@@ -1,0 +1,7 @@
+# vim: set syn=sh noet
+
+export NO_AT_BRIDGE=1
+
+export CUDA_HOME=$(dirname $(dirname $(which nvcc)))
+export PATH=$CUDA_HOME/bin${PATH:+:${PATH}} 
+export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$CUDA_HOME/lib64:$CUDA_HOME/extras/CUPTI/lib64"

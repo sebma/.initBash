@@ -1,4 +1,5 @@
-#sh
+# vim: set syn=sh noet
+
 which register-python-argcomplete >/dev/null 2>&1 && eval "$(register-python-argcomplete conda)"
 
 export NO_AT_BRIDGE=1
