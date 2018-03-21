@@ -2,6 +2,6 @@
 
 export NO_AT_BRIDGE=1
 
-export CUDA_HOME=$(dirname $(dirname $(which nvcc)))
+export CUDA_HOME=/usr/local/cuda
 export PATH=$CUDA_HOME/bin${PATH:+:${PATH}} 
 export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$CUDA_HOME/lib64:$CUDA_HOME/extras/CUPTI/lib64"
