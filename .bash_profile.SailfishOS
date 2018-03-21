@@ -1,0 +1,41 @@
+# vim: set syn=sh noet
+
+#blkid -o value -s UUID /dev/mmcblk1p1
+SDMountPoint=$(df | awk '/ .media.sdcard/{print$NF}')
+linkDestination=$(ls -l sdcard | awk '{print$NF}')
+if [ "$SDMountPoint" ] && [ "$SDMountPoint" != "$linkDestination" ]
+then
+	ln -svf "$SDMountPoint" ~/sdcard
+fi
+ls -ld --color ~/sdcard | awk /$LOGNAME/'{print$(NF-2)" "$(NF-1)" "$NF}'
+
+echo
+
+#export XDG_PICTURES_DIR="$HOME/sdcard/$USER/Pictures"
+#xdg-user-dirs-update --set PICTURES ~/sdcard/nemo/Pictures
+
+# User specific environment and startup programs
+
+export MANPAGER="less -is"
+export EDITOR=$(which vim)
+export LANG=en_US.UTF-8
+#export HOMEBREW_TEMP=$HOME/tmp
+
+if tty -s
+then
+	syncCommand="rsync -vuth -P -rl"
+	test -r ~/.colors && source ~/.colors
+	echo "$bold${color[blue]}=> <$(basename ${BASH_SOURCE[0]})> : Syncing Android Pictures and Downloads to ~ ...$normal"
+	if mount | grep -q /android_storage
+	then
+		time $syncCommand --remove-source-files --exclude ".thumbdata*" ~/android_storage/DCIM/* ~/Pictures/
+		time $syncCommand --remove-source-files ~/android_storage/Download/* ~/Downloads/
+		sync
+	else
+		echo "$bold${color[red]}=> INFO: android_storage is not mounted yet.$normal" >&2
+	fi
+	echo "$bold${color[blue]}=> DONE.$normal"
+	echo
+	test -x ~/shl/sync2PC.sh && ~/shl/sync2PC.sh
+	test -x ~/shl/sync2SDCard.sh && ~/shl/sync2SDCard.sh
+fi

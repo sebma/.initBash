@@ -1,0 +1,114 @@
+#!sh
+############################################################################################################
+#alias lpr="\lpr -P ppti-14-503-imp -o PageSize=A4 -o PageRegion=A4 -o Resolution=default -o InputSlot=Tray2 -o Duplex=DuplexNoTumble -o PreFilter=No"
+#alias lpr="\lpr -o PageSize=A4 -o PageRegion=A4 -o Resolution=default -o InputSlot=Tray2 -o Duplex=DuplexNoTumble -o PreFilter=No"
+#alias topflines='$(which find) . $prunePathsFindExpression -xdev -type f -size +10M -exec ls -lT {} \; 2>/dev/null | sort -nrk5 | column -t | head -n $(($LINES-4)) | awk '\''{total+=$5;print}END{print"=> total = "total" MiB"}'\'''
+#which pidof >/dev/null 2>&1 || alias pgrep="\ps -o 'pid=' -C"
+alias catFiles="\tail -n +1"
+alias cpuInfo="\sysctl machdep.cpu | egrep 'brand_string|count|size|VMX|SVM'"
+alias df="\df -Ph"
+alias firefoxDefrag='pgrep firefox || $(which find) ~/"Library/Application Support/Firefox" -name "*sqlite" -ls -exec sqlite3 {} vacuum \;'
+command -v gdf >/dev/null && alias df="\gdf -PTh"
+alias hideFiles='defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app'
+alias hwinfo="\system_profiler SPHardwareDataType"
+alias osinfo="\system_profiler SPSoftwareDataType;\system_profiler SPInstallHistoryDataType | \grep Install.macOS"
+alias pkill='\pkill -lfu $USER'
+alias graphicsinfo="\system_profiler SPDisplaysDataType"
+alias l="\ls -G"
+alias ldd="\otool -L"
+alias ll="ls -blF -T"
+alias lock="\/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend"
+alias ls="ls -GF"
+alias lsusb="\system_profiler SPUSBDataType"
+alias rename="\rename -v"
+alias reset="\printf '\33c\e[3J'"
+alias rsync="time \rsync -uth -P -z --exclude '*.swp'"
+alias scp="time \rsync -h --progress -u -zt --exclude '*.swp'"
+alias showFiles='defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app'
+alias sshRestart="sshStop;sshStart"
+alias sshStart="sudo launchctl load /System/Library/LaunchDaemons/ssh.plist"
+alias sshStop="sudo launchctl unload /System/Library/LaunchDaemons/ssh.plist"
+alias start="launchctl start"
+alias stat="\stat -x"
+alias stop="launchctl stop"
+#alias svgView="$(which open) -a safari"
+alias svgView="$(which open) -a firefox"
+alias tcpPorts="$(which netstat) -nap tcp"
+alias topf10='$(which find) . $prunePathsFindExpression -xdev -type f -size +10M -exec ls -lT {} \; 2>/dev/null | sort -nrk5 | column -t | head -10 | awk '\''{total+=$5;print}END{print"=> total = "total" MiB"}'\'''
+alias topf50='$(which find) . $prunePathsFindExpression -xdev -type f -size +10M -exec ls -lT {} \; 2>/dev/null | sort -nrk5 | column -t | head -50 | awk '\''{total+=$5;print}END{print"=> total = "total" MiB"}'\'''
+alias topf5='$(which find) . $prunePathsFindExpression -xdev -type f -size +10M -exec ls -lT {} \; 2>/dev/null | sort -nrk5 |  column -t | head -5 | awk '\''{total+=$5;print}END{print"=> total = "total" MiB"}'\'''
+alias topf='$(which find) . $prunePathsFindExpression -xdev -type f -size +10M -exec ls -lT {} \; 2>/dev/null | sort -nrk5 | column -t | head -n | awk '\''{total+=$5;print}END{print"=> total = "total" MiB"}'\'''
+alias umount="\diskutil unmount"
+alias updatedb="time sudo gupdatedb"
+function applescript2app {
+	for file
+	do
+		osacompile -o "/Applications/${file/.applescript/.app}" "$file"
+	done
+}
+function initVars {
+	local duExcludedPathList="./proc ./sys ./dev"
+	excludePathsDuExpression=$(printf " --exclude %s" $duExcludedPathList)
+	local findExcludedPathList="./proc ./sys ./dev"
+	prunePathsFindExpression=$(printf " -path %s -prune -o" $findExcludedPathList)
+}
+function locate {
+	groups 2>/dev/null | \egrep -wq "sudo|admin" && locateOptions="-e" || locateOptions="--database $HOME/.local/lib/mlocate/mlocate.db -e"
+	echo "$@" | grep -q "\-[a-z]*r" && $(which glocate) $locateOptions "$@" || $(which glocate) $locateOptions -ir "${@}"
+}
+function locateBin {
+    locate "${@}" | grep bin/
+}
+function mount {
+	arg=$1
+	arg=$(echo $arg | sed "s|/dev/||")
+	diskutil list | grep -q $arg && [ -b /dev/$arg ] && diskutil mount $arg
+}
+function netstat {
+	local mac_netstat_options="AaLnWgisf:p:I:w:c:mr"
+	local OPTSTRING="ltu$mac_netstat_options"
+	local args=$@
+	local option
+	local wasInWhile=false
+	while getopts $OPTSTRING option; do
+		wasInWhile=true
+		echo $option | \egrep -q "l|t|u" && args="$(echo "$args" | sed -E "s/$option|-$option | -$option//g")"
+		case "$option" in
+			l) args="$args -a" ;; #Show listening ports
+			t) args="$args -p tcp" ;;
+			u) args="$args -p udp" ;;
+			"") echo "=> ERROR : the <option> variable is empty." >&2; return 1;;
+			'?') echo "=> ERROR : the <option> variable is <$?>." >&2; return 2;;
+		esac
+	done
+	
+	if $wasInWhile 
+	then
+		$(which netstat) $args 
+	else
+		echo "=> ERROR : There was a problem with the <getopts> builtin." >&2
+		return 1;
+	fi
+}
+function restart {
+	test $1 && { launchctl stop $1; launchctl start $1; }
+}
+function route {
+	if echo $@ | \egrep -wq "add|flush|delete|change|get|monitor" ;then
+		$(which route) $@
+	else
+		$(which netstat) -f inet -r $@ | \egrep -v /32 | \egrep "default|0.0.0.0|S"
+	fi
+}
+function status {
+	sudo launchctl list | egrep -i "$1"
+}
+function topflines {
+	initVars
+	test $# = 0 && args=. || args=$@
+	$(which gfind) $args $prunePathsFindExpression -xdev -type f -size +10M -exec ls -lT {} \; 2>/dev/null | sort -nrk5 | column -t | head -n $(($LINES-4)) | awk '{total+=$5;print}END{if(total) print"=> total = "total" MiB"}'
+}
+groups | \egrep -wq "admin|sudo" && alias pipInstall="sudo -H easy_install pip" || alias pipInstall="easy_install --user pip"
+initVars
+which gcp >/dev/null 2>&1 && alias cp='\gcp -puv' || alias cp='\cp -pv'
+which pgrep >/dev/null 2>&1 || alias pgrep="\ps -fC"

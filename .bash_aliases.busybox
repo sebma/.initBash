@@ -1,0 +1,53 @@
+#!sh
+alias l="$(which busybox) ls --color"
+alias ls="$(which busybox) ls --color -F"
+#alias touch="$(which busybox) touch"
+#alias date="$(which busybox) date"
+for tool in date touch; do alias $tool="$(which busybox) $tool";done
+alias cp="$(which busybox) cp -puv"
+alias df="$(which busybox) df -PTh"
+alias du="$(which busybox) du -h"
+alias ln="$(which busybox) ln -v"
+alias mv="$(which busybox) mv -iv"
+alias rm="$(which busybox) rm -iv"
+alias chown="$(which busybox) chown -v"
+alias chmod="$(which busybox) chmod -v"
+alias ps="$(which busybox) ps | grep -wv grep"
+alias egrep="grep -E"
+alias topd10="\du -cxsm */ .??*/ 2>/dev/null | sort -nr | head"
+alias topd5="\du  -cxsm */ .??*/ 2>/dev/null | sort -nr | head -5"
+alias topd5="\du  -cxsm */ .??*/ 2>/dev/null | sort -nr | head -50"
+alias topd="\du   -cxsm */ .??*/ 2>/dev/null | sort -nr | head -n"
+alias topdlines='\du   -cxsm */ .??*/ 2>/dev/null | sort -nr | head -$(($LINES-2))'
+alias topf10="$(which find) . -xdev -type f -size +10240k -exec busybox ls -al {} + 2>/dev/null | sort -nrk5 | awk '{size=\$5/2^20;sub(\$5,size\"M\");print}' | head | awk '{total+=\$5;print}END{print\"=> total = \"total\" MiB\"}'"
+alias topf50="$(which find) . -xdev -type f -size +10240k -exec busybox ls -al {} + 2>/dev/null | sort -nrk5 | awk '{size=\$5/2^20;sub(\$5,size\"M\");print}' | head -50 | awk '{total+=\$5;print}END{print\"=> total = \"total\" MiB\"}'"
+alias topf5="$(which find)  . -xdev -type f -size +10240k -exec busybox ls -al {} + 2>/dev/null | sort -nrk5 | awk '{size=\$5/2^20;sub(\$5,size\"M\");print}' | head -5' | awk '{total+=\$5;print}END{print\"=> total = \"total\" MiB\"}'"
+alias topf="$(which find)   . -xdev -type f -size +10240k -exec busybox ls -al {} + 2>/dev/null | sort -nrk5 | awk '{size=\$5/2^20;sub(\$5,size\"M\");print}' | head -n | awk '{total+=\$5;print}END{print\"=> total = \"total\" MiB\"}'"
+#alias topflines="$(which find)   . -xdev -type f -size +10240k -exec busybox ls -al {} + 2>/dev/null | sort -nrk5 | awk '{size=\$5/2^20;sub(\$5,size\"M\");print}' | head -n $(($LINES-4)) | awk '{total+=\$5;print}END{print\"=> total = \"total\" MiB\"}'"
+
+function topflines {
+	$(which find) "$@" -xdev -type f -size +10240k -exec busybox ls -al {} + 2>/dev/null | sort -nrk5 | awk '{size=$5/2^20;sub($5,size"M");print}' | head -n $(($LINES-4)) | awk '{total+=$5;print}END{if(total) print"=> total = "total" MiB"}'
+}
+function find {
+	dir=$1
+	echo $dir | \grep --color -q "\-" && dir=. || shift
+	args="$@"
+	if echo $args | \grep --color -q "\-ls"
+	then
+		args=${args/-ls/}
+		$(which find) $dir $firstPredicate $args -exec busybox ls -alde {} + 2>/dev/null | awk '{
+unit=" "
+size=int($5)
+if(size==0)exponent=0
+else exponent=10*int(log(size)/(10*log(2)))
+size=size/(2**exponent)
+if(exponent==10)unit="K"
+else if(exponent==20)unit="M"
+else if(exponent==30)unit="G"
+sub($5,sprintf("%10.3f",size)" "unit)
+print
+}'
+	else
+		$(which find) $dir $firstPredicate $args
+	fi
+}

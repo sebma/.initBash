@@ -1,0 +1,10 @@
+# vim: set syn=sh noet
+echo "=> RUNNING $BASH_SOURCE ..." >&2
+
+test -e ~/.cache && \rm -vfr ~/.cache/* 2>/dev/null
+#defaultPrinter=$(lpstat -d | awk '{print$NF}')
+#for printerInstance in $(lpstat -a | awk '{if($1 ~ /\//) print$1}')
+#do
+#	lpoptions -x $printerInstance
+#done
+echo "=> END OF SCRIPT <$BASH_SOURCE>." >&2

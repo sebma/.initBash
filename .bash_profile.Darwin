@@ -1,0 +1,39 @@
+#!sh
+trap 'echo "=> Ignoring this step and continuing the script <$(basename $BASH_SOURCE)> ..." >&2' INT
+
+export system="$(sw_vers -productName) $(sw_vers -productVersion)"
+cd && ls -ld -G .cache | awk '{print$(NF-2)" "$(NF-1)" "$NF}'
+mkdir -p ~/log
+
+if ! groups | \egrep -wq "sudo|adm|root|admin" 
+then
+	test -z $HOMEBREW_PREFIX && export HOMEBREW_CASK_OPTS="--appdir=$HOME/Applications" || export HOMEBREW_CASK_OPTS="--appdir=$HOMEBREW_PREFIX"
+fi
+
+#Stops XQuartz from starting a new terminal window when it starts
+defaults read org.macosforge.xquartz.X11 app_to_run | grep -q bin/true$ || defaults write org.macosforge.xquartz.X11 app_to_run $(which true)
+
+#test "$SSH_CONNECTION" || pgrep -qfu $USER XQuartz.app || ( echo "=> Starting XQuartz.app ..." | tee -a ~/log/XQuartz.log ;nohup /Applications/Utilities/XQuartz.app/Contents/MacOS/X11.bin >>~/log/XQuartz.log 2>&1 & )
+test "$SSH_CONNECTION" || pgrep -qfu $USER XQuartz.app || ( echo "=> Starting XQuartz ..." && $(which open) -a XQuartz )
+
+#echo $DISPLAY | grep -q ^/private/tmp && export DISPLAY=:0
+
+#To use "$MATLAB/history.m" in rlwrap
+which matlab >/dev/null 2>&1 && test -d "$HOME/Library/Application Support/MathWorks/MATLAB" && export MATLAB=$(\ls -d "$HOME/Library/Application Support/MathWorks/MATLAB/"* | head -1)
+
+which git >/dev/null && git config --global credential.helper osxkeychain
+# Tu use the Picoscobe drivers with "https://github.com/colinoflynn/pico-python/" PicoScope Python Interface
+test -d /Applications/PicoScope6.app/Contents/Resources/lib && export DYLD_LIBRARY_PATH=/Applications/PicoScope6.app/Contents/Resources/lib
+
+#Impression a partir de CUPS/Lpr + gs
+if ! grep -q "Sandboxing Relaxed" /etc/cups/cups-files.conf && groups | \egrep -wq "sudo|adm|root"
+then
+	echo Sandboxing Relaxed | sudo tee -a /etc/cups/cups-files.conf
+	launchctl stop org.cups.cupsd
+	launchctl start org.cups.cupsd
+	cupsctl WebInterface=yes
+	echo "=> The cups admin console is http://localhost:631/admin"
+fi
+
+trap - INT
+set +x

@@ -1,0 +1,126 @@
+# vim: set syn=sh noet
+export bashProfileLoaded=1
+[ $BASH_VERSINFO = 3 ] && [ -x ~/usr/local/bin/bash ] && exec ~/usr/local/bin/bash -l
+
+initDir=$(basename $initDir) #Pour creer des liens symboliques relatifs a $HOME
+cd $HOME
+[ -f ~/.profile ] || ln -sv $initDir/.bash_profile ~/.profile
+[ -f ~/.bashrc  ] || ln -sv $initDir/.bashrc ~/.bashrc
+[ -f ~/.bash_logout ] || ln -sv $initDir/.bash_logout ~/.bash_logout
+initDir=$HOME/$initDir
+
+#DEFINITION DES VARIABLES
+LANG=C.UTF-8
+export HISTSIZE=2000
+export HISTFILESIZE=4000
+#GDM_LANG=fr_FR.UTF-8
+GDM_LANG=C.UTF-8
+#export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
+test $HOSTNAME || export HOSTNAME=$(hostname | cut -d. -f1)
+export EDITOR=vim
+export UPMC_ID=3607968
+export UPMC=$UPMC_ID@ssh.ufr-info-p6.jussieu.fr
+export ENST=mansfeld@ssh.enst.fr
+export JOLLA=nemo@jolla-wlan
+#export HOMEBREW_TEMP=$HOME/tmp
+export HOMEBREW_NO_GITHUB_API=1
+#export GOPATH=$HOME/work
+export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:~/gnu/lib/pkgconfig:~/local/lib/pkgconfig
+PERL5LIB="$HOME/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
+PERL_LOCAL_LIB_ROOT="$HOME/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
+PERL_MB_OPT="--install_base \"$HOME/perl5\""; export PERL_MB_OPT;
+PERL_MM_OPT="INSTALL_BASE=$HOME/perl5"; export PERL_MM_OPT;
+export PIP_FORMAT=columns
+
+typeset -r isAdmin=$(groups 2>/dev/null | egrep -wq "sudo|adm|admin|root" && echo true || echo false)
+if ! $isAdmin
+then
+	export HOSTALIASES=~/.hosts
+	export PYTHONUSERBASE=$HOME/.local
+	export HOMEBREW_PREFIX=$HOME/usr/local
+fi
+
+export domain=$(awk -F"[ .]" '/domain/{print$(NF-1);exit}' /etc/resolv.conf /private/etc/resolv.conf 2>/dev/null)
+test -z $domain && export domain=localhost # Si le domaine est inconnu
+case $domain in
+jussieu|enst)
+	export proxyName=proxy
+	export proxyPort=3128
+	;;
+*)
+	export proxyName=unknown
+	export proxyPort=0
+	;;
+esac
+
+#Si le proxy est joignable
+if [ $domain != localhost ] && nc -v -z -w 4 $proxyName $proxyPort >/dev/null 2>&1
+then
+    test -z $http_proxy && export http_proxy=http://proxy:$proxyPort
+fi
+
+if test -n "$http_proxy"; then
+	export https_proxy=$http_proxy
+	export dnsSuffix=$(basename $http_proxy | cut -d. -f2- | cut -d: -f1)
+fi
+
+which gnuplot >/dev/null 2>&1 && export GNUTERM=qt
+
+export RSYNC_SKIP_COMPRESS_LIST="7z/aac/avi/bz2/deb/flv/gz/iso/jpeg/jpg/mkv/mov/m4a/mp2/mp3/mp4/mpeg/mpg/oga/ogg/ogm/ogv/webm/rpm/tbz/tgz/z/zip"
+export RSYNC_EXCLUSION=$(printf " --exclude %s" .git/ watch_later/ '*.swp')
+
+export PATH=$PATH:/usr/local/miniconda2/bin
+#FIN DE DEFINITION DES VARIABLES
+
+#Creation du .cache dans /tmp et pointage de ce dernier via un lien symbolique
+if [ $(uname -s) = Linux ] || [ $(uname -s) = Darwin ]
+then
+	#Creation du lien symbolique du cache pointant sur /tmp/$USER/.cache
+	myCacheRootDir=/tmp/$USER
+	if [ ! -L ~/.cache ] 
+	then
+		mkdir -p $myCacheRootDir/ 
+		test -d ~/.cache && mv ~/.cache $myCacheRootDir/ || mkdir -p $myCacheRootDir/.cache/
+		cd $HOME && ln -s $myCacheRootDir/.cache .cache
+	else
+		#Si le lien symbolique existe mais qu'il ne pointe sur rien alors on cree la cible du lien symbolique
+		test -d $myCacheRootDir/.cache/ || mkdir -p $myCacheRootDir/.cache/
+	fi
+	echo
+	
+	which ssh-agent >/dev/null 2>&1 && { pgrep -u $USER ssh-agent >/dev/null 2>&1 || eval `ssh-agent -s` >/dev/null; }
+	pgrep -lfu $USER ssh-agent 2>/dev/null
+	
+	defaultPrinter="$(LANG=C lpstat -d 2>/dev/null | awk '/^system default destination:/{print$NF}')"
+	#Definition des parametres de proxy dans cpan
+	if test "$http_proxy"
+	then
+		grep -q "http_proxy.*$http_proxy" ~/.cpan/CPAN/MyConfig.pm 2>/dev/null
+		test $? = 1 && printf "o conf http_proxy $http_proxy\no conf commit" | cpan
+	fi
+
+	#my git configuration
+	which git >/dev/null && {
+		git config --global user.email sebma@users.noreply.github.com
+		git config --global user.name sebma
+		test "$http_proxy" && git config --global http.proxy $http_proxy
+		git config --global alias.co checkout
+		git config --global alias.st "status -bs"
+		git config --global alias.br branch
+		git config alias.ci '!f() { for file; do git commit $file -m "Updated $file"; done; }; f'
+	}
+fi
+
+case $(uname -s) in
+Darwin)
+	test -r $initDir/.bash_profile.Darwin && source $initDir/.bash_profile.Darwin
+	;;
+Linux)
+	test -r $initDir/.bash_profile.Linux && source $initDir/.bash_profile.Linux
+	;;
+*)
+	which lsb_release >/dev/null 2>&1 && export system="$(lsb_release -sd | awk -F '"' '{print$(NF-1)}')" || export system=$(echo $HOSTTYPE-$OSTYPE | sed "s/arm[^-]*-/arm-/")
+	;;
+esac
+
+which matlab >/dev/null 2>&1 && source $initDir/.bash_profile.matlab

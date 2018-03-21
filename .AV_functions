@@ -1,0 +1,1052 @@
+#!/usr/bin/env bash
+#VARIABLES GLOBALES
+ffmpeg="$(which ffmpeg)   -hide_banner -probesize 400M -analyzeduration 400M"
+ffprobe="$(which ffprobe) -hide_banner -probesize 400M -analyzeduration 400M"
+remuxOptions="-map 0 -c copy"
+mp4Options="-movflags frag_keyframe"
+mp4RemuxOptions="-map 0 -c copy -c:s mov_text"
+aac2m4aOptions="-bsf:a aac_adtstoasc"
+cdr_device=/dev/dvd
+youtube_dl=$(which youtube-dl)
+
+#echo "=> BASH_SOURCE[0] = ${BASH_SOURCE[0]}"
+
+[ $BASH_VERSINFO -ge 4 ] && declare -A audioExtension videoExtension audioDecode
+audioExtension=( [libspeex]=oga [speex]=oga [opus]=oga [vorbis]=ogg [aac]=m4a [mp3]=mp3 [mp2]=mp2 [ac3]=ac3 [wmav2]=wma [pcm_dvd]=wav [pcm_s16le]=wav )
+videoExtension=( [h264]=m4v [mpeg1video]=mpg [mpeg2video]=vob [mpeg4]=avi [flv1]=flv [wmv3]=wmv )
+audioDecode=( [libspeex]=$(which speexdec 2>/dev/null) [speex]=$(which speexdec 2>/dev/null) [opus]=$(which opusdec 2>/dev/null) [vorbis]=$(which oggdec 2>/dev/null) )
+
+
+function mpvFrench {
+#	sid=$($ffprobe "$video" 2>&1 | awk -F ':|\\(' "/Stream .*$language.*Subtitle:/"'{sid=$2;sid+=-1}END{print sid}'); test -z $sid || sid="--sid=$sid"
+	language=fra
+	which mpv >/dev/null && {
+		for video
+		do
+			[ -s "$video" ] || { echo "=> ERROR: The video <$video> does not exist or is an empty file." >&2 ; continue; }
+			mpv --alang=$language --slang=$language "$video"
+		done
+	}
+}
+
+function mpvEnglish {
+	language=eng
+	which mpv >/dev/null && {
+		for video
+		do
+			[ -s "$video" ] || { echo "=> ERROR: The video <$video> does not exist or is an empty file." >&2 ; continue; }
+			mpv --alang=$language --slang=$language "$video"
+		done
+	}
+}
+
+function mpvGerman {
+	language=deu
+	which mpv >/dev/null && {
+		for video
+		do
+			[ -s "$video" ] || { echo "=> ERROR: The video <$video> does not exist or is an empty file." >&2 ; continue; }
+			mpv --alang=$language --slang=$language "$video"
+		done
+	}
+}
+
+function mpvSpanish {
+	language=spa
+	which mpv >/dev/null && {
+		for video
+		do
+			[ -s "$video" ] || { echo "=> ERROR: The video <$video> does not exist or is an empty file." >&2 ; continue; }
+			mpv --alang=$language --slang=$language "$video"
+		done
+	}
+}
+
+function mpvOld {
+	which mpv $(\youtube-dl -g "$@")
+}
+function to16_9 {
+	for video
+	do
+		$ffmpeg -i "$video" -aspect 16/9 $remuxOptions "$(basename "$video" .mp4)_16_9eme.mp4"
+	done
+}
+function moov_atomFix {
+	for inputFile
+	do
+		echo "=> inputFile = <$inputFile>" >&2
+		outputFile="${inputFile/.mp4/_moov_atom_FIXED.mp4}"
+		qtfaststart "$inputFile" "$outputFile" && touch -r "$inputFile" "$outputFile" && echo "=> outputFile = <$outputFile>" >&2
+		sync
+	done
+}
+function cropdetect {
+	ffmpeg -i "$1" -t 1 -vf cropdetect -f null - 2>&1 | awk '/crop/{line=$NF}END{print line}'
+}
+function dvdinfo {
+	cdr_device=/dev/dvd
+	longestTrack=$(\lsdvd -Oy | awk -F ':|,| ' '/longest_track/{print$(NF-1)}')
+	tccat -i $cdr_device -T $longestTrack,-1 2>/dev/null | $(which ffprobe) -hide_banner - 2>&1
+}
+function mp4Info {
+	for file
+	do
+		echo "=> file = <$file>"
+		AtomicParsley "$file" -T 1 | sed '/Movie duration/,$!d'
+	done
+}
+function videoRemux {
+	inputFile="$1"
+	if [ $# != 2 ]
+	then
+		echo "=> Usage: $(basename $0) inputFileName outputFileName" >&2
+		exit 1
+	fi
+
+	shift
+	extension=$(echo $1 | awk -F. '{print$NF}')
+
+	case $extension in
+	vob) options="-f mpeg" ;;
+	*) options="" ;;
+	esac
+
+	time $ffmpeg -i "$inputFile" $remuxOptions $options "$@"
+}
+function addChaptersToMP4 {
+	for file
+	do
+		MP4Box -chap "${file/.mp4/.chapters}" -add "$file" -new OUTPUT.mp4
+	done
+	sync
+}
+function addChaptersToM4A {
+	for file
+	do
+		MP4Box -chap "${file/.m4a/.chapters}" -add "$file" -new OUTPUT.m4a
+		\mv -v OUTPUT.m4a OUTPUT.m4b
+	done
+	sync
+}
+function urlinfo {
+	for url
+	do
+		echo "=> url = $url"
+		$(which ffprobe) -hide_banner $(youtube-dl -gf best "$url")
+	done
+}
+function urlplayer {
+	mpv $(youtube-dl -gf best "$1")
+}
+function audioCodec {
+	local file="$1"
+	local codec=$($ffprobe "$file" -show_entries stream=codec_name -of flat -v 0 | awk -F'"' '{print$(NF-1)}')
+	echo $codec
+}
+function audioFormat {
+	local file="$1"
+	local codec=$($ffprobe "$file" -show_entries stream=codec_name -of flat -v 0 | awk -F'"' '{print$(NF-1)}')
+	echo ${audioExtension[$codec]}
+}
+function any216kHzopus {
+#	local inputFile="$1"
+for inputFile
+do
+	if [ -s "$inputFile" ]
+	then
+		echo "=> inputFile = <$inputFile>"
+		outputFile=${inputFile/.???/_opus.oga}
+		echo "==> outputFile = $outputFile"
+		if [ ! -s "$outputFile" ]
+		then
+			time $ffmpeg -i "$inputFile" -vn -sn -f wav - | sox -V -t wav - -t wav - channels 1 rate 16k norm | opusenc - "$outputFile"
+			sync
+			touch -r "$inputFile" "$outputFile"
+			echo "=> outputFile = <$outputFile>"
+		else
+			echo "=> ERROR: The file <$outputFile> already exits." >&2
+			continue
+		fi
+	else
+		echo "=> ERROR: The file <$inputFile> does not exit or is empty." >&2
+	fi
+done
+}
+function any2opus {
+#	local inputFile="$1"
+for inputFile
+do
+	if [ -s "$inputFile" ]
+	then
+		echo "=> inputFile = <$inputFile>"
+		outputFile=${inputFile/.???/_opus.oga}
+		echo "==> outputFile = $outputFile"
+		if [ ! -s "$outputFile" ]
+		then
+			time $ffmpeg -i "$inputFile" -vn -sn -f wav - | opusenc - "$outputFile"
+			sync
+			touch -r "$inputFile" "$outputFile"
+			echo "=> outputFile = <$outputFile>"
+		else
+			echo "=> ERROR: The file <$outputFile> already exits." >&2
+			continue
+		fi
+	else
+		echo "=> ERROR: The file <$inputFile> does not exit or is empty." >&2
+	fi
+done
+}
+function any2opus64kbps {
+#	local inputFile="$1"
+for inputFile
+do
+	if [ -s "$inputFile" ]
+	then
+		echo "=> inputFile = <$inputFile>"
+		outputFile=${inputFile/.???/_opus.oga}
+		echo "==> outputFile = $outputFile"
+		if [ ! -s "$outputFile" ]
+		then
+			time $ffmpeg -i "$inputFile" -vn -sn -f wav - | opusenc - --bitrate 64 "$outputFile"
+			sync
+			touch -r "$inputFile" "$outputFile"
+			echo "=> outputFile = <$outputFile>"
+		else
+			echo "=> ERROR: The file <$outputFile> already exits." >&2
+			continue
+		fi
+	else
+		echo "=> ERROR: The file <$inputFile> does not exit or is empty." >&2
+	fi
+done
+}
+function any2opus42kbps {
+#	local inputFile="$1"
+for inputFile
+do
+	if [ -s "$inputFile" ]
+	then
+		echo "=> inputFile = <$inputFile>"
+		outputFile=${inputFile/.???/_opus.oga}
+		echo "==> outputFile = $outputFile"
+		if [ ! -s "$outputFile" ]
+		then
+			time $ffmpeg -i "$inputFile" -vn -sn -f wav - | opusenc - --bitrate 42 "$outputFile"
+			sync
+			touch -r "$inputFile" "$outputFile"
+			echo "=> outputFile = <$outputFile>"
+		else
+			echo "=> ERROR: The file <$outputFile> already exits." >&2
+			continue
+		fi
+	else
+		echo "=> ERROR: The file <$inputFile> does not exit or is empty." >&2
+	fi
+done
+}
+function any2opus32kbps {
+#	local inputFile="$1"
+for inputFile
+do
+	if [ -s "$inputFile" ]
+	then
+		echo "=> inputFile = <$inputFile>"
+		outputFile=${inputFile/.???/_opus.oga}
+		echo "==> outputFile = $outputFile"
+		if [ ! -s "$outputFile" ]
+		then
+			time $ffmpeg -i "$inputFile" -vn -sn -f wav - | opusenc - --bitrate 32 "$outputFile"
+			sync
+			touch -r "$inputFile" "$outputFile"
+			echo "=> outputFile = <$outputFile>"
+		else
+			echo "=> ERROR: The file <$outputFile> already exits." >&2
+			continue
+		fi
+	else
+		echo "=> ERROR: The file <$inputFile> does not exit or is empty." >&2
+	fi
+done
+}
+function any2m4a {
+#	local inputFile="$1"
+for inputFile
+do
+	if [ -s "$inputFile" ]
+	then
+		echo "=> inputFile = <$inputFile>"
+		outputFile=${inputFile/.???/.m4a}
+		echo "==> outputFile = $outputFile"
+		if [ ! -s "$outputFile" ]
+		then
+			time $ffmpeg -i "$inputFile" -vn -sn -acodec aac -aprofile aac_low -q:a 1 "$outputFile"
+			sync
+			touch -r "$inputFile" "$outputFile"
+			echo "=> outputFile = <$outputFile>"
+		else
+			echo "=> ERROR: The file <$outputFile> already exits." >&2
+			continue
+		fi
+	else
+		echo "=> ERROR: The file <$inputFile> does not exit or is empty." >&2
+	fi
+done
+}
+function any2m4a_HE_AAC_VBR {
+#	local inputFile="$1"
+for inputFile
+do
+	if [ -s "$inputFile" ]
+	then
+		echo "=> inputFile = <$inputFile>"
+		outputFile=${inputFile/.???/_HE-AAC.m4a}
+		echo "==> outputFile = $outputFile"
+		if [ ! -s "$outputFile" ]
+		then
+			if $ffprobe "$inputFile" 2>&1 | grep -q Audio:.*mono
+			then
+				time $ffmpeg -i "$inputFile" -vn -sn -acodec libfdk_aac -aprofile aac_he -vbr 1 "$outputFile"
+			else
+				time $ffmpeg -i "$inputFile" -vn -sn -acodec libfdk_aac -aprofile aac_he_v2 -vbr 1 "$outputFile"
+			fi
+			sync
+			touch -r "$inputFile" "$outputFile"
+			echo "=> outputFile = <$outputFile>"
+		else
+			echo "=> ERROR: The file <$outputFile> already exits." >&2
+			continue
+		fi
+	else
+		echo "=> ERROR: The file <$inputFile> does not exit or is empty." >&2
+	fi
+done
+}
+function any2aac {
+#	local inputFile="$1"
+for inputFile
+do
+	if [ -s "$inputFile" ]
+	then
+		echo "=> inputFile = <$inputFile>"
+		outputFile=${inputFile/.???/.aac}
+		echo "==> outputFile = $outputFile"
+		if [ ! -s "$outputFile" ]
+		then
+			time $ffmpeg -i "$inputFile" -vn -sn -acodec aac -aprofile aac_low -q:a 1 "$outputFile"
+			sync
+			touch -r "$inputFile" "$outputFile"
+			echo "=> outputFile = <$outputFile>"
+		else
+			echo "=> ERROR: The file <$outputFile> already exits." >&2
+			continue
+		fi
+	else
+		echo "=> ERROR: The file <$inputFile> does not exit or is empty." >&2
+	fi
+done
+}
+function any2aac_HE_AAC_VBR {
+#	local inputFile="$1"
+for inputFile
+do
+	if [ -s "$inputFile" ]
+	then
+		echo "=> inputFile = <$inputFile>"
+		outputFile=${inputFile/.???/_HE-AAC.aac}
+		echo "==> outputFile = $outputFile"
+		if [ ! -s "$outputFile" ]
+		then
+			if $ffprobe "$inputFile" 2>&1 | grep -q Audio:.*mono
+			then
+				time $ffmpeg -i "$inputFile" -vn -sn -acodec libfdk_aac -aprofile aac_he -vbr 1 "$outputFile"
+			else
+				time $ffmpeg -i "$inputFile" -vn -sn -acodec libfdk_aac -aprofile aac_he_v2 -vbr 1 "$outputFile"
+			fi
+			sync
+			touch -r "$inputFile" "$outputFile"
+			echo "=> outputFile = <$outputFile>"
+		else
+			echo "=> ERROR: The file <$outputFile> already exits." >&2
+			continue
+		fi
+	else
+		echo "=> ERROR: The file <$inputFile> does not exit or is empty." >&2
+	fi
+done
+}
+function mp42mp4_HE_AAC_CBR {
+#	local inputFile="$1"
+for inputFile
+do
+	if [ -s "$inputFile" ]
+	then
+		echo "=> inputFile = <$inputFile>"
+		outputFile=${inputFile/.mp4/_HE-AAC.mp4}
+		echo "==> outputFile = $outputFile"
+		if [ ! -s "$outputFile" ]
+		then
+			if $ffprobe "$inputFile" 2>&1 | grep -q Audio:.*mono
+			then
+				time $ffmpeg -i "$inputFile" $remuxOptions -acodec libfdk_aac -aprofile aac_he    -ab 64k $mp4Options "$outputFile"
+			else
+				time $ffmpeg -i "$inputFile" $remuxOptions -acodec libfdk_aac -aprofile aac_he_v2 -ab 64k $mp4Options "$outputFile"
+			fi
+			sync
+			touch -r "$inputFile" "$outputFile"
+			echo "=> outputFile = <$outputFile>"
+		else
+			echo "=> ERROR: The file <$outputFile> already exits." >&2
+			continue
+		fi
+	else
+		echo "=> ERROR: The file <$inputFile> does not exit or is empty." >&2
+	fi
+done
+}
+function spx216kHzopus {
+	typeset inputFile="$1"
+	if [ -s "$inputFile" ]
+	then
+		outputFile=${inputFile/.oga/_opus.oga}
+		echo "==> outputFile = $outputFile"
+		if [ ! -s "$outputFile" ]
+		then
+#			if $ffprobe "$inputFile" 2>&1 | grep -q stereo
+			if $ffprobe "$inputFile" -show_entries stream=channel_layout -of flat 2>&1 | grep -q stereo
+			then
+				time speexdec -V "$inputFile" - | sox -t raw -V -b 16 -e signed -r 44.1k -c 2 - -t wav - channels 1 rate 16k norm | opusenc - "$outputFile"
+			else
+				time speexdec -V "$inputFile" - | sox -t raw -V -b 16 -e signed -r 44.1k -c 1 - -t wav - channels 1 rate 16k norm | opusenc - "$outputFile"
+			fi
+			touch -r "$inputFile" "$outputFile"
+			sync
+		else
+			echo "=> ERROR: The file <$outputFile> already exits." >&2
+			return 1
+		fi
+		echo "=> outputFile = <$outputFile>"
+	else
+		echo "=> ERROR: The file <$inputFile> does not exit or is empty." >&2
+	fi
+}
+function spx216kHzspx {
+	typeset inputFile="$1"
+	if [ -s "$inputFile" ]
+	then
+		outputFile=${inputFile/.oga/_speex.oga}
+		echo "==> outputFile = $outputFile"
+		if [ ! -s "$outputFile" ]
+		then
+			if $ffprobe "$inputFile" 2>&1 | grep -q stereo
+			then
+				time speexdec -V "$inputFile" - | sox -t raw -V -b 16 -e signed -r 44.1k -c 2 - -t wav - channels 1 rate 16k norm | speexenc -V --quality 10 --vbr - "$outputFile"
+			else
+				time speexdec -V "$inputFile" - | sox -t raw -V -b 16 -e signed -r 44.1k -c 1 - -t wav - channels 1 rate 16k norm | speexenc -V --quality 10 --vbr - "$outputFile"
+			fi
+			touch -r "$inputFile" "$outputFile"
+			sync
+		else
+			echo "=> ERROR: The file <$outputFile> already exits." >&2
+			return 1
+		fi
+		echo "=> outputFile = <$outputFile>"
+	else
+		echo "=> ERROR: The file <$inputFile> does not exit or is empty." >&2
+	fi
+}
+function spx2opus {
+	typeset inputFile="$1"
+	if [ -s "$inputFile" ]
+	then
+		outputFile=${inputFile/.oga/_opus.oga}
+		echo "==> outputFile = $outputFile"
+		if [ ! -s "$outputFile" ]
+		then
+			#freq=$(mediainfo --Inform="Audio;%SamplingRate%" "$inputFile")
+			time audio2stout "$inputFile" | opusenc - "$outputFile"
+			touch -r "$inputFile" "$outputFile"
+			sync
+		else
+			echo "=> ERROR: The file <$outputFile> already exits." >&2
+			return 1
+		fi
+		echo "=> outputFile = <$outputFile>"
+	else
+		echo "=> ERROR: The file <$inputFile> does not exit or is empty." >&2
+	fi
+}
+function audio2stout {
+	typeset inputFile="$1"
+	if [ -s "$inputFile" ]
+	then
+		$ffmpeg -i "$inputFile" -f wav -
+	else
+		echo "=> ERROR: The file <$inputFile> does not exit or is empty." >&2
+	fi
+}
+function mp32spx {
+	typeset inputFile="$1"
+	if [ -s "$inputFile" ]
+	then
+		title=$(mp3info2 -p %t "$inputFile")
+		echo "==> title = <$title>"
+		album=$(mp3info -p %l "$inputFile")
+		echo "==> album = <$album>"
+#		artist=$(mp3info -p %a "$inputFile")
+
+		outputFile=${inputFile/.mp3/_speex.oga}
+		echo "==> outputFile = $outputFile"
+		if [ ! -s "$outputFile" ]
+		then
+			time sox -V "$inputFile" -t wav - channels 1 rate 16k norm | speexenc --title "$title" --comment ALBUM="$album" -V --vbr --quality 10 - "$outputFile"
+			sync
+			touch -r "$inputFile" "$outputFile"
+		else
+			echo "=> ERROR: The file <$outputFile> already exits." >&2
+			return 1
+		fi
+		echo "=> outputFile = <$outputFile>"
+	else
+		echo "=> ERROR: The file <$inputFile> does not exit or is empty." >&2
+	fi
+}
+function mp32opus {
+	typeset inputFile="$1"
+	if [ -s "$inputFile" ]
+	then
+		title=$(mp3info2 -p %t "$inputFile")
+		echo "==> title = <$title>"
+		album=$(mp3info -p %l "$inputFile")
+		echo "==> album = <$album>"
+#		artist=$(mp3info -p %a "$inputFile")
+
+		outputFile=${inputFile/.mp3/_opus.oga}
+		echo "==> outputFile = $outputFile"
+		if [ ! -s "$outputFile" ]
+		then
+			time sox -V "$inputFile" -t wav - channels 1 rate 16k norm | opusenc --title "$title" --album "$album" - "$outputFile"
+			sync
+			touch -r "$inputFile" "$outputFile"
+		else
+			echo "=> ERROR: The file <$outputFile> already exits." >&2
+			return 1
+		fi
+		echo "=> outputFile = <$outputFile>"
+	else
+		echo "=> ERROR: The file <$inputFile> does not exit or is empty." >&2
+	fi
+}
+function wav216kwav {
+	typeset inputFile="$1"
+	if [ -s "$inputFile" ]
+	then
+		outputFile=${inputFile/.wav/_16kHz.wav}
+		echo "==> outputFile = $outputFile"
+		if [ ! -s "$outputFile" ]
+		then
+			time $ffmpeg -i "$inputFile" -ar 16k "$outputFile"
+			sync
+			touch -r "$inputFile" "$outputFile"
+		else
+			echo "=> ERROR: The file <$outputFile> already exits." >&2
+			return 1
+		fi
+		echo "=> outputFile = <$outputFile>"
+	else
+		echo "=> ERROR: The file <$inputFile> does not exit or is empty." >&2
+	fi
+}
+function wav2spx {
+	typeset inputFile="$1"
+	if [ -s "$inputFile" ]
+	then
+		outputFile=${inputFile/.wav/_speex.oga}
+		echo "==> outputFile = $outputFile"
+		if [ ! -s "$outputFile" ]
+		then
+			namedPipe=$(mktemp -u).wav
+			mkfifo $namedPipe
+#			time sox -V "$inputFile" -r 16k $namedPipe norm &
+			time sox -V "$inputFile" $namedPipe rate 16k norm &
+#			time speexenc --title "$title" --comment ALBUM="$album" -V --quality 10 --vbr $namedPipe "$outputFile"
+			time speexenc -V --quality 10 --vbr $namedPipe "$outputFile"
+			\rm $namedPipe
+			sync
+			touch -r "$inputFile" "$outputFile"
+		else
+			echo "=> ERROR: The file <$outputFile> already exits." >&2
+			return 1
+		fi
+		echo "=> outputFile = <$outputFile>"
+	else
+		echo "=> ERROR: The file <$inputFile> does not exit or is empty." >&2
+	fi
+}
+function flac2spx {
+	typeset inputFile="$1"
+	if [ -s "$inputFile" ]
+	then
+		outputFile=${inputFile/.flac/_speex.oga}
+		echo "==> outputFile = $outputFile"
+		if [ ! -s "$outputFile" ]
+		then
+			namedPipe=$(mktemp -u).wav
+			mkfifo $namedPipe
+#			time sox -V "$inputFile" -r 16k $namedPipe norm &
+#			time sox -V "$inputFile" $namedPipe rate 16k norm &
+			time $ffmpeg -i "$inputFile" -ar 16k $namedPipe -y &
+#			time speexenc --title "$title" --comment ALBUM="$album" -V --quality 10 --vbr $namedPipe "$outputFile"
+			time speexenc -V --quality 10 --vbr $namedPipe "$outputFile"
+			\rm $namedPipe
+			sync
+			touch -r "$inputFile" "$outputFile"
+		else
+			echo "=> ERROR: The file <$outputFile> already exits." >&2
+			return 1
+		fi
+		echo "=> outputFile = <$outputFile>"
+	else
+		echo "=> ERROR: The file <$inputFile> does not exit or is empty." >&2
+	fi
+}
+function wav16k2spx {
+	typeset inputFile="$1"
+	if [ -s "$inputFile" ]
+	then
+#		title=$(mp3info -p %t "$inputFile")
+#		echo "==> title = <$title>"
+#		album=$(mp3info -p %l "$inputFile")
+#		echo "==> album = <$album>"
+#		   artist=$(mp3info -p %a "$inputFile")
+
+		outputFile=${inputFile/.wav/_speex.oga}
+		echo "==> outputFile = $outputFile"
+		if [ ! -s "$outputFile" ]
+		then
+#			time speexenc --title "$title" --comment ALBUM="$album" -V --quality 10 --vbr "$inputFile" "$outputFile"
+			time speexenc -V --quality 10 --vbr "$inputFile" "$outputFile"
+			sync
+			touch -r "$inputFile" "$outputFile"
+		else
+			echo "=> ERROR: The file <$outputFile> already exits." >&2
+			return 1
+		fi
+		echo "=> outputFile = <$outputFile>"
+	else
+		echo "=> ERROR: The file <$inputFile> does not exit or is empty." >&2
+	fi
+}
+function wav2opus {
+	typeset inputFile="$1"
+	if [ -s "$inputFile" ]
+	then
+#		title=$(mp3info -p %t "$inputFile")
+#		echo "==> title = <$title>"
+#		album=$(mp3info -p %l "$inputFile")
+#		echo "==> album = <$album>"
+#		   artist=$(mp3info -p %a "$inputFile")
+
+		outputFile=${inputFile/.wav/_opus.oga}
+		echo "==> outputFile = $outputFile"
+		if [ ! -s "$outputFile" ]
+		then
+			namedPipe=$(mktemp -u).wav
+			mkfifo $namedPipe
+			time sox -V "$inputFile" $namedPipe rate 16k norm &
+#			time opusenc --title "$title" --album ALBUM="$album" --vbr $namedPipe "$outputFile"
+			time opusenc --vbr $namedPipe "$outputFile"
+			\rm $namedPipe
+			sync
+			touch -r "$inputFile" "$outputFile"
+		else
+			echo "=> ERROR: The file <$outputFile> already exits." >&2
+			return 1
+		fi
+		echo "=> outputFile = <$outputFile>"
+	else
+		echo "=> ERROR: The file <$inputFile> does not exit or is empty." >&2
+	fi
+}
+function _16kwav16k2opus {
+	typeset inputFile="$1"
+	if [ -s "$inputFile" ]
+	then
+#		title=$(mp3info -p %t "$inputFile")
+#		echo "==> title = <$title>"
+#		album=$(mp3info -p %l "$inputFile")
+#		echo "==> album = <$album>"
+#		   artist=$(mp3info -p %a "$inputFile")
+
+		outputFile=${inputFile/.wav/_opus.oga}
+		echo "==> outputFile = $outputFile"
+		if [ ! -s "$outputFile" ]
+		then
+#			time opusenc --title "$title" --album ALBUM="$album" --vbr "$inputFile" "$outputFile"
+			time opusenc --vbr "$inputFile" "$outputFile"
+			sync
+			touch -r "$inputFile" "$outputFile"
+		else
+			echo "=> ERROR: The file <$outputFile> already exits." >&2
+			return 1
+		fi
+		echo "=> outputFile = <$outputFile>"
+	else
+		echo "=> ERROR: The file <$inputFile> does not exit or is empty." >&2
+	fi
+}
+function wav216kHz {
+	typeset inputFile="$1"
+	if [ -s "$inputFile" ]
+	then
+		outputFile=${inputFile/.wav/_16k.wav}
+		echo "==> outputFile = $outputFile"
+		if [ ! -s "$outputFile" ]
+		then
+#			time sox -V "$inputFile" "$outputFile" rate 16k norm
+			time $ffmpeg -i "$inputFile" -ar 16k "$outputFile"
+			sync
+			touch -r "$inputFile" "$outputFile"
+		else
+			echo "=> ERROR: The file <$outputFile> already exits." >&2
+			return 1
+		fi
+		echo "=> outputFile = <$outputFile>"
+	else
+		echo "=> ERROR: The file <$inputFile> does not exit or is empty." >&2
+	fi
+}
+function webmAudio2ogg {
+	typeset inputFile="$1"
+	if [ -s "$inputFile" ]
+	then
+		outputFile=${inputFile/.webm/.ogg}
+		echo "==> outputFile = $outputFile"
+		if [ ! -s "$outputFile" ]
+		then
+			time $ffmpeg -i "$inputFile" $remuxOptions "$outputFile"
+			sync
+			touch -r "$inputFile" "$outputFile"
+		else
+			echo "=> ERROR: The file <$outputFile> already exits." >&2
+			return 1
+		fi
+		echo "=> outputFile = <$outputFile>"
+	else
+		echo "=> ERROR: The file <$inputFile> does not exit or is empty." >&2
+	fi
+}
+function mp4DashAudio2m4a {
+	typeset inputFile="$1"
+	if [ -s "$inputFile" ]
+	then
+		outputFile=${inputFile/.mp4/.m4a}
+		echo "==> outputFile = $outputFile"
+		if [ ! -s "$outputFile" ]
+		then
+			time $ffmpeg -i "$inputFile" $remuxOptions "$outputFile"
+			sync
+			touch -r "$inputFile" "$outputFile"
+		else
+			echo "=> ERROR: The file <$outputFile> already exits." >&2
+			return 1
+		fi
+		echo "=> outputFile = <$outputFile>"
+	else
+		echo "=> ERROR: The file <$inputFile> does not exit or is empty." >&2
+	fi
+}
+function mp4DashAudio2aac {
+	typeset inputFile="$1"
+	if [ -s "$inputFile" ]
+	then
+		outputFile=${inputFile/.mp4/.aac}
+		echo "==> outputFile = $outputFile"
+		if [ ! -s "$outputFile" ]
+		then
+			time $ffmpeg -i "$inputFile" $remuxOptions "$outputFile"
+			sync
+			touch -r "$inputFile" "$outputFile"
+		else
+			echo "=> ERROR: The file <$outputFile> already exits." >&2
+			return 1
+		fi
+		echo "=> outputFile = <$outputFile>"
+	else
+		echo "=> ERROR: The file <$inputFile> does not exit or is empty." >&2
+	fi
+}
+function m3uConcat {
+	files="$@"
+	echo "#EXTM3U"
+	egrep -hv "EXTM3U|^# *$" $files | dos2unix | egrep -v "^$"
+}
+function videoSplit {
+	if [ $# != 2 ] && [ $# != 3 ]
+	then
+		echo "=> Usage: $FUNCNAME <filename> hh:mm:ss[.xxx] [ hh:mm:ss[.xxx] ]"
+		return 1
+	fi
+
+	fileName="$1"
+	extension=$(echo $fileName | sed "s/^.*\.//")
+	fileBaseName=$(basename "$fileName" .$extension)
+	begin=$2
+	outputFile="$fileBaseName-CUT.$extension"
+	chmod -x "$fileName"
+
+	if test $# = 3
+	then
+		end=$3
+		duration=$(echo $(date +%s.%N -d $end) - $(date +%s.%N -d $begin) | bc -l)
+		time $ffmpeg -ss $begin -t $duration -i "$fileName" $remuxOptions "$outputFile"
+	else
+		time $ffmpeg -ss $begin -i "$fileName" $remuxOptions "$outputFile"
+	fi
+	sync
+	touch -r "$fileName" "$outputFile"
+	echo "=> outputFile = <$outputFile>"
+}
+function audioShift {
+	if [ $# != 2 ] && [ $# != 3 ]; then
+		echo "=> Usage: $FUNCNAME <filename> hh:mm:ss[.xxx]"
+		return 1
+	fi
+
+	fileName="$1"
+	extension=$(echo $fileName | sed "s/^.*\.//")
+	fileBaseName=$(basename "$fileName" .$extension)
+	shift=$2
+	time $ffmpeg -itsoffset $shift -i "$fileName" $remuxOptions "$fileBaseName-SHIFTED.$extension"
+	sync
+	touch -r "$fileName" "$fileBaseName-SHIFTED.$extension"
+}
+function sizeofStream {
+	local size
+	local total="0"
+	local format=fmt18_360p
+	echo $1 | grep -q ^http || {
+	format=$1
+	shift
+	}
+	for url in "$@"
+	do
+		size=$(curl -sI "$(youtube-dl -gf best "$url")" | awk 'BEGIN{IGNORECASE=1}/Content-Length:/{print$2/2^20}')
+		total="$total+$size"
+		printf "%s %s Mo\n" $url $size
+	done
+	total=$(echo $total | \bc -l)
+	echo "=> total = $total Mo"
+}
+function vlcRecord {
+	local file=vlc-record-$(date +"%Y-%m-%d-%Hh%Mm%Ss")-$(echo $1 | tr "[:/]" "_" ).ts
+	echo "=> The recording will be saved into the file: <$file>"
+	cvlc --verbose=1 --ipv4-timeout=600  --logmode=text --log-verbose=-1 --logfile=vlcrecord_$(date +"%Y-%m-%d-%Hh%Mm%Ss").out --sout=file:$file $1
+	echo "=> The recording is saved into the file: <$file>" >&2
+}
+
+#function aacDir2mp3 { inp=aac; shopt -s globstar && time for f in **/*.$inp; do time avconv -i "$f" "${f/.$inp/.mp3}" && rm -v "$f"; done; }
+function aacDir2mp3 { shopt -s globstar && for f in **/*.aac; do /bin/mv -vi "$f" "${f/.aac/.m4a}"; done; time pacpl -v --eopts "-v" -r -k -t mp3 .; }
+
+function audioGet {
+	ls "$@" >/dev/null || return
+	for file
+	do
+		extension=${file/*./}
+		audioFormat=$(ffprobe "$file" 2>&1 | awk '/Audio/{print$4}' | sed "s/,$//")
+		outputExtension=${audioExtension[$audioFormat]}
+#		outputFileName=${file/.$extension/_AUDIO.$outputExtension}
+		outputFileName=$(basename $file .$extension)_AUDIO.$outputExtension
+		minimumAudioStreamSize=$(mediainfo --Output="Audio;%StreamSize%" "$file") || return
+		if test -s "$outputFileName" && [ $(stat -c '%s' "$outputFileName") -ge $minimumAudioStreamSize ]
+		then
+			echo "=> INFO: The file $file has already been converted to $outputFileName." >&2
+			continue
+		fi
+		time $ffmpeg -i "$file" -vn -sn -codec copy $options "$outputFileName" -y
+		touch -r "$file" "$outputFileName"
+		sync
+		echo
+		test -s "$outputFileName" && echo "=> Output file is: <$outputFileName>."
+	done
+}
+function videoGet {
+	ls "$@" >/dev/null || return
+	for file
+	do
+		extension=${file/*./}
+		videoFormat=$(ffprobe "$file" 2>&1 | grep -v Video:.mjpeg | awk '/Video/{print$4}' | sed "s/,$//")
+		outputExtension=${videoExtension[$videoFormat]}
+#		outputFileName=${file/.$extension/_VIDEO.$outputExtension}
+		outputFileName=$(basename $file .$extension)_VIDEO.$outputExtension
+		minimumVideoStreamSize=$(mediainfo --Output="Video;%StreamSize%" "$file") || return
+		if test -s "$outputFileName" && [ $(stat -c '%s' "$outputFileName") -ge $minimumVideoStreamSize ]
+		then
+			echo "=> INFO: The file $file has already been converted to $outputFileName." >&2
+			continue
+		fi
+		time $ffmpeg -i "$file" -an -codec copy $options "$outputFileName" -y
+		touch -r "$file" "$outputFileName"
+		sync
+		echo
+		test -s "$outputFileName" && echo "=> Output file is: <$outputFileName>."
+	done
+}
+function avprobe {
+	for arg
+	do
+		egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" <<< "$arg" && $avprobe $avprobeOptions "$($youtube_dl -gf best "$arg")" || $(which avprobe) $avprobeOptions -probesize 400M -analyzeduration 400M "$arg"
+	done 2>&1 | cut -c 1-$COLUMNS
+}
+function videoInfo {
+	which ffprobe >/dev/null && {
+		for urlOrFile
+		do
+			echo "=> urlOrFile = $urlOrFile"
+			if egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" <<< "$urlOrFile"
+			then
+				#remote stream
+				if curl -s "$urlOrFile" | file -bi - | \grep -q "^text/"
+				then
+					echo "=> This stream needs first to be resolved by $youtube_dl ..."
+					possibleFormats=best[ext=mp4]/best[ext=webm]/best[ext=flv]/18/webm/sd/http-480
+					infos="$($youtube_dl -gef $possibleFormats "$urlOrFile")"
+					test -z "$infos" && continue
+					title="$(sed -n 1p <<< "$infos")"
+					directURLOfStream="$(sed -n 2p <<< "$infos")"
+					size=$(\curl -sI "$directURLOfStream" | awk 'BEGIN{IGNORECASE=1;size=0}/Content-Length:/{if($2>0)size=$2}END{printf "%8.3f MiB\n",size/2^20}')
+					echo "Title: $title"
+					echo "Size: $size"
+					ffprobeOptions="-hide_banner"
+					$(which ffprobe) $ffprobeOptions "$URL" 2>&1
+				else
+					#direct stream
+					ffprobeOptions="-hide_banner -probesize 400M -analyzeduration 400M"
+					size=$(\curl -sI "$urlOrFile" | awk 'BEGIN{IGNORECASE=1;size=0}/Content-Length:/{if($2>0)size=$2}END{printf "%8.3f MiB\n",size/2^20}')
+					echo "Size: $size"
+					$(which ffprobe) $ffprobeOptions "$urlOrFile"
+				fi
+			else
+				#Local file
+				ffprobeOptions="-hide_banner -probesize 400M -analyzeduration 400M"
+				size=$(\ls -l "$urlOrFile" | awk '/[0-9]+/{printf "%8.3f MiB\n",$5/1024^2}')
+				echo "Size: $size"
+				$(which ffprobe) $ffprobeOptions "$urlOrFile"
+			fi
+		done 2>&1 | cut -c 1-$COLUMNS | egrep -iw "urlOrFile|kb/s|Input|Size:|Title:|Duration:|Stream|Chapter|Invalid|error|bad| no such file|^\[.* not"
+	}
+}
+function ffprobe {
+	which ffprobe >/dev/null && {
+		for arg
+		do
+			egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" <<< "$arg" && $ffprobe $ffprobeOptions "$($youtube_dl -gf best "$arg")" || $ffprobe $ffprobeOptions "$arg"
+		done 2>&1 | cut -c 1-$COLUMNS
+	}
+}
+function ffprobeFlat {
+	ffprobeOptions="-v 0 -show_format -show_streams -of flat"
+	for arg
+	do
+		egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" <<< "$arg" && $ffprobe $ffprobeOptions "$($youtube_dl -gf best "$arg")" || $ffprobe $ffprobeOptions "$arg"
+	done 2>&1 | cut -c 1-$COLUMNS
+}
+function ffprobeIni {
+	ffprobeOptions="-v 0 -show_format -show_streams -of ini"
+	for arg
+	do
+		egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" <<< "$arg" && $ffprobe $ffprobeOptions "$($youtube_dl -gf best "$arg")" || $ffprobe $ffprobeOptions "$arg"
+	done 2>&1 | cut -c 1-$COLUMNS
+}
+function ffprobeJSON {
+	ffprobeOptions="-v 0 -show_format -show_streams -of json"
+	for arg
+	do
+		egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" <<< "$arg" && $ffprobe $ffprobeOptions "$($youtube_dl -gf best "$arg")" || $ffprobe $ffprobeOptions "$arg"
+	done 2>&1 | cut -c 1-$COLUMNS
+}
+function ffprobeXML {
+	ffprobeOptions="-v 0 -show_format -show_streams -of xml"
+	for arg
+	do
+		egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" <<< "$arg" && $ffprobe $ffprobeOptions "$($youtube_dl -gf best "$arg")" || $ffprobe $ffprobeOptions "$arg"
+	done 2>&1 | cut -c 1-$COLUMNS
+}
+function mp4Repair {
+	for file
+	do
+		extension=mp4
+		time $ffmpeg -i "$file" $remuxOptions -movflags +faststart "${file/.$extension/_REPAIRED.$extension}"
+		sync
+		touch -r "$file" "${file/.$extension/_REPAIRED.$extension}"
+	done
+}
+function videoRepair {
+	for file
+	do
+		extension="${file/*./}"
+		time $ffmpeg -i "$file" $remuxOptions "${file/.$extension/_REPAIRED.$extension}"
+		sync
+		touch -r "$file" "${file/.$extension/_REPAIRED.$extension}"
+	done
+}
+function videoRemux {
+	local inputFile="$1"
+	if [ $# != 2 ]
+	then
+		echo "=> Usage: $(basename $0) inputFileName outputFileName [ffmpegOptions]" >&2
+		exit 1
+	fi
+
+	shift
+	outputFile="$1"
+	outputExtension=${outputFile/*./}
+	case $outputExtension in
+		vob) options="-f mpeg" ;;
+		*) options="" ;;
+	esac
+
+	time $ffmpeg -i "$inputFile" $remuxOptions $options "$@"
+	sync
+	touch -r "$inputFile" "$outputFile"
+}
+function aac2m4a {
+#	file="$1"
+#	shift
+	for file
+	do
+#		time ffmpeg -hide_banner -i "$file" -acodec copy $aac2m4aOptions $@ "${file/.aac/.m4a}"
+		time ffmpeg -hide_banner -i "$file" -acodec copy $aac2m4aOptions "${file/.aac/.m4a}"
+		touch -r "$file" "${file/.aac/.m4a}"
+		sync
+	done
+}
+function m4a2aac {
+#	file="$1"
+#	shift
+	for file
+	do
+#		time ffmpeg -hide_banner -i "$file" -acodec copy $@ "${file/.m4a/.aac}"
+		time ffmpeg -hide_banner -i "$file" -acodec copy "${file/.m4a/.aac}"
+		touch -r "$file" "${file/.m4a/.aac}"
+		sync
+	done
+}
+function mplayer {
+	if tty | grep -q "/dev/pts/[0-9]"; then
+		$(which mplayer) -idx -geometry 0%:100% "$@" 2> /dev/null | egrep "stream |dump|Track |VIDEO:|AUDIO:|VO:|AO:|A:"
+	else
+		if [ -c /dev/fb0 ]; then
+			if [ ! -w /dev/fb0 ]; then
+			groups | grep -wq video || \sudo adduser $USER video
+			\sudo chmod g+w /dev/fb0
+			fi
+			$(which mplayer) -vo fbdev2 -idx "$@" 2> /dev/null | egrep "stream |dump|Track |VIDEO:|AUDIO:|VO:|AO:|A:"
+		else
+			echo "=> Function $FUNCNAME - ERROR: Framebuffer is not supported in this configuration." 1>&2
+			return 1
+		fi
+	fi
+}
+function mpvalt {
+	test $1 && $(which mpv) --no-ytdl $(youtube-dl -gf best $@ | uniq)
+}
