@@ -1,0 +1,7 @@
+#sh
+which register-python-argcomplete >/dev/null 2>&1 && eval "$(register-python-argcomplete conda)"
+
+export NO_AT_BRIDGE=1
+
+export CONDA_HOME=/usr/local/miniconda3
+export PATH=$CONDA_HOME/bin${PATH:+:${PATH}}
