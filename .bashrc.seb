@@ -81,7 +81,7 @@ which ssh-add >/dev/null && {
 	trap 'echo "=> Ignoring this step and continuing the script <$(basename $BASH_SOURCE)> ..." >&2' INT
 	if ! ssh-add -l 2>/dev/null | grep -q "$UPMC_ID"
 	then
-		test -s ~/.ssh/.$UPMC_ID && echo "=> Starting ssh-add from <$(basename $BASH_SOURCE)> ..." && ssh-add ~/.ssh/.$UPMC_ID 2>/dev/null
+		test -s ~/.ssh/.$UPMC_ID && echo "=> Starting ssh-add from <$(basename $BASH_SOURCE)> ..." && ssh-add ~/.ssh/.$UPMC_ID >/dev/null
 	fi
 	trap - INT
 }
