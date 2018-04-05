@@ -1,3 +1,4 @@
+#!sh
 # vim: set syn=sh noet
 
 export NO_AT_BRIDGE=1
