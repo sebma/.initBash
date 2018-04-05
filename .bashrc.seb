@@ -1,3 +1,4 @@
+#!sh
 # vim: set syn=sh noet
 #test -n "$bashRCLoaded" && return
 bashRCLoaded=1
