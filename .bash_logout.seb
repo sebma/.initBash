@@ -1,3 +1,4 @@
+#!sh
 # vim: set syn=sh noet
 echo "=> RUNNING $BASH_SOURCE ..." >&2
 
