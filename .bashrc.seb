@@ -41,7 +41,7 @@ esac
 export -f $(declare -F | egrep -v " __?" | awk '{print$NF}')
 
 test -r $initDir/.colors && source $initDir/.colors
-user=$(id | awk -F"[()]" '/uid/{print$2}')
+user=$(\id -un)
 
 if tty -s #Si c'est une session interactive
 then
