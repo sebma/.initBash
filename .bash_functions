@@ -738,7 +738,9 @@ function rename_APK {
 		}
 
 		packagePath=$(dirname "$package")
-		packageID=$(aapt dump badging "$package" | awk -F"'" '/^package:/{print$2}')
+		set -o pipefail
+		packageID=$(aapt dump badging "$package" | awk -F"'" '/^package:/{print$2}') || continue
+		set +o pipefail
 		packageVersion=$(aapt dump badging "$package" | awk -F"'" '/^package:/{print$6}' | cut -d' ' -f1)
 		packageNewFileName="$packagePath/$packageID-$packageVersion.apk"
 		[ "$package" = $packageNewFileName ] || mv -v "$package" $packageNewFileName
@@ -756,7 +758,9 @@ function rename_All_APKs {
 		if echo $package | egrep -q "^[^\.]+\.apk"
 		then
 			packagePath=$(dirname $package)
-			packageID=$(aapt dump badging "$package" | awk -F"'" '/^package:/{print$2}')
+			set -o pipefail
+			packageID=$(aapt dump badging "$package" | awk -F"'" '/^package:/{print$2}') || continue
+			set +o pipefail
 			packageVersion=$(aapt dump badging "$package" | awk -F"'" '/^package:/{print$6}' | cut -d' ' -f1)
 			packageNewFileName="$packagePath/$packageID-$packageVersion.apk"
 			[ "$package" = $packageNewFileName ] || mv -v "$package" $packageNewFileName
