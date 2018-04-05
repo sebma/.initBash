@@ -42,7 +42,7 @@ export -f $(declare -F | egrep -v " __?" | awk '{print$NF}')
 
 test -r $initDir/.colors && source $initDir/.colors
 user=$(id | awk -F"[()]" '/uid/{print$2}')
-PROMPT_COMMAND='echo -ne "\033]0;$USER : $HOSTNAME @ $domain / $system : $(date +"%A %d %B %Y %H:%M") $PWD\007"'
+#PROMPT_COMMAND='echo -ne "\033]0;$USER : $HOSTNAME @ $domain / $system : $(date +"%A %d %B %Y %H:%M") $PWD\007"'
 
 if tty -s #Si c'est une session interactive
 then
