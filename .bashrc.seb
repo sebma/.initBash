@@ -42,7 +42,6 @@ export -f $(declare -F | egrep -v " __?" | awk '{print$NF}')
 
 test -r $initDir/.colors && source $initDir/.colors
 user=$(id | awk -F"[()]" '/uid/{print$2}')
-#PROMPT_COMMAND='echo -ne "\033]0;$USER : $HOSTNAME @ $domain / $system : $(date +"%A %d %B %Y %H:%M") $PWD\007"'
 
 if tty -s #Si c'est une session interactive
 then
@@ -96,5 +95,6 @@ date
 test -r $initDir/.bashrc.conda && source $initDir/.bashrc.conda
 test $os = Linux && source $initDir/.bashrc.Linux
 
+#PROMPT_COMMAND='echo -ne "\033]0;$USER : $HOSTNAME @ $domain / $system : $(date +"%A %d %B %Y %H:%M") $PWD\007"'
 PS1="$bold${color[blue]}$user : $blink${color[red]}$HOSTNAME$blinkOff @ $bold${color[blue]}$domain / $italics${color[green]}$system$normal : $bold${color[blue]}\w$normal
  "
