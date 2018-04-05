@@ -66,10 +66,8 @@ fi
 
 which gnuplot >/dev/null 2>&1 && export GNUTERM=qt
 
-export RSYNC_SKIP_COMPRESS_LIST="7z/aac/avi/bz2/deb/flv/gz/iso/jpeg/jpg/mkv/mov/m4a/mp2/mp3/mp4/mpeg/mpg/oga/ogg/ogm/ogv/webm/wim/rpm/tbz/tgz/z/zip"
+export RSYNC_SKIP_COMPRESS_LIST="7z/aac/avi/bz2/deb/flv/gz/iso/jpeg/jpg/mkv/mov/m4a/mp2/mp3/mp4/mpeg/mpg/oga/ogg/ogm/ogv/webm/rpm/tbz/tgz/z/zip"
 export RSYNC_EXCLUSION=$(printf " --exclude %s" .git/ watch_later/ '*.swp')
-
-export PATH=$PATH:/usr/local/miniconda2/bin
 #FIN DE DEFINITION DES VARIABLES
 
 #Creation du .cache dans /tmp et pointage de ce dernier via un lien symbolique
@@ -101,7 +99,6 @@ then
 
 	#my git configuration
 	which git >/dev/null && {
-		cd $initDir
 		git config --global user.email sebma@users.noreply.github.com
 		git config --global user.name sebma
 		test "$http_proxy" && git config --global http.proxy $http_proxy
@@ -109,7 +106,6 @@ then
 		git config --global alias.st "status -bs"
 		git config --global alias.br branch
 		git config alias.ci '!f() { for file; do git commit $file -m "Updated $file"; done; }; f'
-		cd -
 	}
 fi
 
