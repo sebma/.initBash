@@ -1,4 +1,4 @@
-#!sh
+#!bash
 # vim: set syn=sh noet
 export bashProfileLoaded=1
 [ $BASH_VERSINFO = 3 ] && [ -x ~/usr/local/bin/bash ] && exec ~/usr/local/bin/bash -l
