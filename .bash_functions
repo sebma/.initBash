@@ -600,7 +600,7 @@ function reinstallOrignialPackages {
 }
 function timeprocess {
 	local process=$1
-	local pid=$(pidof "$1")
+	local pid=$(\pgrep "$1")
 	test -z $pid || ps -o etime= $pid
 }
 function watchProcess {
