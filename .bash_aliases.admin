@@ -13,7 +13,7 @@ alias rtmpdumprs='\sudo iptables -t nat -D OUTPUT -p tcp --dport 1935 -m owner \
 alias sudo="\sudo "
 alias testLiveUSB_BIOS="sudo -b \kvm -m 1G -boot menu=on -hda"
 alias testLiveUSB_UEFI="sudo -b \kvm -m 1G -bios /usr/share/qemu/OVMF.fd -hda"
-alias update="time sudo $(which apt 2>/dev/null) update && $(which apt 2>/dev/null) list --upgradable"
+alias update="time sudo $(which apt 2>/dev/null) update;$(which apt 2>/dev/null) list --upgradable"
 alias update-mime-database="\sudo \rm -vf /usr/share/mime/packages/kde.xml;time sudo \update-mime-database /usr/share/mime"
 alias updatedb="time sudo $(which updatedb 2>/dev/null)"
 alias upgrade="sudo $(which apt 2>/dev/null) upgrade -V --download-only && sync && sudo $(which apt 2>/dev/null) upgrade -V --yes"
