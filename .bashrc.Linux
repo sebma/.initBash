@@ -1,2 +1,3 @@
+#!sh
 # vim: set syn=sh noet
 lspci | grep -qi VGA.*NVIDIA && test -r $initDir/.bashrc.cuda && source $initDir/.bashrc.cuda
