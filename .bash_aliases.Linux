@@ -30,8 +30,6 @@ function topf {
 function topflines {
 	$(which find) "$@" $prunePathsFindExpression -xdev -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | column -t | head -n $(($LINES-4)) | awk '{total+=$5;print}END{if(total) print"=> total = "total" MiB"}'
 }
-which pgrep >/dev/null 2>&1 || alias pgrep="\ps -fC"
-which pidof >/dev/null 2>&1 || alias pgrep="\ps -o pid= -C"
 alias pip_pypy="\pypy -m pip"
 alias pip_pypy3="\pypy3 -m pip"
 alias mmcSize="awk '/[0-9]/{print FILENAME\": \"\$1/(2*1024^2)\" GiB\"}' /sys/class/block/mmcblk?/size"
