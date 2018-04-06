@@ -5,5 +5,9 @@ which register-python-argcomplete >/dev/null 2>&1 && eval "$(register-python-arg
 
 export NO_AT_BRIDGE=1
 
-export CONDA_HOME=/usr/local/miniconda3
-export PATH=$CONDA_HOME/bin${PATH:+:${PATH}}
+for condaPath in /usr/local/miniconda3 /usr/local/miniconda2
+do
+		test -x $condaPath/bin/conda && export CONDA_HOME=$condaPath && break
+done
+
+echo $PATH | grep -wq $CONDA_HOME || export PATH=$CONDA_HOME/bin${PATH:+:${PATH}}
