@@ -87,7 +87,7 @@ alias getUuid="\blkid -o value -s UUID"
 alias gitLocalUndelete="\git ls-files -d | grep . && \git ls-files -d | \xargs git checkout-index"
 alias gitStatus="\git status -bs -uno"
 alias gitUpdate='\grep -w "^[[:blank:]]url" ./.git/config;\git pull'
-alias gitURL='\grep -w "^[[:blank:]]url" ./.git/config'
+alias gitURL='\git config remote.origin.url'
 alias gitURLs='\grep -w "url" ./.git/config'
 alias grepInHome="time \grep --exclude-dir=Audios --exclude-dir=Music --exclude-dir=Podcasts --exclude-dir=Videos --exclude-dir=Karambiri --exclude-dir=iso --exclude-dir=Downloads --exclude-dir=Documents --exclude-dir=src --exclude-dir=Pictures --exclude-dir=.thunderbird --exclude-dir=deb --exclude-dir=apks --exclude-dir=.mozilla --exclude-dir=.PlayOnLinux --exclude-dir=PlayOnLinux\'s\ virtual\ drives --exclude-dir=.cache --exclude-dir=Sauvegarde_MB525 --exclude-dir=A_Master_RES --exclude-dir=SailFishSDK --exclude=.*history"
 alias gunzip="\gunzip -Nv"
