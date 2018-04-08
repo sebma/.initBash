@@ -339,7 +339,7 @@ function getRestrictedFilenamesSD {
 		fi
 
 #		format=$($youtube_dl -F $url | egrep -vw "only|hls-[0-9]+"  | egrep '(webm|mp4|flv) .*([0-9]+p?(x[0-9]+)?)|(unknown)' | egrep -wv "22|hd|http-720" | sort -k 2,2 -k 3,3rn | awk '{printf$1"/"}')
-		format="mp4[height<=?360]"
+		format="mp4[height<=?480]"
 		echo
 		fileName=$($youtube_dl -f $format --get-filename "$url" --restrict-filenames || $youtube_dl -f $fallback --get-filename "$url" --restrict-filenames)
 		echo "=> fileName = <$fileName>"
