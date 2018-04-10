@@ -48,11 +48,13 @@ PS1="$bold${color[blue]}$user : $blink${color[red]}$HOSTNAME$blinkOff @ $bold${c
 
 if tty -s #Si c'est une session interactive
 then
+	trap 'echo "=> Ignoring this step and continuing the script <$(basename $BASH_SOURCE)> ..." >&2' INT
 	if which aplay >/dev/null 2>&1 && LANG=C aplay -l 2>/dev/null | grep -wq "card"
 	then
 		audioCardNumber=$(LANG=C aplay -l 2>/dev/null | grep -wv HDMI | awk -F "[ :]" '/^card/{number=$2;exit}END{print number}')
 #		test $audioCardNumber && amixer -q -c $audioCardNumber -- sset Master 100%
 	fi
+	trap - INT
 	echo
 	which randverse >/dev/null 2>&1 && randverse && echo
 fi
