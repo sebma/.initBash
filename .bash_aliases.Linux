@@ -34,5 +34,5 @@ alias pip_pypy="\pypy -m pip"
 alias pip_pypy3="\pypy3 -m pip"
 alias mmcSize="awk '/[0-9]/{print FILENAME\": \"\$1/(2*1024^2)\" GiB\"}' /sys/class/block/mmcblk?/size"
 alias mmcInfo="tail -vn +1 /sys/class/block/mmcblk0/device/driver/mmc*/uevent"
-#alias lsgpu="\lspci | awk '/Display|VGA/{print \"lspci -vnns \" \$1}' | sh"
-alias lsgpu="\lspci -vnns $(\lspci | awk '/Display|VGA/{print$1}')"
+alias lsgpu="\lspci -vnns \$(\lspci | awk '/Display|VGA/{print\$1}')"
+alias vga=lsgpu
