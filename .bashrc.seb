@@ -101,4 +101,4 @@ which register-python-argcomplete >/dev/null 2>&1 && eval "$(register-python-arg
 date
 test -r $initDir/.bashrc.conda && source $initDir/.bashrc.conda
 test $os = Linux && source $initDir/.bashrc.Linux
-
+test -s /etc/debian_version && source $initDir/.bashrc.Debian
