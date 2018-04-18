@@ -7,6 +7,24 @@ test -r $initDir/.colors && source $initDir/.colors
 test -r $initDir/.AV_functions && source $initDir/.AV_functions
 test -r $initDir/.youtube_functions && source $initDir/.youtube_functions
 
+function lswifi {
+	\lspci | awk '/Network controller/{print$1}' | while read device
+	do
+		\lspci -nns $device "$@"
+	done
+}
+function lswireless {
+	lswifi "$@"
+}
+function lsether {
+	\lspci | awk '/Ethernet controller/{print$1}' | while read device
+	do
+		\lspci -nns $device "$@"
+	done
+}
+function lseth {
+	lsether "$@"
+}
 function wlanmac {
 	wlanIF=$(iwconfig 2>&1 | awk '/ESSID:/{print$1}')
 	test "$wlanIF" && ip link show $wlanIF | awk '/link\/ether /{print$2}'
