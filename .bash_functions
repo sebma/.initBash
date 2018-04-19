@@ -26,17 +26,11 @@ function lswifi {
 		\lspci -nns $device "$@"
 	done
 }
-function lswireless {
-	lswifi "$@"
-}
-function lsether {
+function lseth {
 	\lspci | awk '/Ethernet controller/{print$1}' | while read device
 	do
 		\lspci -nns $device "$@"
 	done
-}
-function lseth {
-	lsether "$@"
 }
 function wlanmac {
 	wlanIF=$(iwconfig 2>&1 | awk '/ESSID:/{print$1}')
