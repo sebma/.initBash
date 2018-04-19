@@ -9,15 +9,12 @@ test -r $initDir/.youtube_functions && source $initDir/.youtube_functions
 
 function Sudo {
 	local firstArg=$1
-	echo "=> \$@ = <$@>"
-	echo "=> \$firstArg = <$firstArg>"
-	if [ $(type -t $firstArg) == function ] 
+	if [ $(type -t $firstArg) = function ] 
 	then
-		shift && $(which sudo) bash -c "$(type $firstArg);$firstArg $@"
-	elif [ $(type -t $firstArg) == alias ]
+		shift && $(which sudo) $(which bash) -c "$(declare -f $firstArg);$firstArg $@"
+	elif [ $(type -t $firstArg) = alias ]
 	then
-		type sudo
-		sudo "$@"
+		eval "sudo $@"
 	else
 		$(which sudo) "$@"
 	fi
