@@ -14,6 +14,7 @@ function Sudo {
 		shift && $(which sudo) $(which bash) -c "$(declare -f $firstArg);$firstArg $@"
 	elif [ $(type -t $firstArg) = alias ]
 	then
+		alias sudo='\sudo '
 		eval "sudo $@"
 	else
 		$(which sudo) "$@"
