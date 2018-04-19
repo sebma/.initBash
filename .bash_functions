@@ -7,6 +7,21 @@ test -r $initDir/.colors && source $initDir/.colors
 test -r $initDir/.AV_functions && source $initDir/.AV_functions
 test -r $initDir/.youtube_functions && source $initDir/.youtube_functions
 
+function Sudo {
+	local firstArg=$1
+	echo "=> \$@ = <$@>"
+	echo "=> \$firstArg = <$firstArg>"
+	if [ $(type -t $firstArg) == function ] 
+	then
+		shift && $(which sudo) bash -c "$(type $firstArg);$firstArg $@"
+	elif [ $(type -t $firstArg) == alias ]
+	then
+		type sudo
+		sudo "$@"
+	else
+		$(which sudo) "$@"
+	fi
+}
 function lswifi {
 	\lspci | awk '/Network controller/{print$1}' | while read device
 	do
