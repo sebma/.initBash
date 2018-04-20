@@ -3,7 +3,7 @@
 declare -A | grep -wq color || source $initDir/.colors
 test "$debug" = "1" && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 test "$debug" = "2" && set -x
-function Source { test "$debug" = "1" && time source "$@" || source "$@" ; }
+function Source { test "$debug" = "1" && time source "$@";echo || source "$@" ; }
 
 #test -n "$bashRCLoaded" && return
 bashRCLoaded=1
