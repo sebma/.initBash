@@ -8,7 +8,7 @@ if [ "$SHLVL" = 1 ]; then
     [ -x /usr/bin/clear_console ] && /usr/bin/clear_console -q
 fi
 
-test -f $initDir/.bash_logout.seb && time source $initDir/.bash_logout.seb
+test -f $initDir/.bash_logout.seb && Source $initDir/.bash_logout.seb
 
 set +x
 test "$debug" = "1" && echo "=> END of $blink$bold${colors[blue]}${BASH_SOURCE[0]}$normal"

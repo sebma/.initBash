@@ -3,7 +3,7 @@
 declare -A | grep -wq color || source $initDir/.colors
 test "$debug" = "1" && echo "=> Running $blink$bold${colors[blue]}${BASH_SOURCE[0]}$normal ..."
 
-lspci | grep -qi VGA.*NVIDIA && test -r $initDir/.bashrc.cuda && source $initDir/.bashrc.cuda
+lspci | grep -qi VGA.*NVIDIA && test -r $initDir/.bashrc.cuda && Source $initDir/.bashrc.cuda
 
 set +x
 test "$debug" = "1" && echo "=> END of $blink$bold${colors[blue]}${BASH_SOURCE[0]}$normal"

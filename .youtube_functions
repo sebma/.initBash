@@ -4,7 +4,6 @@ test "$debug" = "1" && echo "=> Running $blink$bold${colors[blue]}${BASH_SOURCE[
 
 test -r $initDir/.colors && source $initDir/.colors
 youtube_dl=$(which youtube-dl)
-os=$(uname -s)
 test $os = Linux  && locate=$(which locate)
 test $os = Darwin && locate=$(which glocate)
 

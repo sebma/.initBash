@@ -2,6 +2,8 @@
 # vim: set syn=sh noet
 declare -A | grep -wq color || source $initDir/.colors
 test "$debug" = "1" && echo "=> Running $blink$bold${colors[blue]}${BASH_SOURCE[0]}$normal ..."
+test "$debug" = "2" && set -x
+function Source { test "$debug" = "1" && time source "$@" || source "$@" ; }
 
 #test -n "$bashRCLoaded" && return
 bashRCLoaded=1
@@ -32,20 +34,20 @@ done
 export MANPATH
 
 #Definitions de mes fonctions bash pour Linux
-[ -n "$BASH_VERSION" ] && test -r $initDir/.bash_functions && time source $initDir/.bash_functions
+[ -n "$BASH_VERSION" ] && test -r $initDir/.bash_functions && Source $initDir/.bash_functions
 #Definitions de mes alias
-test -r $initDir/.bash_aliases && time source $initDir/.bash_aliases
-test -r $initDir/.bash_aliases.admin && groups 2>/dev/null | egrep -wq "sudo|admin" && time source $initDir/.bash_aliases.admin
-test -r $initDir/.bash_aliases.$(uname -s) && time source $initDir/.bash_aliases.$(uname -s)
+test -r $initDir/.bash_aliases && Source $initDir/.bash_aliases
+test -r $initDir/.bash_aliases.admin && groups 2>/dev/null | egrep -wq "sudo|admin" && Source $initDir/.bash_aliases.admin
+test -r $initDir/.bash_aliases.$(uname -s) && Source $initDir/.bash_aliases.$(uname -s)
 case $OSTYPE in
-	linux-gnueabihf) grep -q ID=sailfishos /etc/os-release &&  test -r $initDir/.bash_aliases.SailfishOS && time source $initDir/.bash_aliases.SailfishOS;;
-	linux-gnueabi) resize; test -r $initDir/.bash_aliases.android && time source $initDir/.bash_aliases.android; which busybox >/dev/null && test -r $initDir/.bash_aliases.busybox && time source $initDir/.bash_aliases.busybox;;
+	linux-gnueabihf) grep -q ID=sailfishos /etc/os-release &&  test -r $initDir/.bash_aliases.SailfishOS && Source $initDir/.bash_aliases.SailfishOS;;
+	linux-gnueabi) resize; test -r $initDir/.bash_aliases.android && Source $initDir/.bash_aliases.android; which busybox >/dev/null && test -r $initDir/.bash_aliases.busybox && Source $initDir/.bash_aliases.busybox;;
 esac
 
 #Export de toutes les fonctions sauf celles dont le nom commence par "_"
 export -f $(declare -F | egrep -v " __?" | awk '{print$NF}')
 
-test -r $initDir/.colors && source $initDir/.colors
+test -r $initDir/.colors && Source $initDir/.colors
 user=$(\id -un)
 #PROMPT_COMMAND='echo -ne "\033]0;$USER : $HOSTNAME @ $domain / $system : $(date +"%A %d %B %Y %H:%M") $PWD\007"'
 PS1="$bold${colors[blue]}$user : $blink${colors[red]}$HOSTNAME$blinkOff @ $bold${colors[blue]}$domain / $italics${colors[green]}$system$normal : $bold${colors[blue]}\w$normal
@@ -69,7 +71,7 @@ then
 	xdg-mime query default application/pdf | grep -wq evince.desktop || xdg-mime default evince.desktop application/pdf
 fi
 
-#test -f ~/.rvm/scripts/rvm && time source ~/.rvm/scripts/rvm
+#test -f ~/.rvm/scripts/rvm && Source ~/.rvm/scripts/rvm
 which lpstat >/dev/null 2>&1 && defaultPrinter=$(LANG=C lpstat -a 2>/dev/null | awk '/accepting/{print$1}') || defaultPrinter=""
 if which lpstat >/dev/null 2>&1 && lpstat -p 2>/dev/null | grep -q printer 
 then
@@ -96,15 +98,16 @@ which ssh-add >/dev/null && {
 }
 cd
 
-test -r /usr/share/bash-completion/bash_completion && time source /usr/share/bash-completion/bash_completion
-test -x "$(which brew)" && [ $BASH_VERSINFO -ge 4 ] && [ -r $(brew --prefix)/share/bash-completion/bash_completion ] && time source $(brew --prefix)/share/bash-completion/bash_completion
+test -r /usr/share/bash-completion/bash_completion && Source /usr/share/bash-completion/bash_completion
+test -x "$(which brew)" && [ $BASH_VERSINFO -ge 4 ] && [ -r $(brew --prefix)/share/bash-completion/bash_completion ] && Source $(brew --prefix)/share/bash-completion/bash_completion
 which register-python-argcomplete >/dev/null 2>&1 && eval "$(register-python-argcomplete conda)"
 
-#[[ -s "$HOME/.rvm/scripts/rvm" ]] && time source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+#[[ -s "$HOME/.rvm/scripts/rvm" ]] && Source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 date
-test -r $initDir/.bashrc.conda && time source $initDir/.bashrc.conda
-test $os = Linux && time source $initDir/.bashrc.Linux
-test -s /etc/debian_version && time source $initDir/.bashrc.Debian
+test -r $initDir/.bashrc.conda && Source $initDir/.bashrc.conda
+test $os = Linux && Source $initDir/.bashrc.Linux
+test -s /etc/debian_version && Source $initDir/.bashrc.Debian
 
 set +x
+echo $normal
 test "$debug" = "1" && echo "=> END of $blink$bold${colors[blue]}${BASH_SOURCE[0]}$normal"

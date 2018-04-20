@@ -27,7 +27,7 @@ export LANG=en_US.UTF-8
 if tty -s
 then
 	syncCommand="rsync -vuth -P -rl"
-	test -r ~/.colors && source ~/.colors
+	test -r ~/.colors && Source ~/.colors
 	echo "$bold${colors[blue]}=> <$(basename ${BASH_SOURCE[0]})> : Syncing Android Pictures and Downloads to ~ ...$normal"
 	if mount | grep -q /android_storage
 	then

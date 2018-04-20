@@ -3,6 +3,8 @@
 declare -A | grep -wq color || source $initDir/.colors
 test "$debug" = "1" && echo "=> Running $blink$bold${colors[blue]}${BASH_SOURCE[0]}$normal ..."
 
+os=$(uname -s)
+function Source { test "$debug" = "1" && time source "$@" || source "$@" ; }
 export bashProfileLoaded=1
 [ $BASH_VERSINFO = 3 ] && [ -x ~/usr/local/bin/bash ] && exec ~/usr/local/bin/bash -l
 
@@ -102,22 +104,22 @@ then
 	fi
 
 	#my git configuration
-	which git >/dev/null && test -f $initDir/.git_config.seb && time source $initDir/.git_config.seb
+	which git >/dev/null && test -f $initDir/.git_config.seb && Source $initDir/.git_config.seb
 fi
 
 case $(uname -s) in
 Darwin)
-	test -r $initDir/.bash_profile.Darwin && time source $initDir/.bash_profile.Darwin
+	test -r $initDir/.bash_profile.Darwin && Source $initDir/.bash_profile.Darwin
 	;;
 Linux)
-	test -r $initDir/.bash_profile.Linux && time source $initDir/.bash_profile.Linux
+	test -r $initDir/.bash_profile.Linux && Source $initDir/.bash_profile.Linux
 	;;
 *)
 	which lsb_release >/dev/null 2>&1 && export system="$(lsb_release -sd | awk -F '"' '{print$(NF-1)}')" || export system=$(echo $HOSTTYPE-$OSTYPE | sed "s/arm[^-]*-/arm-/")
 	;;
 esac
 
-which matlab >/dev/null 2>&1 && time source $initDir/.bash_profile.matlab
+which matlab >/dev/null 2>&1 && Source $initDir/.bash_profile.matlab
 
 set +x
 test "$debug" = "1" && echo "=> END of $blink$bold${colors[blue]}${BASH_SOURCE[0]}$normal"

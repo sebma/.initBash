@@ -2,8 +2,8 @@
 declare -A | grep -wq color || source $initDir/.colors
 test "$debug" = "1" && echo "=> Running $blink$bold${colors[blue]}${BASH_SOURCE[0]}$normal ..."
 
-test -r $initDir/.AV_functions && time source $initDir/.AV_functions
-test -r $initDir/.youtube_functions && time source $initDir/.youtube_functions
+test -r $initDir/.AV_functions && Source $initDir/.AV_functions
+test -r $initDir/.youtube_functions && Source $initDir/.youtube_functions
 
 function Sudo {
 	local firstArg=$1

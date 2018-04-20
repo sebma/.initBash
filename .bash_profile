@@ -1,6 +1,4 @@
 # ~/.profile: executed by the command interpreter for login shells.
-declare -A | grep -wq color || source $initDir/.colors
-test "$debug" = "1" && echo "=> Running $blink$bold${colors[blue]}${BASH_SOURCE[0]}$normal ..."
 # This file is not read by bash(1), if ~/.bash_profile or ~/.bash_login
 # exists.
 # see /usr/share/doc/bash/examples/startup-files for examples.
@@ -9,16 +7,20 @@ test "$debug" = "1" && echo "=> Running $blink$bold${colors[blue]}${BASH_SOURCE[
 # the default umask is set in /etc/profile; for setting the umask
 # for ssh logins, install and configure the libpam-umask package.
 #umask 022
+declare -A | grep -wq color || source $initDir/.colors
+test "$debug" = "1" && echo "=> Running $blink$bold${colors[blue]}${BASH_SOURCE[0]}$normal ..."
+
 scriptDir=$(cd $(dirname $BASH_SOURCE);pwd);test $HOME = / && export HOME=$scriptDir ; cd #Pour les cas tordus ou HOME pointerai sur "/", example sur les certains telephones Android
 
 export initDir=$HOME/.initBash
-test -f $initDir/.bash_profile.seb && time source $initDir/.bash_profile.seb
+function Source { test "$debug" = "1" && time source "$@" || source "$@" ; }
+test -f $initDir/.bash_profile.seb && Source $initDir/.bash_profile.seb
 
 # if running bash
 if [ -n "$BASH_VERSION" ]; then
     # include .bashrc if it exists
     if [ -f "$initDir/.bashrc" ]; then
-		time source "$initDir/.bashrc"
+		Source "$initDir/.bashrc"
     fi
 fi
 
