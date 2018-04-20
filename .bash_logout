@@ -1,8 +1,14 @@
 # ~/.bash_logout: executed by bash(1) when login shell exits.
+declare -A | grep -wq color || source $initDir/.colors
+test "$debug" = "1" && echo "=> Running $blink$bold${colors[blue]}${BASH_SOURCE[0]}$normal ..."
 
 # when leaving the console clear the screen to increase privacy
 
 if [ "$SHLVL" = 1 ]; then
     [ -x /usr/bin/clear_console ] && /usr/bin/clear_console -q
 fi
-test -f $initDir/.bash_logout.seb && source $initDir/.bash_logout.seb
+
+test -f $initDir/.bash_logout.seb && time source $initDir/.bash_logout.seb
+
+set +x
+test "$debug" = "1" && echo "=> END of $blink$bold${colors[blue]}${BASH_SOURCE[0]}$normal"

@@ -1,4 +1,7 @@
 #!sh
+declare -A | grep -wq color || source $initDir/.colors
+test "$debug" = "1" && echo "=> Running $blink$bold${colors[blue]}${BASH_SOURCE[0]}$normal ..."
+
 trap 'echo "=> Ignoring this step and continuing the script <$(basename $BASH_SOURCE)> ..." >&2' INT
 
 export system="$(sw_vers -productName) $(sw_vers -productVersion)"
@@ -18,10 +21,6 @@ test "$SSH_CONNECTION" || pgrep -qfu $USER XQuartz.app || ( echo "=> Starting XQ
 
 #echo $DISPLAY | grep -q ^/private/tmp && export DISPLAY=:0
 
-#To use "$MATLAB/history.m" in rlwrap
-which matlab >/dev/null 2>&1 && test -d "$HOME/Library/Application Support/MathWorks/MATLAB" && export MATLAB=$(\ls -d "$HOME/Library/Application Support/MathWorks/MATLAB/"* | head -1)
-
-which git >/dev/null && git config --global credential.helper osxkeychain
 # Tu use the Picoscobe drivers with "https://github.com/colinoflynn/pico-python/" PicoScope Python Interface
 test -d /Applications/PicoScope6.app/Contents/Resources/lib && export DYLD_LIBRARY_PATH=/Applications/PicoScope6.app/Contents/Resources/lib
 
@@ -29,11 +28,13 @@ test -d /Applications/PicoScope6.app/Contents/Resources/lib && export DYLD_LIBRA
 if ! grep -q "Sandboxing Relaxed" /etc/cups/cups-files.conf && groups | \egrep -wq "sudo|adm|root"
 then
 	echo Sandboxing Relaxed | sudo tee -a /etc/cups/cups-files.conf
-	launchctl stop org.cups.cupsd
+	launchctl stop  org.cups.cupsd
 	launchctl start org.cups.cupsd
 	cupsctl WebInterface=yes
 	echo "=> The cups admin console is http://localhost:631/admin"
 fi
 
 trap - INT
+
 set +x
+test "$debug" = "1" && echo "=> END of $blink$bold${colors[blue]}${BASH_SOURCE[0]}$normal"

@@ -1,3 +1,8 @@
 #!sh
+declare -A | grep -wq color || source $initDir/.colors
+test "$debug" = "1" && echo "=> Running $blink$bold${colors[blue]}${BASH_SOURCE[0]}$normal ..."
 
 alias upgradable='$(which apt) list --upgradable'
+
+set +x
+test "$debug" = "1" && echo "=> END of $blink$bold${colors[blue]}${BASH_SOURCE[0]}$normal"

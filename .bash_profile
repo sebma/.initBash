@@ -1,4 +1,6 @@
 # ~/.profile: executed by the command interpreter for login shells.
+declare -A | grep -wq color || source $initDir/.colors
+test "$debug" = "1" && echo "=> Running $blink$bold${colors[blue]}${BASH_SOURCE[0]}$normal ..."
 # This file is not read by bash(1), if ~/.bash_profile or ~/.bash_login
 # exists.
 # see /usr/share/doc/bash/examples/startup-files for examples.
@@ -10,13 +12,13 @@
 scriptDir=$(cd $(dirname $BASH_SOURCE);pwd);test $HOME = / && export HOME=$scriptDir ; cd #Pour les cas tordus ou HOME pointerai sur "/", example sur les certains telephones Android
 
 export initDir=$HOME/.initBash
-test -f $initDir/.bash_profile.seb && source $initDir/.bash_profile.seb
+test -f $initDir/.bash_profile.seb && time source $initDir/.bash_profile.seb
 
 # if running bash
 if [ -n "$BASH_VERSION" ]; then
     # include .bashrc if it exists
     if [ -f "$initDir/.bashrc" ]; then
-		source "$initDir/.bashrc"
+		time source "$initDir/.bashrc"
     fi
 fi
 
@@ -24,3 +26,6 @@ fi
 if [ -d "$HOME/bin" ] ; then
     echo $PATH | grep -wq "$HOME/bin" || PATH="$HOME/bin:$PATH"
 fi
+
+set +x
+test "$debug" = "1" && echo "=> END of $blink$bold${colors[blue]}${BASH_SOURCE[0]}$normal"

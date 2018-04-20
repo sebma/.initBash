@@ -1,4 +1,7 @@
 #!sh
+declare -A | grep -wq color || source $initDir/.colors
+test "$debug" = "1" && echo "=> Running $blink$bold${colors[blue]}${BASH_SOURCE[0]}$normal ..."
+
 unalias ps
 alias egrep="grep -E"
 unalias less
@@ -16,3 +19,6 @@ alias topf="$(which find)   . -xdev -type f -size +10240k -exec ls -al {} + 2>/d
 function topflines {
 	$(which find) "$@" -xdev -type f -size +10240k -exec ls -al {} + 2>/dev/null | sort -nrk4 | awk '{size=$5/2^20;sub($5,size"M");print}' | head -n $(($LINES-4)) | awk '{total+=$5;print}END{if(total) print"=> total = "total" MiB"}'
 }
+
+set +x
+test "$debug" = "1" && echo "=> END of $blink$bold${colors[blue]}${BASH_SOURCE[0]}$normal"

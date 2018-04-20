@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-#VARIABLES GLOBALES
+declare -A | grep -wq color || source $initDir/.colors
+test "$debug" = "1" && echo "=> Running $blink$bold${colors[blue]}${BASH_SOURCE[0]}$normal ..."
 
-#echo "=> BASH_SOURCE[0] = ${BASH_SOURCE[0]}"
 test -r $initDir/.colors && source $initDir/.colors
 youtube_dl=$(which youtube-dl)
 os=$(uname -s)
@@ -131,7 +131,7 @@ function ytget {
 		echo
 		if [ -f "$fileName" ] && [ ! -w "$fileName" ]
 		then
-			echo "${color[yellowOnBlue]}=> The file <$fileName> is already downloaded, skipping ...$normal" >&2
+			echo "${colors[yellowOnBlue]}=> The file <$fileName> is already downloaded, skipping ...$normal" >&2
 			echo
 			continue
 		fi
@@ -174,7 +174,7 @@ function getRestrictedFilenamesFORMAT {
 			fileName=$(basename $( $locate -er "$streamID.*__${format}__" | \egrep -v "\.part|AUDIO" | sort -rt. | head -1) 2>/dev/null)
 			if test -s "$fileName"
 			then
-				echo "${color[yellowOnBlue]}=> The file <$fileName> is already downloaded, skipping ...$normal" >&2
+				echo "${colors[yellowOnBlue]}=> The file <$fileName> is already downloaded, skipping ...$normal" >&2
 				echo
 				continue
 			elif  $youtube_dl -f "$format" -qs $youtubeURLPrefix$url	   2>/dev/null
@@ -188,7 +188,7 @@ function getRestrictedFilenamesFORMAT {
 			echo $url | grep -q youtube.com/ && urlSuffix="$(echo $url | cut -d= -f2 | sed 's/^-/\\&/')"
 			if test "$urlSuffix" && fileName=$(basename $( $locate -er "$urlSuffix.*__${format}__" | \egrep -v "\.part|AUDIO" | sort -rt. | head -1) 2>/dev/null) && test -s "$fileName"
 			then
-				echo "${color[yellowOnBlue]}=> The file <$fileName> is already downloaded, skipping ...$normal" >&2
+				echo "${colors[yellowOnBlue]}=> The file <$fileName> is already downloaded, skipping ...$normal" >&2
 				echo
 				continue
 			fi
@@ -200,7 +200,7 @@ function getRestrictedFilenamesFORMAT {
 		echo
 		if [ -f "$fileName" ] && [ ! -w "$fileName" ]
 		then
-			echo "${color[yellowOnBlue]}=> The file <$fileName> is already downloaded, skipping ...$normal" >&2
+			echo "${colors[yellowOnBlue]}=> The file <$fileName> is already downloaded, skipping ...$normal" >&2
 			echo
 			continue
 		fi
@@ -243,7 +243,7 @@ function getRestrictedFilenamesBEST {
 		echo
 		if [ -f "$fileName" ] && [ ! -w "$fileName" ]
 		then
-			echo "${color[yellowOnBlue]}=> The file <$fileName> is already downloaded, skipping ...$normal" >&2
+			echo "${colors[yellowOnBlue]}=> The file <$fileName> is already downloaded, skipping ...$normal" >&2
 			echo
 			continue
 		fi
@@ -287,7 +287,7 @@ function getRestrictedFilenamesHD {
 		echo
 		if [ -f "$fileName" ] && [ ! -w "$fileName" ]
 		then
-			echo "${color[yellowOnBlue]}=> The file <$fileName> is already downloaded, skipping ...$normal" >&2
+			echo "${colors[yellowOnBlue]}=> The file <$fileName> is already downloaded, skipping ...$normal" >&2
 			echo
 			continue
 		fi
@@ -318,7 +318,7 @@ function getRestrictedFilenamesSD {
 			fileName=$(basename $( $locate -er "$url" | \egrep -v "\.part|AUDIO" | sort -rt. | head -1) 2>/dev/null)
 			if test -s "$fileName"
 			then
-				echo "${color[yellowOnBlue]}=> The file <$fileName> is already downloaded, skipping ...$normal" >&2
+				echo "${colors[yellowOnBlue]}=> The file <$fileName> is already downloaded, skipping ...$normal" >&2
 				echo
 				continue
 			elif  $youtube_dl -f "$format" -qs $youtubeURLPrefix$url	   2>/dev/null
@@ -332,7 +332,7 @@ function getRestrictedFilenamesSD {
 			echo $url | grep -q youtube.com/ && urlSuffix="$(echo $url | cut -d= -f2 | sed 's/^-/\\&/')"
 			if test "$urlSuffix" && fileName=$(basename $( $locate -er "$urlSuffix.*mp4$" | \egrep -v "\.part|AUDIO" | sort -rt. | head -1) 2>/dev/null) && test -s "$fileName"
 			then
-				echo "${color[yellowOnBlue]}=> The file <$fileName> is already downloaded, skipping ...$normal" >&2
+				echo "${colors[yellowOnBlue]}=> The file <$fileName> is already downloaded, skipping ...$normal" >&2
 				echo
 				continue
 			fi
@@ -346,7 +346,7 @@ function getRestrictedFilenamesSD {
 		echo
 		if [ -f "$fileName" ] && [ ! -w "$fileName" ]
 		then
-			echo "${color[yellowOnBlue]}=> The file <$fileName> is already downloaded, skipping ...$normal" >&2
+			echo "${colors[yellowOnBlue]}=> The file <$fileName> is already downloaded, skipping ...$normal" >&2
 			echo
 			continue
 		fi
@@ -377,7 +377,7 @@ function getRestrictedFilenamesSD_PREV {
 			fileName=$(basename $( $locate -er "$url" | \egrep -v "\.part|AUDIO" | sort -rt. | head -1) 2>/dev/null)
 			if test -s "$fileName"
 			then
-				echo "${color[yellowOnBlue]}=> The file <$fileName> is already downloaded, skipping ...$normal" >&2
+				echo "${colors[yellowOnBlue]}=> The file <$fileName> is already downloaded, skipping ...$normal" >&2
 				echo
 				continue
 			elif  $youtube_dl -f "$format" -qs $youtubeURLPrefix$url	   2>/dev/null
@@ -391,7 +391,7 @@ function getRestrictedFilenamesSD_PREV {
 			echo $url | grep -q youtube.com/ && urlSuffix="$(echo $url | cut -d= -f2 | sed 's/^-/\\&/')"
 			if test "$urlSuffix" && fileName=$(basename $( $locate -er "$urlSuffix" | \egrep -v "\.part|AUDIO" | sort -rt. | head -1) 2>/dev/null) && test -s "$fileName"
 			then
-				echo "${color[yellowOnBlue]}=> The file <$fileName> is already downloaded, skipping ...$normal" >&2
+				echo "${colors[yellowOnBlue]}=> The file <$fileName> is already downloaded, skipping ...$normal" >&2
 				echo
 				continue
 			fi
@@ -405,7 +405,7 @@ function getRestrictedFilenamesSD_PREV {
 		echo
 		if [ -f "$fileName" ] && [ ! -w "$fileName" ]
 		then
-			echo "${color[yellowOnBlue]}=> The file <$fileName> is already downloaded, skipping ...$normal" >&2
+			echo "${colors[yellowOnBlue]}=> The file <$fileName> is already downloaded, skipping ...$normal" >&2
 			echo
 			continue
 		fi
@@ -449,7 +449,7 @@ function getRestrictedFilenamesLD {
 		echo
 		if [ -f "$fileName" ] && [ ! -w "$fileName" ]
 		then
-			echo "${color[yellowOnBlue]}=> The file <$fileName> is already downloaded, skipping ...$normal" >&2
+			echo "${colors[yellowOnBlue]}=> The file <$fileName> is already downloaded, skipping ...$normal" >&2
 			echo
 			continue
 		fi
@@ -560,3 +560,6 @@ function reget {
 	$youtube_dl -f 18 "$url" || $youtube_dl $url
 	mp4tags -m "$url" "$newFileName" && chmod -w "$newFileName" && echo "=> Done."
 }
+
+set +x
+test "$debug" = "1" && echo "=> END of $blink$bold${colors[blue]}${BASH_SOURCE[0]}$normal"

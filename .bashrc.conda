@@ -1,5 +1,7 @@
 #!sh
 # vim: set syn=sh noet
+declare -A | grep -wq color || source $initDir/.colors
+test "$debug" = "1" && echo "=> Running $blink$bold${colors[blue]}${BASH_SOURCE[0]}$normal ..."
 
 which register-python-argcomplete >/dev/null 2>&1 && eval "$(register-python-argcomplete conda)"
 
@@ -11,3 +13,6 @@ do
 done
 
 echo $PATH | grep -wq $CONDA_HOME || export PATH=$CONDA_HOME/bin${PATH:+:${PATH}}
+
+set +x
+test "$debug" = "1" && echo "=> END of $blink$bold${colors[blue]}${BASH_SOURCE[0]}$normal"

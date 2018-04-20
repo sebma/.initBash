@@ -1,11 +1,9 @@
 #!/usr/bin/env bash
-#VARIABLES GLOBALES
+declare -A | grep -wq color || source $initDir/.colors
+test "$debug" = "1" && echo "=> Running $blink$bold${colors[blue]}${BASH_SOURCE[0]}$normal ..."
 
-#echo "=> BASH_SOURCE[0] = ${BASH_SOURCE[0]}"
-
-test -r $initDir/.colors && source $initDir/.colors
-test -r $initDir/.AV_functions && source $initDir/.AV_functions
-test -r $initDir/.youtube_functions && source $initDir/.youtube_functions
+test -r $initDir/.AV_functions && time source $initDir/.AV_functions
+test -r $initDir/.youtube_functions && time source $initDir/.youtube_functions
 
 function Sudo {
 	local firstArg=$1
@@ -1086,3 +1084,6 @@ function ddPV {
 	echo "=> sudo bash -c \"pv $inputFile | dd $@\" ..."
 	time sudo bash -c "pv $inputFile | dd $@"
 }
+
+set +x
+test "$debug" = "1" && echo "=> END of $blink$bold${colors[blue]}${BASH_SOURCE[0]}$normal"

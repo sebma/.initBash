@@ -1,4 +1,7 @@
 #!sh
+declare -A | grep -wq color || source $initDir/.colors
+test "$debug" = "1" && echo "=> Running $blink$bold${colors[blue]}${BASH_SOURCE[0]}$normal ..."
+
 test -d ~/local/lib && test $LD_LIBRARY_PATH && export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:~/local/lib || export LD_LIBRARY_PATH=~/local/lib
 if ls --color >/dev/null 2>&1 
 then
@@ -12,18 +15,18 @@ if [ -e /etc/os-release ]
 then
 	if grep -q ID=sailfishos /etc/os-release
 	then
-		export system=$(. /etc/os-release && echo "$NAME $VERSION_ID")
+		export system=$(time source /etc/os-release && echo "$NAME $VERSION_ID")
 	elif which lsb_release >/dev/null 2>&1 
 	then
 		export system="$(lsb_release -sd | awk -F '"' '{print$(NF-1)}')"
 	else
 		ID=$(awk -F"=" '/^ID\>/{print$2}' /etc/os-release)
 		case $ID in
-			debian) export system="$(. /etc/os-release && echo $PRETTY_NAME | sed "s/[0-9]\+/$(cat /etc/debian_version)/")" ;;
-			ubuntu) export system="$(. /etc/os-release && echo $PRETTY_NAME)" ;;
+			debian) export system="$(time source /etc/os-release && echo $PRETTY_NAME | sed "s/[0-9]\+/$(cat /etc/debian_version)/")" ;;
+			ubuntu) export system="$(time source /etc/os-release && echo $PRETTY_NAME)" ;;
 		esac
 	fi
-	grep -q ID=sailfishos /etc/os-release && test -r $initDir/.bash_profile.SailfishOS && source $initDir/.bash_profile.SailfishOS
+	grep -q ID=sailfishos /etc/os-release && test -r $initDir/.bash_profile.SailfishOS && time source $initDir/.bash_profile.SailfishOS
 else
 	export system=$(echo $HOSTTYPE-$OSTYPE | sed "s/arm[^-]*-/arm-/")
 fi
@@ -77,3 +80,6 @@ fi
 
 which matlab >/dev/null 2>&1 && test -d "$HOME/.matlab" && export MATLAB=$(\ls -d "$HOME/.matlab/"* | head -1)
 which git >/dev/null && git config --global credential.helper "cache --timeout=86400"
+
+set +x
+test "$debug" = "1" && echo "=> END of $blink$bold${colors[blue]}${BASH_SOURCE[0]}$normal"

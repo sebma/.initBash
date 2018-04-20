@@ -1,4 +1,8 @@
 #!sh
+declare -A | grep -wq color || source $initDir/.colors
+test "$debug" = "1" && echo "=> Running $blink$bold${colors[blue]}${BASH_SOURCE[0]}$normal ..."
+
+cd $initDir && git config alias.ci '!f() { for file; do git commit $file -m "Updated $file"; done; }; f';cd -
 git config --global user.email sebma@users.noreply.github.com
 git config --global user.name sebma
 test "$http_proxy" && git config --global http.proxy $http_proxy
@@ -6,3 +10,8 @@ git config --global alias.co checkout
 git config --global alias.st "status -bs"
 git config --global alias.stu "status -bs -uno"
 git config --global alias.br branch
+[ $os = Darwin ] && git config --global credential.helper osxkeychain
+#[ $os = Linux ] && git config --global credential.helper "cache --timeout=86400"
+
+set +x
+test "$debug" = "1" && echo "=> END of $blink$bold${colors[blue]}${BASH_SOURCE[0]}$normal"

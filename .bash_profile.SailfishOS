@@ -1,5 +1,7 @@
 #!sh
 # vim: set syn=sh noet
+declare -A | grep -wq color || source $initDir/.colors
+test "$debug" = "1" && echo "=> Running $blink$bold${colors[blue]}${BASH_SOURCE[0]}$normal ..."
 
 #blkid -o value -s UUID /dev/mmcblk1p1
 SDMountPoint=$(df | awk '/ .media.sdcard/{print$NF}')
@@ -26,17 +28,20 @@ if tty -s
 then
 	syncCommand="rsync -vuth -P -rl"
 	test -r ~/.colors && source ~/.colors
-	echo "$bold${color[blue]}=> <$(basename ${BASH_SOURCE[0]})> : Syncing Android Pictures and Downloads to ~ ...$normal"
+	echo "$bold${colors[blue]}=> <$(basename ${BASH_SOURCE[0]})> : Syncing Android Pictures and Downloads to ~ ...$normal"
 	if mount | grep -q /android_storage
 	then
 		time $syncCommand --remove-source-files --exclude ".thumbdata*" ~/android_storage/DCIM/* ~/Pictures/
 		time $syncCommand --remove-source-files ~/android_storage/Download/* ~/Downloads/
 		sync
 	else
-		echo "$bold${color[red]}=> INFO: android_storage is not mounted yet.$normal" >&2
+		echo "$bold${colors[red]}=> INFO: android_storage is not mounted yet.$normal" >&2
 	fi
-	echo "$bold${color[blue]}=> DONE.$normal"
+	echo "$bold${colors[blue]}=> DONE.$normal"
 	echo
 	test -x ~/shl/sync2PC.sh && ~/shl/sync2PC.sh
 	test -x ~/shl/sync2SDCard.sh && ~/shl/sync2SDCard.sh
 fi
+
+set +x
+test "$debug" = "1" && echo "=> END of $blink$bold${colors[blue]}${BASH_SOURCE[0]}$normal"

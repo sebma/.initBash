@@ -1,6 +1,7 @@
 #!sh
 # vim: set syn=sh noet
-echo "=> RUNNING $BASH_SOURCE ..." >&2
+declare -A | grep -wq color || source $initDir/.colors
+test "$debug" = "1" && echo "=> Running $blink$bold${colors[blue]}${BASH_SOURCE[0]}$normal ..."
 
 test -e ~/.cache && \rm -vfr ~/.cache/* 2>/dev/null
 #defaultPrinter=$(lpstat -d | awk '{print$NF}')
@@ -8,4 +9,6 @@ test -e ~/.cache && \rm -vfr ~/.cache/* 2>/dev/null
 #do
 #	lpoptions -x $printerInstance
 #done
-echo "=> END OF SCRIPT <$BASH_SOURCE>." >&2
+
+set +x
+test "$debug" = "1" && echo "=> END of $blink$bold${colors[blue]}${BASH_SOURCE[0]}$normal"

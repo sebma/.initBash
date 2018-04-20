@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-#VARIABLES GLOBALES
+declare -A | grep -wq color || source $initDir/.colors
+test "$debug" = "1" && echo "=> Running $blink$bold${colors[blue]}${BASH_SOURCE[0]}$normal ..."
+
 ffmpeg="$(which ffmpeg)   -hide_banner -probesize 400M -analyzeduration 400M"
 ffprobe="$(which ffprobe) -hide_banner -probesize 400M -analyzeduration 400M"
 remuxOptions="-map 0 -c copy"
@@ -9,13 +11,10 @@ aac2m4aOptions="-bsf:a aac_adtstoasc"
 cdr_device=/dev/dvd
 youtube_dl=$(which youtube-dl)
 
-#echo "=> BASH_SOURCE[0] = ${BASH_SOURCE[0]}"
-
 [ $BASH_VERSINFO -ge 4 ] && declare -A audioExtension videoExtension audioDecode
 audioExtension=( [libspeex]=oga [speex]=oga [opus]=oga [vorbis]=ogg [aac]=m4a [mp3]=mp3 [mp2]=mp2 [ac3]=ac3 [wmav2]=wma [pcm_dvd]=wav [pcm_s16le]=wav )
 videoExtension=( [h264]=m4v [mpeg1video]=mpg [mpeg2video]=vob [mpeg4]=avi [flv1]=flv [wmv3]=wmv )
 audioDecode=( [libspeex]=$(which speexdec 2>/dev/null) [speex]=$(which speexdec 2>/dev/null) [opus]=$(which opusdec 2>/dev/null) [vorbis]=$(which oggdec 2>/dev/null) )
-
 
 function mpvFrench {
 #	sid=$($ffprobe "$video" 2>&1 | awk -F ':|\\(' "/Stream .*$language.*Subtitle:/"'{sid=$2;sid+=-1}END{print sid}'); test -z $sid || sid="--sid=$sid"
@@ -1050,3 +1049,6 @@ function mplayer {
 function mpvalt {
 	test $1 && $(which mpv) --no-ytdl $(youtube-dl -gf best $@ | uniq)
 }
+
+set +x
+test "$debug" = "1" && echo "=> END of $blink$bold${colors[blue]}${BASH_SOURCE[0]}$normal"

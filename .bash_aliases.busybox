@@ -1,4 +1,7 @@
 #!sh
+declare -A | grep -wq color || source $initDir/.colors
+test "$debug" = "1" && echo "=> Running $blink$bold${colors[blue]}${BASH_SOURCE[0]}$normal ..."
+
 alias l="$(which busybox) ls --color"
 alias ls="$(which busybox) ls --color -F"
 #alias touch="$(which busybox) touch"
@@ -51,3 +54,6 @@ print
 		$(which find) $dir $firstPredicate $args
 	fi
 }
+
+set +x
+test "$debug" = "1" && echo "=> END of $blink$bold${colors[blue]}${BASH_SOURCE[0]}$normal"
