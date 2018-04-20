@@ -1,5 +1,5 @@
 #!sh
-declare -A | grep -wq color || source $initDir/.colors
+declare -A | grep -wq colors || source $initDir/.colors
 test "$debug" = "1" && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 #Finding the emplacement of the "history.m" file to be used with the GNU Readline wrapper

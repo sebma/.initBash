@@ -1,7 +1,7 @@
 #!sh
 # vim: set syn=sh noet
 [ $BASH_VERSINFO = 3 ] && [ -x ~/usr/local/bin/bash ] && exec ~/usr/local/bin/bash -l
-declare -A | grep -wq color || source $initDir/.colors
+declare -A | grep -wq colors || source $initDir/.colors
 test "$debug" = "1" && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 os=$(uname -s)

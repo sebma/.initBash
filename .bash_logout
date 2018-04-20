@@ -1,5 +1,5 @@
 # ~/.bash_logout: executed by bash(1) when login shell exits.
-declare -A | grep -wq color || source $initDir/.colors
+declare -A | grep -wq colors || source $initDir/.colors
 test "$debug" = "1" && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 # when leaving the console clear the screen to increase privacy

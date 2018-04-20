@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-declare -A | grep -wq color || source $initDir/.colors
+declare -A | grep -wq colors || source $initDir/.colors
 test "$debug" = "1" && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 ffmpeg="$(which ffmpeg)   -hide_banner -probesize 400M -analyzeduration 400M"
