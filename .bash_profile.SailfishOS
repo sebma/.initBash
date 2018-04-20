@@ -1,7 +1,7 @@
 #!sh
 # vim: set syn=sh noet
 declare -A | grep -wq color || source $initDir/.colors
-test "$debug" = "1" && echo "=> Running $blink$bold${colors[blue]}${BASH_SOURCE[0]}$normal ..."
+test "$debug" = "1" && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 #blkid -o value -s UUID /dev/mmcblk1p1
 SDMountPoint=$(df | awk '/ .media.sdcard/{print$NF}')
@@ -44,4 +44,4 @@ then
 fi
 
 set +x
-test "$debug" = "1" && echo "=> END of $blink$bold${colors[blue]}${BASH_SOURCE[0]}$normal"
+test "$debug" = "1" && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"

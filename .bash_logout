@@ -1,6 +1,6 @@
 # ~/.bash_logout: executed by bash(1) when login shell exits.
 declare -A | grep -wq color || source $initDir/.colors
-test "$debug" = "1" && echo "=> Running $blink$bold${colors[blue]}${BASH_SOURCE[0]}$normal ..."
+test "$debug" = "1" && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 # when leaving the console clear the screen to increase privacy
 
@@ -11,4 +11,4 @@ fi
 test -f $initDir/.bash_logout.seb && Source $initDir/.bash_logout.seb
 
 set +x
-test "$debug" = "1" && echo "=> END of $blink$bold${colors[blue]}${BASH_SOURCE[0]}$normal"
+test "$debug" = "1" && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"

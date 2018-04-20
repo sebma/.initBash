@@ -1,7 +1,7 @@
 #!sh
 # vim: set syn=sh noet
 declare -A | grep -wq color || source $initDir/.colors
-test "$debug" = "1" && echo "=> Running $blink$bold${colors[blue]}${BASH_SOURCE[0]}$normal ..."
+test "$debug" = "1" && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 test "$debug" = "2" && set -x
 function Source { test "$debug" = "1" && time source "$@" || source "$@" ; }
 
@@ -50,7 +50,7 @@ export -f $(declare -F | egrep -v " __?" | awk '{print$NF}')
 test -r $initDir/.colors && Source $initDir/.colors
 user=$(\id -un)
 #PROMPT_COMMAND='echo -ne "\033]0;$USER : $HOSTNAME @ $domain / $system : $(date +"%A %d %B %Y %H:%M") $PWD\007"'
-PS1="$bold${colors[blue]}$user : $blink${colors[red]}$HOSTNAME$blinkOff @ $bold${colors[blue]}$domain / $italics${colors[green]}$system$normal : $bold${colors[blue]}\w$normal
+PS1="$bold${colors[blue]}$user : ${colors[red]}$HOSTNAME$blinkOff @ $bold${colors[blue]}$domain / $italics${colors[green]}$system$normal : $bold${colors[blue]}\w$normal
  "
 
 if tty -s #Si c'est une session interactive
@@ -110,4 +110,4 @@ test -s /etc/debian_version && Source $initDir/.bashrc.Debian
 
 set +x
 echo $normal
-test "$debug" = "1" && echo "=> END of $blink$bold${colors[blue]}${BASH_SOURCE[0]}$normal"
+test "$debug" = "1" && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"

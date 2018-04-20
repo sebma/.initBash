@@ -1,7 +1,7 @@
 #!sh
 # vim: set syn=sh noet
 declare -A | grep -wq color || source $initDir/.colors
-test "$debug" = "1" && echo "=> Running $blink$bold${colors[blue]}${BASH_SOURCE[0]}$normal ..."
+test "$debug" = "1" && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 export NO_AT_BRIDGE=1
 
@@ -10,4 +10,4 @@ echo $PATH | grep -wq $CUDA_HOME || export PATH=$CUDA_HOME/bin${PATH:+:${PATH}}
 echo $LD_LIBRARY_PATH | grep -wq $CUDA_HOME || export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$CUDA_HOME/lib64:$CUDA_HOME/extras/CUPTI/lib64"
 
 set +x
-test "$debug" = "1" && echo "=> END of $blink$bold${colors[blue]}${BASH_SOURCE[0]}$normal"
+test "$debug" = "1" && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"

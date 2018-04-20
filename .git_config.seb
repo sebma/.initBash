@@ -1,6 +1,6 @@
 #!sh
 declare -A | grep -wq color || source $initDir/.colors
-test "$debug" = "1" && echo "=> Running $blink$bold${colors[blue]}${BASH_SOURCE[0]}$normal ..."
+test "$debug" = "1" && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 cd $initDir && git config alias.ci '!f() { for file; do git commit $file -m "Updated $file"; done; }; f';cd - >/dev/null
 git config --global user.email sebma@users.noreply.github.com
@@ -14,4 +14,4 @@ git config --global alias.br branch
 #[ $os = Linux ] && git config --global credential.helper "cache --timeout=86400"
 
 set +x
-test "$debug" = "1" && echo "=> END of $blink$bold${colors[blue]}${BASH_SOURCE[0]}$normal"
+test "$debug" = "1" && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
