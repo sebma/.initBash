@@ -10,7 +10,7 @@
 scriptDir=$(cd $(dirname $BASH_SOURCE);pwd);test $HOME = / && export HOME=$scriptDir ; cd #Pour les cas tordus ou HOME pointerai sur "/", example sur les certains telephones Android
 
 export initDir=$HOME/.initBash
-declare -A | grep -wq color || source $initDir/.colors
+set | grep -q "^colors=" || source $initDir/.colors
 test "$debug" = "1" && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 function Source { test "$debug" = "1" && time source "$@" && echo || source "$@" ; }
 
