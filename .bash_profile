@@ -12,7 +12,7 @@ scriptDir=$(cd $(dirname $BASH_SOURCE);pwd);test $HOME = / && export HOME=$scrip
 export initDir=$HOME/.initBash
 declare -A | grep -wq color || source $initDir/.colors
 test "$debug" = "1" && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
-function Source { test "$debug" = "1" && time source "$@";echo || source "$@" ; }
+function Source { test "$debug" = "1" && time source "$@" && echo || source "$@" ; }
 
 test -f $initDir/.bash_profile.seb && Source $initDir/.bash_profile.seb
 

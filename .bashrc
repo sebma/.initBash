@@ -3,7 +3,7 @@
 # for examples
 declare -A | grep -wq color || source $initDir/.colors
 test "$debug" = "1" && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
-function Source { test "$debug" = "1" && time source "$@";echo || source "$@" ; }
+function Source { test "$debug" = "1" && time source "$@" && echo || source "$@" ; }
 
 #test -z "$bashProfileLoaded" && Source .profile
 if [ -n "$BASH_VERSION" ]; then

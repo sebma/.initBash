@@ -4,7 +4,7 @@ declare -A | grep -wq color || source $initDir/.colors
 test "$debug" = "1" && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 os=$(uname -s)
-function Source { test "$debug" = "1" && time source "$@";echo || source "$@" ; }
+function Source { test "$debug" = "1" && time source "$@" && echo || source "$@" ; }
 export bashProfileLoaded=1
 [ $BASH_VERSINFO = 3 ] && [ -x ~/usr/local/bin/bash ] && exec ~/usr/local/bin/bash -l
 
