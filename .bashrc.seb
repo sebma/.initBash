@@ -50,7 +50,7 @@ export -f $(declare -F | egrep -v " __?" | awk '{print$NF}')
 test -r $initDir/.colors && Source $initDir/.colors
 user=$(\id -un)
 #PROMPT_COMMAND='echo -ne "\033]0;$USER : $HOSTNAME @ $domain / $system : $(date +"%A %d %B %Y %H:%M") $PWD\007"'
-PS1="$bold${colors[blue]}$user : ${colors[red]}$HOSTNAME$blinkOff @ $bold${colors[blue]}$domain / $italics${colors[green]}$system$normal : $bold${colors[blue]}\w$normal
+PS1="$bold${colors[blue]}$user : $blink${colors[red]}$HOSTNAME$blinkOff @ $bold${colors[blue]}$domain / $italics${colors[green]}$system$normal : $bold${colors[blue]}\w$normal
  "
 
 if tty -s #Si c'est une session interactive
