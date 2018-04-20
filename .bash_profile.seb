@@ -95,7 +95,6 @@ then
 	which ssh-agent >/dev/null 2>&1 && { pgrep -u $USER ssh-agent >/dev/null 2>&1 || eval `ssh-agent -s` >/dev/null; }
 	pgrep -lfu $USER ssh-agent 2>/dev/null
 	
-	defaultPrinter="$(LANG=C lpstat -d 2>/dev/null | awk '/^system default destination:/{print$NF}')"
 	#Definition des parametres de proxy dans cpan
 	if test "$http_proxy"
 	then
@@ -104,7 +103,9 @@ then
 	fi
 
 	#my git configuration
-	which git >/dev/null && test -f $initDir/.git_config.seb && Source $initDir/.git_config.seb
+	which git >/dev/null 2>&1 && test -f $initDir/.git_config.seb && Source $initDir/.git_config.seb
+	#my lpr configuration
+	which lpr >/dev/null 2>&1 && test -f $initDir/.bash_profile.lpr && Source $initDir/.bash_profile.lpr
 fi
 
 case $(uname -s) in
