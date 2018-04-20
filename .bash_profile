@@ -7,13 +7,13 @@
 # the default umask is set in /etc/profile; for setting the umask
 # for ssh logins, install and configure the libpam-umask package.
 #umask 022
-declare -A | grep -wq color || source $initDir/.colors
-test "$debug" = "1" && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
-
 scriptDir=$(cd $(dirname $BASH_SOURCE);pwd);test $HOME = / && export HOME=$scriptDir ; cd #Pour les cas tordus ou HOME pointerai sur "/", example sur les certains telephones Android
 
 export initDir=$HOME/.initBash
+declare -A | grep -wq color || source $initDir/.colors
+test "$debug" = "1" && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 function Source { test "$debug" = "1" && time source "$@" || source "$@" ; }
+
 test -f $initDir/.bash_profile.seb && Source $initDir/.bash_profile.seb
 
 # if running bash
