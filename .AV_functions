@@ -16,6 +16,9 @@ audioExtension=( [libspeex]=oga [speex]=oga [opus]=oga [vorbis]=ogg [aac]=m4a [m
 videoExtension=( [h264]=m4v [mpeg1video]=mpg [mpeg2video]=vob [mpeg4]=avi [flv1]=flv [wmv3]=wmv )
 audioDecode=( [libspeex]=$(which speexdec 2>/dev/null) [speex]=$(which speexdec 2>/dev/null) [opus]=$(which opusdec 2>/dev/null) [vorbis]=$(which oggdec 2>/dev/null) )
 
+alias mp32wavstdout="\mpg123 --wav - "
+alias ogg2wavstdout="\oggdec --output=- "
+
 function mpvFrench {
 #	sid=$($ffprobe "$video" 2>&1 | awk -F ':|\\(' "/Stream .*$language.*Subtitle:/"'{sid=$2;sid+=-1}END{print sid}'); test -z $sid || sid="--sid=$sid"
 	language=fra
