@@ -5,6 +5,9 @@ test "$debug" = "1" && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 test -r $initDir/.AV_functions && Source $initDir/.AV_functions
 test -r $initDir/.youtube_functions && Source $initDir/.youtube_functions
 
+function locateHere {
+	locate "$@" | grep $PWD
+}
 function pingMyLAN {
 	local myLAN=$(\ip addr show | awk '/inet /{print$2}' | egrep -v '127.0.0.[0-9]|192.168.122.[0-9]')
 	time LANG=C \nmap -T5 -sP $myLAN | sed -n '/Nmap scan report for /s/Nmap scan report for //p'
