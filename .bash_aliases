@@ -44,6 +44,7 @@ alias cp2exFAT="rsync -puv"
 alias cp2ftpfs="\rsync -uth --progress --inplace --size-only"
 alias cpanRepair="$(which cpan) -f -i Term::ReadLine::Gnu"
 alias cpuUsage="which mpstat >/dev/null && mpstat 1 1 | awk 'END{print 100-\$NF\"%\"}'"
+which cleartool >/dev/null 2>&1 && alias ct=cleartool
 which curl >/dev/null 2>&1 && alias curl="\curl -L"
 alias curlResposeCode="\curl -sw "%{http_code}" -o /dev/null"
 alias dbus-halt='\dbus-send --system --print-reply --dest="org.freedesktop.ConsoleKit" /org/freedesktop/ConsoleKit/Manager org.freedesktop.ConsoleKit.Manager.Stop'
