@@ -11,7 +11,15 @@ git config --global alias.st "status -bs"
 git config --global alias.stu "status -bs -uno"
 git config --global alias.br branch
 [ $os = Darwin ] && git config --global credential.helper osxkeychain
-#[ $os = Linux ] && git config --global credential.helper "cache --timeout=86400"
+[ $os = Linux ]  && git config --global credential.helper "cache --timeout=86400"
+
+alias gitHTTP='\awk "/url .*https?/"{print\$NF} ./.git/config'
+alias gitLocalUndelete="\git ls-files -d | grep . && \git ls-files -d | \xargs git checkout-index"
+alias gitStatus="\git status -bs -uno"
+alias gitUpdate='\grep -w "^[[:blank:]]url" ./.git/config;\git pull'
+alias gitURL='\git config remote.origin.url'
+alias gitURLs='\awk "/url/"{print\$NF} ./.git/config'
+alias updateGIT="\git pull"
 
 set +x
 test "$debug" = "1" && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
