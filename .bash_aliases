@@ -7,6 +7,13 @@ wifiInterface="$(which iwconfig >/dev/null 2>&1 && iwconfig 2>/dev/null | awk '/
 #alias processUsage="printf ' RSS\t       %%MEM %%CPU  COMMAND\n';\ps -e -o rssize,pmem,pcpu,args | sort -nr | cut -c-156 | head -500 | awk '{printf \"%9.3lf MiB %4.1f%% %4.1f%% %s\n\", \$1/1024, \$2,\$3,\$4}' | head"
 #alias ssh="\ssh -A -Y -C"
 #sdiff -v 2>/dev/null | grep -qw GNU && alias sdiff='$(which sdiff) -Ww $(tput cols 2>/dev/null)' || alias sdiff='$(which sdiff) -w $(tput cols 2>/dev/null)'
+alias calcSigs="time find . -type f -exec sha1sum {} \;"
+alias findcrlf="\grep -slr "
+alias lsqm='dspmq | sed "s/[()]/ /g" | awk "/Running/{print \$2}" | tr "\n" " ";echo'
+alias port="lsof -ni -P | grep LISTEN"
+alias ulogtodayerrors="egrep -iB4 -A1 'error|erreur|Err: [^0]' $ulog"
+alias vict2c="vim +'setf xml' $LOGDIR/ct2c.log"
+
 alias ....="cd ../../.."
 alias ...="cd ../.."
 alias ..="cd .."
@@ -49,6 +56,7 @@ which curl >/dev/null 2>&1 && alias curl="\curl -L"
 alias curlResposeCode="\curl -sw "%{http_code}" -o /dev/null"
 alias dbus-halt='\dbus-send --system --print-reply --dest="org.freedesktop.ConsoleKit" /org/freedesktop/ConsoleKit/Manager org.freedesktop.ConsoleKit.Manager.Stop'
 alias dbus-hibernate='\dbus-send --system --print-reply --dest="org.freedesktop.UPower" /org/freedesktop/UPower org.freedesktop.UPower.Hibernate'
+alias dbus-logout-gnome='dbus-send --session --type=method_call --print-reply --dest=org.gnome.SessionManager /org/gnome/SessionManager org.gnome.SessionManager.Logout uint32:1'
 alias dbus-logout-force-kde='\qdbus org.kde.ksmserver /KSMServer org.kde.KSMServerInterface.logout 0 0 0'
 alias dbus-logout-kde='\qdbus org.kde.ksmserver /KSMServer org.kde.KSMServerInterface.logout -1 -1 -1'
 alias dbus-reboot='\dbus-send --system --print-reply --dest="org.freedesktop.ConsoleKit" /org/freedesktop/ConsoleKit/Manager org.freedesktop.ConsoleKit.Manager.Restart'
