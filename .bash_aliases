@@ -147,10 +147,10 @@ alias mkdir="\mkdir -pv"
 alias mpvlive='mpv --no-resume-playback'
 alias mpvlocal='mpv --no-ytdl'
 alias mpvplaylist='mpv --playlist'
-alias mpvLD="mpv --ytdl-format 'best[height<=?240]'"
-alias mpvSD="mpv --ytdl-format 'best[height<=?480]'"
-alias mpvHD="mpv --ytdl-format 'best[height<=?720]'"
-alias mpvFHD="mpv --ytdl-format 'best[height<=?1080]'"
+alias mpvLD="mpv --ytdl-format 'best[height<=240]'"
+alias mpvSD="mpv --ytdl-format 'best[height<=480]'"
+alias mpvHD="mpv --ytdl-format 'best[height<=720]'"
+alias mpvFHD="mpv --ytdl-format 'best[height<=1080]'"
 alias mpvFORMAT="mpv --ytdl-format"
 alias mutt="LANG=C.UTF-8 \mutt"
 alias muttDebug="LANG=C.UTF-8 \mutt -nd5"
