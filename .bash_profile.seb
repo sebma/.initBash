@@ -105,8 +105,6 @@ then
 		test $? = 1 && printf "o conf http_proxy $http_proxy\no conf commit" | cpan
 	fi
 
-	#my git configuration
-	which git >/dev/null 2>&1 && test -f $initDir/.bashrc.git && Source $initDir/.bashrc.git
 	#my lpr configuration
 	which lpr >/dev/null 2>&1 && test -f $initDir/.bash_profile.lpr && Source $initDir/.bash_profile.lpr
 fi
