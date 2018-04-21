@@ -106,7 +106,7 @@ then
 	fi
 
 	#my git configuration
-	which git >/dev/null 2>&1 && test -f $initDir/.git_config.seb   && Source $initDir/.git_config.seb
+	which git >/dev/null 2>&1 && test -f $initDir/.bashrc.git && Source $initDir/.bashrc.git
 	#my lpr configuration
 	which lpr >/dev/null 2>&1 && test -f $initDir/.bash_profile.lpr && Source $initDir/.bash_profile.lpr
 fi
