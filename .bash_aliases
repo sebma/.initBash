@@ -78,8 +78,7 @@ alias ip@="LANG=C \ifconfig | awk -F ' *|:' '/^\w+/{printf\"\\n\"\$1\"\\t\"}/ine
 alias mac@="LANG=C \ifconfig | awk '/HWaddr/{print\$1\"\\t\"\$NF}'"
 #alias ip@="\ip addr show | awk '/^[0-9]+:/{printf\"\\n\"\$2\"\\t\"}/inet /{print\$2}' | grep -v '^$'"
 #alias mac@="\ip addr show | awk '/^[0-9]+:/{printf\"\\n\"\$2\"\\t\"}/ether/{print\$2}' | grep -v '^$'"
-alias eman="\man -L en"
-alias enman="LANG=en_US \man"
+alias enman="\man -L en"
 alias erasecd='\cdrecord -v speed=12 blank=fast gracetime=10 -eject'
 alias erasewholecd='\cdrecord -v speed=12 blank=all gracetime=10 -eject'
 alias errors="\egrep -iC2 'error|erreur|java.*exception'"
@@ -90,7 +89,7 @@ alias findFunctions="grep -P '(^| )\w+\(\)|\bfunction\b'"
 alias findSpecialFiles="$(which find) . -xdev '(' -type b -o -type c -o -type p -o -type s ')' -a -ls"
 alias findbin='$(which find) $(echo $PATH | tr : "\n" | \egrep "/(s?bin|shl|py|rb|pl)") /system/{bin,xbin} 2>/dev/null | egrep'
 alias free="\free -m"
-alias frman="LANG=fr_FR.UTF-8 \man"
+alias frman="\man -Lfr"
 alias fuser="\fuser -v"
 alias fuserumount="\fusermount -u"
 alias gateWay="\route -n | awk '/^(0.0.0.0|default)/{print\$2}'"
