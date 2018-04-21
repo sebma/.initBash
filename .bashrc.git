@@ -15,6 +15,8 @@ git config --global alias.br branch
 
 alias gitHTTP='\awk "/url .*https?/"{print\$NF} ./.git/config'
 alias gitLocalUndelete="\git ls-files -d | grep . && \git ls-files -d | \xargs git checkout-index"
+alias gitls="\git ls-files"
+alias git-ls=gitls
 alias gitStatus="\git status -bs -uno"
 alias gitUpdate='\grep -w "^[[:blank:]]url" ./.git/config;\git pull'
 alias gitURL='\git config remote.origin.url'
