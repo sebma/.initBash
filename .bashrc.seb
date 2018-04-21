@@ -26,7 +26,7 @@ do
 done
 export PATH
 
-manPathsList="/opt/ffmpeg/share/man $HOME/.local/share/man"
+manPathsList="/opt/ffmpeg/share/man $HOME/.local/share/man /usr/share/man"
 for manpath in $manPathsList
 do
   addmanpath $manpath
