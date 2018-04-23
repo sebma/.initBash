@@ -4,9 +4,6 @@
 declare -A | grep -wq colors || source $initDir/.colors
 test "$debug" = "1" && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-echo "=> MIT-MAGIC-COOKIE-1:"
-xauth list | grep :$(echo $DISPLAY | awk -F '\\.|:' '{print$2}')
-
 os=$(uname -s)
 function Source { test "$debug" = "1" && time source "$@" && echo || source "$@" ; }
 export bashProfileLoaded=1
