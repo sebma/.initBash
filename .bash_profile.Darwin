@@ -19,6 +19,7 @@ defaults read org.macosforge.xquartz.X11 app_to_run | grep -q bin/true$ || defau
 #test "$SSH_CONNECTION" || pgrep -qfu $USER XQuartz.app || ( echo "=> Starting XQuartz.app ..." | tee -a ~/log/XQuartz.log ;nohup /Applications/Utilities/XQuartz.app/Contents/MacOS/X11.bin >>~/log/XQuartz.log 2>&1 & )
 test "$SSH_CONNECTION" || pgrep -qfu $USER XQuartz.app || ( echo "=> Starting XQuartz ..." && $(which open) -a XQuartz )
 
+
 #echo $DISPLAY | grep -q ^/private/tmp && export DISPLAY=:0
 
 # Tu use the Picoscobe drivers with "https://github.com/colinoflynn/pico-python/" PicoScope Python Interface
@@ -34,6 +35,7 @@ then
 	echo "=> The cups admin console is http://localhost:631/admin"
 fi
 
+#pgrep -qfu $USER XQuartz.app && echo "=> MIT-MAGIC-COOKIE-1:" && xauth list | grep :$(echo $DISPLAY | awk -F '\\.|:' '{print$2}')
 trap - INT
 
 set +x
