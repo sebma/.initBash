@@ -2,6 +2,9 @@
 declare -A | grep -wq colors || source $initDir/.colors
 test "$debug" = "1" && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
+echo "=> MIT-MAGIC-COOKIE-1:"
+xauth list | grep :$(echo $DISPLAY | awk -F '\\.|:' '{print$2}')
+
 test -d ~/local/lib && test $LD_LIBRARY_PATH && export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:~/local/lib || export LD_LIBRARY_PATH=~/local/lib
 if ls --color >/dev/null 2>&1 
 then
