@@ -16,11 +16,11 @@ cd $HOME
 initDir=$HOME/$initDir
 
 #DEFINITION DES VARIABLES
-LANG=C.UTF-8
+export LANG=en_US.UTF-8
 export HISTSIZE=2000
 export HISTFILESIZE=4000
 #GDM_LANG=fr_FR.UTF-8
-GDM_LANG=C.UTF-8
+export GDM_LANG=$LANG
 #export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 test $HOSTNAME || export HOSTNAME=$(hostname | cut -d. -f1)
 export EDITOR=vim
