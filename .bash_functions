@@ -511,7 +511,7 @@ function processUsage {
 	\ps -e -o $columns | sort -nr | cut -c-156 | head -500 | awk '!/COMMAND/{printf "%9.3lf MiB %4.1f%% %4.1f%% %5d %s\n", $1/1024,$2,$3,$4,$5}' | tail -n +1 | head -45
 }
 function memUsage {
-	LANG=C
+	local LANG=C
 	local processName=$1
 	local columns="pid,comm,pmem,rssize"
 	if test $processName
