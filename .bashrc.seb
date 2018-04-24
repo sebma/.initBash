@@ -101,6 +101,8 @@ test -s /etc/debian_version && Source $initDir/.bashrc.Debian
 #my git configuration
 which git >/dev/null 2>&1 && test -f $initDir/.bashrc.git && Source $initDir/.bashrc.git
 
+test -f $initDir/.bashrc.gpu && Source $initDir/.bashrc.gpu
+
 set +x
 echo $normal
 test "$debug" = "1" && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
