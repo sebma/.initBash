@@ -1,0 +1,12 @@
+#!sh
+
+if [ $os = Linux ]
+then
+	if lspci | grep -qi nvidia
+	then
+		alias nvidiaVersion="cat /proc/driver/nvidia/version"
+		alias cudaVersion="nvcc -V"
+	else
+		:
+	fi
+fi
