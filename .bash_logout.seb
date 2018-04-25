@@ -11,7 +11,7 @@ test -e ~/.cache && \rm -vfr ~/.cache/* 2>/dev/null
 #done
 
 #For security reasons
-[ $os = Linux ] && \pkill -efu $USER ssh-agent
+[ $os = Linux ] && [ $(hostname) != ssh ] && \pkill -efu $USER ssh-agent
 
 set +x
 test "$debug" = "1" && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
