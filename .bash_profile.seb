@@ -17,7 +17,10 @@ cd $HOME
 initDir=$HOME/$initDir
 
 #DEFINITION DES VARIABLES
-test -z "$LANG" && export LANG=$(locale -a 2>/dev/null | awk '/C.UTF|en_US.UTF/{print$1;exit}')
+test -z "$LANG" && export LANG=$(locale -a 2>/dev/null | awk '/UTF|utf/{print$1;exit}')
+#test -z "$LC_MESSAGES" && export LC_MESSAGES=$(locale -a 2>/dev/null | awk '/UTF|utf/{print$1;exit}')
+locale 2>&1 | grep -q "locale: Cannot set LC_ALL to default locale: No such file or directory" && unset LC_ALL
+
 export HISTSIZE=2000
 export HISTFILESIZE=4000
 #GDM_LANG=fr_FR.UTF-8
