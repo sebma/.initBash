@@ -265,7 +265,7 @@ egrep --help 2>&1 | \grep -qw "\--color" && alias egrep="egrep --color"
 grep  --help 2>&1 | \grep -qw "\--color" && alias grep="grep --color"
 test $TNS_ADMIN && alias mysqlplus='echo "=> Connecting to database <$ORACLE_SID> as <$USER> ...";sqlplus $USER' || alias sqlplus="echo ERROR: Variable TNS_ADMIN is not defined. >&2;"
 uname -s | grep -q AIX && alias stat="istat"
-which vim >/dev/null && alias vim="LANG=$(locale -a | egrep -i '(fr_fr|en_us|en_uk).*utf' | sort -r | head -1) \vim" && alias vi=vim
+which vim >/dev/null && alias vim="LANG=$(locale -a 2>/dev/null | egrep -i '(fr_fr|en_us|en_uk).*utf' | sort -r | head -1) \vim" && alias vi=vim
 
 set +x
 test "$debug" = "1" && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
