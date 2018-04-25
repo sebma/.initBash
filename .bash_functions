@@ -633,11 +633,13 @@ function timeprocess {
 	test -z $pid || ps -o etime= $pid
 }
 function watchProcess {
+	local pidList=""
 	test $# = 1 && while true
 	do
-		\pgrep -alf "$1" && break
-		sleep 1
-	done | uniq
+		pidList=$(\pgrep -f "$1")
+		test -n "$pidList" && \ps -fp $pidList && echo "=> Showing the parent process :" && \ps h -fp $(\ps -o ppid= $pidList) && break
+		sleep 0.01
+	done
 }
 function processSPY {
 	watchProcess $@
