@@ -35,7 +35,7 @@ then
 	echo "=> The cups admin console is http://localhost:631/admin"
 fi
 
-#pgrep -qfu $USER XQuartz.app && echo "=> MIT-MAGIC-COOKIE-1:" && xauth list | grep :$(echo $DISPLAY | awk -F '\\.|:' '{print$2}')
+#pgrep -qfu $USER XQuartz.app && echo "=> MIT-MAGIC-COOKIE-1:" && xauth list | grep :$(echo $DISPLAY | awk -F '\\.|:' '{print$2}') && echo
 trap - INT
 export LC_ALL=$LANG
 
