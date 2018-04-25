@@ -17,7 +17,7 @@ cd $HOME
 initDir=$HOME/$initDir
 
 #DEFINITION DES VARIABLES
-export LANG=en_US.UTF-8
+export LANG=$(locale -a 2>/dev/null | awk '/C.UTF|en_US.UTF/{print$1;exit}')
 export HISTSIZE=2000
 export HISTFILESIZE=4000
 #GDM_LANG=fr_FR.UTF-8
