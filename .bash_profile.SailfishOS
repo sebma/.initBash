@@ -21,7 +21,7 @@ echo
 
 export MANPAGER="less -is"
 export EDITOR=$(which vim)
-export LANG=$(locale -a 2>/dev/null | awk '/C.UTF|en_US.UTF/{print$1;exit}')
+test -z "$LANG" && export LANG=$(locale -a 2>/dev/null | awk '/C.UTF|en_US.UTF/{print$1;exit}')
 #export HOMEBREW_TEMP=$HOME/tmp
 
 if tty -s
