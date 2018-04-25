@@ -1,10 +1,13 @@
 #!sh
 # vim: set syn=sh noet
 test -z "$initDir" && export initDir=$HOME/.initBash
+
+function Debug { test "$debug" = "1" && echo "$bold${colors[blue]}$@$normal"; }
 declare -A | grep -wq colors || source $initDir/.colors
-test "$debug" = "1" && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
-test "$debug" = "2" && set -x
+Debug "=> Running $(basename ${BASH_SOURCE[0]}) ..."
+
 function Source { test "$debug" = "1" && time source "$@" && echo || source "$@" ; }
+test "$debug" = "2" && set -x
 
 #test -n "$bashRCLoaded" && return
 bashRCLoaded=1
@@ -51,7 +54,7 @@ export -f $(declare -F | egrep -v " __?" | awk '{print$NF}')
 test -r $initDir/.colors && Source $initDir/.colors
 user=$(\id -un)
 #PROMPT_COMMAND='echo -ne "\033]0;$USER : $HOSTNAME @ $domain / $system : $(date +"%A %d %B %Y %H:%M") $PWD\007"'
-PS1="$bold${colors[blue]}$user : $blink${colors[red]}$HOSTNAME$blinkOff @ $bold${colors[blue]}$domain / $italics${colors[green]}$system$normal : $bold${colors[blue]}\w$normal
+PS1="$user : $blink${colors[red]}$HOSTNAME$blinkOff @ $bold${colors[blue]}$domain / $italics${colors[green]}$system : $bold${colors[blue]}\w$normal
  "
 
 if tty -s #Si c'est une session interactive
@@ -89,7 +92,13 @@ which ssh-add >/dev/null && {
 }
 cd
 
-test -r /usr/share/bash-completion/bash_completion && Source /usr/share/bash-completion/bash_completion
+if test -r /usr/share/bash-completion/bash_completion 
+then
+	Debug "=> Running /usr/share/bash-completion/bash_completion ..."
+	Source /usr/share/bash-completion/bash_completion
+	Debug "=> Running /usr/share/bash-completion/bash_completion ..."
+fi
+
 test -x "$(which brew)" && [ $BASH_VERSINFO -ge 4 ] && [ -r $(brew --prefix)/share/bash-completion/bash_completion ] && Source $(brew --prefix)/share/bash-completion/bash_completion
 which register-python-argcomplete >/dev/null 2>&1 && eval "$(register-python-argcomplete conda)"
 
@@ -105,5 +114,5 @@ which git >/dev/null 2>&1 && test -f $initDir/.bashrc.git && Source $initDir/.ba
 test -f $initDir/.bashrc.gpu && Source $initDir/.bashrc.gpu
 
 set +x
-echo $normal
-test "$debug" = "1" && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
+echo 
+Debug "=> END of $(basename ${BASH_SOURCE[0]})"
