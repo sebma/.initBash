@@ -1,5 +1,6 @@
 #!sh
 # vim: set syn=sh noet
+test -z "$initDir" && export initDir=$HOME/.initBash
 declare -A | grep -wq colors || source $initDir/.colors
 test "$debug" = "1" && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 test "$debug" = "2" && set -x
