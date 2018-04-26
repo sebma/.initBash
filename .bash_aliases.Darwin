@@ -124,16 +124,20 @@ alias pkgInstaller="\installer -pkg"
 function dmgInstaller {
 	local sudo defaultDst
 	groups | \egrep -wq "admin|sudo" && { sudo=sudo;defaultDst=/; }	|| { sudo="";defaultDst="$HOME"; }
-	test $debug = 1 && set -x
+	test "$debug" = 1 && set -x
 	for dmgFilePath
 	do
-		mountDir=$(hdiutil mount $dmgFilePath | awk '{print $NF}')	
-		test $debug = 1 && echo "=> mountDir = $mountDir"
-		if [ -n "$mountDir" ]
+		if \ls $dmgFilePath >/dev/null
 		then
-			$sudo installer -verboseR -pkg "${MOUNTDIR}/"*.pkg -target $defaultDst
-			hdiutil unmount $mountDir
-			sync
+			mountDev=$(hdiutil mount $dmgFilePath | awk '/dev.disk/{print$1}')
+			mountDir="$(mount | grep $mountDev | awk '{$1=$2="";sub("^..| [(].*","");print}')"
+			test $debug = 1 && echo "=> mountDir = $mountDir"
+			if [ -n "$mountDir" ]
+			then
+				$sudo installer -verboseR -pkg "${MOUNTDIR}/"*.pkg -target $defaultDst
+				hdiutil unmount $mountDir
+				sync
+			fi
 		fi
 	done
 	unset dmgFilePath
