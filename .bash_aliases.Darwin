@@ -1,5 +1,5 @@
 #!sh
-declare -A | grep -wq colors || source $initDir/.colors
+declare -A | \grep -wq colors || source $initDir/.colors
 test "$debug" = "1" && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 #alias lpr="\lpr -P ppti-14-503-imp -o PageSize=A4 -o PageRegion=A4 -o Resolution=default -o InputSlot=Tray2 -o Duplex=DuplexNoTumble -o PreFilter=No"
@@ -130,8 +130,8 @@ function dmgInstaller {
 		if \ls $dmgFilePath >/dev/null
 		then
 			mountDev=$(hdiutil mount $dmgFilePath | awk '/dev.disk/{print$1}')
-			mountDir="$(mount | grep $mountDev | awk '{$1=$2="";sub("^..| [(].*","");print}')"
-			test $debug = 1 && echo "=> mountDir = $mountDir"
+			mountDir="$($(which mount) | grep $mountDev | awk '{$1=$2="";sub(" [(].*","");sub("^  ","");print}')"
+			test "$debug" = 1 && echo "=> mountDir = $mountDir"
 			if [ -n "$mountDir" ]
 			then
 				$sudo installer -verboseR -pkg "${MOUNTDIR}/"*.pkg -target $defaultDst
