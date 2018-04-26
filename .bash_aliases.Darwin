@@ -120,6 +120,25 @@ groups | \egrep -wq "admin|sudo" && alias pipInstall="sudo -H easy_install pip" 
 initVars
 which gcp >/dev/null 2>&1 && alias cp='\gcp -puv' || alias cp='\cp -pv'
 which pgrep >/dev/null 2>&1 || alias pgrep="\ps -fC"
+alias pkgInstaller="\installer -pkg"
+function dmgInstaller {
+	local sudo defaultDst
+	groups | \egrep -wq "admin|sudo" && { sudo=sudo;defaultDst=/; }	|| { sudo="";defaultDst="$HOME"; }
+	test $debug = 1 && set -x
+	for dmgFilePath
+	do
+		mountDir=$(hdiutil mount $dmgFilePath | awk '{print $NF}')	
+		test $debug = 1 && echo "=> mountDir = $mountDir"
+		if [ -n "$mountDir" ]
+		then
+			$sudo installer -verboseR -pkg "${MOUNTDIR}/"*.pkg -target $defaultDst
+			hdiutil unmount $mountDir
+			sync
+		fi
+	done
+	unset dmgFilePath
+	set +x
+}
 
 set +x
 test "$debug" = "1" && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
