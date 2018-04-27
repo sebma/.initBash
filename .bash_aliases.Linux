@@ -39,6 +39,7 @@ alias mmcSize="awk '/[0-9]/{print FILENAME\": \"\$1/(2*1024^2)\" GiB\"}' /sys/cl
 alias mmcInfo="tail -vn +1 /sys/class/block/mmcblk0/device/driver/mmc*/uevent"
 alias lsgpu="\lspci -nns \$(\lspci | awk '/Display|VGA/{print\$1}')"
 alias lsvga=lsgpu
+alias reset="\printf '\33c\e[3J'"
 
 set +x
 test "$debug" = "1" && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
