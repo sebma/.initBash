@@ -6,7 +6,12 @@ test -r $initDir/.AV_functions && Source $initDir/.AV_functions
 test -r $initDir/.youtube_functions && Source $initDir/.youtube_functions
 
 function lanip {
-	if [ $(uname -s) = Linux ]	
+	ethName=$1
+	if [ -n "$ethName" ]
+	then
+		printf "$ethName: "
+		LANG=C \ip addr show dev $ethName | awk '/inet /{print$2}'
+	elif [ $(uname -s) = Linux ]	
 	then
 		LANG=C \ip addr show | awk '{if(/(UP|UNKNOWN)/){interface=$2;found=1}else if(/DOWN/)found=0;if(found==1 && /inet /)print interface" "$2}'	
 	elif [ $(uname -s) = Darwin ]
