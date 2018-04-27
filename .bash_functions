@@ -6,7 +6,7 @@ test -r $initDir/.AV_functions && Source $initDir/.AV_functions
 test -r $initDir/.youtube_functions && Source $initDir/.youtube_functions
 
 function resetRESOLUTION {
-	LANG=C \xrandr | awk '{if(/\<connected/)output=$1;if(/\*/)print"xrandr --output "output" --mode "$1}' | sh -x
+	LANG=C \xrandr | awk '{if(/\<connected/)output=$1;if(/\*/){print"xrandr --output "output" --mode "$1;exit}}' | sh -x
 }
 function locateHere {
 	locate "$@" | grep $PWD
