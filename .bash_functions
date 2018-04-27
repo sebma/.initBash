@@ -5,6 +5,15 @@ test "$debug" = "1" && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 test -r $initDir/.AV_functions && Source $initDir/.AV_functions
 test -r $initDir/.youtube_functions && Source $initDir/.youtube_functions
 
+function lanip {
+	if [ $(uname -s) = Linux ]	
+	then
+		LANG=C \ip addr show | awk '{if(/(UP|UNKNOWN)/){interface=$2;found=1}else if(/DOWN/)found=0;if(found==1 && /inet /)print interface" "$2}'	
+	elif [ $(uname -s) = Darwin ]
+	then
+		LANG=C \ip addr show | awk '{if(/(UP|UNKNOWN)/){interface=$1;found=1}else if(/DOWN/)found=0;if(found==1 && /inet /)print interface" "$2}'	
+	fi
+}
 function resetRESOLUTION {
 	LANG=C \xrandr | awk '{if(/\<connected/)output=$1;if(/\*/){print"xrandr --output "output" --mode "$1;exit}}' | sh -x
 }
