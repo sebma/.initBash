@@ -2,12 +2,20 @@
 declare -A | grep -wq colors || source $initDir/.colors
 test "$debug" = "1" && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
+wifiInterface="$(which iwconfig >/dev/null 2>&1 && iwconfig 2>/dev/null | awk '/^[^ \t]/ { if ($1 ~ /^[0-9]+:/) { print $2 } else { print $1 } }' || ( which iw >/dev/null 2>&1 && iw dev | awk '/Interface/{lastInterface=$NF}END{print lastInterface}') )"
+
 #alias lpr="\lpr -P ppti-14-503-imp -o PageSize=A4 -o PageRegion=A4 -o Resolution=default -o InputSlot=Tray2 -o Duplex=DuplexNoTumble -o PreFilter=No"
 #alias lpr="\lpr -o PageSize=A4 -o PageRegion=A4 -o Resolution=default -o InputSlot=Tray2 -o Duplex=DuplexNoTumble -o PreFilter=No"
+
 findExcludedPathList="./proc ./sys ./dev"
 prunePathsFindExpression=$(printf " -path %s -prune -o" $findExcludedPathList)
 duExcludedPathList="./proc ./sys ./dev"
 excludePathsDuExpression=$(printf " --exclude %s" $duExcludedPathList)
+
+alias wifiList="which nmcli >/dev/null && nmcli dev wifi list || iw dev $wifiInterface scan || iwlist $wifiInterface scan"
+alias restartWifi="nmcli nm wifi off;nmcli nm wifi on;sleep 10;wanip"
+alias wifiRestart=restartWifi
+
 alias catFiles="\tail -vn +1"
 alias cp='\cp --preserve=timestamps -uv'
 alias firefoxDefrag='pgrep firefox || time $(which find) ~/.mozilla/firefox/ -name "*sqlite" -ls -exec sqlite3 -echo {} vacuum \;'
