@@ -7,6 +7,7 @@ test "$debug" = "1" && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 #alias topflines='$(which find) . $prunePathsFindExpression -xdev -type f -size +10M -exec ls -lT {} \; 2>/dev/null | sort -nrk5 | column -t | head -n $(($LINES-4)) | awk '\''{total+=$5;print}END{print"=> total = "total" MiB"}'\'''
 which pgrep >/dev/null 2>&1 || alias pgrep="\ps -fC"
 alias addgroup="\dseditgroup -o create"
+alias airport="\/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport"
 alias groupadd=addgroup
 alias adduser="\dseditgroup -o edit -t user -a"
 alias useradd=adduser
