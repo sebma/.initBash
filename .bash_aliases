@@ -2,8 +2,6 @@
 declare -A | grep -wq colors || source $initDir/.colors
 test "$debug" = "1" && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-wifiInterface="$(which iwconfig >/dev/null 2>&1 && iwconfig 2>/dev/null | awk '/^[^ \t]/ { if ($1 ~ /^[0-9]+:/) { print $2 } else { print $1 } }' || ( which iw >/dev/null 2>&1 && iw dev | awk '/Interface/{lastInterface=$NF}END{print lastInterface}') )"
-
 #alias processUsage="printf ' RSS\t       %%MEM %%CPU  COMMAND\n';\ps -e -o rssize,pmem,pcpu,args | sort -nr | cut -c-156 | head -500 | awk '{printf \"%9.3lf MiB %4.1f%% %4.1f%% %s\n\", \$1/1024, \$2,\$3,\$4}' | head"
 #alias ssh="\ssh -A -Y -C"
 #sdiff -v 2>/dev/null | grep -qw GNU && alias sdiff='$(which sdiff) -Ww $(tput cols 2>/dev/null)' || alias sdiff='$(which sdiff) -w $(tput cols 2>/dev/null)'
@@ -189,7 +187,6 @@ alias recode="\recode -v"
 alias regrep="which regrep >/dev/null || egrep -Ir"
 alias rename="\prename -v"
 alias repeat="\watch -n1"
-alias restartWifi="nmcli nm wifi off;nmcli nm wifi on;sleep 10;wanip"
 alias restart_conky="\pgrep conky && \killall -SIGHUP conky || conky -d"
 alias conky_restart=restart_conky
 alias restore_my_stty="\stty erase ^?"
@@ -246,8 +243,6 @@ alias wanip='time \curl -A "" ipinfo.io/ip || time \wget -qU "" -O- ipinfo.io/ip
 alias wanipOLD='time \dig +short myip.opendns.com @resolver1.opendns.com'
 alias wavemon="xterm -e wavemon &"
 alias wget="\wget -c --content-disposition"
-alias wifiList="which nmcli >/dev/null && nmcli dev wifi list || iw dev $wifiInterface scan || iwlist $wifiInterface scan"
-alias wifiRestart=restartWifi
 alias xargs="\xargs -ri"
 alias xclock="\xclock -digital -update 1"
 alias xfree="\xterm -geometry 73x5 -e watch -n2 free -om &"
