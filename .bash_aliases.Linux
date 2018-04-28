@@ -18,6 +18,7 @@ alias llk="ll --block-size=K"
 alias llm="ll --block-size=M"
 alias ls="ls --color -F"
 #alias os="\lsb_release -sd"
+alias Pgrep="\grep -P"
 alias pkill='\pkill -efu $USER'
 alias quota="\quota -s"
 alias rsync='time \rsync -uth -P -z --skip-compress=$RSYNC_SKIP_COMPRESS_LIST $RSYNC_EXCLUSION'
