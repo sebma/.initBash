@@ -647,7 +647,7 @@ function reinstallOrignialPackages {
 function timeprocess {
 	local process=$1
 	local pid=$(\pgrep -f "$1" | head -1)
-	test -n "$pid" && \ps -fp $pid && echo && ps -o etime= $pid
+	test -n "$pid" && \ps -o etime -fp $pid
 }
 function watchProcess {
 	local pidList=""
