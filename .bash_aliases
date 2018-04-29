@@ -166,8 +166,8 @@ alias pcmanfm="\pcmanfm --no-desktop"
 alias perlInterpreter="\perl -de ''"
 alias pgrep='\pgrep -lfu $USER'
 alias phpInterpreter="\php -a"
-groups 2>/dev/null | egrep -wq "admin|sudo" && alias pipInstall=" sudo -H easy_install pip"  || alias pipInstall="easy_install --user pip"
-groups 2>/dev/null | egrep -wq "admin|sudo" && alias pip3Install="sudo -H easy_install3 pip" || alias pip3Install="easy_install3 --user pip"
+alias pipInstall="easy_install --user pip"
+alias pip3Install="easy_install3 --user pip"
 alias pipUpdate="pip install -U pip"
 alias ppt2pdf=odp2pdf
 alias pps2pdf=odp2pdf
@@ -198,7 +198,6 @@ alias rsyncMove="rsync --remove-source-files"
 alias scp_unix='time \rsync -h --progress --rsync-path=$HOME/gnu/bin/rsync -ut'
 alias sdiff='\sdiff -w $COLUMNS'
 alias sortip="\sort -nt. -k1,1 -k2,2 -k3,3 -k4,4"
-alias sudo="\sudo "
 alias sum="\awk '{sum+=\$1}END{print sum}'"
 alias swapUsage="\free -m | awk '/^Swap/{print 100*\$3/\$2}'"
 alias terminfo='echo "=> C est un terminal $(tput cols 2>/dev/null)x$(tput lines 2>/dev/null)."'
