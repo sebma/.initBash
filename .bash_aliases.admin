@@ -10,6 +10,8 @@ alias cupsRestart="pgrep -a cupsd;\sudo killall -HUP cupsd;sleep 1;pgrep -a cups
 alias full-upgrade="sudo $(which apt 2>/dev/null) full-upgrade -V --download-only && sync && sudo $(which apt 2>/dev/null) full-upgrade -V --yes"
 alias nmRestart="sudo service network-manager restart"
 alias pgrep="\pgrep -lf"
+alias pipInstall=" sudo -H $(which easy_install) pip"
+alias pip3Install="sudo -H $(which easy_install3) pip"
 alias reinstall="sudo $(which apt 2>/dev/null) install --reinstall -V"
 alias restart_nm="sudo service network-manager restart"
 alias rtmpdumprd='\sudo iptables -t nat -A OUTPUT -p tcp --dport 1935 -m owner \! --uid-owner root -j REDIRECT'
@@ -22,8 +24,8 @@ alias update-mime-database="\sudo \rm -vf /usr/share/mime/packages/kde.xml;time 
 alias updatedb="time sudo $(which updatedb 2>/dev/null)"
 alias upgrade="sudo $(which apt 2>/dev/null) upgrade -V --download-only && sync && sudo $(which apt 2>/dev/null) upgrade -V --yes"
 alias wifiList="which nmcli >/dev/null && nmcli dev wifi list || sudo iw dev $wifiInterface scan || sudo iwlist $wifiInterface scan"
-alias youtube-dlUpdate="\sudo -H pip3 install -U youtube-dl"
-alias ytdlUpdate="\sudo -H pip3 install -U youtube-dl"
+alias youtube-dlUpdate="\sudo -H $(which pip3) install -U youtube-dl"
+alias ytdlUpdate="\sudo -H $(which pip3) install -U youtube-dl"
 
 set +x
 test "$debug" = "1" && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
