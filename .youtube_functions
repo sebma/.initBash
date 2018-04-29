@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 declare -A | grep -wq colors || source $initDir/.colors
 test "$debug" = "1" && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
+#trap 'rc=$?;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
 
 test -r $initDir/.colors && source $initDir/.colors
 youtube_dl=$(which youtube-dl)
@@ -8,14 +9,17 @@ test $os = Linux  && locate=$(which locate)
 test $os = Darwin && locate=$(which glocate)
 
 function ytdlFormats {
+	trap 'rc=$?;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
 	for url
 	do
 		echo "=> url = $url"
 		streamID=$(basename "$url" | cut -d= -f2)
 		$youtube_dl -F "$url" | \egrep -v "only|$streamID"
 	done
+	trap - INT
 }
 function YTRenameFromFiles {
+	trap 'rc=$?;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
 #	local file="$1"
 	for file
 	do
@@ -31,8 +35,10 @@ function YTRenameFromFiles {
 #		mp4tags -m "$url" "$file"
 		test "$(basename $file)" != "$newName" && mv -v "$file" "$(dirname $file)/$newName"
 	done
+	trap - INT
 }
 function updateYTMetadataFromFiles {
+	trap 'rc=$?;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
 	for file
 	do
 		echo "=> file = $file"
@@ -43,8 +49,10 @@ function updateYTMetadataFromFiles {
 		chmod +w $file
 		[ $format = 22 ] && getRestrictedFilenamesHD $url || getRestrictedFilenamesSD $url
 	done
+	trap - INT
 }
 function YTRenameFromURLs {
+	trap 'rc=$?;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
 #	local URL="$1"
 	for URL
 	do
@@ -58,8 +66,10 @@ function YTRenameFromURLs {
 		test -s $oldName || { echo "=> This URL has not been downloaded" >&2;continue; }
 		mv -v "$oldName" "$newName"
 	done
+	trap - INT
 }
 function addYoutubeTDescription {
+	trap 'rc=$?;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
 	local file="$1"
 	local url="$2"
 	test $# != 2 && echo "=> Usage: $FUNCNAME file youtube-URL" && return 1
@@ -72,8 +82,10 @@ function addYoutubeTDescription {
 #	AtomicParsley "$file" --artwork "$artworkFile" --overWrite
 #	rm "$artworkFile"
 	chmod -w "$file"
+	trap - INT
 }
 function sizeOf {
+	trap 'rc=$?;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
 	local size
 	local total="0"
 	local format=18
@@ -91,8 +103,10 @@ function sizeOf {
 		total=$(echo $total | \bc -l)
 		echo "=> total = $total Mo"
 	}
+	trap - INT
 }
 function ytget {
+	trap 'rc=$?;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
 	youtubeURLPrefix=https://www.youtube.com/watch?v=
 	dailymotionURLPrefix=https://www.dailymotion.com/video/
 	format="mp4"
@@ -143,8 +157,10 @@ function ytget {
 	done
 	\rm -v *.description
 	sync
+	trap - INT
 }
 function getRestrictedFilenamesFORMAT {
+	trap 'rc=$?;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
 	youtube_dl=$(which youtube-dl)
 	youtubeURLPrefix=https://www.youtube.com/watch?v=
 	dailymotionURLPrefix=https://www.dailymotion.com/video/
@@ -207,8 +223,10 @@ function getRestrictedFilenamesFORMAT {
 		echo
 	done
 	sync
+	trap - INT
 }
 function getRestrictedFilenamesBEST {
+	trap 'rc=$?;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
 	youtube_dl=$(which youtube-dl)
 	youtubeURLPrefix=https://www.youtube.com/watch?v=
 	dailymotionURLPrefix=https://www.dailymotion.com/video/
@@ -250,8 +268,10 @@ function getRestrictedFilenamesBEST {
 		echo
 	done
 	sync
+	trap - INT
 }
 function getRestrictedFilenamesHD {
+	trap 'rc=$?;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
 	youtube_dl=$(which youtube-dl)
 	youtubeURLPrefix=https://www.youtube.com/watch?v=
 	dailymotionURLPrefix=https://www.dailymotion.com/video/
@@ -294,8 +314,10 @@ function getRestrictedFilenamesHD {
 		echo
 	done
 	sync
+	trap - INT
 }
 function getRestrictedFilenamesSD {
+	trap 'rc=$?;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
 	youtube_dl=$(which youtube-dl)
 	youtubeURLPrefix=https://www.youtube.com/watch?v=
 	dailymotionURLPrefix=https://www.dailymotion.com/video/
@@ -311,7 +333,8 @@ function getRestrictedFilenamesSD {
 		let i++
 		echo "=> Downloading url # $i/$# ..."
 		echo "=> url = $url"
-		$youtube_dl -f "$format" -qs "$url" 2>&1 | grep --color -A1 ^ERROR: && continue
+		echo "=> Testing if $url still exists ..."
+		time $youtube_dl -f "$format" -qs "$url" 2>&1 | grep --color -A1 ^ERROR: && continue
 		if ! echo $url | \egrep -wq "www"
 		then
 			fileName=$(basename $( $locate -er "$url" | \egrep -v "\.part|AUDIO" | sort -rt. | head -1) 2>/dev/null)
@@ -336,6 +359,7 @@ function getRestrictedFilenamesSD {
 				continue
 			fi
 		fi
+		set +x
 
 #		format=$($youtube_dl -F $url | egrep -vw "only|hls-[0-9]+"  | egrep '(webm|mp4|flv) .*([0-9]+p?(x[0-9]+)?)|(unknown)' | egrep -wv "22|hd|http-720" | sort -k 2,2 -k 3,3rn | awk '{printf$1"/"}')
 		format="mp4[height<=?480]"
@@ -353,8 +377,10 @@ function getRestrictedFilenamesSD {
 		echo
 	done
 	sync
+	trap - INT
 }
 function getRestrictedFilenamesSD_PREV {
+	trap 'rc=$?;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
 	youtube_dl=$(which youtube-dl)
 	youtubeURLPrefix=https://www.youtube.com/watch?v=
 	dailymotionURLPrefix=https://www.dailymotion.com/video/
@@ -412,8 +438,10 @@ function getRestrictedFilenamesSD_PREV {
 		echo
 	done
 	sync
+	trap - INT
 }
 function getRestrictedFilenamesLD {
+	trap 'rc=$?;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
 	youtube_dl=$(which youtube-dl)
 	youtubeURLPrefix=https://www.youtube.com/watch?v=
 	dailymotionURLPrefix=https://www.dailymotion.com/video/
@@ -456,8 +484,10 @@ function getRestrictedFilenamesLD {
 		echo
 	done
 	sync
+	trap - INT
 }
 function ytdlSDFormats {
+	trap 'rc=$?;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
 	local format=""
 	for url
 	do
@@ -466,8 +496,10 @@ function ytdlSDFormats {
 		echo "=> format :"   1>&2
 		echo "$format"
 	done
+	trap - INT
 }
 function getPlaylistsRestrictedFilenamesHD {
+	trap 'rc=$?;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
 	for playList
 	do
 		echo "=> Treating playList : $playList ..." >&2
@@ -481,8 +513,10 @@ function getPlaylistsRestrictedFilenamesHD {
 
 		getRestrictedFilenamesHD $listOfUrls
 	done
+	trap - INT
 }
 function getPlaylistsRestrictedFilenamesSD {
+	trap 'rc=$?;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
 	for playList
 	do
 		echo "=> Treating playList : $playList ..." >&2
@@ -497,8 +531,10 @@ function getPlaylistsRestrictedFilenamesSD {
 
 		getRestrictedFilenamesSD $listOfUrls
 	done
+	trap - INT
 }
 function updateYoutubeDescription {
+	trap 'rc=$?;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
 	youtube_dl=$(which youtube-dl)
 	youtubeURLPrefix=https://www.youtube.com/watch?v=
 	dailymotionURLPrefix=https://www.dailymotion.com/video/
@@ -547,8 +583,10 @@ function updateYoutubeDescription {
 		test -f $descFileName && \rm -v $descFileName
 	done
 	sync
+	trap - INT
 }
 function reget {
+	trap 'rc=$?;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
 	youtube_dl=$(which youtube-dl)
 	local url=$1
 	local oldFile="$2"
@@ -558,7 +596,9 @@ function reget {
 	rm "$newFileName"
 	$youtube_dl -f 18 "$url" || $youtube_dl $url
 	mp4tags -m "$url" "$newFileName" && chmod -w "$newFileName" && echo "=> Done."
+	trap - INT
 }
 
+trap - INT
 set +x
 test "$debug" = "1" && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
