@@ -7,7 +7,8 @@ test "$debug" = "1" && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 #alias topflines='$(which find) . $prunePathsFindExpression -xdev -type f -size +10M -exec ls -lT {} \; 2>/dev/null | sort -nrk5 | column -t | head -n $(($LINES-4)) | awk '\''{total+=$5;print}END{print"=> total = "total" MiB"}'\'''
 which pgrep >/dev/null 2>&1 || alias pgrep="\ps -fC"
 
-alias grep="\ggrep --color"
+ggrep -V 2>/dev/null | \grep -wq GNU && alias grep="\ggrep --color"
+
 alias egrep="grep -E"
 alias rgrep='grep -Ir'
 alias zegrep="zgrep -E"
