@@ -61,10 +61,10 @@ then
 	printf "=> eth0 MAC@ : " >&2
 	ip link show eth0 | awk '/ether/{print$(NF-2)}' >&2
 fi
-
+function Time { [ "$debug" '>' 0 ] && eval "time $@" || $@;}
 trap 'echo "=> Ignoring this step and continuing the script <$(basename $BASH_SOURCE)> ..." >&2' INT
-time setxkbmap -option terminate:ctrl_alt_bksp
-time if which gsettings >/dev/null 2>&1 && [ $DISPLAY ]; then
+Time setxkbmap -option terminate:ctrl_alt_bksp
+Time if which gsettings >/dev/null 2>&1 && [ $DISPLAY ]; then
 #	if ! ldd $(which gsettings) 2>&1 | grep -q not.found
 	if $(which gsettings) help >/dev/null 2>&1
 		then
