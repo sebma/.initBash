@@ -25,7 +25,7 @@ then
 		export system="$(lsb_release -sd | awk -F '"' '{print$(NF-1)}')"
 	else
 		ID=$(awk -F"=" '/^ID\>/{print$2}' /etc/os-release)
-time		case $ID in
+		case $ID in
 			debian) export system="$(Source /etc/os-release && echo $PRETTY_NAME | sed "s/[0-9]\+/$(cat /etc/debian_version)/")" ;;
 			ubuntu) export system="$(Source /etc/os-release && echo $PRETTY_NAME)" ;;
 		esac
@@ -72,6 +72,8 @@ then
 	if $(which gsettings) help >/dev/null 2>&1
 		then
 			[ "$debug" '>' 0 ] && echo "=> Setting 'gsettings' parameters ..."	
+			[ "$debug" '>' 0 ] && echo "=> debug = <$debug>"
+			[ "$debug" '>' 0 ] && echo "=> time = <$time>"
 			$time gsettings get org.gnome.desktop.input-sources xkb-options 2>&1 | grep -q GLib-GIO-Message && export GIO_EXTRA_MODULES=/usr/lib/x86_64-linux-gnu/gio/modules/
 			$time profile=$(gsettings get org.gnome.Terminal.ProfilesList default)
 			$time profile=${profile:1:-1} # remove leading and trailing single quotes
