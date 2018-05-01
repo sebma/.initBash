@@ -1,7 +1,7 @@
 #!sh
 declare -A | grep -wq colors || source $initDir/.colors
 test "$debug" '>' 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
-test "$debug" '>' 2 && set -x
+test "$debug" '>' 3 && set -x
 
 echo "=> MIT-MAGIC-COOKIE-1:"
 xauth list | grep :$(echo $DISPLAY | awk -F '\\.|:' '{print$2}') && echo
@@ -69,7 +69,7 @@ trap 'echo "=> Ignoring this step and continuing the script <$(basename $BASH_SO
 $time setxkbmap -option terminate:ctrl_alt_bksp
 if which gsettings >/dev/null 2>&1 && [ $DISPLAY ]
 then
-	if $(which gsettings) help >/dev/null 2>&1
+	if $(which gsettings) help >/dev/null
 	then
 		[ "$debug" '>' 2 ] && set -x
 		[ "$debug" '>' 0 ] && echo "=> Setting 'gsettings' parameters ..."	
@@ -82,6 +82,7 @@ then
 		$time gsettings set org.gnome.desktop.wm.preferences mouse-button-modifier "<Alt>"
 		$time gsettings set org.gnome.desktop.wm.preferences resize-with-right-button true
 		$time gsettings set org.gnome.desktop.input-sources xkb-options "['terminate:ctrl_alt_bksp']"
+		[ "$debug" '>' 2 ] && set +x
 		[ "$debug" '>' 0 ] && echo "=> DONE."
 	fi 2>/dev/null
 fi
