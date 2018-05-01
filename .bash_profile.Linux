@@ -62,8 +62,8 @@ then
 	ip link show eth0 | awk '/ether/{print$(NF-2)}' >&2
 fi
 
-#function Time { [ "$debug" '>' 0 ] && eval "time $@" || $@;}
-[ "$debug" '>' 0 ] && time="eval time" && timeBlock="$(which time) -p"
+#function Time { [ "$debug" '>' 0 ] && eval "time $@" || $@; }
+[ "$debug" '>' 0 ] && time="eval time" && timeBlock="$(which time) -p" || { time="";timeBlock=""; }
 
 trap 'echo "=> Ignoring this step and continuing the script <$(basename $BASH_SOURCE)> ..." >&2' INT
 $time setxkbmap -option terminate:ctrl_alt_bksp
