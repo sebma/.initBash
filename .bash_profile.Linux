@@ -1,89 +1,89 @@
 #!sh
-declare -A | grep -wq colors || source $initDir/.colors
-test "$debug" = "1" && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
-test "$debug" = "2" && set -x
+time declare -A | grep -wq colors || source $initDir/.colors
+time test "$debug" = "1" && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
+time test "$debug" = "2" && set -x
 
-echo "=> MIT-MAGIC-COOKIE-1:"
-xauth list | grep :$(echo $DISPLAY | awk -F '\\.|:' '{print$2}') && echo
+time echo "=> MIT-MAGIC-COOKIE-1:"
+time xauth list | grep :$(echo $DISPLAY | awk -F '\\.|:' '{print$2}') && echo
 
-test -d ~/local/lib && test $LD_LIBRARY_PATH && export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:~/local/lib || export LD_LIBRARY_PATH=~/local/lib
-if ls --color >/dev/null 2>&1 
+time test -d ~/local/lib && test $LD_LIBRARY_PATH && export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:~/local/lib || export LD_LIBRARY_PATH=~/local/lib
+time if ls --color >/dev/null 2>&1 
 then
-	ls -ld --color .cache | awk /$USER/'{print$(NF-2)" "$(NF-1)" "$NF}'
+time 	ls -ld --color .cache | awk /$USER/'{print$(NF-2)" "$(NF-1)" "$NF}'
 else
 	#C'est le cas pour Android
-	ls -ld .cache | awk /$USER/'{print$(NF-2)" "$(NF-1)" "$NF}'
+time 	ls -ld .cache | awk /$USER/'{print$(NF-2)" "$(NF-1)" "$NF}'
 fi
 	
-if [ -e /etc/os-release ]
+time if [ -e /etc/os-release ]
 then
-	if grep -q ID=sailfishos /etc/os-release
+time 	if grep -q ID=sailfishos /etc/os-release
 	then
-		export system=$(Source /etc/os-release && echo "$NAME $VERSION_ID")
+time 		export system=$(Source /etc/os-release && echo "$NAME $VERSION_ID")
 	elif which lsb_release >/dev/null 2>&1 
 	then
-		export system="$(lsb_release -sd | awk -F '"' '{print$(NF-1)}')"
+time 		export system="$(lsb_release -sd | awk -F '"' '{print$(NF-1)}')"
 	else
-		ID=$(awk -F"=" '/^ID\>/{print$2}' /etc/os-release)
-		case $ID in
+time 		ID=$(awk -F"=" '/^ID\>/{print$2}' /etc/os-release)
+time		case $ID in
 			debian) export system="$(Source /etc/os-release && echo $PRETTY_NAME | sed "s/[0-9]\+/$(cat /etc/debian_version)/")" ;;
 			ubuntu) export system="$(Source /etc/os-release && echo $PRETTY_NAME)" ;;
 		esac
 	fi
-	grep -q ID=sailfishos /etc/os-release && test -r $initDir/.bash_profile.SailfishOS && Source $initDir/.bash_profile.SailfishOS
+time 	grep -q ID=sailfishos /etc/os-release && test -r $initDir/.bash_profile.SailfishOS && Source $initDir/.bash_profile.SailfishOS
 else
-	export system=$(echo $HOSTTYPE-$OSTYPE | sed "s/arm[^-]*-/arm-/")
+time 	export system=$(echo $HOSTTYPE-$OSTYPE | sed "s/arm[^-]*-/arm-/")
 fi
 
-trap 'echo "=> Ignoring this step and continuing the script <$(basename $BASH_SOURCE)> ..." >&2' INT
-setxkbmap -layout fr >/dev/null 2>&1
-groups 2>/dev/null | egrep -wq "sudo|admin" && xhost SI:localuser:root >/dev/null 2>&1 #Permet a root de lancer des applis graphiques
-trap - INT
+time trap 'echo "=> Ignoring this step and continuing the script <$(basename $BASH_SOURCE)> ..." >&2' INT
+time setxkbmap -layout fr >/dev/null 2>&1
+time groups 2>/dev/null | egrep -wq "sudo|admin" && xhost SI:localuser:root >/dev/null 2>&1 #Permet a root de lancer des applis graphiques
+time trap - INT
 
-groups 2>/dev/null | egrep -wq "sudo|admin" || mkdir -p ~/.local/lib/mlocate/ ~/.local/share/applications/ 2>/dev/null
-[ $TERM = linux ] && setterm -blength 0 > $(tty)
+time groups 2>/dev/null | egrep -wq "sudo|admin" || \mkdir -p ~/.local/lib/mlocate/ ~/.local/share/applications/ 2>/dev/null
+time [ $TERM = linux ] && setterm -blength 0 > $(tty)
 
 #Choix d'une splash image grub aleatoire
-if test -w /boot/grub/today.jpg 
+time if test -w /boot/grub/today.jpg 
 then
-	for dir in /datas/ImagesVersets $HOME/ImagesVersets
+time 	for dir in /datas/ImagesVersets $HOME/ImagesVersets
 	do
 		test -d $dir && $(which find) $dir -type f | egrep -q '(png|jpg)$' && cp -pv "$(shuf -n1 -e $dir/*/*.{jpg,png})" /boot/grub/today.jpg
 	done
 fi
 
 #Cleanup previous XFCE Sessions
-rm -f ~/.cache/sessions/xf*
+time rm -f ~/.cache/sessions/xf*
 
 #printf "=> Server Signature : " >&2;ssh-keygen -lf /etc/ssh/ssh_host_rsa_key >&2
-if ip link show eth0 >/dev/null 2>&1 && [ -z $DISPLAY ]
+time if ip link show eth0 >/dev/null 2>&1 && [ -z $DISPLAY ]
 then
-	printf "=> eth0 MAC@ : " >&2
-	ip link show eth0 | awk '/ether/{print$(NF-2)}' >&2
+time 	printf "=> eth0 MAC@ : " >&2
+time 	ip link show eth0 | awk '/ether/{print$(NF-2)}' >&2
 fi
 
-trap 'echo "=> Ignoring this step and continuing the script <$(basename $BASH_SOURCE)> ..." >&2' INT
-setxkbmap -option terminate:ctrl_alt_bksp
-if which gsettings >/dev/null 2>&1 && [ $DISPLAY ]; then
-	ldd $(which gsettings) 2>&1 | grep -q not.found || {
-		gsettings get org.gnome.desktop.input-sources xkb-options 2>&1 | grep -q GLib-GIO-Message && export GIO_EXTRA_MODULES=/usr/lib/x86_64-linux-gnu/gio/modules/
-		profile=$(gsettings get org.gnome.Terminal.ProfilesList default)
-		profile=${profile:1:-1} # remove leading and trailing single quotes
-		gsettings set "org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$profile/" login-shell true
-		gsettings set org.gnome.desktop.wm.preferences mouse-button-modifier "<Alt>"
-		gsettings set org.gnome.desktop.wm.preferences resize-with-right-button true
-		gsettings set org.gnome.desktop.input-sources xkb-options "['terminate:ctrl_alt_bksp']"
+time trap 'echo "=> Ignoring this step and continuing the script <$(basename $BASH_SOURCE)> ..." >&2' INT
+time setxkbmap -option terminate:ctrl_alt_bksp
+time if which gsettings >/dev/null 2>&1 && [ $DISPLAY ]; then
+time 	ldd $(which gsettings) 2>&1 | grep -q not.found || {
+time 		gsettings get org.gnome.desktop.input-sources xkb-options 2>&1 | grep -q GLib-GIO-Message && export GIO_EXTRA_MODULES=/usr/lib/x86_64-linux-gnu/gio/modules/
+time 		profile=$(gsettings get org.gnome.Terminal.ProfilesList default)
+time 		profile=${profile:1:-1} # remove leading and trailing single quotes
+time 		gsettings set "org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$profile/" login-shell true
+time 		gsettings set org.gnome.desktop.wm.preferences mouse-button-modifier "<Alt>"
+time 		gsettings set org.gnome.desktop.wm.preferences resize-with-right-button true
+time 		gsettings set org.gnome.desktop.input-sources xkb-options "['terminate:ctrl_alt_bksp']"
 	} 2>/dev/null
 fi
-trap - INT
+time trap - INT
 
-if [ $(dconf read /org/gnome/shell/favorite-apps | wc -c) != 0 ]
+time if [ $(dconf read /org/gnome/shell/favorite-apps | wc -c) != 0 ]
 then
-	dconf read /org/gnome/shell/favorite-apps | grep -wqi firefox.desktop || dconf write /org/gnome/shell/favorite-apps "$(dconf read /org/gnome/shell/favorite-apps | sed "s/\]/, 'Firefox.desktop']/")"
+time 	dconf read /org/gnome/shell/favorite-apps | grep -wqi firefox.desktop || dconf write /org/gnome/shell/favorite-apps "$(dconf read /org/gnome/shell/favorite-apps | sed "s/\]/, 'Firefox.desktop']/")"
 fi
 
-which matlab >/dev/null 2>&1 && test -d "$HOME/.matlab" && export MATLAB=$(\ls -d "$HOME/.matlab/"* | head -1)
-which git >/dev/null && git config --global credential.helper "cache --timeout=86400"
+time which matlab >/dev/null 2>&1 && test -d "$HOME/.matlab" && export MATLAB=$(\ls -d "$HOME/.matlab/"* | head -1)
+time which git >/dev/null && git config --global credential.helper "cache --timeout=86400"
 
-set +x
-test "$debug" = "1" && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
+time set +x
+time test "$debug" = "1" && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
