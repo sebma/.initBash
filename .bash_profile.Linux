@@ -63,7 +63,7 @@ then
 fi
 
 #function Time { [ "$debug" '>' 0 ] && eval "time $@" || $@;}
-[ "$debug" '>' 0 ] && time="eval time" && timeBlock="time -p"
+[ "$debug" '>' 0 ] && time="eval time" && timeBlock="$(which time) -p"
 
 trap 'echo "=> Ignoring this step and continuing the script <$(basename $BASH_SOURCE)> ..." >&2' INT
 $time setxkbmap -option terminate:ctrl_alt_bksp
