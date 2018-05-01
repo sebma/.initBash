@@ -76,6 +76,7 @@ time 	if $(which gsettings) help >/dev/null 2>&1
 			gsettings set org.gnome.desktop.wm.preferences mouse-button-modifier "<Alt>"
 			gsettings set org.gnome.desktop.wm.preferences resize-with-right-button true
 			gsettings set org.gnome.desktop.input-sources xkb-options "['terminate:ctrl_alt_bksp']"
+			[ $debug = 1 ] && echo "=> DONE."
 		fi 2>/dev/null
 	fi
 trap - INT
