@@ -79,10 +79,10 @@ then
 		$time profile=$(gsettings get org.gnome.Terminal.ProfilesList default)
 		$time profile=${profile:1:-1} # remove leading and trailing single quotes
 		$time gsettings set "org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$profile/" login-shell true
-		time gsettings set org.gnome.desktop.wm.preferences mouse-button-modifier "<Alt>"
 		$time gsettings set org.gnome.desktop.wm.preferences resize-with-right-button true
+		time gsettings set org.gnome.desktop.wm.preferences mouse-button-modifier "<Alt>"
 #		time dconf write  /org/gnome/desktop/input-sources/xkb-options "['terminate:ctrl_alt_bksp']"
-		[ "$debug" '>' 2 ] && set +x
+		[ "$debug" '<' 4 ] && set +x
 		[ "$debug" '>' 0 ] && echo "=> DONE."
 #	fi 2>/dev/null
 	fi
