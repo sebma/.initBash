@@ -62,7 +62,7 @@ then
 	ip link show eth0 | awk '/ether/{print$(NF-2)}' >&2
 fi
 
-#function TimeBlock { [ "$debug" '>' 0 ] && eval time "$@" || $@; }
+function Time { [ "$debug" '>' 0 ] && eval time "$@" || $@; }
 [ "$debug" '>' 1 ] && time="eval time" && timeBlock="eval time"
 
 trap 'echo "=> Ignoring this step and continuing the script <$(basename $BASH_SOURCE)> ..." >&2' INT
@@ -71,17 +71,17 @@ if which gsettings >/dev/null 2>&1 && [ $DISPLAY ]
 then
 	if $(which gsettings) help >/dev/null
 	then
-		[ "$debug" '>' 2 ] && set -x
 		[ "$debug" '>' 0 ] && echo "=> Setting 'gsettings' parameters ..."
 		[ "$debug" '>' 0 ] && echo "=> debug = <$debug>"
 		[ "$debug" '>' 0 ] && echo "=> time = <$time>"
+		[ "$debug" '>' 2 ] && set -x
 		$time gsettings get org.gnome.desktop.input-sources xkb-options 2>&1 | grep -q GLib-GIO-Message && export GIO_EXTRA_MODULES=/usr/lib/x86_64-linux-gnu/gio/modules/
 		$time profile=$(gsettings get org.gnome.Terminal.ProfilesList default)
 		$time profile=${profile:1:-1} # remove leading and trailing single quotes
 		$time gsettings set "org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$profile/" login-shell true
-		$time gsettings set org.gnome.desktop.wm.preferences mouse-button-modifier "<Alt>"
+		Time gsettings set org.gnome.desktop.wm.preferences mouse-button-modifier "<Alt>"
 		$time gsettings set org.gnome.desktop.wm.preferences resize-with-right-button true
-		$time gsettings set org.gnome.desktop.input-sources xkb-options "['terminate:ctrl_alt_bksp']"
+#		time dconf write  /org/gnome/desktop/input-sources/xkb-options "['terminate:ctrl_alt_bksp']"
 		[ "$debug" '>' 2 ] && set +x
 		[ "$debug" '>' 0 ] && echo "=> DONE."
 #	fi 2>/dev/null
