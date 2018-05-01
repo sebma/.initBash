@@ -4,30 +4,36 @@ test "$debug" = "1" && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 
 test -r $initDir/.AV_functions && Source $initDir/.AV_functions
 test -r $initDir/.youtube_functions && Source $initDir/.youtube_functions
+export LANG=C
 
 function lanip {
 	ethName=$1
 	if [ -n "$ethName" ]
 	then
 		printf "$ethName: "
-		LANG=C \ip addr show dev $ethName | awk '/inet /{print$2}'
+		\ip addr show dev $ethName | awk '/inet /{print$2}'
 	elif [ $(uname -s) = Linux ]	
 	then
-		LANG=C \ip addr show | awk '{if(/(UP|UNKNOWN)/){interface=$2;found=1}else if(/DOWN/)found=0;if(found==1 && /inet /)print interface" "$2}'	
+		\ip addr show | awk '{if(/(UP|UNKNOWN)/){interface=$2;found=1}else if(/DOWN/)found=0;if(found==1 && /inet /)print interface" "$2}'	
 	elif [ $(uname -s) = Darwin ]
 	then
-		LANG=C \ip addr show | awk '{if(/(UP|UNKNOWN)/){interface=$1;found=1}else if(/DOWN/)found=0;if(found==1 && /inet /)print interface" "$2}'	
+		\ip addr show | awk '{if(/(UP|UNKNOWN)/){interface=$1;found=1}else if(/DOWN/)found=0;if(found==1 && /inet /)print interface" "$2}'	
 	fi
 }
 function resetRESOLUTION {
-	LANG=C \xrandr | awk '{if(/\<connected/)output=$1;if(/\*/){print"xrandr --output "output" --mode "$1;exit}}' | sh -x
+	\xrandr | awk '{if(/\<connected/)output=$1;if(/\*/){print"xrandr --output "output" --mode "$1;exit}}' | sh -x
 }
 function locateHere {
 	locate "$@" | grep $PWD
 }
 function pingMyLAN {
 	local myLAN=$(\ip addr show | awk '/inet /{print$2}' | egrep -v '127.0.0.[0-9]|192.168.122.[0-9]')
-	time LANG=C \nmap -T5 -sP $myLAN | sed -n '/Nmap scan report for /s/Nmap scan report for //p'
+	if which fping >/dev/null 2>&1
+	then
+		time fping -r 0 -aAg $myLAN | sort -u
+	else
+		time \nmap -T5 -sP $myLAN | sed -n '/Nmap scan report for /s/Nmap scan report for //p'
+	fi
 }
 function Sudo {
 	local firstArg=$1
@@ -528,7 +534,6 @@ function processUsage {
 	\ps -e -o $columns | sort -nr | cut -c-156 | head -500 | awk '!/COMMAND/{printf "%9.3lf MiB %4.1f%% %4.1f%% %5d %s\n", $1/1024,$2,$3,$4,$5}' | tail -n +1 | head -45
 }
 function memUsage {
-	local LANG=C
 	local processName=$1
 	local columns="pid,comm,pmem,rssize"
 	if test $processName
