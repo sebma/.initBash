@@ -5,6 +5,7 @@ test "$debug" = "1" && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 test -r $initDir/.AV_functions && Source $initDir/.AV_functions
 test -r $initDir/.youtube_functions && Source $initDir/.youtube_functions
 export LANG=C
+sshOptions="-A -Y -C"
 
 function lanip {
 	ethName=$1
@@ -252,7 +253,6 @@ function getFiles {
 }
 function ssh {
 	local reachable=""
-	local sshOptions="-A -Y -C"
 	type ssh >/dev/null || return
 	remoteSSHServer=$(echo $@ | awk '{sub("^(-[[:alnum:]_]+ ?)+","");sub("[[:alnum:]_]+@","");print$1}')
 	if test -n "$remoteSSHServer"
