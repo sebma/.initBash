@@ -72,7 +72,7 @@ then
 	if $(which gsettings) help >/dev/null
 	then
 		[ "$debug" '>' 2 ] && set -x
-		[ "$debug" '>' 0 ] && echo "=> Setting 'gsettings' parameters ..."	
+		[ "$debug" '>' 0 ] && echo "=> Setting 'gsettings' parameters ..."
 		[ "$debug" '>' 0 ] && echo "=> debug = <$debug>"
 		[ "$debug" '>' 0 ] && echo "=> time = <$time>"
 		$time gsettings get org.gnome.desktop.input-sources xkb-options 2>&1 | grep -q GLib-GIO-Message && export GIO_EXTRA_MODULES=/usr/lib/x86_64-linux-gnu/gio/modules/
@@ -84,7 +84,8 @@ then
 		$time gsettings set org.gnome.desktop.input-sources xkb-options "['terminate:ctrl_alt_bksp']"
 		[ "$debug" '>' 2 ] && set +x
 		[ "$debug" '>' 0 ] && echo "=> DONE."
-	fi 2>/dev/null
+#	fi 2>/dev/null
+	fi
 fi
 trap - INT
 
