@@ -62,7 +62,7 @@ then
 	ip link show eth0 | awk '/ether/{print$(NF-2)}' >&2
 fi
 
-function Time { [ "$debug" '>' 0 ] && eval time "$@" || $@; }
+#function Time { [ "$debug" '>' 0 ] && eval time "$@" || $@; }
 [ "$debug" '>' 1 ] && time="eval time" && timeBlock="eval time"
 
 trap 'echo "=> Ignoring this step and continuing the script <$(basename $BASH_SOURCE)> ..." >&2' INT
@@ -79,7 +79,7 @@ then
 		$time profile=$(gsettings get org.gnome.Terminal.ProfilesList default)
 		$time profile=${profile:1:-1} # remove leading and trailing single quotes
 		$time gsettings set "org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$profile/" login-shell true
-		Time gsettings set org.gnome.desktop.wm.preferences mouse-button-modifier "<Alt>"
+		time gsettings set org.gnome.desktop.wm.preferences mouse-button-modifier "<Alt>"
 		$time gsettings set org.gnome.desktop.wm.preferences resize-with-right-button true
 #		time dconf write  /org/gnome/desktop/input-sources/xkb-options "['terminate:ctrl_alt_bksp']"
 		[ "$debug" '>' 2 ] && set +x
