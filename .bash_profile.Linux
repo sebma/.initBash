@@ -1,7 +1,7 @@
 #!sh
 declare -A | grep -wq colors || source $initDir/.colors
-test "$debug" = "1" && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
-test "$debug" = "2" && set -x
+test "$debug" '>' 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
+test "$debug" '>' 2 && set -x
 
 echo "=> MIT-MAGIC-COOKIE-1:"
 xauth list | grep :$(echo $DISPLAY | awk -F '\\.|:' '{print$2}') && echo
@@ -62,23 +62,23 @@ then
 	ip link show eth0 | awk '/ether/{print$(NF-2)}' >&2
 fi
 
-#function Time { [ "$debug" '>' 0 ] && eval "time $@" || $@; }
-[ "$debug" '>' 0 ] && time="eval time" && timeBlock="$(which time) -p" || { time="";timeBlock=""; }
+#function TimeBlock { [ "$debug" '>' 0 ] && eval time "$@" || $@; }
+[ "$debug" '>' 1 ] && time="eval time" && timeBlock="eval time"
 
 trap 'echo "=> Ignoring this step and continuing the script <$(basename $BASH_SOURCE)> ..." >&2' INT
 $time setxkbmap -option terminate:ctrl_alt_bksp
-$timeBlock if which gsettings >/dev/null 2>&1 && [ $DISPLAY ]
+if which gsettings >/dev/null 2>&1 && [ $DISPLAY ]
 then
 	if $(which gsettings) help >/dev/null 2>&1
 		then
 			[ "$debug" '>' 0 ] && echo "=> Setting 'gsettings' parameters ..."	
-			gsettings get org.gnome.desktop.input-sources xkb-options 2>&1 | grep -q GLib-GIO-Message && export GIO_EXTRA_MODULES=/usr/lib/x86_64-linux-gnu/gio/modules/
-			profile=$(gsettings get org.gnome.Terminal.ProfilesList default)
-			profile=${profile:1:-1} # remove leading and trailing single quotes
-			gsettings set "org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$profile/" login-shell true
-			gsettings set org.gnome.desktop.wm.preferences mouse-button-modifier "<Alt>"
-			gsettings set org.gnome.desktop.wm.preferences resize-with-right-button true
-			gsettings set org.gnome.desktop.input-sources xkb-options "['terminate:ctrl_alt_bksp']"
+			$time gsettings get org.gnome.desktop.input-sources xkb-options 2>&1 | grep -q GLib-GIO-Message && export GIO_EXTRA_MODULES=/usr/lib/x86_64-linux-gnu/gio/modules/
+			$time profile=$(gsettings get org.gnome.Terminal.ProfilesList default)
+			$time profile=${profile:1:-1} # remove leading and trailing single quotes
+			$time gsettings set "org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$profile/" login-shell true
+			$time gsettings set org.gnome.desktop.wm.preferences mouse-button-modifier "<Alt>"
+			$time gsettings set org.gnome.desktop.wm.preferences resize-with-right-button true
+			$time gsettings set org.gnome.desktop.input-sources xkb-options "['terminate:ctrl_alt_bksp']"
 			[ "$debug" '>' 0 ] && echo "=> DONE."
 		fi 2>/dev/null
 	fi
