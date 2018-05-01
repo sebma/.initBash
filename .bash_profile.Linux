@@ -68,7 +68,7 @@ time if which gsettings >/dev/null 2>&1 && [ $DISPLAY ]; then
 #	if ! ldd $(which gsettings) 2>&1 | grep -q not.found
 	if $(which gsettings) help >/dev/null 2>&1
 		then
-			[ $debug = 1 ] && echo "=> Setting 'gsettings' parameters ..."	
+			[ "$debug" '>' 0 ] && echo "=> Setting 'gsettings' parameters ..."	
 			gsettings get org.gnome.desktop.input-sources xkb-options 2>&1 | grep -q GLib-GIO-Message && export GIO_EXTRA_MODULES=/usr/lib/x86_64-linux-gnu/gio/modules/
 			profile=$(gsettings get org.gnome.Terminal.ProfilesList default)
 			profile=${profile:1:-1} # remove leading and trailing single quotes
@@ -76,7 +76,7 @@ time if which gsettings >/dev/null 2>&1 && [ $DISPLAY ]; then
 			gsettings set org.gnome.desktop.wm.preferences mouse-button-modifier "<Alt>"
 			gsettings set org.gnome.desktop.wm.preferences resize-with-right-button true
 			gsettings set org.gnome.desktop.input-sources xkb-options "['terminate:ctrl_alt_bksp']"
-			[ $debug = 1 ] && echo "=> DONE."
+			[ "$debug" '>' 0 ] && echo "=> DONE."
 		fi 2>/dev/null
 	fi
 trap - INT
