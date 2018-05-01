@@ -62,11 +62,11 @@ then
 	ip link show eth0 | awk '/ether/{print$(NF-2)}' >&2
 fi
 
-time trap 'echo "=> Ignoring this step and continuing the script <$(basename $BASH_SOURCE)> ..." >&2' INT
+trap 'echo "=> Ignoring this step and continuing the script <$(basename $BASH_SOURCE)> ..." >&2' INT
 time setxkbmap -option terminate:ctrl_alt_bksp
 time if which gsettings >/dev/null 2>&1 && [ $DISPLAY ]; then
-#time 	if ! ldd $(which gsettings) 2>&1 | grep -q not.found
-time 	if $(which gsettings) help >/dev/null 2>&1
+#	if ! ldd $(which gsettings) 2>&1 | grep -q not.found
+	if $(which gsettings) help >/dev/null 2>&1
 		then
 			[ $debug = 1 ] && echo "=> Setting 'gsettings' parameters ..."	
 			gsettings get org.gnome.desktop.input-sources xkb-options 2>&1 | grep -q GLib-GIO-Message && export GIO_EXTRA_MODULES=/usr/lib/x86_64-linux-gnu/gio/modules/
