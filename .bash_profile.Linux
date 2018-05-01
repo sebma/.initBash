@@ -72,8 +72,6 @@ then
 	if $(which gsettings) help >/dev/null
 	then
 		[ "$debug" '>' 0 ] && echo "=> Setting 'gsettings' parameters ..."
-		[ "$debug" '>' 0 ] && echo "=> debug = <$debug>"
-		[ "$debug" '>' 0 ] && echo "=> time = <$time>"
 		[ "$debug" '>' 2 ] && set -x
 		$time gsettings get org.gnome.desktop.input-sources xkb-options 2>&1 | grep -q GLib-GIO-Message && export GIO_EXTRA_MODULES=/usr/lib/x86_64-linux-gnu/gio/modules/
 		$time profile=$(gsettings get org.gnome.Terminal.ProfilesList default)
