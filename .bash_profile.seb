@@ -123,6 +123,7 @@ Linux)
 esac
 
 which matlab >/dev/null 2>&1 && Source $initDir/.bash_profile.matlab
+which brew >/dev/null 2>&1 && Source $initDir/.bashrc.brew
 
 set +x
 test "$debug" = "1" && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
