@@ -4,25 +4,21 @@ test "$debug" = "1" && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 
 wifiInterface="$(iwconfig 2>/dev/null | awk '/^[^ \t]/ { if ($1 ~ /^[0-9]+:/) { print $2 } else { print $1 } }' | iw dev 2>/dev/null | awk '/Interface/{lastInterface=$NF}END{print lastInterface}')"
 
-alias autoremove="sudo $(which apt-get 2>/dev/null) autoremove -V"
+test -f /etc/debian_version && Source $initDir/.bash_aliases.Debian
 alias checkSudoFile="\visudo -cf"
 alias cupsRestart="pgrep -a cupsd;\sudo killall -HUP cupsd;sleep 1;pgrep -a cupsd"
-alias full-upgrade="sudo $(which apt 2>/dev/null) full-upgrade -V --download-only && sync && sudo $(which apt 2>/dev/null) full-upgrade -V --yes"
 alias nmRestart="sudo service network-manager restart"
 alias pgrep="\pgrep -lf"
 alias pipInstall=" sudo -H $(which easy_install) pip"
 alias pip3Install="sudo -H $(which easy_install3) pip"
-alias reinstall="sudo $(which apt 2>/dev/null) install --reinstall -V"
 alias restart_nm="sudo service network-manager restart"
 alias rtmpdumprd='\sudo iptables -t nat -A OUTPUT -p tcp --dport 1935 -m owner \! --uid-owner root -j REDIRECT'
 alias rtmpdumprs='\sudo iptables -t nat -D OUTPUT -p tcp --dport 1935 -m owner \! --uid-owner root -j REDIRECT'
 alias sudo="\sudo "
 alias testLiveUSB_BIOS="sudo -b \kvm -m 1G -boot menu=on -hda"
 alias testLiveUSB_UEFI="sudo -b \kvm -m 1G -bios /usr/share/qemu/OVMF.fd -hda"
-alias update="time sudo $(which apt 2>/dev/null) update;$(which apt 2>/dev/null) list --upgradable"
 alias update-mime-database="\sudo \rm -vf /usr/share/mime/packages/kde.xml;time sudo \update-mime-database /usr/share/mime"
 alias updatedb="time sudo $(which updatedb 2>/dev/null)"
-alias upgrade="sudo $(which apt 2>/dev/null) upgrade -V --download-only && sync && sudo $(which apt 2>/dev/null) upgrade -V --yes"
 alias wifiList="which nmcli >/dev/null && nmcli dev wifi list || sudo iw dev $wifiInterface scan || sudo iwlist $wifiInterface scan"
 alias youtube-dlUpdate="\sudo -H $(which pip3) install -U youtube-dl"
 alias ytdlUpdate="\sudo -H $(which pip3) install -U youtube-dl"
