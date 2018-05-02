@@ -121,9 +121,7 @@ function status {
 }
 function topflines {
 	initVars
-	test $# = 0 && args=. || args=$@
-#	BLOCKSIZE=M $(which gfind) $args $prunePathsFindExpression -xdev -type f -size +10M -exec ls -lsT {} \; 2>/dev/null | sort -nrk6 | column -t | head -n $(($LINES-4)) | awk '{total+=$1;$6/=2^20;$6=$6"M";print}END{if(total) print"=> total = "total" MiB"}'
-	$(which gfind) $args $prunePathsFindExpression -xdev -type f -size +10M -exec ls -lT {} \; 2>/dev/null | sort -nrk5 | column -t | head -n $(($LINES-4)) | awk '{total+=$1;$5/=2^20;$5=$5"M";print}END{if(total) print"=> total = "total" MiB"}'
+	$(which gfind) "$@" $prunePathsFindExpression -xdev -type f -size +10M -exec gls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | column -t | head -n $(($LINES-4)) | awk '{total+=$5;print}END{if(total) print"=> total = "total" MiB"}'
 }
 groups | \egrep -wq "admin|sudo" && alias pipInstall="sudo -H easy_install pip" || alias pipInstall="easy_install --user pip"
 initVars
