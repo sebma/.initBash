@@ -99,11 +99,13 @@ then
 	Debug "=> Running /usr/share/bash-completion/bash_completion ..."
 fi
 
-test -x "$(which brew)" && [ $BASH_VERSINFO -ge 4 ] && [ -r $(brew --prefix)/share/bash-completion/bash_completion ] && Source $(brew --prefix)/share/bash-completion/bash_completion
 which register-python-argcomplete >/dev/null 2>&1 && eval "$(register-python-argcomplete conda)"
 
 #[[ -s "$HOME/.rvm/scripts/rvm" ]] && Source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+
 date
+
+which brew >/dev/null 2>&1 && Source $initDir/.bashrc.brew
 test -r $initDir/.bashrc.conda && Source $initDir/.bashrc.conda
 test $os = Linux && Source $initDir/.bashrc.Linux
 test -s /etc/debian_version && Source $initDir/.bashrc.Debian
