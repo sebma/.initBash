@@ -190,7 +190,7 @@ function env {
 function os {
 	case $(uname -s) in
 	Darwin) sw_vers >/dev/null 2>&1 && echo $(sw_vers -productName) $(sw_vers -productVersion) || system_profiler SPSoftwareDataType || defaults read /System/Library/CoreServices/SystemVersion ProductVersion ;;
-	Linux) lsb_release -sd  2>/dev/null || awk -F'[="]' '/PRETTY_NAME/{print$(NF-1)}' /etc/os-release || sed -n 's/\\[nl]//g;1p' /etc/issue ;;
+	Linux) \lsb_release -scd | tr "\n" " ";echo 2>/dev/null || awk -F'[="]' '/PRETTY_NAME/{printf$(NF-1)" "}/VERSION_CODENAME/{codeName=$2}END{if(codeName)print codeName;else print""}' /etc/os-release || sed -n 's/\\[nl]//g;1p' /etc/issue ;;
 	*) ;;
 	esac
 }
