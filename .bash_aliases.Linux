@@ -18,8 +18,10 @@ alias wifiRestart=restartWifi
 
 alias catFiles="\tail -vn +1"
 alias cp='\cp --preserve=timestamps -uv'
-alias firefoxDefrag='pgrep firefox || time $(which find) ~/.mozilla/firefox/ -name "*sqlite" -ls -exec sqlite3 -echo {} vacuum \;'
 alias df="\df -PTh"
+#which ccze >/dev/null 2>&1 && alias ccze="\ccze -A" && alias dmesg="\ccze -A < /var/log/dmesg"
+#alias dmesg="\grc less /var/log/dmesg"
+alias firefoxDefrag='pgrep firefox || time $(which find) ~/.mozilla/firefox/ -name "*sqlite" -ls -exec sqlite3 -echo {} vacuum \;'
 alias l="ls --color"
 alias ll="ls -blF --time-style=+'%Y-%m-%d %T'"
 alias llk="ll --block-size=K"
