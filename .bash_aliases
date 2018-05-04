@@ -26,8 +26,8 @@ alias burnaudiocd='\burnclone'
 alias burncdrw='\cdrecord -v -dao driveropts=burnfree fs=14M speed=12 gracetime=10 -eject'
 alias burnclone='\cdrecord -v -clone -raw driveropts=burnfree fs=14M speed=16 gracetime=10 -eject -overburn'
 alias burniso='\cdrecord -v -dao driveropts=burnfree fs=14M speed=24 gracetime=10 -eject -overburn'
+alias Cat='\highlight -O ansi --force'
 alias cclive="\cclive -c"
-which ccze >/dev/null 2>&1 && alias ccze="\ccze -A" && alias dmesg="\ccze -A < /var/log/dmesg"
 alias cdda_info="\icedax -gHJq -vtitles"
 alias cdrdao='\df | grep -q $CDR_DEVICE && umount -vv $CDR_DEVICE ; \cdrdao'
 alias cget="\curl -O"
@@ -209,7 +209,6 @@ alias topd5="\du  -cxsm */ .??*/ 2>/dev/null | sort -nr | head -5"
 alias topd="\du   -cxsm */ .??*/ 2>/dev/null | sort -nr | head -n"
 alias topdlines='\du   -cxsm */ .??*/ 2>/dev/null | sort -nr | head -$(($LINES-2))'
 alias ulogerrors="egrep -iB4 -A1 'error|erreur|Err: [^0]'"
-#alias ulogtodayerrors="egrep -iB4 -A1 'error|erreur|Err: [^0]' $ulog"
 alias umask="\umask -S"
 alias umount="\umount -vv"
 alias uncompress="\uncompress -v"
@@ -225,7 +224,6 @@ alias updateThumbnail="\exiftran -gi"
 alias updateYoutube-dl="pip install -U youtube-dl"
 alias updatedb='updatedb -l 0 -o ~/.local/lib/mlocate/mlocate.db --prunefs "rpc_pipefs afs binfmt_misc proc smbfs iso9660 ncpfs coda devpts ftpfs devfs mfs shfs sysfs cifs lustre tmpfs usbfs udf fuse.glusterfs fuse.sshfs curlftpfs"'
 alias uuidGet="\blkid -o value -s UUID"
-#alias vict2c="vim +'setf xml' $LOGDIR/ct2c.log"
 alias vimatlab="vim +'setf matlab'"
 alias vihistory='\vim ~/.bash_history'
 alias vioctave=vimatlab
