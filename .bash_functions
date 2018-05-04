@@ -7,6 +7,12 @@ test -r $initDir/.youtube_functions && Source $initDir/.youtube_functions
 export LANG=C
 sshOptions="-A -Y -C"
 
+function Less {
+	for file
+	do
+		\highlight -O ansi --force "$file" | \less -ir	
+	done
+}
 function lanip {
 	ethName=$1
 	if [ -n "$ethName" ]
