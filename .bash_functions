@@ -7,10 +7,16 @@ test -r $initDir/.youtube_functions && Source $initDir/.youtube_functions
 export LANG=C
 sshOptions="-A -Y -C"
 
+function More {
+	for file
+	do
+		\highlight -O ansi --force "$file" | more
+	done
+}
 function Less {
 	for file
 	do
-		\highlight -O ansi --force "$file" | \less -ir	
+		\highlight -O ansi --force "$file" | \less -ir
 	done
 }
 function lanip {
@@ -19,12 +25,12 @@ function lanip {
 	then
 		printf "$ethName: "
 		\ip addr show dev $ethName | awk '/inet /{print$2}'
-	elif [ $(uname -s) = Linux ]	
+	elif [ $(uname -s) = Linux ]
 	then
-		\ip addr show | awk '{if(/(UP|UNKNOWN)/){interface=$2;found=1}else if(/DOWN/)found=0;if(found==1 && /inet /)print interface" "$2}'	
+		\ip addr show | awk '{if(/(UP|UNKNOWN)/){interface=$2;found=1}else if(/DOWN/)found=0;if(found==1 && /inet /)print interface" "$2}'
 	elif [ $(uname -s) = Darwin ]
 	then
-		\ip addr show | awk '{if(/(UP|UNKNOWN)/){interface=$1;found=1}else if(/DOWN/)found=0;if(found==1 && /inet /)print interface" "$2}'	
+		\ip addr show | awk '{if(/(UP|UNKNOWN)/){interface=$1;found=1}else if(/DOWN/)found=0;if(found==1 && /inet /)print interface" "$2}'
 	fi
 }
 function resetRESOLUTION {
