@@ -38,11 +38,11 @@ done
 export MANPATH
 
 #Definitions de mes fonctions bash pour Linux
-[ -n "$BASH_VERSION" ] && test -r $initDir/.bash_functions && Source $initDir/.bash_functions
 #Definitions de mes alias
 test -r $initDir/.bash_aliases && Source $initDir/.bash_aliases
 test -r $initDir/.bash_aliases.admin && groups 2>/dev/null | egrep -wq "sudo|admin" && Source $initDir/.bash_aliases.admin
-test -r $initDir/.bash_aliases.$(uname -s) && Source $initDir/.bash_aliases.$(uname -s)
+test -r $initDir/.bash_aliases.$(uname -s) && Source $initDir/.bash_aliases.$(uname -s) #Pour Darwin ou Linux
+[ -n "$BASH_VERSION" ] && test -r $initDir/.bash_functions && Source $initDir/.bash_functions
 case $OSTYPE in
 	linux-gnueabihf) grep -q ID=sailfishos /etc/os-release &&  test -r $initDir/.bash_aliases.SailfishOS && Source $initDir/.bash_aliases.SailfishOS;;
 	linux-gnueabi) resize; test -r $initDir/.bash_aliases.android && Source $initDir/.bash_aliases.android; which busybox >/dev/null && test -r $initDir/.bash_aliases.busybox && Source $initDir/.bash_aliases.busybox;;
