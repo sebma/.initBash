@@ -12,9 +12,10 @@ prunePathsFindExpression=$(printf " -path %s -prune -o" $findExcludedPathList)
 duExcludedPathList="./proc ./sys ./dev"
 excludePathsDuExpression=$(printf " --exclude %s" $duExcludedPathList)
 
-alias wifiList="which nmcli >/dev/null && nmcli dev wifi list || iw dev $wifiInterface scan || iwlist $wifiInterface scan"
-alias restartWifi="nmcli nm wifi off;nmcli nm wifi on;sleep 10;wanip"
-alias wifiRestart=restartWifi
+test $wifiInterface && alias wifiList="which nmcli >/dev/null && \nmcli con || iw dev $wifiInterface scan || iwlist $wifiInterface scan"
+test $wifiInterface && alias wifiSpeed="\iwlist $wifiInterface bitrate;\iw dev $wifiInterface link"
+test $wifiInterface && alias restartWifi="which nmcli >/dev/null && \nmcli nm wifi off;nmcli nm wifi on;sleep 10;wanip"
+test $wifiInterface && alias wifiRestart=restartWifi
 
 alias catFiles="\tail -vn +1"
 alias cp='\cp --preserve=timestamps -uv'
