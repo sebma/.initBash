@@ -30,6 +30,7 @@ alias hwinfo="\system_profiler SPHardwareDataType"
 alias osinfo="\system_profiler SPSoftwareDataType;\system_profiler SPInstallHistoryDataType | \grep Install.macOS"
 alias pkill='\pkill -lfu $USER'
 alias graphicsinfo="\system_profiler SPDisplaysDataType"
+alias lsvga="\system_profiler SPDisplaysDataType"
 alias l="\ls -G"
 alias ldd="\otool -L"
 alias ll="ls -blF -T"
