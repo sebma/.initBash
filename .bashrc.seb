@@ -11,7 +11,7 @@ test "$debug" '>' "2" && set -x
 
 #test -n "$bashRCLoaded" && return
 bashRCLoaded=1
-os=$(uname -s)
+export os=$(uname -s)
 function addpath {
 	test ! -d "$1" && return
 	echo $PATH | grep -wq "$1" || PATH=$1:$PATH
