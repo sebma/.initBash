@@ -132,7 +132,7 @@ alias pkgInstaller="\installer -pkg"
 function dmgInstaller {
 	local sudo defaultDst
 	groups | \egrep -wq "admin|sudo" && { sudo=sudo;defaultDst=/; }	|| { sudo="";defaultDst="$HOME"; }
-	test "$debug" = 2 && set -x
+	test "$debug" '>' 2 && set -x
 	for dmgFilePath
 	do
 		if \ls $dmgFilePath >/dev/null
