@@ -3,7 +3,13 @@
 declare -A | grep -wq colors || source $initDir/.colors
 test "$debug" = "1" && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-test -e ~/.cache && \rm -vfr ~/.cache/* 2>/dev/null
+if test -e ~/.cache; then
+#	\rm -vfr ~/.cache/*
+	# Deletes everything except the "fontconfig" cache also used by matplotlib
+	$(which find) ~/.cache/ -type d | \egrep -vw "(.cache/|fontconfig)$" | \xargs rm -vfr
+	$(which find) ~/.cache/ -type f | \egrep -v /fontconfig/ | \xargs rm -vf
+fi 2>/dev/null
+
 #defaultPrinter=$(lpstat -d | awk '{print$NF}')
 #for printerInstance in $(lpstat -a | awk '{if($1 ~ /\//) print$1}')
 #do
