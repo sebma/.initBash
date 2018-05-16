@@ -7,7 +7,7 @@ declare -A | grep -wq colors || source $initDir/.colors
 Debug "=> Running $(basename ${BASH_SOURCE[0]}) ..."
 
 function Source { test "$debug" = "1" && time source "$@" && echo || source "$@" ; }
-test "$debug" = "2" && set -x
+test "$debug" '>' "2" && set -x
 
 #test -n "$bashRCLoaded" && return
 bashRCLoaded=1
