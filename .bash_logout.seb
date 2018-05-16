@@ -6,8 +6,8 @@ test "$debug" = "1" && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 if test -e ~/.cache; then
 #	\rm -vfr ~/.cache/*
 	# Deletes everything except the "fontconfig" cache also used by matplotlib
-	$(which find) ~/.cache/ -type d | \egrep -vw "(.cache/|fontconfig)$" | \xargs rm -vfr
-	$(which find) ~/.cache/ -type f | \egrep -v /fontconfig/ | \xargs rm -vf
+	$(which find) ~/.cache/ -type d | \egrep -vw "(.cache/|fontconfig|matplotlib)" | \xargs rm -vfr
+	$(which find) ~/.cache/ -type f | \egrep -v "/(fontconfig|matplotlib)/" | \xargs rm -vf
 fi 2>/dev/null
 
 #defaultPrinter=$(lpstat -d | awk '{print$NF}')
