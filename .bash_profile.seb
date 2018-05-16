@@ -5,7 +5,7 @@ test -z "$initDir" && export initDir=$HOME/.initBash
 declare -A | grep -wq colors || source $initDir/.colors
 test "$debug" = "1" && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-os=$(uname -s)
+export os=$(uname -s)
 function Source { test "$debug" = "1" && time source "$@" && echo || source "$@" ; }
 export bashProfileLoaded=1
 
