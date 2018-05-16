@@ -565,10 +565,11 @@ function open {
 	done
 }
 function distribType {
-	local distribType=unknown
+	distribType=unknown
 	if which lsb_release >/dev/null 2>&1
 	then
-		case $(lsb_release -si) in
+		distrib=$(\lsb_release -si)
+		case $distrib in
 			Ubuntu|Debian) distribType="debian";;
 			Mer |Redhat|Fedora) distribType="redhat";;
 			*) distribType=unknown;;
@@ -583,10 +584,11 @@ function distribType {
 		else
 			distribType=unknown
 		fi
-
+		distrib=$distribType
 	fi
 	echo $distribType
 }
+distribType >/dev/null
 function distribPackageMgmt {
 	case $(distribType) in
 		debian|Debian) packageType="deb";;
