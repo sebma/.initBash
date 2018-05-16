@@ -577,14 +577,16 @@ function distribType {
 	else
 		if   [ $(uname -s) = Linux ]
 		then
-			distribType=$(awk -F"=" '/^(ID|ID_LIKE)=/{last=$2}END{print last}' /etc/os-release)
+			distrib=$(awk -F"=" '/^ID=/{print$2}' /etc/os-release)
+			distribType=$(awk -F"=" '/^ID_LIKE=/{print$2}' /etc/os-release)
 		elif [ $(uname -s) = Darwin ]
 		then
-			distribType="$(sw_vers -productName)"
+			distrib="$(sw_vers -productName)"
+			distribType=$(uname -s)
 		else
-			distribType=unknown
+			distrib=unknown
+			distribType=$(uname -s)
 		fi
-		distrib=$distribType
 	fi
 	echo $distribType
 }
