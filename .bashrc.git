@@ -1,6 +1,6 @@
 #!sh
 declare -A | grep -wq colors || source $initDir/.colors
-test "$debug" = "1" && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
+test "$debug" '>' 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 cd $initDir && git config alias.ci '!f() { for file; do git commit $file -m "Updated $file"; done; }; f';cd - >/dev/null
 git config --global user.email sebma@users.noreply.github.com
@@ -26,4 +26,4 @@ alias gitURLs='\awk /url/{print\$NF} ./.git/config'
 alias updateGIT="\git pull"
 
 set +x
-test "$debug" = "1" && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
+test "$debug" '>' 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
