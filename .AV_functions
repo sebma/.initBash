@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 declare -A | grep -wq colors || source $initDir/.colors
-test "$debug" = "1" && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
+test "$debug" '>' 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 ffmpeg="$(which ffmpeg)   -hide_banner -probesize 400M -analyzeduration 400M"
 ffprobe="$(which ffprobe) -hide_banner -probesize 400M -analyzeduration 400M"
@@ -1054,4 +1054,4 @@ function mpvalt {
 }
 
 set +x
-test "$debug" = "1" && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
+test "$debug" '>' 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
