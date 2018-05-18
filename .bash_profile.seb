@@ -3,10 +3,10 @@
 [ $BASH_VERSINFO = 3 ] && [ -x ~/usr/local/bin/bash ] && exec ~/usr/local/bin/bash -l
 test -z "$initDir" && export initDir=$HOME/.initBash
 declare -A | grep -wq colors || source $initDir/.colors
-test "$debug" = "1" && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
+test "$debug" '>' 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 export os=$(uname -s)
-function Source { test "$debug" = "1" && time source "$@" && echo || source "$@" ; }
+function Source { test "$debug" '>' 0 && time source "$@" && echo || source "$@" ; }
 export bashProfileLoaded=1
 
 initDir=$(basename $initDir) #Pour creer des liens symboliques relatifs a $HOME
@@ -17,14 +17,8 @@ cd $HOME
 initDir=$HOME/$initDir
 
 #DEFINITION DES VARIABLES
-test -z "$LANG" && export LANG=$(locale -a 2>/dev/null | awk 'BEGIN{IGNORECASE=1}/(fr_FR|en_US|en_UK).utf/{print$1;exit}')
-locale 2>&1 | grep -q "locale: Cannot set LC_ALL to default locale: No such file or directory" && unset LC_ALL
-locale 2>&1 | grep -q "locale: Cannot set LC_CTYPE to default locale: No such file or directory" && export LC_CTYPE=C.UTF-8
-
 export HISTSIZE=2000
 export HISTFILESIZE=4000
-#GDM_LANG=fr_FR.UTF-8
-export GDM_LANG=$LANG
 #export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 test $HOSTNAME || export HOSTNAME=$(hostname | cut -d. -f1)
 export EDITOR=vim
@@ -106,6 +100,11 @@ then
 		test $? = 1 && printf "o conf http_proxy $http_proxy\no conf commit" | cpan
 	fi
 
+	#my locale configuration
+	which locale >/dev/null 2>&1 && test -e $initDir/.bash_profile.locale && Source $initDir/.bash_profile.locale
+	#GDM_LANG=fr_FR.UTF-8
+	export GDM_LANG=$LANG
+
 	#my lpr configuration
 	which lpr >/dev/null 2>&1 && test -f $initDir/.bash_profile.lpr && Source $initDir/.bash_profile.lpr
 fi
@@ -122,8 +121,8 @@ Linux)
 	;;
 esac
 
-which matlab >/dev/null 2>&1 && Source $initDir/.bash_profile.matlab
+which matlab >/dev/null 2>&1 && test -r $initDir/.bash_profile.matlab && Source $initDir/.bash_profile.matlab
 which brew >/dev/null 2>&1 && [ $BASH_VERSINFO -ge 4 ] && [ -r $(brew --prefix)/share/bash-completion/bash_completion ] && Source $(brew --prefix)/share/bash-completion/bash_completion
 
 set +x
-test "$debug" = "1" && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
+test "$debug" '>' 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
