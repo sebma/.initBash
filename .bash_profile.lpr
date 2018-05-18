@@ -17,6 +17,7 @@ then
 	fi
 else
 	$time defaultPrinter=$(LANG=C lpstat -a 2>/dev/null | grep -vi pdf | awk '/accepting/{print$1;exit}') || defaultPrinter=""
+	test $defaultPrinter && lpadmin -d $defaultPrinter
 fi
 
 export defaultPrinter colorPrinter
