@@ -1,6 +1,6 @@
 #!sh
 declare -A | \grep -wq colors || source $initDir/.colors
-test "$debug" = "1" && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
+test "$debug" '>' 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 #alias lpr="\lpr -P ppti-14-503-imp -o PageSize=A4 -o PageRegion=A4 -o Resolution=default -o InputSlot=Tray2 -o Duplex=DuplexNoTumble -o PreFilter=No"
 #alias lpr="\lpr -o PageSize=A4 -o PageRegion=A4 -o Resolution=default -o InputSlot=Tray2 -o Duplex=DuplexNoTumble -o PreFilter=No"
@@ -153,4 +153,4 @@ function dmgInstaller {
 }
 
 set +x
-test "$debug" = "1" && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
+test "$debug" '>' 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
