@@ -1,6 +1,6 @@
 #!sh
 declare -A | grep -wq colors || source $initDir/.colors
-test "$debug" = "1" && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
+test "$debug" '>' 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 #wifiInterface="$(which iwconfig >/dev/null 2>&1 && iwconfig 2>/dev/null | awk '/^[^ \t]/ { if ($1 ~ /^[0-9]+:/) { print $2 } else { print $1 } }' || ( which iw >/dev/null 2>&1 && iw dev | awk '/Interface/{lastInterface=$NF}END{print lastInterface}') )"
 wifiInterface=$(iwconfig 2>/dev/null | grep -v ESSID:off/any | awk '/ESSID/{print$1}')
@@ -55,4 +55,4 @@ alias lsvga=lsgpu
 alias reset="\printf '\33c\e[3J'"
 
 set +x
-test "$debug" = "1" && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
+test "$debug" '>' 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
