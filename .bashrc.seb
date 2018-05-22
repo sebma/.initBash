@@ -103,7 +103,7 @@ which register-python-argcomplete >/dev/null 2>&1 && eval "$(register-python-arg
 
 #[[ -s "$HOME/.rvm/scripts/rvm" ]] && Source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 
-date
+shopt -q login_shell && date
 
 which brew >/dev/null 2>&1 && Source $initDir/.bashrc.brew
 test -r $initDir/.bashrc.conda && Source $initDir/.bashrc.conda
