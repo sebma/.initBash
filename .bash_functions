@@ -5,7 +5,7 @@ test "$debug" '>' 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 test -r $initDir/.AV_functions && Source $initDir/.AV_functions
 test -r $initDir/.youtube_functions && Source $initDir/.youtube_functions
 export LANG=C
-sshOptions="-A -Y -C"
+myDefault_sshOptions="-A -Y -C"
 
 function More {
 	for file
@@ -271,9 +271,9 @@ function ssh {
 	then
 		if which netcat >/dev/null 2>&1
 		then
-			netcat -v -z -w 5 $remoteSSHServer 22 2>&1 | egrep -v "succeeded|open" || $(which ssh) $sshOptions $@
+			netcat -v -z -w 5 $remoteSSHServer 22 2>&1 | egrep -v "succeeded|open" || $(which ssh) $myDefault_sshOptions $@
 		else
-			$(which bash) -c ": < /dev/tcp/$remoteSSHServer/ssh" && $(which ssh) $sshOptions $@
+			$(which bash) -c ": < /dev/tcp/$remoteSSHServer/ssh" && $(which ssh) $myDefault_sshOptions $@
 		fi
 	else
 		$(which ssh) $@
