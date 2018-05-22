@@ -66,8 +66,8 @@ then
 #		test $audioCardNumber && amixer -q -c $audioCardNumber -- sset Master 100%
 	fi
 	trap - INT
-	echo
-	which randverse >/dev/null 2>&1 && randverse && echo
+	shopt -q login_shell && echo
+	shopt -q login_shell && which randverse >/dev/null 2>&1 && randverse && echo
 fi
 
 if which xdg-mime >/dev/null 
