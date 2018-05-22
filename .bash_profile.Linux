@@ -4,8 +4,7 @@ test "$debug" '>' 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 test "$debug" '>' 3 && set -x
 
 trap 'echo "=> Ignoring this step and continuing the script <$(basename $BASH_SOURCE)> ..." >&2' INT
-echo "=> MIT-MAGIC-COOKIE-1:"
-xauth list | grep :$(echo $DISPLAY | awk -F '\\.|:' '{print$2}') && echo
+shopt -q login_shell && echo "=> MIT-MAGIC-COOKIE-1:" && xauth list | grep :$(echo $DISPLAY | awk -F '\\.|:' '{print$2}') && echo
 trap - INT
 
 test -d ~/local/lib && test $LD_LIBRARY_PATH && export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:~/local/lib || export LD_LIBRARY_PATH=~/local/lib
