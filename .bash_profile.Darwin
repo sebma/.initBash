@@ -5,7 +5,8 @@ test "$debug" '>' 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 trap 'echo "=> Ignoring this step and continuing the script <$(basename $BASH_SOURCE)> ..." >&2' INT
 
 export system="$(sw_vers -productName) $(sw_vers -productVersion)"
-cd && ls -ld -G .cache | awk '{print$(NF-2)" "$(NF-1)" "$NF}'
+cd
+shopt -q login_shell && ls -ld -G .cache | awk '{print$(NF-2)" "$(NF-1)" "$NF}'
 mkdir -p ~/log
 
 if ! groups | \egrep -wq "sudo|adm|root|admin" 
