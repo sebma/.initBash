@@ -279,6 +279,31 @@ function ssh {
 		$(which ssh) $@
 	fi
 }
+function sshTunnel {
+	test $# '<' 3 && {
+		echo "=> Usage : $BASH_FUNC <localPort> <remotePort> <remoteServer> <sshServer>"
+		echo "OR"
+		echo "=> Usage : $BASH_FUNC <localPort> <remotePort> <sshServer>"
+		return 1
+	} >&2
+
+	declare -i localPort=$1
+	declare -i remotePort=$2
+
+	if [ $# = 3 ]
+	then
+		declare sshServer=$3
+		remoteServer=localhost
+	elif [ $# '>' 3 ]
+	then
+		declare remoteServer=$3
+		declare sshServer=$4
+		test $sshServer = $remoteServer && remoteServer=localhost
+	fi
+
+	$(which ssh) -N -f -L $localPort:$remoteServer:$remotePort $sshServer
+	pgrep ssh.*-L
+}
 function aria2c {
 	for url
 	do
