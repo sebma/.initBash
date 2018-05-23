@@ -301,7 +301,14 @@ function sshTunnel {
 		test $sshServer = $remoteServer && remoteServer=localhost
 	fi
 
-	$(which ssh) -N -f -L $localPort:$remoteServer:$remotePort $sshServer
+	if autossh -V >/dev/null 2>&1
+	then
+#		$(which autossh) -M 0 -f -T -N cli-myJupyter-Tunnel
+		$(which autossh) -M 0 -o "ServerAliveInterval 30" -o "ServerAliveCountMax 3" -f -N -L $localPort:$remoteServer:$remotePort $sshServer
+	else
+		$(which ssh) -f -N -L $localPort:$remoteServer:$remotePort $sshServer
+	fi
+
 	pgrep ssh.*-L
 }
 function aria2c {
