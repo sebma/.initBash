@@ -20,9 +20,9 @@ alias gitLocalUndelete="\git ls-files -d | grep . && \git ls-files -d | \xargs g
 alias gitls="\git ls-files"
 alias git-ls=gitls
 alias gitStatus="\git status -bs -uno"
-alias gitUpdate="\awk '/^\s*url/{print\"=> Updating from <\"\$NF\"> ...\"}' ./.git/config;\git pull"
+alias gitUpdate="\git config remote.origin.url | \awk '/github.com/{print\"=> Updating from <\"\$NF\"> ...\"}';\git pull"
 alias gitURL='\git config remote.origin.url'
-alias gitURLs='\awk /url/{print\$NF} ./.git/config'
+alias gitURLs='\awk /url/{print\$NF} ./.git/config || \git config remote.origin.url'
 alias updateGIT="\git pull"
 
 set +x
