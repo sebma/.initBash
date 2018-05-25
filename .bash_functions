@@ -7,6 +7,9 @@ test -r $initDir/.youtube_functions && Source $initDir/.youtube_functions
 export LANG=C
 myDefault_sshOptions="-A -Y -C"
 
+function gps {
+	test -e /dev/nvidia0 && $(which ps) $@ -p $(lsof -n -w -t /dev/nvidia*)
+}
 function More {
 	for file
 	do
