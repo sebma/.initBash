@@ -5,8 +5,27 @@ test "$debug" '>' 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 test -r $initDir/.AV_functions && Source $initDir/.AV_functions
 test -r $initDir/.youtube_functions && Source $initDir/.youtube_functions
 export LANG=C
+os=$(uname -s)
+
 myDefault_sshOptions="-A -Y -C"
 
+function top {
+	local top=$(which top)
+	local processPattern=$1
+	test -n "$processPattern" && shift && local processPIDs=$(\pgrep -f $processPattern)
+	if [ -z "$processPIDs" ]
+	then
+		$top
+	else
+		if [ $os = Linux ]
+		then
+			$top -d 1 $(printf " -p %d" $processPIDs) $@
+		elif [ $os = Darwin ]
+		then
+			$top -i 1 $(printf " -pid %d" $processPIDs) $@
+		fi
+	fi
+}
 function More {
 	for file
 	do
