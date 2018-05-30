@@ -9,6 +9,11 @@ os=$(uname -s)
 
 myDefault_sshOptions="-A -Y -C"
 
+function jupyterToken {
+	jupyter notebook list
+	local token=$(jupyter notebook list | awk -F '[= ]' '/token=/{print$2}')
+	echo "=> token = $token"
+}
 function xsetResolution {
 	local output=$(\xrandr | \awk  '/^.+ connected/{print$1}')
 	local oldResolution=$(\xrandr | \awk '/[0-9].*\*/{print$1}')
