@@ -9,6 +9,29 @@ os=$(uname -s)
 
 myDefault_sshOptions="-A -Y -C"
 
+function xsetResolution {
+	local output=$(\xrandr | \awk  '/^.+ connected/{print$1}')
+	local oldResolution=$(\xrandr | \awk '/[0-9].*\*/{print$1}')
+	local newResolution=$1
+
+	echo "=> Reset current resolution command :"
+	echo "\xrandr --output $output --mode $oldResolution"
+	if [ -z $newResolution ]
+	then
+		echo "=> Usage: $FUNCNAME XResxYRes"
+		return 1
+	else
+		if ! \xrandr | grep -wq $newResolution
+		then
+			echo "=> $FUNCNAME ERROR : The resolution <$newResolution> is not supported." >&2
+			return 2
+		fi
+
+		echo "=> Setting new resolution command :"
+		echo "\xrandr --output $output --mode $newResolution"
+		\xrandr --output $output --mode $newResolution
+	fi
+}
 function Top {
 	local top=$(which -a top | \grep ^/usr) #Au cas ou il y a un script top ailleurs dans le PATH
 	local processPattern=$1
