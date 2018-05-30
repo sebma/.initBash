@@ -186,7 +186,6 @@ alias reboot="\reboot && exit"
 alias recode="\recode -v"
 alias rename="\prename -v"
 alias repeat="\watch -n1"
-#alias res="\xrandr | egrep ' connected|[*]'"
 alias res="\xrandr | egrep '^.+ connected|[0-9].*\*'"
 alias restart_conky="\pgrep conky && \killall -SIGHUP conky || conky -d"
 alias conky_restart=restart_conky
