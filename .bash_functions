@@ -269,7 +269,7 @@ function speedTest {
 	for iperf3PublicServer in bouygues.testdebit.info ping.online.net ikoula.testdebit.info debit.k-net.fr speedtest.serverius.net iperf.eenet.ee iperf.volia.net
 	do
 		echo "=> Connecting to IPerf server $iperf3PublicServer ..." >&2
-		time iperf3 -c $iperf3PublicServer && break
+		time iperf3 -c $iperf3PublicServer -t 5 && break
 	done
 }
 function nbPages {
