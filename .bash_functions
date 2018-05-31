@@ -9,6 +9,21 @@ os=$(uname -s)
 
 myDefault_sshOptions="-A -Y -C"
 
+function rtt {
+	local remote=$1
+	test -z $remote && {
+		echo "=> Usage: $FUNCNAME remote" >&2
+		return 1
+	}
+	local NBPackets=10
+	local interval=0.2
+	local deadline
+	local ping=$(which ping)
+	awk=$(which awk)
+	[ $os = Darwin ] && deadline="-t 5"
+	[ $os = Linux ]  && deadline="-w 5"
+	$ping -c $NBPackets $deadline -i $interval $remote | $awk -F/ '//{print}/min\/avg\/max\/\w+dev/{avg=$5}END{print "=> avg = "avg" ms"}'
+}
 function jupyterToken {
 	jupyter notebook list
 	local token=$(jupyter notebook list | awk -F '[= ]' '/token=/{print$2}')
