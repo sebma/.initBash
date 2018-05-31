@@ -27,7 +27,7 @@ function rtt {
 function jupyterToken {
 	jupyter notebook list
 	local token=$(jupyter notebook list | awk -F '[= ]' '/token=/{print$2}')
-	echo "=> token = $token"
+	test -n "$token" && echo "=> token = $token"
 }
 function xsetResolution {
 	local output=$(\xrandr | \awk  '/^.+ connected/{print$1}')
