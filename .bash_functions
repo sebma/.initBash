@@ -9,6 +9,19 @@ os=$(uname -s)
 
 myDefault_sshOptions="-A -Y -C"
 
+trap 'echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $?' INT
+function condaSearchThroughChannels {
+	pythonChannelsList="conda-forge intel anaconda aaronzs"
+	for pkg
+	do
+		for ch in $pythonChannelsList
+		do
+			echo "=> Searching through conda channel <$ch> ..."
+			conda search -c $ch $pkg 2>/dev/null
+		done
+	done
+}
+trap - INT
 function getFunction {
 	local startRegExpPattern=$1
 	local endRegExpPattern=$2
