@@ -9,6 +9,21 @@ os=$(uname -s)
 
 myDefault_sshOptions="-A -Y -C"
 
+function getFunction {
+	local startRegExpPattern=$1
+	local endRegExpPattern=$2
+	test $# '<' 3 && {
+		echo "=> Usage : $FUNCNAME startRegExpPattern endRegExpPattern fileList" >&2
+		return 1
+	}
+	shift 2
+	local fileListPattern="$@"
+#	sed -r -n "/$startRegExpPattern/,/$endRegExpPattern/p" $fileListPattern
+	awk "/$startRegExpPattern/{p=1}p;/$endRegExpPattern/{p=0}" $fileListPattern
+}
+function getPythonFunction {
+	getFunction "def " '^$' $@
+}
 function rtt {
 	local remote=$1
 	test -z $remote && {
