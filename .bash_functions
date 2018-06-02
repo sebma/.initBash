@@ -22,7 +22,7 @@ function condaSearchThroughChannels {
 	done
 }
 trap - INT
-function getFunction {
+function getFunctions {
 	local startRegExpPattern=$1
 	local endRegExpPattern=$2
 	test $# '<' 3 && {
@@ -32,10 +32,14 @@ function getFunction {
 	shift 2
 	local fileListPattern="$@"
 #	sed -r -n "/$startRegExpPattern/,/$endRegExpPattern/p" $fileListPattern
-	awk "/$startRegExpPattern/{p=1}p;/$endRegExpPattern/{p=0}" $fileListPattern
+#	awk "/$startRegExpPattern/{p=1}p;/$endRegExpPattern/{p=0}" $fileListPattern
+	perl -ne "print if /$startRegExpPattern/ ... /$endRegExpPattern/" $fileListPattern
 }
-function getPythonFunction {
-	getFunction "def " '^$' $@
+function getPythonFunctions {
+	getFunctions "def " '^$' $@
+}
+function getShellFunctions {
+	getFunctions '(^| )\w+\(\)|\bfunction\b' '^}' $@
 }
 function rtt {
 	local remote=$1
