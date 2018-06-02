@@ -164,6 +164,7 @@ alias odt2pdf="\lowriter --headless --convert-to pdf"
 alias odp2pdf="\loimpress --headless --convert-to pdf"
 alias page="\head -50"
 alias pcmanfm="\pcmanfm --no-desktop"
+alias perlfunc="\perldoc -f"
 alias perlInterpreter="\perl -de ''"
 alias pgrep='\pgrep -lfu $USER'
 alias phpInterpreter="\php -a"
