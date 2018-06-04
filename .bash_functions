@@ -36,10 +36,20 @@ function getFunctions {
 	perl -ne "print if /$startRegExpPattern/ ... /$endRegExpPattern/" $fileListPattern
 }
 function getPythonFunctions {
-	getFunctions "def " '^$' $@
+	test $# != 0 && getFunctions "def " '^$' $@
+}
+function getPythonFunctionName {
+	local funcName=$1
+	shift
+	test $# != 0 && getFunctions "def $funcName " '^$' $@
 }
 function getShellFunctions {
-	getFunctions '(^| )\w+\(\)|\bfunction\b' '^}' $@
+	test $# != 0 && getFunctions '(^|\s)\w+\(\)|\bfunction\b' '^}' $@
+}
+function getShellFunctionName {
+	local funcName=$1
+	shift
+	test $# != 0 && getFunctions "(^|\s)$funcName\s*\(\)|\bfunction\s$funcName" '^}' $@
 }
 function rtt {
 	local remote=$1
@@ -1093,8 +1103,12 @@ function updateYoutubePlaylistLUAForVLC {
 	fi
 }
 function locate {
+	local locate
+	test $os = Linux && locate=$(which locate)
+	test $os = Darwin && locate=$(which glocate)
+
 	groups 2>/dev/null | \egrep -wq "sudo|admin" && locateOptions="-e" || locateOptions="--database $HOME/.local/lib/mlocate/mlocate.db -e"
-	echo "$@" | grep -q "\-[a-z]*r" && $(which locate) $locateOptions "$@" || $(which locate) $locateOptions -ir "${@}"
+	echo "$@" | grep -q "\-[a-z]*r" && $locate $locateOptions "$@" || $locate $locateOptions -ir "${@}"
 }
 function locateBin {
 	locate "${@}" | grep bin/
