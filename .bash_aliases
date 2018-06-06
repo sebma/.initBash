@@ -177,6 +177,7 @@ alias pptx2pdf=odp2pdf
 alias ppsx2pdf=odp2pdf
 alias ports="lsof -ni -P | grep LISTEN"
 alias tcpPorts="\netstat -ntl"
+alias traceroute="\traceroute -I"
 alias prettyjson='\python -m json.tool'
 alias ps="\ps -f"
 alias psu='\ps -fu $USER'
