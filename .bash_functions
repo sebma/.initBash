@@ -311,7 +311,8 @@ function os {
 	esac
 }
 function findLoops {
-	$(which find) . -follow 2>&1 >/dev/null | egrep -w "loop|denied"
+	[ $os = Darwin ] && find=gfind || find=find
+	$find . -follow 2>&1 >/dev/null | egrep -w "loop|denied"
 }
 function dirName {
 	#NE MARCHE PAS LORSQUE LE CHEMIN NE CONTIENT PAS DE "/"
@@ -1018,6 +1019,7 @@ function resizePics_4096 {
 	done
 }
 function find {
+	[ $os = Darwin ] && find=gfind || find=find
 	dir=$1
 	if echo $dir | \grep -q "\-"
 	then
@@ -1031,10 +1033,10 @@ function find {
 	if echo $@ | \grep -q "\-ls"
 	then
 		args=${args/-ls/}
-		$(which find) $dir $firstPredicate $args -printf "%10i %10k %M %n %-10u %-10g %10s %AY-%Am-%Ad %.12AX %p\n"
+		$find $dir $firstPredicate $args -printf "%10i %10k %M %n %-10u %-10g %10s %AY-%Am-%Ad %.12AX %p\n"
 	else
-#		$(which find) $dir $firstPredicate "$arg"
-		$(which find) $dir $firstPredicate "$@"
+#		$find $dir $firstPredicate "$arg"
+		$find $dir $firstPredicate "$@"
 	fi
 }
 function getBJC {
