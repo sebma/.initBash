@@ -42,9 +42,6 @@ alias reset="\reset;\printf '\33c\e[3J'"
 alias rsync="time \rsync -uth -P -z --exclude '*.swp'"
 alias scp="time \rsync -h --progress -u -zt --exclude '*.swp'"
 alias showFiles='defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app'
-alias sshRestart="sshStop;sshStart"
-alias sshStart="sudo launchctl load /System/Library/LaunchDaemons/ssh.plist"
-alias sshStop="sudo launchctl unload /System/Library/LaunchDaemons/ssh.plist"
 alias start="launchctl start"
 alias stat="\stat -x"
 alias stop="launchctl stop"
@@ -56,7 +53,6 @@ alias topf50='$(which find) . $prunePathsFindExpression -xdev -type f -size +10M
 alias topf5='$(which find) . $prunePathsFindExpression -xdev -type f -size +10M -exec ls -lT {} \; 2>/dev/null | sort -nrk5 |  column -t | head -5 | awk '\''{total+=$5;print}END{print"=> total = "total" MiB"}'\'''
 alias topf='$(which find) . $prunePathsFindExpression -xdev -type f -size +10M -exec ls -lT {} \; 2>/dev/null | sort -nrk5 | column -t | head -n | awk '\''{total+=$5;print}END{print"=> total = "total" MiB"}'\'''
 alias umount="\diskutil unmount"
-alias updatedb="time sudo gupdatedb"
 alias xlock="\/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend"
 function applescript2app {
 	for file
@@ -119,13 +115,16 @@ function route {
 	fi
 }
 function status {
-	sudo launchctl list | egrep -i "$1"
+	local serviceName="$1"
+	if [ "$serviceName" ]
+	then
+		launchctl list | egrep -i "$serviceName" || sudo launchctl list | egrep -i "$serviceName"
+	fi
 }
 function topflines {
 	initVars
 	$(which gfind) "$@" $prunePathsFindExpression -xdev -type f -size +10M -exec gls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | column -t | head -n $(($LINES-4)) | awk '{total+=$5;print}END{if(total) print"=> total = "total" MiB"}'
 }
-groups | \egrep -wq "admin|sudo" && alias pipInstall="sudo -H easy_install pip" || alias pipInstall="easy_install --user pip"
 initVars
 which gcp >/dev/null 2>&1 && alias cp='\gcp -puv' || alias cp='\cp -pv'
 alias pkgInstaller="\installer -pkg"
@@ -151,6 +150,15 @@ function dmgInstaller {
 	unset dmgFilePath
 	set +x
 }
+
+if groups 2>/dev/null | egrep -wq "sudo|admin"
+then
+	alias cupsRestart="launchctl stop org.cups.cupsd;launchctl start org.cups.cupsd"
+	alias sshStart="sudo launchctl load /System/Library/LaunchDaemons/ssh.plist"
+	alias sshStop="sudo launchctl unload /System/Library/LaunchDaemons/ssh.plist"
+	alias sshRestart="sshStop;sshStart"
+	alias updatedb="time sudo gupdatedb"
+fi
 
 set +x
 test "$debug" '>' 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
