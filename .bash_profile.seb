@@ -100,6 +100,8 @@ then
 		test $? = 1 && printf "o conf http_proxy $http_proxy\no conf commit" | cpan
 	fi
 
+	echo "=> The cups admin console is http://localhost:631/admin"
+
 	#my locale configuration
 	which locale >/dev/null 2>&1 && test -e $initDir/.bash_profile.locale && Source $initDir/.bash_profile.locale
 	#GDM_LANG=fr_FR.UTF-8
