@@ -33,7 +33,6 @@ then
 	launchctl stop  org.cups.cupsd
 	launchctl start org.cups.cupsd
 	cupsctl WebInterface=yes
-	echo "=> The cups admin console is http://localhost:631/admin"
 fi
 
 #pgrep -qfu $USER XQuartz.app && shopt -q login_shell && echo "=> MIT-MAGIC-COOKIE-1:" && xauth list | grep :$(echo $DISPLAY | awk -F '\\.|:' '{print$2}') && echo
