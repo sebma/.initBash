@@ -40,7 +40,6 @@ export MANPATH
 #Definitions de mes fonctions bash pour Linux
 #Definitions de mes alias
 test -r $initDir/.bash_aliases && Source $initDir/.bash_aliases
-test -r $initDir/.bash_aliases.admin && groups 2>/dev/null | egrep -wq "sudo|admin" && Source $initDir/.bash_aliases.admin
 test -r $initDir/.bash_aliases.$(uname -s) && Source $initDir/.bash_aliases.$(uname -s) #Pour Darwin ou Linux
 [ -n "$BASH_VERSION" ] && test -r $initDir/.bash_functions && Source $initDir/.bash_functions
 case $OSTYPE in
