@@ -62,7 +62,8 @@ then
 	alias cupsRestart="pgrep -a cupsd;\sudo killall -HUP cupsd;sleep 1;pgrep -a cupsd"
 	alias nmRestart="sudo service network-manager restart"
 	alias pgrep="\pgrep -lf"
-	alias pipInstall="curl -s https://bootstrap.pypa.io/get-pip.py | sudo -H python2"
+	alias pipInstall=pip2Install
+	alias pip2Install="curl -s https://bootstrap.pypa.io/get-pip.py | sudo -H python2"
 	alias pip3Install="curl -s https://bootstrap.pypa.io/get-pip.py | sudo -H python3"
 	alias restart_nm="sudo service network-manager restart"
 	alias rtmpdumprd='\sudo iptables -t nat -A OUTPUT -p tcp --dport 1935 -m owner \! --uid-owner root -j REDIRECT'
