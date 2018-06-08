@@ -370,18 +370,14 @@ function getFiles {
 }
 function ssh {
 	local reachable=""
+	local timeout=5
 	type ssh >/dev/null || return
 	remoteSSHServer=$(echo $@ | awk '{sub("^(-[[:alnum:]_]+ ?)+","");sub("[[:alnum:]_]+@","");print$1}')
 	if test -n "$remoteSSHServer"
 	then
-		if which netcat >/dev/null 2>&1
-		then
-			netcat -v -z -w 5 $remoteSSHServer 22 2>&1 | egrep -v "succeeded|open" || $(which ssh) $myDefault_sshOptions $@
-		else
-			$(which bash) -c ": < /dev/tcp/$remoteSSHServer/ssh" && $(which ssh) $myDefault_sshOptions $@
-		fi
+		$(which ssh) $myDefault_sshOptions -o ConnectTimeout=$timeout $@
 	else
-		$(which ssh) $@
+		$(which ssh) -o ConnectTimeout=$timeout $@
 	fi
 }
 function sshTunnel {
@@ -644,7 +640,15 @@ function configureForJolla {
 	return $?
 }
 function tcpConnetTest {
-    time \netcat -v -z -w 5 $(echo $@ | tr ":" " ")
+	if which netcat > /dev/null 2>&1
+	then
+		time \netcat -v -z -w 5 $(echo $@ | tr ":" " ")
+	else
+#		local remoteSSHServer=$(echo $@ | awk '{sub("^(-[[:alnum:]_]+ ?)+","");sub("[[:alnum:]_]+@","");print$1}')
+		local remoteSSHServer=$1
+		local remotePort=$2
+		time $(which bash) -c ": < /dev/tcp/$remoteSSHServer/$remotePort"
+	fi
 }
 function addKeys {
 	for key
