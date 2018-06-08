@@ -60,6 +60,11 @@ function applescript2app {
 		osacompile -o "/Applications/${file/.applescript/.app}" "$file"
 	done
 }
+function brewServicesStatus {
+	local serviceList=$@
+	serviceList=$(echo $serviceList | tr " " "|")
+	\brew services list | egrep "$serviceList" | egrep "started|stopped"
+}
 function initVars {
 	local duExcludedPathList="./proc ./sys ./dev"
 	excludePathsDuExpression=$(printf " --exclude %s" $duExcludedPathList)
