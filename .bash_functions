@@ -375,9 +375,9 @@ function ssh {
 	remoteSSHServer=$(echo $@ | awk '{sub("^(-[[:alnum:]_]+ ?)+","");sub("[[:alnum:]_]+@","");print$1}')
 	if test -n "$remoteSSHServer"
 	then
-		$(which ssh) $myDefault_sshOptions -o ConnectTimeout=$timeout $@
+		time $(which ssh) $myDefault_sshOptions -o ConnectTimeout=$timeout $@
 	else
-		$(which ssh) -o ConnectTimeout=$timeout $@
+		time $(which ssh) -o ConnectTimeout=$timeout $@
 	fi
 }
 function sshTunnel {
