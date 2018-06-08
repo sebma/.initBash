@@ -372,7 +372,7 @@ function ssh {
 	local reachable=""
 	local timeout=5
 	type ssh >/dev/null || return
-	remoteSSHServer=$(echo $@ | awk '{sub("^(-[[:alnum:]_]+ ?)+","");sub("[[:alnum:]_]+@","");print$1}')
+	local remoteSSHServer=$(echo $@ | awk '{sub("^(-[[:alnum:]_]+ ?)+","");sub("[[:alnum:]_]+@","");print$1}')
 	if test -n "$remoteSSHServer"
 	then
 		time $(which ssh) $myDefault_sshOptions -o ConnectTimeout=$timeout $@
