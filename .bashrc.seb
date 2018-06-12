@@ -56,7 +56,7 @@ user=$(\id -un)
 PS1="$user : $blink${colors[red]}$HOSTNAME$blinkOff @ $bold${colors[blue]}$domain / $italics${colors[green]}$system : $bold${colors[blue]}\w$normal
  "
 
-\pgrep -f jupyter-notebook >/dev/null && \mkdir /run/user/$UID/jupyter
+\pgrep -f jupyter-notebook >/dev/null && \mkdir -pv /run/user/$UID/jupyter
 
 if tty -s #Si c'est une session interactive
 then
