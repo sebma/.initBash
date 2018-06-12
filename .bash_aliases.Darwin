@@ -141,12 +141,17 @@ function dmgInstaller {
 	do
 		if \ls $dmgFilePath >/dev/null
 		then
-			mountDev=$(hdiutil mount $dmgFilePath | awk '/dev.disk/{print$1}')
+			mountDev=$(hdiutil mount $dmgFilePath | awk '/dev.disk.*Volumes/{print$1}')
 			mountDir="$($(which mount) | grep $mountDev | awk '{$1=$2="";sub(" [(].*","");sub("^  ","");print}')"
 			test "$debug" = 1 && echo "=> mountDir = $mountDir"
-			if [ -n "$mountDir" ]
+			if [ -d "$mountDir" ]
 			then
-				$sudo installer -verboseR -pkg "${MOUNTDIR}/"*.pkg -target $defaultDst
+				if ls "${mountDir}/"*.pkg >/dev/null
+				then
+					$sudo installer -verboseR -pkg "${mountDir}/"*.pkg -target $defaultDst
+				else
+					$sudo cp -pvr "${mountDir}/"*.app /Applications/
+				fi
 				hdiutil unmount $mountDir
 				sync
 			fi
