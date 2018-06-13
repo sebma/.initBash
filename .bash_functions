@@ -1023,7 +1023,7 @@ function resizePics_4096 {
 	done
 }
 function find {
-	[ $os = Darwin ] && find=gfind || find=find
+	[ $os = Darwin ] && find=gfind || find=$(which find)
 	dir=$1
 	if echo $dir | \grep -q "\-"
 	then
