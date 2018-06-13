@@ -2,6 +2,7 @@
 declare -A | grep -wq colors || source $initDir/.colors
 test "$debug" '>' 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
+which git | \grep -q /usr || export GIT_EXEC_PATH=$HOME/libexec/git-core
 cd $initDir && git config alias.ci '!f() { for file; do git commit $file -m "Updated $file"; done; }; f';cd - >/dev/null
 git config --global user.email sebma@users.noreply.github.com
 git config --global user.name sebma
