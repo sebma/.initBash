@@ -642,7 +642,18 @@ function configureForJolla {
 function tcpConnetTest {
 	if which netcat > /dev/null 2>&1
 	then
-		time \netcat -v -z -w 5 $(echo $@ | tr ":" " ")
+		if test $http_proxy
+		then
+			if which nc.openbsd > /dev/null 2>&1 
+			then
+				time \nc.openbsd -x $proxyName:$proxyPort -v -z -w 5 $(echo $@ | tr ":" " ")
+			else
+				echo "=> $FUNCNAME: Cannot connect through $proxyName:$proxyPort because <nc.openbsd> is not installed." >&2		
+				return 1
+			fi
+		else
+			time \netcat -v -z -w 5 $(echo $@ | tr ":" " ")
+		fi
 	else
 #		local remoteSSHServer=$(echo $@ | awk '{sub("^(-[[:alnum:]_]+ ?)+","");sub("[[:alnum:]_]+@","");print$1}')
 		local remoteSSHServer=$1
