@@ -1,19 +1,24 @@
 #!/usr/bin/env bash
 
 #ANSI color codes
-[ $BASH_VERSINFO -ge 4 ] && export escapeChar=$'\e' || export escapeChar=$'\033'
+[ $BASH_VERSINFO -ge 4 ] && export escapeChar=$'\e'     || export escapeChar=$'\033'
+[ $BASH_VERSINFO -ge 4 ] && export declare="declare -A" || export declare="declare"
 
-export normal="$escapeChar[0m"
-export bold="$escapeChar[1m"
-export dim="$escapeChar[2m"
-export italics="$escapeChar[3m" 
-export underlined="$'\e'[4m"
-export blink="$escapeChar[5m"
-export reverse="$escapeChar[7m"
+export normal=$(tput sgr0)
+export bold=$(tput bold)
+export dim=$(tput dim)
+export italics=$(tput sitm)
+export underlined=$(tput smul)
+export blink=$(tput blink)
+export reverse=$(tput rev)
+export hidden=$(tput invis)
+
 export blinkOff="$escapeChar[25m"
 
-[ $BASH_VERSINFO -ge 4 ] && declare -A colors effects
-[ $BASH_VERSINFO -ge 4 ] && effects=( [bold]="$escapeChar[1m" [dim]="$escapeChar[2m" [italics]="$escapeChar[3m" [underlined]="$escapeChar[4m" [blink]="$escapeChar[5m" [reverse]="$escapeChar[7m" [hidden]="$escapeChar[8m" [blinkOff]="$escapeChar[25m" )
+$declare colors effects
 
-colors=( [red]="$escapeChar[31m" [green]="$escapeChar[32m" [blue]="$escapeChar[34m" [cyan]="$escapeChar[36m" [yellowOnRed]="$escapeChar[33;41m" [greenOnBlue]="$escapeChar[32;44m" [yellowOnBlue]="$escapeChar[33;44m" [cyanOnBlue]="$escapeChar[36;44m" [whiteOnBlue]="$escapeChar[37;44m" [redOnGrey]="$escapeChar[31;47m" [blueOnGrey]="$escapeChar[34;47m" )
+#[ $BASH_VERSINFO -ge 4 ] && effects=( [bold]="$escapeChar[1m" [dim]="$escapeChar[2m" [italics]="$escapeChar[3m" [underlined]="$escapeChar[4m" [blink]="$escapeChar[5m" [reverse]="$escapeChar[7m" [hidden]="$escapeChar[8m" [blinkOff]="$escapeChar[25m" )
+[ $BASH_VERSINFO -ge 4 ] && effects=( [bold]=$(tput bold) [dim]=$(tput dim) [italics]=$(tput sitm) [underlined]=$(tput smul) [blink]=$(tput blink) [reverse]=$(tput rev) [hidden]=$(tput invis) [blinkOff]=$blinkOff )
+[ $BASH_VERSINFO -ge 4 ] && colors=( [red]=$(tput setaf 1) [green]=$(tput setaf 2) [blue]=$(tput setaf 4) [cyan]=$(tput setaf 6) [yellow]=$(tput setaf 11) [yellowOnRed]=$(tput setaf 11)$(tput setab 1) [greenOnBlue]=$(tput setaf 2)$(tput setab 4) [yellowOnBlue]=$(tput setaf 11)$(tput setab 4) [cyanOnBlue]=$(tput setaf 6)$(tput setab 4) [whiteOnBlue]=$(tput setaf 7)$(tput setab 4) [redOnGrey]=$(tput setaf 1)$(tput setab 7) [blueOnGrey]=$(tput setaf 4)$(tput setab 7) )
+
 export colors effects
