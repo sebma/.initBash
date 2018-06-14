@@ -53,7 +53,7 @@ export -f $(declare -F | egrep -v " __?" | awk '{print$NF}')
 test -r $initDir/.colors && Source $initDir/.colors
 user=$(\id -un)
 #PROMPT_COMMAND='echo -ne "\033]0;$USER : $HOSTNAME @ $domain / $system : $(date +"%A %d %B %Y %H:%M") $PWD\007"'
-PS1="$user : $blink${colors[red]}$HOSTNAME$blinkOff @ $bold${colors[blue]}$domain / $italics${colors[green]}$system : $bold${colors[blue]}\w$normal
+PS1="$user : $blink${colors[red]}$HOSTNAME$normal @ $bold${colors[blue]}$domain / $italics${colors[green]}$system : $bold${colors[blue]}\w$normal
  "
 
 \pgrep -f jupyter-notebook >/dev/null && \mkdir -pv /run/user/$UID/jupyter
