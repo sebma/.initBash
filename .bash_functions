@@ -69,7 +69,7 @@ function rtt {
 function jupyterToken {
 	jupyter notebook list
 	local token
-	if jupyter notebook list | grep -q token
+	if jupyter notebook list | \grep -wq token
 	then
 		token=$(jupyter notebook list | awk -F '[= ]' '/token=/{token=$2}END{print token}')
 	else
