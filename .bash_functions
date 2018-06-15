@@ -73,7 +73,7 @@ function jupyterToken {
 	then
 		token=$(jupyter notebook list | awk -F '[= ]' '/token=/{token=$2}END{print token}')
 	else
-		token=$(awk -F '[=&]' '/token=/{token=$2}END{print token}' nohup.out)
+		\pgrep -f jupyter-notebook >/dev/null && token=$(awk -F '[=&]' '/token=/{token=$2}END{print token}' nohup.out)
 	fi
 	test -n "$token" && echo "=> token = $token"
 }
