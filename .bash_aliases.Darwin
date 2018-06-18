@@ -55,6 +55,8 @@ alias topf50='$(which find) . $prunePathsFindExpression -xdev -type f -size +10M
 alias topf5='$(which find) . $prunePathsFindExpression -xdev -type f -size +10M -exec ls -lT {} \; 2>/dev/null | sort -nrk5 |  column -t | head -5 | awk '\''{total+=$5;print}END{print"=> total = "total" MiB"}'\'''
 alias topf='$(which find) . $prunePathsFindExpression -xdev -type f -size +10M -exec ls -lT {} \; 2>/dev/null | sort -nrk5 | column -t | head -n | awk '\''{total+=$5;print}END{print"=> total = "total" MiB"}'\'''
 alias umount="\diskutil unmount"
+alias wifiList="airport -s"
+alias wifiSpeed="airport -I | awk '/lastTxRate/{print\$0\" MBit/s\"}'"
 alias xlock="\/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend"
 function applescript2app {
 	for file
