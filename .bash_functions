@@ -22,6 +22,18 @@ function condaSearchThroughChannels {
 	done
 }
 trap - INT
+function testURLs {
+	for file
+	do
+		while read line
+		do
+			url=$line
+			printf "=> [$file] : The url = <$url> is : "
+#			\curl -sLI -m 5 $url | \egrep -wq "HTTP[^ ]* 200" && echo ALIVE || echo DEAD
+			\curl -ksf -o /dev/null -m 5 $url && echo ALIVE || echo DEAD
+		done < $file
+	done
+}
 function getFunctions {
 	local startRegExpPattern=$1
 	local endRegExpPattern=$2
