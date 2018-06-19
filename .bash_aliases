@@ -205,6 +205,8 @@ alias rsyncMove="rsync --remove-source-files"
 alias scp_unix='time \rsync -h --progress --rsync-path=$HOME/gnu/bin/rsync -ut'
 alias sdiff='\sdiff -w $COLUMNS'
 alias sortip="\sort -nt. -k1,1 -k2,2 -k3,3 -k4,4"
+alias sshStatusLocalForward="$(which ssh) -O check"
+alias sshStopLocalForward="$(which ssh) -O exit"
 alias sum="\awk '{sum+=\$1}END{print sum}'"
 alias swapUsage="\free -m | awk '/^Swap/{print 100*\$3/\$2}'"
 alias terminfo='echo "=> C est un terminal $(tput cols 2>/dev/null)x$(tput lines 2>/dev/null)."'
