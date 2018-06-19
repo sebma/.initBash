@@ -57,6 +57,7 @@ PS1="$user : $blink${colors[red]}$HOSTNAME$normal @ $bold${colors[blue]}$domain 
  "
 
 \pgrep -f jupyter-notebook >/dev/null 2>&1 && which jupyter >/dev/null 2>&1 && \mkdir -pv $(jupyter --runtime-dir)
+\mkdir -pvm 700 ~/.ssh/sockets/
 
 if tty -s #Si c'est une session interactive
 then
