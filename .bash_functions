@@ -398,7 +398,14 @@ function ssh {
 		time $(which ssh) -o ConnectTimeout=$timeout $@
 	fi
 }
-function sshTunnel {
+function sshStartLocalForward {
+	if ! $(which autossh) -M 0 -Nf $1 2>/dev/null
+	then
+		$(which ssh) -Nf $1
+	fi
+	\pgrep -lf ssh | grep -v ssh-agent
+}
+function createSshTunnel {
 	test $# '<' 3 && {
 		echo "=> Usage : $BASH_FUNC <localPort> <remotePort> <remoteServer> <sshServer>"
 		echo "OR"
