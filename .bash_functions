@@ -1312,6 +1312,15 @@ function ddPV {
 	echo "=> sudo bash -c \"pv $inputFile | dd $@\" ..."
 	time sudo bash -c "pv $inputFile | dd $@"
 }
+function mysqlplus {
+	if test $TNS_ADMIN 
+	then
+		echo "=> Connecting to database <$ORACLE_SID> as <$USER> ..."
+		sqlplus $USER $@
+	else
+		echo "=> ERROR: Variable TNS_ADMIN is not defined." >&2
+	fi
+}
 
 set +x
 test "$debug" '>' 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
