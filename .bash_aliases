@@ -116,7 +116,6 @@ alias jpg2pdfA4=jpeg2pdfA4
 alias killall2="\killall -v"
 alias kshVersion="type ksh >/dev/null && strings $(which ksh) | grep Version | tail -2"
 alias lastfiles='$(which find) . -xdev -type f -mmin -2'
-alias latexBuild="\texfot pdflatex --shell-escape"
 alias less="\less -ir"
 alias ll="ls -lF"
 alias lla="ll -a"
