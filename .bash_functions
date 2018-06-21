@@ -13,7 +13,7 @@ trap 'echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $?' INT
 function latexBuild {
 	for file
 	do
-		\texfot pdflatex --shell-escape "$file"
+		\texfot pdflatex --shell-escape "$file" && open ${file/tex/pdf}
 	done
 }
 function condaSearchThroughChannels {
