@@ -10,6 +10,12 @@ os=$(uname -s)
 myDefault_sshOptions="-A -Y -C"
 
 trap 'echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $?' INT
+function latexBuild {
+	for file
+	do
+		\texfot pdflatex --shell-escape "$file"
+	done
+}
 function condaSearchThroughChannels {
 	pythonChannelsList="conda-forge intel anaconda aaronzs"
 	for pkg
