@@ -2,7 +2,7 @@
 # vim: set syn=sh noet
 test -z "$initDir" && export initDir=$HOME/.initBash
 
-tty -s && declare -A | grep -wq colors || source $initDir/.colors
+declare -A | grep -wq colors || source $initDir/.colors
 function Debug { test "$debug" '>' 0 && echo "$bold${colors[blue]}$@$normal"; }
 Debug "=> Running $(basename ${BASH_SOURCE[0]}) ..."
 
