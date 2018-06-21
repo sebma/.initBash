@@ -11,9 +11,11 @@ myDefault_sshOptions="-A -Y -C"
 
 trap 'echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $?' INT
 function latexBuild {
+	local outPutDIR=tmp
+	mkdir -pv $outPutDIR
 	for file
 	do
-		\texfot pdflatex --shell-escape "$file" && open ${file/tex/pdf}
+		\texfot pdflatex --shell-escape --output-directory $outPutDIR "$file" && open $outPutDIR/${file/tex/pdf}
 	done
 }
 function condaSearchThroughChannels {
