@@ -29,7 +29,6 @@ command -v gdf >/dev/null && alias df="\gdf -PTh"
 alias hideFiles='defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app'
 alias hwinfo="\system_profiler SPHardwareDataType"
 alias osinfo="\system_profiler SPSoftwareDataType;\system_profiler SPInstallHistoryDataType | \grep Install.macOS"
-alias pkill='\pkill -lfu $USER'
 alias powershell="\pwsh"
 alias graphicsinfo="\system_profiler SPDisplaysDataType"
 alias lsvga="\system_profiler SPDisplaysDataType"
@@ -112,6 +111,18 @@ function netstat {
 		echo "=> ERROR : There was a problem with the <getopts> builtin." >&2
 		return 1;
 	fi
+}
+function pkill {
+	local firstArg=$1
+	test $firstArg && {
+		if echo $firstArg | \grep -q "\-[0-9]" 
+		then
+			shift
+			$(which pkill) $firstArg -lfu $USER $@
+		else
+			$(which pkill) -lfu $USER $@
+		fi
+	}
 }
 function restart {
 	test $1 && { launchctl stop $1; launchctl start $1; }
