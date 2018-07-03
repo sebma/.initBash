@@ -20,6 +20,9 @@ test $wifiInterface && alias restartWifi="which nmcli >/dev/null && \nmcli nm wi
 test $wifiInterface && alias wifiRestart=restartWifi
 
 alias catFiles="\tail -vn +1"
+alias connect2MyHiddenWifi="\time nmcli con up id sebWlan && wanip"
+alias connect2eduroam="\time nmcli con up id eduroam && wanip"
+alias connect2SSID="\time nmcli con up id"
 alias cp='\cp --preserve=timestamps -uv'
 alias df="\df -PTh"
 #which ccze >/dev/null 2>&1 && alias ccze="\ccze -A" && alias dmesg="\ccze -A < /var/log/dmesg"
