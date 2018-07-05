@@ -5,6 +5,7 @@ test "$debug" '>' 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 #alias upgradable='$(which apt) list --upgradable'
 [ $(\lsb_release -si) = Ubuntu ] && codeName=$(\lsb_release -sc)
 [ $(\lsb_release -si) = Debian ] && codeName=$(awk -F"[()]" '/VERSION=/{print$(NF-1)}' /etc/os-release)
+
 alias installSecurityUpdates="sudo apt install -V $(apt-get -s dist-upgrade | awk "/^Inst.*\/$codeName-security/"'{print$2}')"
 
 set +x
