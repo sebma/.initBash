@@ -2,8 +2,9 @@
 # vim: set syn=sh noet:
 set -x
 declare -A | grep -wq colors || source $initDir/.colors
-#test $debug '>' 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
+test "$debug" '>' 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
+unalias which
 if test -e ~/.cache; then
 #	\rm -vfr ~/.cache/*
 	# Deletes everything except the "fontconfig" cache also used by matplotlib
@@ -21,4 +22,4 @@ fi 2>/dev/null
 [ $os = Linux ] && [ $(hostname) != ssh ] && \pkill -efu $USER ssh-agent
 
 set +x
-test $debug '>' 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
+test "$debug" '>' 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
