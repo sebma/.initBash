@@ -1,5 +1,6 @@
 #!sh
 # vim: set syn=sh noet
+unalias which
 test -z "$initDir" && export initDir=$HOME/.initBash
 
 declare -A | grep -wq colors || source $initDir/.colors
