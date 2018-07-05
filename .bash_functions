@@ -1287,7 +1287,6 @@ function mplayer {
 }
 function mpv {
 	which mpv >/dev/null && {
-	local youtube_dl=$(which youtube-dl)
 #	for urlOrFile; do
 #		echo $urlOrFile | egrep -q "(http|ftp)s?://" && $youtube_dl -qs $urlOrFile 2>&1 | grep --color=auto --color -A1 ^ERROR: && continue
 		if tty | egrep -q "/dev/pts/[0-9]|/dev/ttys[0-9]+"; then
