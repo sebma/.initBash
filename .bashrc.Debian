@@ -2,8 +2,10 @@
 declare -A | grep -wq colors || source $initDir/.colors
 test "$debug" '>' 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-alias upgradable='$(which apt) list --upgradable'
-alias installSecurityUpdates="sudo apt install -V $(apt-get -s dist-upgrade | awk "/^Inst.*\/$(\lsb_release -sc)-security/"'{print$2}')"
+#alias upgradable='$(which apt) list --upgradable'
+[ $(\lsb_release -si) = Ubuntu ] && codeName=$(\lsb_release -sc)
+[ $(\lsb_release -si) = Debian ] && codeName=$(echo $VERSION | tr -d '[()]' | awk '{print$NF}')
+alias installSecurityUpdates="sudo apt install -V $(apt-get -s dist-upgrade | awk "/^Inst.*\/$codeName-security/"'{print$2}')"
 
 set +x
 test "$debug" '>' 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
