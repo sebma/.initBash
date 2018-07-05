@@ -2,7 +2,7 @@
 # vim: set syn=sh noet:
 set -x
 declare -A | grep -wq colors || source $initDir/.colors
-test "$debug" '>' 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
+test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 if test -e ~/.cache; then
 #	\rm -vfr ~/.cache/*
@@ -21,4 +21,4 @@ fi 2>/dev/null
 [ $os = Linux ] && [ $(hostname) != ssh ] && \pkill -efu $USER ssh-agent
 
 set +x
-test "$debug" '>' 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
+test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
