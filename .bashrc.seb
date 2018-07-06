@@ -57,7 +57,17 @@ user=$(\id -un)
 PS1="$user : $blink${colors[red]}$HOSTNAME$normal @ $bold${colors[blue]}$domain / $italics${colors[green]}$system : $bold${colors[blue]}\w$normal
  "
 
-\pgrep -f jupyter-notebook >/dev/null 2>&1 && which jupyter >/dev/null 2>&1 && \mkdir -pv $(jupyter --runtime-dir) && \chmod -v +t $(jupyter --runtime-dir) # See : https://github.com/jupyter/notebook/issues/3718
+jupyterRuntimeDIR=$(jupyter --runtime-dir)
+if [ -n "$jupyterRuntimeDIR" ]
+then
+	\pgrep -f jupyter-notebook >/dev/null 2>&1 && \mkdir -pv $jupyterRuntimeDIR
+
+	if [ -d $jupyterRuntimeDIR ]
+	then
+		test -k $jupyterRuntimeDIR || \chmod -v +t $jupyterRuntimeDIR # See : https://github.com/jupyter/notebook/issues/3718
+	fi
+fi
+
 \mkdir -pvm 700 ~/.ssh/sockets/
 
 if tty -s #Si c'est une session interactive
