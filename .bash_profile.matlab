@@ -1,4 +1,4 @@
-#!sh
+# vim: set syn=sh noet:
 declare -A | grep -wq colors || source $initDir/.colors
 test "$debug" '>' 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
