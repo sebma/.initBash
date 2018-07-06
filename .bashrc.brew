@@ -1,2 +1,3 @@
+# vim: set syn=sh noet:
 [ $(uname -s) = Linux  ] && alias upgradable="\brew outdated"
 [ $(uname -s) = Darwin ] && alias upgradable="\brew outdated;yes N | \brew cu -aq;echo" && alias upgrade="\brew cu -aq"
