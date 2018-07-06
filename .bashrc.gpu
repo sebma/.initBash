@@ -1,4 +1,4 @@
-#!sh
+# vim: set syn=sh noet:
 
 if [ $os = Linux ]
 then
