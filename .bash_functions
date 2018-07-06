@@ -1154,8 +1154,8 @@ function updateYoutubePlaylistLUAForVLC {
 }
 function locate {
 	local locate
-	test $os = Linux && locate=$(which locate)
-	test $os = Darwin && locate="time $(which glocate)"
+	test $os = Linux  && locate=$(which locate)
+	test $os = Darwin && locate="time -p $(which glocate)"
 
 	groups 2>/dev/null | \egrep -wq "sudo|admin" && locateOptions="-e" || locateOptions="--database $HOME/.local/lib/mlocate/mlocate.db -e"
 	echo "$@" | grep -q "\-[a-z]*r" && $locate $locateOptions "$@" || $locate $locateOptions -ir "${@}"
