@@ -407,11 +407,15 @@ function ssh {
 	fi
 }
 function sshStartLocalForward {
-	if ! $(which autossh) -M 0 -Nf $1 2>/dev/null
+	local tunnelDef=$1
+	if test $tunnelDef && ! \pgrep -f $tunnelDef
 	then
-		$(which ssh) -Nf $1
+		if ! $(which autossh) -M 0 -Nf $tunnelDef 2>/dev/null
+		then
+			$(which ssh) -Nf $tunnelDef
+		fi
+		\pgrep -lf $tunnelDef
 	fi
-	\pgrep -lf ssh | grep -v ssh-agent
 }
 function createSshTunnel {
 	test $# '<' 3 && {
