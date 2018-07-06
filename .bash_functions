@@ -408,11 +408,16 @@ function ssh {
 }
 function sshStartLocalForward {
 	local tunnelDef=$1
-	if test $tunnelDef && ! \pgrep -f $tunnelDef
+	if test $tunnelDef 
 	then
-		if ! $(which autossh) -M 0 -Nf $tunnelDef 2>/dev/null
+		if ! \pgrep -f $tunnelDef >/dev/null
 		then
-			$(which ssh) -Nf $tunnelDef
+			if ! $(which autossh) -M 0 -Nf $tunnelDef 2>/dev/null
+			then
+				$(which ssh) -Nf $tunnelDef
+			fi
+		else
+			echo "=> INFO: The tunnel $tunnelDef is already runnung :" >&2
 		fi
 		\pgrep -lf $tunnelDef
 	fi
