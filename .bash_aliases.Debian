@@ -1,7 +1,7 @@
 # vim: set syn=sh noet:
 alias autoremove="sudo $(which apt-get 2>/dev/null) autoremove -V"
 #alias installSecurityUpdates="sudo apt install -V $(apt-get -s dist-upgrade | awk "/^Inst.*\/$codeName-security/"'{print$2}')"
-alias installSecurityUpdates="\apt list --upgradable 2>/dev/null | awk -F/ '/security/{packages=packages\" \"\$1}END{if(packages)print \"sudo apt install -V -y\"packages}' | sh"
+alias installSecurityUpdates="\apt list --upgradable 2>/dev/null | awk -F/ '/security/{packages=packages\" \"\$1}END{if(packages){commandLine=\"sudo apt install -V -y\"packages;print commandLine >\"/dev/stderr\";print commandLine;}}' | sh"
 alias full-upgrade="sudo $(which apt 2>/dev/null) full-upgrade -V --download-only && sync && sudo $(which apt 2>/dev/null) full-upgrade -V --yes"
 alias reinstall="sudo $(which apt 2>/dev/null) install --reinstall -V"
 alias update="time sudo $(which apt 2>/dev/null) update;$(which apt 2>/dev/null) list --upgradable"
