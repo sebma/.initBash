@@ -48,7 +48,7 @@ user=$(\id -un)
 PS1="$user : $blink${colors[red]}$HOSTNAME$normal @ $bold${colors[blue]}$domain / $italics${colors[green]}$system : $bold${colors[blue]}\w$normal
  "
 
-jupyterRuntimeDIR=$(jupyter --runtime-dir)
+jupyterRuntimeDIR=$(jupyter --runtime-dir 2>/dev/null)
 if [ -n "$jupyterRuntimeDIR" ]
 then
 	\pgrep -f jupyter-notebook >/dev/null 2>&1 && \mkdir -pv $jupyterRuntimeDIR
