@@ -4,6 +4,8 @@ test "$debug" '>' 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 
 test -r $initDir/.AV_functions && Source $initDir/.AV_functions
 test -r $initDir/.youtube_functions && Source $initDir/.youtube_functions
+test $os = Linux  && export locate=$(which locate)
+test $os = Darwin && export locate="time -p $(which glocate)"
 export LANG=C
 os=$(uname -s)
 
@@ -1175,10 +1177,6 @@ function updateYoutubePlaylistLUAForVLC {
 	fi
 }
 function locate {
-	local locate
-	test $os = Linux  && locate=$(which locate)
-	test $os = Darwin && locate="time -p $(which glocate)"
-
 	groups 2>/dev/null | \egrep -wq "sudo|admin" && locateOptions="-e" || locateOptions="--database $HOME/.local/lib/mlocate/mlocate.db -e"
 	echo "$@" | grep -q "\-[a-z]*r" && $locate $locateOptions "$@" || $locate $locateOptions -ir "${@}"
 }
