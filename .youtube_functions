@@ -5,8 +5,8 @@ test "$debug" '>' 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 
 test -r $initDir/.colors && source $initDir/.colors
 which youtube-dl >/dev/null 2>&1 && youtube_dl=$(which youtube-dl)
-test $os = Linux  && locate=$(which locate)
-test $os = Darwin && locate=$(which glocate)
+test $os = Linux  && export locate=$(which locate)
+test $os = Darwin && export locate="time -p $(which glocate)"
 
 function ytdlFormats {
 	trap 'rc=$?;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
