@@ -7,4 +7,3 @@ alias reinstall="sudo $(which apt 2>/dev/null) install --reinstall -V"
 alias update="time sudo $(which apt 2>/dev/null) update;$(which apt 2>/dev/null) list --upgradable"
 alias upgradable='$(which apt) list --upgradable'
 alias upgrade="sudo $(which apt 2>/dev/null) upgrade -V --download-only && sync && sudo $(which apt 2>/dev/null) upgrade -V --yes"
-echo "=> codeName = $codeName"
