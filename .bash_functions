@@ -178,6 +178,19 @@ function pingMyLAN {
 		time \nmap -T5 -sP $myLAN | sed -n '/Nmap scan report for /s/Nmap scan report for //p'
 	fi
 }
+function Nohup {
+	local firstArg=$1
+	if [ $(type -t $firstArg) = function ] 
+	then
+		shift && $(which nohup) $(which bash) -c "$(declare -f $firstArg);$firstArg $@"
+	elif [ $(type -t $firstArg) = alias ]
+	then
+		alias nohup='\nohup '
+		eval "nohup $@"
+	else
+		$(which nohup) "$@"
+	fi
+}
 function Sudo {
 	local firstArg=$1
 	if [ $(type -t $firstArg) = function ] 
