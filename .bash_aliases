@@ -99,6 +99,7 @@ alias gunzip="\gunzip -Nv"
 alias gzcat="\gunzip -c"
 alias gzgrep="zgrep ."
 alias gzip="\gzip -Nv"
+alias h5dump="\h5dump -n 1"
 alias halt="\halt && exit"
 alias html2xml="\xmllint --html --format --recover --xmlout"
 alias img2pdf=jpeg2pdf
