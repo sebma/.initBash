@@ -12,6 +12,15 @@ os=$(uname -s)
 myDefault_sshOptions="-A -Y -C"
 
 trap 'echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $?' INT
+
+function h5ll {
+	local switch="$1"
+	echo $switch | \grep -q "\-" && shift 1 || switch=""
+	for file
+	do
+		\h5ls -r $switch $file
+	done | egrep "Group|Attribute:|Dataset|Data:"
+}
 function latexBuild {
 	local outPutDIR=tmp
 	mkdir -pv $outPutDIR
