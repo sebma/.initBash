@@ -114,7 +114,7 @@ shopt -q login_shell && date
 
 which brew >/dev/null 2>&1 && Source $initDir/.bashrc.brew
 test -r $initDir/.bashrc.conda && Source $initDir/.bashrc.conda
-test $os = Linux && Source $initDir/.bashrc.Linux
+test -r $initDir/.bashrc.$os && Source $initDir/.bashrc.$os
 test -s /etc/debian_version && Source $initDir/.bashrc.Debian
 
 #my git configuration
@@ -124,7 +124,8 @@ test -f $initDir/.bashrc.gpu && Source $initDir/.bashrc.gpu
 
 #Definitions de mes alias
 test -r $initDir/.bash_aliases && Source $initDir/.bash_aliases
-test -r $initDir/.bash_aliases.$(uname -s) && Source $initDir/.bash_aliases.$(uname -s) #Pour Darwin ou Linux
+test -r $initDir/.bash_aliases.$os && Source $initDir/.bash_aliases.$os #Pour Darwin ou Linux
+test -r $initDir/.bash_functions.$os && Source $initDir/.bash_functions.$os #Pour Darwin ou Linux
 case $OSTYPE in
 	linux-gnueabihf) grep -q ID=sailfishos /etc/os-release &&  test -r $initDir/.bash_aliases.SailfishOS && Source $initDir/.bash_aliases.SailfishOS;;
 	linux-gnueabi) resize; test -r $initDir/.bash_aliases.android && Source $initDir/.bash_aliases.android; which busybox >/dev/null && test -r $initDir/.bash_aliases.busybox && Source $initDir/.bash_aliases.busybox;;
