@@ -178,7 +178,7 @@ function Nohup {
 	local firstArg=$1
 	if [ $(type -t $firstArg) = function ] 
 	then
-		shift && $(which nohup) $(which bash) -c "$(declare -f $firstArg);$firstArg $@"
+		shift && $(which nohup) $(which bash) -c "$(declare -f $firstArg);$firstArg $*"
 	elif [ $(type -t $firstArg) = alias ]
 	then
 		alias nohup='\nohup '
@@ -191,7 +191,7 @@ function Sudo {
 	local firstArg=$1
 	if [ $(type -t $firstArg) = function ] 
 	then
-		shift && $(which sudo) $(which bash) -c "$(declare -f $firstArg);$firstArg $@"
+		shift && $(which sudo) $(which bash) -c "$(declare -f $firstArg);$firstArg $*"
 	elif [ $(type -t $firstArg) = alias ]
 	then
 		alias sudo='\sudo '
