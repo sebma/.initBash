@@ -5,6 +5,7 @@ declare -A | grep -wq colors || source $initDir/.colors
 test "$debug" '>' 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 export os=$(uname -s)
+
 function Source { test "$debug" '>' 0 && time source "$@" && echo || source "$@" ; }
 export bashProfileLoaded=1
 
@@ -74,7 +75,7 @@ export RSYNC_EXCLUSION=$(printf " --exclude %s" .git/ watch_later/ '*.swp')
 #FIN DE DEFINITION DES VARIABLES
 
 #Creation du .cache dans /tmp et pointage de ce dernier via un lien symbolique
-if [ $(uname -s) = Linux ] || [ $(uname -s) = Darwin ]
+if [ $os = Linux ] || [ $os = Darwin ]
 then
 	#Creation du lien symbolique du cache pointant sur /tmp/$USER/.cache
 	myCacheRootDir=/tmp/$USER
@@ -110,7 +111,7 @@ then
 	which lpr >/dev/null 2>&1 && test -f $initDir/.bash_profile.lpr && Source $initDir/.bash_profile.lpr
 fi
 
-case $(uname -s) in
+case $os in
 Darwin)
 	test -r $initDir/.bash_profile.Darwin && Source $initDir/.bash_profile.Darwin
 	;;
