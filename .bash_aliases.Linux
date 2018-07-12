@@ -19,6 +19,7 @@ test $wifiInterface && alias wifiSpeed="\iwlist $wifiInterface bitrate;\iw dev $
 test $wifiInterface && alias restartWifi="which nmcli >/dev/null && \nmcli nm wifi off;nmcli nm wifi on;sleep 10;wanip"
 test $wifiInterface && alias wifiRestart=restartWifi
 
+alias brewUnInstall='$(which ruby) -e "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/uninstall)"'
 alias catFiles="\tail -vn +1"
 alias connect2MyHiddenWifi="time nmcli con up id sebWlan && wanip"
 alias connect2eduroam="time nmcli con up id eduroam && wanip"
