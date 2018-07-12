@@ -4,8 +4,8 @@ test "$debug" '>' 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 
 test -r $initDir/.AV_functions && Source $initDir/.AV_functions
 test -r $initDir/.youtube_functions && Source $initDir/.youtube_functions
-test $os = Linux  && export locate=$(which locate)
-test $os = Darwin && export locate="time -p $(which glocate)"
+test $os = Linux  && export locate=$(which locate) && openCommand=$(which xdg-open)
+test $os = Darwin && export locate="time -p $(which glocate)" && openCommand=$(which open)
 export LANG=C
 
 myDefault_sshOptions="-A -Y -C"
@@ -159,20 +159,6 @@ function Less {
 		\highlight -O ansi --force "$file" | \less -ir
 	done
 }
-function lanip {
-	ethName=$1
-	if [ -n "$ethName" ]
-	then
-		printf "$ethName: "
-		\ip addr show dev $ethName | awk '/inet /{print$2}'
-	elif [ $(uname -s) = Linux ]
-	then
-		\ip addr show | awk '{if(/(UP|UNKNOWN)/){interface=$2;found=1}else if(/DOWN/)found=0;if(found==1 && /inet /)print interface" "$2}'
-	elif [ $(uname -s) = Darwin ]
-	then
-		\ip addr show | awk '{if(/(UP|UNKNOWN)/){interface=$1;found=1}else if(/DOWN/)found=0;if(found==1 && /inet /)print interface" "$2}'
-	fi
-}
 function resetRESOLUTION {
 	\xrandr | awk '{if(/\<connected/)output=$1;if(/\*/){print"xrandr --output "output" --mode "$1;exit}}' | sh -x
 }
@@ -289,32 +275,6 @@ function odf2 {
 		}
 	done
 }
-function brewInstall {
-	case $(uname) in 
-		Darwin)
-			which brew >/dev/null 2>&1 || $(which ruby) -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-			brew=$(which brew) || return 1
-			set -x
-			$brew update
-			$brew tap caskroom/cask
-			$brew tap caskroom/drivers
-			$brew tap caskroom/versions;set +x ;;
-		Linux)
-			which brew >/dev/null 2>&1 || $(which ruby) -e "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install)"
-			brew=$(which brew) || return 1
-			$brew update ;;
-		*) echo "=> ERROR : brew does not support <$(uname)> operating system." >&2; exit 1;;
-	esac
-}
-function brewUnInstall {
-	case $(uname) in 
-		Darwin)
-			$(which ruby) -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall)"  ;;
-		Linux)
-			$(which ruby) -e "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/uninstall)" ;;
-		*) echo "=> ERROR : brew does not support <$(uname)> operating system." >&2; exit 1;;
-	esac
-}
 function make {
 	if [ -s Makefile ] || [ -s makefile ]
 	then
@@ -353,7 +313,7 @@ function env {
 	$(which env) $@ | sort
 }
 function os {
-	case $(uname -s) in
+	case $os in
 	Darwin) sw_vers >/dev/null 2>&1 && echo $(sw_vers -productName) $(sw_vers -productVersion) || system_profiler SPSoftwareDataType || defaults read /System/Library/CoreServices/SystemVersion ProductVersion ;;
 	Linux) \lsb_release -scd | tr "\n" " ";echo 2>/dev/null || awk -F'[="]' '/PRETTY_NAME/{printf$(NF-1)" "}/VERSION_CODENAME/{codeName=$2}END{if(codeName)print codeName;else print""}' /etc/os-release || sed -n 's/\\[nl]//g;1p' /etc/issue ;;
 	*) ;;
@@ -774,8 +734,6 @@ function memUsage {
 	fi
 }
 function open {
-	[ $(uname -s) = Linux ]  && openCommand=$(which xdg-open)
-	[ $(uname -s) = Darwin ] && openCommand=$(which open)
 	for file
 	do
 		$openCommand "$file" 2>&1 | egrep -v "MBuntu-Y-For-Unity"
@@ -792,17 +750,17 @@ function distribType {
 			*) distribType=unknown;;
 		esac
 	else
-		if   [ $(uname -s) = Linux ]
+		if   [ $os = Linux ]
 		then
 			distrib=$(awk -F"=" '/^ID=/{print$2}' /etc/os-release)
 			distribType=$(awk -F"=" '/^ID_LIKE=/{print$2}' /etc/os-release)
-		elif [ $(uname -s) = Darwin ]
+		elif [ $os = Darwin ]
 		then
 			distrib="$(sw_vers -productName)"
-			distribType=$(uname -s)
+			distribType=$os
 		else
 			distrib=unknown
-			distribType=$(uname -s)
+			distribType=$os
 		fi
 	fi
 	echo $distribType
@@ -1167,21 +1125,23 @@ function build_in_usr_local_DEBIAN {
 	test -s GNUmakefile && time make && sudo checkinstall
 }
 function updateYoutubeLUAForVLC {
+	local youtubeLuaURL=https://raw.githubusercontent.com/videolan/vlc/master/share/lua/playlist/youtube.lua
 	if groups 2>/dev/null | egrep -wq "sudo|admin"
 	then
-		test $(uname -s) = Linux &&  \sudo \wget --content-disposition -NP /usr/lib/vlc/lua/playlist/ https://raw.githubusercontent.com/videolan/vlc/master/share/lua/playlist/youtube.lua
-		test $(uname -s) = Darwin && \sudo \wget --content-disposition -NP /Applications/VLC.app/Contents/MacOS/share/lua/playlist/ https://raw.githubusercontent.com/videolan/vlc/master/share/lua/playlist/youtube.lua
+		test $os = Linux &&  \sudo \wget --content-disposition -NP /usr/lib/vlc/lua/playlist/ $youtubeLuaURL
+		test $os = Darwin && \sudo \wget --content-disposition -NP /Applications/VLC.app/Contents/MacOS/share/lua/playlist/ $youtubeLuaURL
 	else
-		\wget --content-disposition -NP ~/.local/share/vlc/lua/playlist/ https://raw.githubusercontent.com/videolan/vlc/master/share/lua/playlist/youtube.lua
+		\wget --content-disposition -NP ~/.local/share/vlc/lua/playlist/ $youtubeLuaURL
 	fi
 }
 function updateYoutubePlaylistLUAForVLC {
+	local playlist_youtubeLuaURL=https://dl.opendesktop.org/api/files/download/id/1473753829/149909-playlist_youtube.lua
 	if groups 2>/dev/null | egrep -wq "sudo|admin"
 	then
-		test $(uname -s) = Linux &&  \sudo \wget --content-disposition -NP /usr/lib/vlc/lua/playlist/ https://dl.opendesktop.org/api/files/download/id/1473753829/149909-playlist_youtube.lua
-		test $(uname -s) = Darwin && \sudo \wget --content-disposition -NP /Applications/VLC.app/Contents/MacOS/share/lua/playlist/ https://dl.opendesktop.org/api/files/download/id/1473753829/149909-playlist_youtube.lua
+		test $os = Linux &&  \sudo \wget --content-disposition -NP /usr/lib/vlc/lua/playlist/ $playlist_youtubeLuaURL
+		test $os = Darwin && \sudo \wget --content-disposition -NP /Applications/VLC.app/Contents/MacOS/share/lua/playlist/ $playlist_youtubeLuaURL
 	else
-		wget --content-disposition -NP ~/.local/share/vlc/lua/playlist/ https://dl.opendesktop.org/api/files/download/id/1473753829/149909-playlist_youtube.lua
+		wget --content-disposition -NP ~/.local/share/vlc/lua/playlist/ $playlist_youtubeLuaURL
 	fi
 }
 function locate {
@@ -1289,8 +1249,8 @@ set +x
 	time sync
 }
 function reload_SHELL_Functions_And_Aliases {
-#	for script in ~/.${0}rc $initDir/.*functions $initDir/.*aliases $initDir/.*aliases.$(uname -s)
-	for script in $initDir/.*functions $initDir/.*aliases $initDir/.*aliases.$(uname -s)
+#	for script in ~/.${0}rc $initDir/.*functions $initDir/.*aliases $initDir/.*aliases.$os
+	for script in $initDir/.bashrc.$os $initDir/.*functions $initDir/.*functions.$os $initDir/.*aliases $initDir/.*aliases.$os
 	do
 		source $script
 	done
