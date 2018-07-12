@@ -74,9 +74,11 @@ function pkill {
 		if echo $firstArg | \grep -q "\-[0-9]" 
 		then
 			shift
-			$(which pkill) $firstArg -lfu $USER $@
+			processName=$1
+			test -n "$processName" && $(which pkill) $firstArg -lfu $USER $@
 		else
-			$(which pkill) -lfu $USER $@
+			processName=$1
+			test -n "$processName" && $(which pkill) -lfu $USER $@
 		fi
 	}
 }
