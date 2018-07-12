@@ -7,7 +7,6 @@ test -r $initDir/.youtube_functions && Source $initDir/.youtube_functions
 test $os = Linux  && export locate=$(which locate)
 test $os = Darwin && export locate="time -p $(which glocate)"
 export LANG=C
-os=$(uname -s)
 
 myDefault_sshOptions="-A -Y -C"
 
