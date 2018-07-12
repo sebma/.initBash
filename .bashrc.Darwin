@@ -1,0 +1,5 @@
+# vim: set syn=sh noet:
+duExcludedPathList="./proc ./sys ./dev"
+excludePathsDuExpression=$(printf " --exclude %s" $duExcludedPathList)
+findExcludedPathList="./proc ./sys ./dev"
+prunePathsFindExpression=$(printf " -path %s -prune -o" $findExcludedPathList)
