@@ -1,0 +1,111 @@
+# vim: set syn=sh noet:
+
+function applescript2app {
+	for file
+	do
+		osacompile -o "/Applications/${file/.applescript/.app}" "$file"
+	done
+}
+function brewServicesStatus {
+	local serviceList=$@
+	serviceList=$(echo $serviceList | tr " " "|")
+	\brew services list | egrep "$serviceList" | egrep "started|stopped"
+}
+function locate {
+	groups 2>/dev/null | \egrep -wq "sudo|admin" && locateOptions="-e" || locateOptions="--database $HOME/.local/lib/mlocate/mlocate.db -e"
+	echo "$@" | grep -q "\-[a-z]*r" && time $(which glocate) $locateOptions "$@" || time $(which glocate) $locateOptions -ir "${@}"
+}
+function locateBin {
+    locate "${@}" | grep bin/
+}
+function mount {
+	arg=$1
+	arg=$(echo $arg | sed "s|/dev/||")
+	diskutil list | grep -q $arg && [ -b /dev/$arg ] && diskutil mount $arg
+}
+function netstat {
+	local mac_netstat_options="AaLnWgisf:p:I:w:c:mr"
+	local OPTSTRING="ltu$mac_netstat_options"
+	local args=$@
+	local option
+	local wasInWhile=false
+	while getopts $OPTSTRING option; do
+		wasInWhile=true
+		echo $option | \egrep -q "l|t|u" && args="$(echo "$args" | sed -E "s/$option|-$option | -$option//g")"
+		case "$option" in
+			l) args="$args -a" ;; #Show listening ports
+			t) args="$args -p tcp" ;;
+			u) args="$args -p udp" ;;
+			"") echo "=> ERROR : the <option> variable is empty." >&2; return 1;;
+			'?') echo "=> ERROR : the <option> variable is <$?>." >&2; return 2;;
+		esac
+	done
+	
+	if $wasInWhile 
+	then
+		$(which netstat) $args 
+	else
+		echo "=> ERROR : There was a problem with the <getopts> builtin." >&2
+		return 1;
+	fi
+}
+function pkill {
+	local firstArg=$1
+	test $firstArg && {
+		if echo $firstArg | \grep -q "\-[0-9]" 
+		then
+			shift
+			$(which pkill) $firstArg -lfu $USER $@
+		else
+			$(which pkill) -lfu $USER $@
+		fi
+	}
+}
+function restart {
+	test $1 && { launchctl stop $1; launchctl start $1; }
+}
+function route {
+	if echo $@ | \egrep -wq "add|flush|delete|change|get|monitor" ;then
+		$(which route) $@
+	else
+		$(which netstat) -f inet -r $@ | \egrep -v /32 | \egrep "default|0.0.0.0|S"
+	fi
+}
+function status {
+	local serviceName="$1"
+	if [ "$serviceName" ]
+	then
+		launchctl list | egrep -i "$serviceName" || sudo launchctl list | egrep -i "$serviceName"
+	fi
+}
+function topflines {
+	$(which gfind) "$@" $prunePathsFindExpression -xdev -type f -size +10M -exec gls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | column -t | head -n $(($LINES-4)) | awk '{total+=$5;print}END{if(total) print"=> total = "total" MiB"}'
+}
+function dmgInstaller {
+	local sudo defaultDst
+	groups | \egrep -wq "admin|sudo" && { sudo=sudo;defaultDst=/; }	|| { sudo="";defaultDst="$HOME"; }
+	test "$debug" '>' 2 && set -x
+	for dmgFilePath
+	do
+		if \ls $dmgFilePath >/dev/null
+		then
+			mountDev=$(hdiutil mount $dmgFilePath | awk '/dev.disk.*Volumes/{print$1}')
+			mountDir="$($(which mount) | grep $mountDev | awk '{$1=$2="";sub(" [(].*","");sub("^  ","");print}')"
+			test "$debug" = 1 && echo "=> mountDir = $mountDir"
+			if [ -d "$mountDir" ]
+			then
+				if ls "${mountDir}/"*.pkg >/dev/null
+				then
+					$sudo installer -verboseR -pkg "${mountDir}/"*.pkg -target $defaultDst
+				else
+					$sudo cp -pvr "${mountDir}/"*.app /Applications/
+				fi
+				hdiutil unmount $mountDir
+				sync
+			fi
+		fi
+	done
+	unset dmgFilePath
+	set +x
+}
+
