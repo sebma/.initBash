@@ -393,7 +393,7 @@ function sshStartLocalForward {
 	local tunnelDef=$1
 	if test $tunnelDef 
 	then
-		if ! \pgrep -f $tunnelDef >/dev/null
+		if ! \pgrep -fl $tunnelDef | \grep -q /ssh
 		then
 			if ! $(which autossh) -M 0 -Nf $tunnelDef 2>/dev/null
 			then
