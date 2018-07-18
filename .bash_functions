@@ -471,7 +471,7 @@ function pip {
 	firstArg=$1
 	if   [ "$firstArg" = install ]
 	then
-		if groups | egrep -wq "sudo|admin" && [ $os != Darwin ]
+		if groups | egrep -wq "sudo|admin"
 		then
 			\sudo -H $(which $caller) $@
 		else
@@ -479,7 +479,7 @@ function pip {
 		fi
 	elif [ "$firstArg" = uninstall ]
 	then
-		if groups | egrep -wq "sudo|admin" && [ $os != Darwin ]
+		if groups | egrep -wq "sudo|admin"
 		then
 			\sudo -H $(which $caller) $@ 
 		else
