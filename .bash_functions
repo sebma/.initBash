@@ -395,9 +395,16 @@ function sshStartLocalForward {
 	then
 		if ! \pgrep -lf $tunnelDef | \grep -q "/ssh "
 		then
-			if ! $(which autossh) -M 0 -Nf $tunnelDef 2>/dev/null
+			if ! ssh-add -l | \grep agent
 			then
-				$(which ssh) -Nf $tunnelDef
+				if ! $(which autossh) -M 0 -Nf $tunnelDef 2>/dev/null
+				then
+					$(which ssh) -Nf $tunnelDef
+				fi
+			else
+				rc=$?
+				echo "=> ERROR: Check the ssh-agent and load your ssh key before running: $FUNCNAME $@" >&2
+				return $rc
 			fi
 		else
 			echo "=> INFO: The tunnel $tunnelDef is already runnung :" >&2
