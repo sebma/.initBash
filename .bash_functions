@@ -12,6 +12,13 @@ myDefault_sshOptions="-A -Y -C"
 
 trap 'echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $?' INT
 
+function getURLTitle {
+	for url
+	do
+		\curl -Ls $url | awk -F'"' /og:title/'{print$4}'
+		echo $url
+	done
+}
 function h5ll {
 	local switch="$1"
 	echo $switch | \grep -q "^-" && shift 1 || switch=""
