@@ -80,8 +80,8 @@ then
 	alias update-mime-database="\sudo \rm -vf /usr/share/mime/packages/kde.xml;time sudo \update-mime-database /usr/share/mime"
 	alias updatedb="time sudo $(which updatedb 2>/dev/null)"
 	alias wifiList="which nmcli >/dev/null && nmcli dev wifi list || sudo iw dev $wifiInterface scan || sudo iwlist $wifiInterface scan"
-	alias youtube-dlUpdate="\sudo -H $(which pip3) install -U youtube-dl"
-	alias ytdlUpdate="\sudo -H $(which pip3) install -U youtube-dl"
+	alias youtube-dlUpdate='\sudo -H $(which pip3) install -U youtube-dl || \sudo -H $(which pip) install -U youtube-dl'
+	alias ytdlUpdate='\sudo -H $(which pip3) install -U youtube-dl || \sudo -H $(which pip) install -U youtube-dl'
 fi
 
 set +x
