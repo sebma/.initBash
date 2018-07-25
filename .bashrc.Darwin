@@ -3,4 +3,4 @@ duExcludedPathList="./proc ./sys ./dev"
 excludePathsDuExpression=$(printf " --exclude %s" $duExcludedPathList)
 findExcludedPathList="./proc ./sys ./dev"
 prunePathsFindExpression=$(printf " -path %s -prune -o" $findExcludedPathList)
-codeName=$(\system_profiler SPInstallHistoryDataType | sed -En '/Install.macOS/s/ *Install |:$//gp')
+codeName=$(\sed -nE '/SOFTWARE LICENSE AGREEMENT FOR/s/([A-Za-z]+ ){5}|\\$//gp' /System/Library/CoreServices/Setup\ Assistant.app/Contents/Resources/en.lproj/OSXSoftwareLicense.rtf)
