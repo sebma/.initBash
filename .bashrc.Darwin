@@ -3,3 +3,4 @@ duExcludedPathList="./proc ./sys ./dev"
 excludePathsDuExpression=$(printf " --exclude %s" $duExcludedPathList)
 findExcludedPathList="./proc ./sys ./dev"
 prunePathsFindExpression=$(printf " -path %s -prune -o" $findExcludedPathList)
+codeName=$(\system_profiler SPInstallHistoryDataType | sed -En '/Install.macOS/s/ *Install |:$//gp')
