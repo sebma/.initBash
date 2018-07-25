@@ -10,8 +10,7 @@ function brew {
 	brew=$(which brew)
 	$brew $@
 	rc=$?
-	echo
-	\rm -vfr $($brew --prefix)/var/homebrew/locks
+	\rm -fr $($brew --prefix)/var/homebrew/locks
 	return $rc
 }
 function brewInstall {
