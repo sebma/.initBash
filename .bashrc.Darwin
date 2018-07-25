@@ -1,6 +1,1 @@
 # vim: set syn=sh noet:
-duExcludedPathList="./proc ./sys ./dev"
-excludePathsDuExpression=$(printf " --exclude %s" $duExcludedPathList)
-findExcludedPathList="./proc ./sys ./dev"
-prunePathsFindExpression=$(printf " -path %s -prune -o" $findExcludedPathList)
-codeName=$(\sed -nE '/SOFTWARE LICENSE AGREEMENT FOR/s/([A-Za-z]+ ){5}|\\$//gp' /System/Library/CoreServices/Setup\ Assistant.app/Contents/Resources/en.lproj/OSXSoftwareLicense.rtf)
