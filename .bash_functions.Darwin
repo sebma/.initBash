@@ -7,9 +7,10 @@ function applescript2app {
 	done
 }
 function brew {
-	$(which brew) $@
+	brew=$(which brew)
+	$brew $@
 	rc=$?
-	\rm -vfr ~/usr/local/var/homebrew/locks
+	\rm -vfr $($brew --prefix)/var/homebrew/locks
 	return $rc
 }
 function brewInstall {
