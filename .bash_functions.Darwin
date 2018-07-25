@@ -14,7 +14,15 @@ function brew {
 	return $rc
 }
 function brewInstall {
-	which brew >/dev/null 2>&1 || $(which ruby) -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+	if ! which brew >/dev/null 2>&1 
+	then
+		if groups | egrep -wq "adm|admin|sudo"
+		then
+			$(which ruby) -e "$(\curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" || return 1
+		else
+			mkdir $HOME/homebrew && \curl -L https://github.com/Homebrew/brew/tarball/master | \tar xz --strip 1 -C $HOME/homebrew
+		fi
+	fi
 	local brew=$(which brew) || exit 1
 	set -x
 	$brew update
