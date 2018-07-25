@@ -7,20 +7,22 @@ function applescript2app {
 	done
 }
 function brew {
-	brew=$(which brew)
+	local brew=$(which brew)
 	$brew $@
 	rc=$?
-	\rm -fr $($brew --prefix)/var/homebrew/locks
+	test "$brew" && \rm -fr $($brew --prefix)/var/homebrew/locks
 	return $rc
 }
 function brewInstall {
 	which brew >/dev/null 2>&1 || $(which ruby) -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-	which brew || return 1
+	local brew=$(which brew) || exit 1
 	set -x
-	brew update
-	brew tap caskroom/cask
-	brew tap caskroom/drivers
-	brew tap caskroom/versions;set +x
+	$brew update
+	$brew tap caskroom/cask
+	$brew tap caskroom/drivers
+	$brew tap caskroom/versions
+	$brew tap buo/cask-upgrade
+	set +x
 }
 function brewServicesStatus {
 	local serviceList=$@
