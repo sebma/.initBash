@@ -6,6 +6,12 @@ function applescript2app {
 		osacompile -o "/Applications/${file/.applescript/.app}" "$file"
 	done
 }
+function brew {
+	$(which brew) $@
+	rc=$?
+	\rm -vfr ~/usr/local/var/homebrew/locks
+	return $rc
+}
 function brewInstall {
 	which brew >/dev/null 2>&1 || $(which ruby) -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 	which brew || return 1
