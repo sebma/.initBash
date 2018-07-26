@@ -18,12 +18,14 @@ function brewInstall {
 	then
 		if groups | egrep -wq "adm|admin|sudo"
 		then
-			$(which ruby) -e "$(\curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" || return 1
+			$(which ruby) -e "$(\curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" || return
+			brew=/usr/local/bin/brew
 		else
-			mkdir $HOME/homebrew && \curl -L https://github.com/Homebrew/brew/tarball/master | \tar xz --strip 1 -C $HOME/homebrew
+			brewPrefix=$HOME/homebrew
+			mkdir -p $brewPrefix && \curl -L https://github.com/Homebrew/brew/tarball/master | \tar xz --strip 1 -C $brewPrefix || return
+			brew=$brewPrefix/bin/brew
 		fi
 	fi
-	local brew=$(which brew) || exit 1
 	set -x
 	$brew update
 	$brew tap caskroom/cask
