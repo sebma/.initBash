@@ -121,7 +121,7 @@ function status {
 function topflines {
 	$(which gfind) "$@" $prunePathsFindExpression -xdev -type f -size +10M -exec gls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | column -t | head -n $(($LINES-4)) | awk '{total+=$5;print}END{if(total) print"=> total = "total" MiB"}'
 }
-function dmgInstaller {
+function dmgInstall {
 	local sudo defaultDst
 	groups | \egrep -wq "admin|sudo" && { sudo=sudo;defaultDst=/; }	|| { sudo="";defaultDst="$HOME"; }
 	test "$debug" '>' 2 && set -x
@@ -146,6 +146,22 @@ function dmgInstaller {
 		fi
 	done
 	unset dmgFilePath
+	set +x
+}
+function pkgList {
+	for pkg
+	do
+		lsbom $(pkgutil --bom "$pkg")
+	done
+}
+function pkgInstall {
+	local sudo defaultDst
+	groups | \egrep -wq "admin|sudo" && { sudo=sudo;defaultDst=/; }	|| { sudo="";defaultDst="$HOME"; }
+	test "$debug" '>' 2 && set -x
+	for pkg
+	do
+		$sudo installer -verboseR -pkg "$pkg" -target $defaultDst
+	done
 	set +x
 }
 
