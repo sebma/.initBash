@@ -134,14 +134,14 @@ function dmgInstall {
 			test "$debug" = 1 && echo "=> mountDir = $mountDir"
 			if [ -d "$mountDir" ]
 			then
-				if ls "${mountDir}/"*.pkg >/dev/null
+				if \ls "${mountDir}/"*.pkg >/dev/null
 				then
 					$sudo installer -verboseR -pkg "${mountDir}/"*.pkg -target $defaultDst
 				else
-					$sudo cp -pvr "${mountDir}/"*.app /Applications/
+					$sudo \cp -pvr "${mountDir}/"*.app /Applications/
 				fi
-				hdiutil unmount $mountDir
 				sync
+				hdiutil unmount $mountDir
 			fi
 		fi
 	done
@@ -152,6 +152,12 @@ function pkgList {
 	for pkg
 	do
 		lsbom $(pkgutil --bom "$pkg")
+	done
+}
+function pkgExpand {
+	for pkg
+	do
+		pkgutil --expand "$pkg" tmp/
 	done
 }
 function pkgInstall {
