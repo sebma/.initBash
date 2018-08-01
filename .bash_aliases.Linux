@@ -49,7 +49,7 @@ alias pkill='\pkill -efu $USER'
 alias quota="\quota -s"
 alias rsync='time \rsync -uth -P -z --skip-compress=$RSYNC_SKIP_COMPRESS_LIST $RSYNC_EXCLUSION'
 alias scp='time \rsync -h --progress -u -zt --skip-compress=$RSYNC_SKIP_COMPRESS_LIST $RSYNC_EXCLUSION'
-#alias sed="\sed -E" # La completion ssh ne fonctionne pas si l'alias est actif
+alias sed="\sed -E" # La completion ssh ne fonctionne pas si l'alias est actif a cause du script /usr/share/bash-completion/bash_completion qui est obsolete, faire une maj du package bash_completion vers la v2.8
 alias topf10='$(which find) . $prunePathsFindExpression -xdev -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | column -t | head -10 | awk '\''{total+=$5;print}END{print"=> total = "total" MiB"}'\'''
 alias topf50='$(which find) . $prunePathsFindExpression -xdev -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | column -t | head -50 | awk '\''{total+=$5;print}END{print"=> total = "total" MiB"}'\'''
 alias topf5='$(which find) . $prunePathsFindExpression -xdev -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 |  column -t | head -5 | awk '\''{total+=$5;print}END{print"=> total = "total" MiB"}'\'''
