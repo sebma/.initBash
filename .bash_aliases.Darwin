@@ -22,13 +22,14 @@ alias brewUnInstall='$(which ruby) -e "$(\curl -fsSL https://raw.githubuserconte
 alias catFiles="\tail -n +1"
 alias cpuInfo="\sysctl machdep.cpu | egrep 'brand_string|count|size|VMX|SVM'"
 alias df="\df -Ph"
+alias firefoxDefrag='pgrep firefox || $(which find) ~/"Library/Application Support/Firefox" -name "*sqlite" -ls -exec sqlite3 {} vacuum \;'
 alias firefox="/Applications/Firefox.app/Contents/MacOS/firefox-bin"
 alias palemoon="/Applications/Palemoon.app/Contents/MacOS/palemoon"
-alias firefoxDefrag='pgrep firefox || $(which find) ~/"Library/Application Support/Firefox" -name "*sqlite" -ls -exec sqlite3 {} vacuum \;'
 command -v gdf >/dev/null && alias df="\gdf -PTh"
 alias hideFiles='defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app'
 alias hwinfo="\system_profiler SPHardwareDataType"
 #alias lshw="\system_profiler SPHardwareDataType SPSoftwareDataType SPParallelATADataType SPAudioDataType SPBluetoothDataType SPCameraDataType SPDiscBurningDataType SPEthernetDataType SPFibreChannelDataType SPFireWireDataType SPDisplaysDataType SPHardwareRAIDDataType SPNetworkLocationDataType SPManagedClientDataType SPMemoryDataType SPNVMeDataType SPNetworkDataType SPPCIDataType SPParallelSCSIDataType SPPowerDataType SPPrintersDataType SPSASDataType SPSerialATADataType SPSPIDataType SPStorageDataType SPThunderboltDataType SPUSBDataType SPWWANDataType SPAirPortDataType SPiBridgeDataType"
+alias lastme='last -t console | \grep "$USER.*$(LC_TIME=C date +%b\ %_d)"'
 alias lshw='\system_profiler -detailLevel mini | sed "/^Printer Software:/,/^      *Library Extensions/d"'
 alias osinfo="\system_profiler SPSoftwareDataType;\system_profiler SPInstallHistoryDataType | \grep Install.macOS"
 alias powershell="\pwsh"
