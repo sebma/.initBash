@@ -16,7 +16,7 @@ function brew {
 function brewInstall {
 	if ! which brew >/dev/null 2>&1 
 	then
-		if groups | egrep -wq "adm|admin|sudo"
+		if groups | \egrep -wq "adm|admin|sudo"
 		then
 			$(which ruby) -e "$(\curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" || return
 			brew=/usr/local/bin/brew
@@ -37,7 +37,7 @@ function brewInstall {
 function brewServicesStatus {
 	local serviceList=$@
 	serviceList=$(echo $serviceList | tr " " "|")
-	\brew services list | egrep "$serviceList" | egrep "started|stopped"
+	\brew services list | \egrep "$serviceList" | \egrep "started|stopped"
 }
 function lanip {
 	ethName=$1
@@ -51,15 +51,15 @@ function lanip {
 }
 function locate {
 	groups 2>/dev/null | \egrep -wq "sudo|admin" && locateOptions="-e" || locateOptions="--database $HOME/.local/lib/mlocate/mlocate.db -e"
-	echo "$@" | grep -q "\-[a-z]*r" && time $(which glocate) $locateOptions "$@" || time $(which glocate) $locateOptions -ir "${@}"
+	echo "$@" | \grep -q "\-[a-z]*r" && time $(which glocate) $locateOptions "$@" || time $(which glocate) $locateOptions -ir "${@}"
 }
 function locateBin {
-    locate "${@}" | grep bin/
+    locate "${@}" | \grep bin/
 }
 function mount {
 	arg=$1
 	arg=$(echo $arg | sed "s|/dev/||")
-	diskutil list | grep -q $arg && [ -b /dev/$arg ] && diskutil mount $arg
+	diskutil list | \grep -q $arg && [ -b /dev/$arg ] && diskutil mount $arg
 }
 function netstat {
 	local mac_netstat_options="AaLnWgisf:p:I:w:c:mr"
@@ -115,7 +115,7 @@ function status {
 	local serviceName="$1"
 	if [ "$serviceName" ]
 	then
-		launchctl list | egrep -i "$serviceName" || sudo launchctl list | egrep -i "$serviceName"
+		launchctl list | \egrep -i "$serviceName" || sudo launchctl list | \egrep -i "$serviceName"
 	fi
 }
 function topflines {
@@ -130,7 +130,7 @@ function dmgInstall {
 		if \ls $dmgFilePath >/dev/null
 		then
 			mountDev=$(hdiutil mount $dmgFilePath | awk '/dev.disk.*Volumes/{print$1}')
-			mountDir="$($(which mount) | grep $mountDev | awk '{$1=$2="";sub(" [(].*","");sub("^  ","");print}')"
+			mountDir="$($(which mount) | \grep $mountDev | awk '{$1=$2="";sub(" [(].*","");sub("^  ","");print}')"
 			test "$debug" = 1 && echo "=> mountDir = $mountDir"
 			if [ -d "$mountDir" ]
 			then
