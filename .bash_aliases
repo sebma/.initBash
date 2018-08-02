@@ -137,6 +137,7 @@ alias mkdir="\mkdir -pv"
 alias mountfreebox="mount | \grep -wq freebox-server || curlftpfs 'freebox@freebox-server.local/Disque dur' /mnt/freebox/ ; mount | \grep -w freebox-server"
 alias mountfreeboxanna="mount | \grep -wq freeboxanna || curlftpfs 'freebox@78.201.68.5/Disque dur' /freeboxanna/ ; mount | \grep -w freeboxanna"
 alias mpath='\echo $PATH | tr ":" "\n"'
+alias mpv="mpv --ytdl-raw-options='sub-lang=\"en,eng,enUS,en-US,fr\",write-sub='"
 alias mpvFHD="mpv --ytdl-format 'best[height<=1080]'"
 alias mpvFORMAT="mpv --ytdl-format"
 alias mpvHD="mpv --ytdl-format 'best[height<=720]'"
