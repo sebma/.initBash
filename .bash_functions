@@ -1293,13 +1293,15 @@ function mpv {
 		then
 	#		for urlOrFile; do
 	#			echo $urlOrFile | egrep -q "(http|ftp)s?://" && $youtube_dl -qs $urlOrFile 2>&1 | grep --color=auto --color -A1 ^ERROR: && continue
-				if tty | egrep -q "/dev/pts/[0-9]|/dev/ttys[0-9]+"; then
+				if tty | egrep -q "/dev/pts/[0-9]|/dev/ttys[0-9]+"
+				then # Si on est dans une fenetre de terminal
 					$(which mpv) -geometry 0%:100% "$@"
-				else
+				else # Si on est dans une console
 					if [ -c /dev/fb0 ]; then
-						if [ ! -w /dev/fb0 ]; then
-						groups | grep -wq video || \sudo adduser $USER video
-						\sudo chmod g+w /dev/fb0
+						if [ ! -w /dev/fb0 ]
+						then
+							\sudo chmod g+w /dev/fb0
+							groups | grep -wq video || { \sudo adduser $USER video; exit; }
 						fi
 						$(which mpv) -vo drm "$@"
 					else
