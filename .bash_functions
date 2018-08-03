@@ -1289,23 +1289,29 @@ function mplayer {
 }
 function mpv {
 	which mpv >/dev/null && {
-#	for urlOrFile; do
-#		echo $urlOrFile | egrep -q "(http|ftp)s?://" && $youtube_dl -qs $urlOrFile 2>&1 | grep --color=auto --color -A1 ^ERROR: && continue
-		if tty | egrep -q "/dev/pts/[0-9]|/dev/ttys[0-9]+"; then
-			$(which mpv) -geometry 0%:100% "$@"
-		else
-			if [ -c /dev/fb0 ]; then
-				if [ ! -w /dev/fb0 ]; then
-				groups | grep -wq video || \sudo adduser $USER video
-				\sudo chmod g+w /dev/fb0
+	if [ $os = Linux ]
+		then
+	#		for urlOrFile; do
+	#			echo $urlOrFile | egrep -q "(http|ftp)s?://" && $youtube_dl -qs $urlOrFile 2>&1 | grep --color=auto --color -A1 ^ERROR: && continue
+				if tty | egrep -q "/dev/pts/[0-9]|/dev/ttys[0-9]+"; then
+					$(which mpv) -geometry 0%:100% "$@"
+				else
+					if [ -c /dev/fb0 ]; then
+						if [ ! -w /dev/fb0 ]; then
+						groups | grep -wq video || \sudo adduser $USER video
+						\sudo chmod g+w /dev/fb0
+						fi
+						$(which mpv) -vo drm "$@"
+					else
+						echo "=> Function $FUNCNAME - ERROR: Framebuffer is not supported in this configuration." 1>&2
+						return 1
+					fi
 				fi
-				$(which mpv) -vo drm "$@"
-			else
-				echo "=> Function $FUNCNAME - ERROR: Framebuffer is not supported in this configuration." 1>&2
-				return 1
-			fi
+	#		done
+		elif [ $os = Darwin ]
+		then
+			$(which mpv) "$@"
 		fi
-#	done
 	}
 }
 function ddPV {
