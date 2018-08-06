@@ -68,11 +68,20 @@ alias pkgInstaller="\installer -pkg"
 
 if groups 2>/dev/null | egrep -wq "sudo|admin"
 then
-#	alias cupsRestart="launchctl stop org.cups.cupsd;launchctl start org.cups.cupsd"
-	alias cupsRestart="sudo launchctl unload -w /System/Library/LaunchDaemons/org.cups.cupsd.plist;sudo launchctl load -w /System/Library/LaunchDaemons/org.cups.cupsd.plist"
-	alias sshStart="sudo launchctl load /System/Library/LaunchDaemons/ssh.plist"
-	alias sshStop="sudo launchctl unload /System/Library/LaunchDaemons/ssh.plist"
+	macOSServiceDIR=/System/Library/LaunchDaemons
+
+	cupsServiceName=org.cups.cupsd
+	alias cupsStatus="sudo launchctl list | \grep $cupsServiceName"
+	alias cupsStart="sudo launchctl load -w $macOSServiceDIR/$cupsServiceName.plist;cupsStatus"
+	alias cupsStop="sudo launchctl unload -w $macOSServiceDIR/$cupsServiceName.plist;cupsStatus"
+	alias cupsRestart="cupsStop;cupsStart"
+
+	sshServiceName=com.openssh.sshd
+	alias sshStatus="sudo launchctl list | \grep $sshServiceName"
+	alias sshStart="sudo launchctl load $macOSServiceDIR/ssh.plist;sshStatus"
+	alias sshStop="sudo launchctl unload $macOSServiceDIR/ssh.plist;sshStatus"
 	alias sshRestart="sshStop;sshStart"
+
 	alias updatedb="time sudo gupdatedb"
 fi
 
