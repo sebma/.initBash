@@ -76,7 +76,6 @@ alias enman="\man -L en"
 alias erasecd='\cdrecord -v speed=12 blank=fast gracetime=10 -eject'
 alias erasewholecd='\cdrecord -v speed=12 blank=all gracetime=10 -eject'
 alias errors="\egrep -iC2 'error|erreur|java.*exception'"
-alias ethmac="\ifconfig eth | awk '/HWaddr/{print\$1\"\\t\"\$NF}'"
 alias ffmpeg="time \ffmpeg -hide_banner"
 alias ffplay="\ffplay -hide_banner"
 alias findFunctions="grep -P '(^| )\w+\(\)|\bfunction\b'"
@@ -127,8 +126,6 @@ alias lsdvd="\lsdvd -avcs"
 alias lshw="\lshw -numeric -sanitize"
 alias lspci="\lspci -nn"
 alias lxterm="\lxterm -sb -fn 9x15"
-#alias mac@="\ip addr show | awk '/^[0-9]+:/{printf\"\\n\"\$2\"\\t\"}/ether/{print\$2}' | grep -v '^$'"
-alias mac@="LANG=C \ifconfig | awk '/HWaddr/{print\$1\"\\t\"\$NF}'"
 alias manen=enman
 alias manfr=frman
 alias mkdir="\mkdir -pv"
