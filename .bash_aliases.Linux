@@ -56,9 +56,6 @@ alias topf5='$(which find) . $prunePathsFindExpression -xdev -type f -size +10M 
 #alias topf='$(which find) . $prunePathsFindExpression -xdev -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | column -t | head -n | awk '\''{total+=$5;print}END{print"=> total = "total" MiB"}'\'''
 alias wifimac="\ifconfig $wifiInterface | awk '/HWaddr/{print\$1\"\\t\"\$NF}'"
 alias wlanmac=wifimac
-alias ethmac="\ifconfig eth | awk '/HWaddr/{print\$1\"\\t\"\$NF}'"
-#alias mac@="LANG=C \ifconfig | awk '/HWaddr/{print\$1\"\\t\"\$NF}'"
-alias mac@="\ip addr show | awk '/^[0-9]+:/{printf\"\\n\"\$2\"\\t\"}/ether/{print\$2}' | grep -v '^$'"
 
 function topf {
 	$(which find) . $prunePathsFindExpression -xdev -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | column -t | head -n "$1" | awk '{total+=$5;print}END{print"=> total = "total" MiB"}'
