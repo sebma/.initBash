@@ -17,10 +17,7 @@ alias ...="cd ../.."
 alias ..="cd .."
 
 #alias findLoops='$(which find) . -follow -printf "" 2>&1 | egrep -w "loop|denied"'
-#alias ip@="\ip addr show | awk '/^[0-9]+:/{printf\"\\n\"\$2\"\\t\"}/inet /{print\$2}' | grep -v '^$'"
-#alias lanip="\ip addr show | awk '/inet /{print\$2}' | egrep -v '127.0.0.[0-9]|192.168.122.[0-9]'"
 #alias lsb_release="\lsb_release -idrc"
-#alias mac@="\ip addr show | awk '/^[0-9]+:/{printf\"\\n\"\$2\"\\t\"}/ether/{print\$2}' | grep -v '^$'"
 #alias reset="\reset;\printf '\33c\e[3J'"
 
 alias Cat='\highlight -O ansi --force'
@@ -107,7 +104,7 @@ alias img2pdfA4=jpeg2pdfA4
 alias integer="typeset -i"
 alias inxi="\inxi -c21"
 alias inxiSummary="\inxi -c21 -Admi -v4"
-alias ip@="LANG=C \ifconfig | awk -F ' *|:' '/^\w+/{printf\"\\n\"\$1\"\\t\"}/inet addr:/{print\$4}' | grep -v '^$'"
+alias ip@=lanip
 alias jpeg2pdf="\convert -gravity center"
 alias jpeg2pdfA4="\convert -set density '%[fx:w/8.27]' -gravity center"
 alias jpg2pdf=jpeg2pdf
@@ -130,6 +127,7 @@ alias lsdvd="\lsdvd -avcs"
 alias lshw="\lshw -numeric -sanitize"
 alias lspci="\lspci -nn"
 alias lxterm="\lxterm -sb -fn 9x15"
+#alias mac@="\ip addr show | awk '/^[0-9]+:/{printf\"\\n\"\$2\"\\t\"}/ether/{print\$2}' | grep -v '^$'"
 alias mac@="LANG=C \ifconfig | awk '/HWaddr/{print\$1\"\\t\"\$NF}'"
 alias manen=enman
 alias manfr=frman
@@ -246,8 +244,6 @@ alias wanip='time \curl -A "" ipinfo.io/ip || time \wget -qU "" -O- ipinfo.io/ip
 alias wanipOLD='time \dig +short myip.opendns.com @resolver1.opendns.com'
 alias wavemon="xterm -e wavemon &"
 alias wget="\wget -c --content-disposition"
-alias wifimac="\ifconfig $wifiInterface | awk '/HWaddr/{print\$1\"\\t\"\$NF}'"
-alias wlanmac=wifimac
 alias xargs="\xargs -ri"
 alias xclock="\xclock -digital -update 1"
 alias xfree="\xterm -geometry 73x5 -e watch -n2 free -om &"
