@@ -12,6 +12,7 @@ git config --global alias.st "status -bs"
 git config --global alias.stu "status -bs -uno"
 git config --global alias.br branch
 git config --global alias.com "commit -uno"
+git config --global alias.mvv "mv -v"
 
 [ $os = Linux  ] && git config --global credential.helper "cache --timeout=86400"
 [ $os = Darwin ] && git config --global credential.helper osxkeychain
