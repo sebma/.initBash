@@ -33,7 +33,6 @@ alias hwinfo="\system_profiler SPHardwareDataType"
 alias lastme='last -t console | \grep $USER'
 alias lastmeToday='last -t console | \grep "$USER.*$(LC_TIME=C date +%b\ %_d)"'
 alias lshw='\system_profiler -detailLevel mini | sed "/^Printer Software:/,/^      *Library Extensions/d"'
-#alias mac@="\networksetup -getmacaddress \$wifiInterface | awk '{print\$3}'"
 alias osinfo="\system_profiler SPSoftwareDataType;\system_profiler SPInstallHistoryDataType | \grep Install.macOS"
 alias powershell="\pwsh"
 alias graphicsinfo="\system_profiler SPDisplaysDataType"
@@ -43,7 +42,6 @@ alias ldd="\otool -L"
 alias ll="ls -blF -T"
 alias ls="ls -GF"
 alias lsusb="\system_profiler SPUSBDataType"
-alias mac@="\ip addr show | awk '/^[0-9]+:/{printf\"\\n\"\$1\"\\t\"}/ether/{print\$2}' | grep -v '^$'"
 alias more="\more -r"
 alias rename="\rename -v"
 alias rsync="time \rsync -uth -P -z --exclude '*.swp'"
