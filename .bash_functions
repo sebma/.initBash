@@ -17,6 +17,7 @@ function pdfCompress {
 	do
 		echo "=> Compressing $pdf ..."
 		time \pdftk $pdf output ${pdf/.pdf/__SMALLER.pdf} compress
+		echo
 		du -h ${pdf/.pdf/*.pdf}
 	done
 }
