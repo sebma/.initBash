@@ -12,6 +12,14 @@ myDefault_sshOptions="-A -Y -C"
 
 trap 'echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $?' INT
 
+function pdfCompress {
+	for pdf
+	do
+		echo "=> Compressing $pdf ..."
+		time \pdftk $pdf output ${pdf/.pdf/__SMALLER.pdf} compress
+		du -h ${pdf/.pdf/*.pdf}
+	done
+}
 function getURLTitle {
 	for url
 	do
