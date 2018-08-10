@@ -70,8 +70,8 @@ then
 #		test $audioCardNumber && amixer -q -c $audioCardNumber -- sset Master 100%
 	fi
 	trap - INT
-	shopt -q login_shell && echo
-	shopt -q login_shell && which randverse >/dev/null 2>&1 && randverse && echo
+	tty -s && echo
+	tty -s && which randverse >/dev/null 2>&1 && randverse && echo
 fi
 
 if which xdg-mime >/dev/null 
@@ -91,7 +91,7 @@ which ssh-add >/dev/null && {
 	if ! ssh-add -l 2>/dev/null | grep -q "$UPMC_ID"
 	then
 		if test -s ~/.ssh/.$UPMC_ID; then
-			shopt -q login_shell && echo "=> Starting ssh-add from <$(basename $BASH_SOURCE)> ..." 
+			tty -s && echo "=> Starting ssh-add from <$(basename $BASH_SOURCE)> ..." 
 			ssh-add ~/.ssh/.$UPMC_ID >/dev/null
 		fi
 	fi
@@ -110,7 +110,7 @@ which register-python-argcomplete >/dev/null 2>&1 && eval "$(register-python-arg
 
 #[[ -s "$HOME/.rvm/scripts/rvm" ]] && Source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 
-shopt -q login_shell && date
+tty -s && date
 
 which brew >/dev/null 2>&1 && Source $initDir/.bashrc.brew
 test -r $initDir/.bashrc.conda && Source $initDir/.bashrc.conda
