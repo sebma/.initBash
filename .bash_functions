@@ -260,7 +260,7 @@ function renameFileInsideZIP {
 		echo "=> Usage: $FUNCNAME oldName newName zipFile" >&2
 		return 1
 	}
-	lastArg="$(eval echo \$$#)"
+	lastArg="$(eval echo \${$#})"
 	zipFile=$lastArg
 	oldName=$1
 	newName=$2
@@ -381,7 +381,7 @@ function getFiles {
 		return 1
 	}
 
-	lastArg="$(eval echo \$$#)"
+	lastArg="$(eval echo \${$#})"
 	url=$lastArg
 	echo $url | \egrep "^(https?|ftp)://" || {
 		echo "=> ERROR: This protocol is not supported by GNU Wget." >&2
@@ -563,7 +563,7 @@ function configure {
 		echo "=> Usage: $FUNCNAME [--prefix=/installation/path] [./configure arguments ...]" >&2
 		return 1
 	}
-	if [ $# = 0 ] || ! \egrep -q "\--prefix=[0-9a-zA-Z_/]+" <<< "$@"
+	if [ $# = 0 ] || ! echo "$@" | \egrep -q "\--prefix=[0-9a-zA-Z_/]+"
 	then
 		if groups | \egrep -wq "sudo|adm|root"
 		then
@@ -587,7 +587,7 @@ function configure {
 	then
 		mkdir -p build
 		cd build
-		if groups | \egrep -wq "sudo|adm|root" && grep -q /usr <<< $prefix
+		if groups | \egrep -wq "sudo|adm|root" && echo $prefix | grep -q /usr
 		then
 			unset CC
 			cmake .. $@
@@ -731,7 +731,7 @@ function ldapUserFind {
 function pdfConcat {
 	test "$1" && {
 		args=$@
-		lastArg="$(eval echo \$$#)"
+		lastArg="$(eval echo \${$#})"
 		allArgsButLast="${@:1:$#-1}"
 #		which pdftk >/dev/null 2>&1 && $allArgsButLast cat output $lastArg || pdfjoin --rotateoversize false $allArgsButLast -o $lastArg
 		gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile="$lastArg" $allArgsButLast && open "$lastArg"
@@ -907,9 +907,9 @@ function dfc {
 	else
 		shift
 		args=$@
-		test "$args" && argsRE="|"$(tr -s / <<< $@ | tr " " "|" | sed "s,/$,,")
-		firstArg="$(tr -s / <<< "$firstArg")"
-		test "$firstArg" != / && firstArg="$(sed "s,/$,," <<< "$firstArg")"
+		test "$args" && argsRE="|"$(echo $@ | tr -s / | tr " " "|" | sed "s,/$,,")
+		firstArg="$(echo "$firstArg" | tr -s /)"
+		test "$firstArg" != / && firstArg="$(echo "$firstArg" | sed "s,/$,,")"
 		$(which dfc) -TWfc always | \egrep "FILESYSTEM|$firstArg$argsRE"
 	fi
 }
@@ -1258,7 +1258,7 @@ function rsyncIncludeOnly {
 	for arg
 	do
 		[ "$arg" = $destination ] && break
-		if grep -q '*' <<< "$arg"
+		if echo "$arg" | grep -q '*'
 		then
 			rsyncCommand="$rsyncCommand --include=\"$arg\""
 		else
