@@ -65,8 +65,6 @@ if tty -s #Si c'est une session interactive
 then
 	trap 'echo "=> Ignoring this step and continuing the script <$(basename $BASH_SOURCE)> ..." >&2' INT
 
-	echo "=> The cups admin console is http://localhost:631/admin"
-
 	if which aplay >/dev/null 2>&1 && LANG=C aplay -l 2>/dev/null | grep -wq "card"
 	then
 		audioCardNumber=$(LANG=C aplay -l 2>/dev/null | grep -wv HDMI | awk -F "[ :]" '/^card/{number=$2;exit}END{print number}')
@@ -113,7 +111,11 @@ which register-python-argcomplete >/dev/null 2>&1 && eval "$(register-python-arg
 
 #[[ -s "$HOME/.rvm/scripts/rvm" ]] && Source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 
-tty -s && date
+if tty -s #Si c'est une session interactive
+then
+	date;echo
+	echo "=> The cups admin console is http://localhost:631/admin"
+fi
 
 which brew >/dev/null 2>&1 && Source $initDir/.bashrc.brew
 test -r $initDir/.bashrc.conda && Source $initDir/.bashrc.conda
