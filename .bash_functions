@@ -734,7 +734,7 @@ function pdfConcat {
 		lastArg="$(eval echo \${$#})"
 		allArgsButLast="${@:1:$#-1}"
 #		which pdftk >/dev/null 2>&1 && $allArgsButLast cat output $lastArg || pdfjoin --rotateoversize false $allArgsButLast -o $lastArg
-		gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile="$lastArg" $allArgsButLast && open "$lastArg"
+		time gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -dAutoRotatePages=/None -sOutputFile="$lastArg" $allArgsButLast && open "$lastArg"
 	}
 }
 function processUsage {
