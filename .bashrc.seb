@@ -64,14 +64,17 @@ fi
 if tty -s #Si c'est une session interactive
 then
 	trap 'echo "=> Ignoring this step and continuing the script <$(basename $BASH_SOURCE)> ..." >&2' INT
+
+	echo "=> The cups admin console is http://localhost:631/admin"
+
 	if which aplay >/dev/null 2>&1 && LANG=C aplay -l 2>/dev/null | grep -wq "card"
 	then
 		audioCardNumber=$(LANG=C aplay -l 2>/dev/null | grep -wv HDMI | awk -F "[ :]" '/^card/{number=$2;exit}END{print number}')
 #		test $audioCardNumber && amixer -q -c $audioCardNumber -- sset Master 100%
 	fi
 	trap - INT
-	tty -s && echo
-	tty -s && which randverse >/dev/null 2>&1 && randverse && echo
+	echo
+	which randverse >/dev/null 2>&1 && randverse && echo
 fi
 
 if which xdg-mime >/dev/null 
