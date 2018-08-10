@@ -88,7 +88,7 @@ then
 		#Si le lien symbolique existe mais qu'il ne pointe sur rien alors on cree la cible du lien symbolique
 		test -d $myCacheRootDir/.cache/ || mkdir -p $myCacheRootDir/.cache/
 	fi
-	shopt -q login_shell && echo
+	tty -s && echo
 	
 	which ssh-agent >/dev/null 2>&1 && { pgrep -u $USER ssh-agent >/dev/null 2>&1 || eval `ssh-agent -s` >/dev/null; }
 	pgrep -lfu $USER ssh-agent 2>/dev/null
