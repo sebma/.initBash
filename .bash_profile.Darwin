@@ -12,7 +12,7 @@ prunePathsFindExpression=$(printf " -path %s -prune -o" $findExcludedPathList)
 codeName=$(\sed -nE '/SOFTWARE LICENSE AGREEMENT FOR/s/([A-Za-z]+ ){5}|\\$//gp' /System/Library/CoreServices/Setup\ Assistant.app/Contents/Resources/en.lproj/OSXSoftwareLicense.rtf)
 
 cd
-shopt -q login_shell && ls -ld -G .cache | awk '{print$(NF-2)" "$(NF-1)" "$NF}'
+tty -s && ls -ld -G .cache | awk '{print$(NF-2)" "$(NF-1)" "$NF}'
 mkdir -p ~/log
 
 if ! groups | \egrep -wq "sudo|adm|root|admin" 
@@ -41,7 +41,7 @@ then
 	cupsctl WebInterface=yes
 fi
 
-#pgrep -qfu $USER XQuartz.app && shopt -q login_shell && echo "=> MIT-MAGIC-COOKIE-1:" && xauth list | grep :$(echo $DISPLAY | awk -F '\\.|:' '{print$2}') && echo
+#pgrep -qfu $USER XQuartz.app && tty -s && echo "=> MIT-MAGIC-COOKIE-1:" && xauth list | grep :$(echo $DISPLAY | awk -F '\\.|:' '{print$2}') && echo
 trap - INT
 export LC_ALL=$LANG
 
