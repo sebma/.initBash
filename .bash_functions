@@ -12,6 +12,13 @@ myDefault_sshOptions="-A -Y -C"
 
 trap 'echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $?' INT
 
+function pdfSelect {
+	input=$1
+	pages=$2
+	output=$3
+	time \pdfjam $input $pages -o $output
+	open $output
+}
 function pdfCompress {
 	for pdf
 	do
