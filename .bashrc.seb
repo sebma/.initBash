@@ -132,5 +132,5 @@ case $OSTYPE in
 esac
 
 set +x
-shopt -q login_shell && echo
+tty -s && echo
 Debug "=> END of $(basename ${BASH_SOURCE[0]})"
