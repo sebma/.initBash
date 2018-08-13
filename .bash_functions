@@ -12,6 +12,14 @@ myDefault_sshOptions="-A -Y -C"
 
 trap 'echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $?' INT
 
+function pdfAutoRotate {
+	for file
+	do
+		output="${file/.pdf/-ROTATED.pdf}"
+		time \gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -dAutoRotatePages=/All -sOutputFile="$output" "$file"
+		echo $output
+	done
+}
 function pdfSelect {
 	input=$1
 	pages=$2
