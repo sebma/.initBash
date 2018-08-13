@@ -16,6 +16,10 @@ function pdfSelect {
 	input=$1
 	pages=$2
 	output=$3
+	test $# != 3 && {
+		echo "=> Usage : $BASH_FUNC <inputFile> <pageRanges> <outputFile>" >&2
+		return 1
+	}
 	time \pdfjam $input $pages -o $output
 	open $output
 }
