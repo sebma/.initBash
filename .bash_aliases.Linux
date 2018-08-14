@@ -26,6 +26,7 @@ alias connect2eduroam="time nmcli con up id eduroam && wanip"
 alias connect2SSID="time nmcli con up id"
 alias cp='\cp --preserve=timestamps -uv'
 alias df="\df -PTh"
+alias dnsInfo="\nmcli | sed -n '/^DNS /,+3p'"
 #which ccze >/dev/null 2>&1 && alias ccze="\ccze -A" && alias dmesg="\ccze -A < /var/log/dmesg"
 #alias dmesg="\grc less /var/log/dmesg"
 alias firefoxDefrag='pgrep firefox || time $(which find) ~/.mozilla/firefox/ -name "*sqlite" -ls -exec sqlite3 -echo {} vacuum \;'
