@@ -45,7 +45,7 @@ then
 fi
 
 export domain=$(awk -F"[ .]" '/domain/{print$(NF-1);exit}' /etc/resolv.conf /private/etc/resolv.conf 2>/dev/null)
-test -z $domain && export domain=localhost # Si le domaine est inconnu
+test -z $domain && export domain=local # Si le domaine est inconnu
 case $domain in
 jussieu|enst)
 	export proxyName=proxy
