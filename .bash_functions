@@ -16,7 +16,7 @@ function pdfAutoRotate {
 	for file
 	do
 		output="${file/.pdf/-ROTATED.pdf}"
-		time \gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -dAutoRotatePages=/All -sOutputFile="$output" "$file"
+		time \gs -dBATCH -dNOPAUSE -sDEVICE=pdfwrite -dAutoRotatePages=/All -sOutputFile="$output" "$file"
 		echo $output
 	done
 }
