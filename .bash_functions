@@ -12,6 +12,13 @@ myDefault_sshOptions="-A -Y -C"
 
 trap 'echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $?' INT
 
+function sortInPlace {
+	local sort=$(which sort)
+	for file
+	do
+		$sort -uo "$file" "$file"
+	done
+}
 function pdfAutoRotate {
 	for file
 	do
