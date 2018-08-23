@@ -503,10 +503,11 @@ function getRestrictedFilenamesFromFilesHD {
 	for file
 	do
 		echo "=> Treating file : $file ..." >&2
-		urls=$(awk '{print$1}' $file | uniq)
+		urls=$(awk '{printf$1" "}' $file)
 		for url in $urls
 		do
-			hxwls $url >/dev/null && listOfUrls="$url "
+			printf "=> Testing $url ..."
+			\curl -o /dev/null -Lsw "%{http_code}\n" $url | \egrep -q "^(200|301)$" && echo OK && listOfUrls="$url " || echo DOWN >&2
 		done
 
 		getRestrictedFilenamesHD $listOfUrls
@@ -518,10 +519,11 @@ function getRestrictedFilenamesFromFilesSD {
 	for file
 	do
 		echo "=> Treating file : $file ..." >&2
-		urls=$(awk '{print$1}' $file | uniq)
+		urls=$(awk '{printf$1" "}' $file)
 		for url in $urls
 		do
-			hxwls $url >/dev/null && listOfUrls="$url "
+			printf "=> Testing $url ..."
+			\curl -o /dev/null -Lsw "%{http_code}\n" $url | \egrep -q "^(200|301)$" && echo OK && listOfUrls="$url " || echo DOWN >&2
 		done
 
 		getRestrictedFilenamesSD $listOfUrls
@@ -533,10 +535,11 @@ function getRestrictedFilenamesFromFilesLD {
 	for file
 	do
 		echo "=> Treating file : $file ..." >&2
-		urls=$(awk '{print$1}' $file | uniq)
+		urls=$(awk '{printf$1" "}' $file)
 		for url in $urls
 		do
-			hxwls $url >/dev/null && listOfUrls="$url "
+			printf "=> Testing $url ..."
+			\curl -o /dev/null -Lsw "%{http_code}\n" $url | \egrep -q "^(200|301)$" && echo OK && listOfUrls="$url " || echo DOWN >&2
 		done
 
 		getRestrictedFilenamesLD $listOfUrls
