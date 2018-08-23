@@ -498,6 +498,51 @@ function ytdlSDFormats {
 	done
 	trap - INT
 }
+function getRestrictedFilenamesFromFilesHD {
+	trap 'rc=$?;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
+	for file
+	do
+		echo "=> Treating file : $file ..." >&2
+		urls=$(awk '{print$1}' $file | uniq)
+		for url in $urls
+		do
+			hxwls $url >/dev/null && listOfUrls="$url "
+		done
+
+		getRestrictedFilenamesHD $listOfUrls
+	done
+	trap - INT
+}
+function getRestrictedFilenamesFromFilesSD {
+	trap 'rc=$?;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
+	for file
+	do
+		echo "=> Treating file : $file ..." >&2
+		urls=$(awk '{print$1}' $file | uniq)
+		for url in $urls
+		do
+			hxwls $url >/dev/null && listOfUrls="$url "
+		done
+
+		getRestrictedFilenamesSD $listOfUrls
+	done
+	trap - INT
+}
+function getRestrictedFilenamesFromFilesLD {
+	trap 'rc=$?;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
+	for file
+	do
+		echo "=> Treating file : $file ..." >&2
+		urls=$(awk '{print$1}' $file | uniq)
+		for url in $urls
+		do
+			hxwls $url >/dev/null && listOfUrls="$url "
+		done
+
+		getRestrictedFilenamesLD $listOfUrls
+	done
+	trap - INT
+}
 function getPlaylistsRestrictedFilenamesHD {
 	trap 'rc=$?;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
 	for playList
