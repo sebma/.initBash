@@ -120,6 +120,7 @@ fi
 which brew >/dev/null 2>&1 && Source $initDir/.bashrc.brew
 test -r $initDir/.bashrc.conda && Source $initDir/.bashrc.conda
 test -r $initDir/.bashrc.$os && Source $initDir/.bashrc.$os
+test -r $initDir/.bashrc.$os.local && Source $initDir/.bashrc.$os.local
 test -s /etc/debian_version && Source $initDir/.bashrc.Debian
 
 #my git configuration
