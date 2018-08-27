@@ -12,6 +12,24 @@ myDefault_sshOptions="-A -Y -C"
 
 trap 'echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $?' INT
 
+function testURLs {
+	for url
+	do
+		\curl -o /dev/null -Lsw "%{http_code}\n" $url | \egrep -q "^(200|301)$" && echo OK || echo DOWN >&2
+	done
+}
+function testURLsFromFILE {
+	for file
+	do
+		while read line
+		do
+			url=$line
+			printf "=> [$file] : The url = <$url> is : "
+#			\curl -sLI -m 5 $url | \egrep -wq "HTTP[^ ]* 200" && echo ALIVE || echo DEAD
+			\curl -ksf -o /dev/null -m 5 $url && echo ALIVE || echo DEAD
+		done < $file
+	done
+}
 function sortInPlace {
 	local sort=$(which sort)
 	for file
@@ -83,18 +101,6 @@ function condaSearchThroughChannels {
 	done
 }
 trap - INT
-function testURLs {
-	for file
-	do
-		while read line
-		do
-			url=$line
-			printf "=> [$file] : The url = <$url> is : "
-#			\curl -sLI -m 5 $url | \egrep -wq "HTTP[^ ]* 200" && echo ALIVE || echo DEAD
-			\curl -ksf -o /dev/null -m 5 $url && echo ALIVE || echo DEAD
-		done < $file
-	done
-}
 function getFunctions {
 	local startRegExpPattern=$1
 	local endRegExpPattern=$2
