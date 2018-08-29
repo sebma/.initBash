@@ -79,22 +79,23 @@ if [ $os = Linux ] || [ $os = Darwin ]
 then
 	#Creation du lien symbolique du cache pointant sur /tmp/$USER/.cache
 	myCacheRootDir=/tmp/$USER
-	[ $os = Linux  ] && cacheLinkName=.cache
-	[ $os = Darwin ] && cacheLinkName=Library/Caches
+	[ $os = Linux  ] && export cacheLinkName=.cache
+	[ $os = Darwin ] && export cacheLinkName=Library/Caches
 	if [ ! -L ~/$cacheLinkName ] 
 	then
 		mkdir -p $myCacheRootDir/ 
-		test -d ~/$cacheLinkName && mv ~/$cacheLinkName $myCacheRootDir/ || mkdir -p $myCacheRootDir/$cacheLinkName/
+		test -d ~/$cacheLinkName && { mv ~/$cacheLinkName $myCacheRootDir/;true; } || mkdir -p $myCacheRootDir/$cacheLinkName/
 		cd $HOME
-		ln -s $myCacheRootDir/$cacheLinkName $cacheLinkName
+		[ $os = Linux  ] && ln -s $myCacheRootDir/$cacheLinkName $cacheLinkName
 	else
 		#Si le lien symbolique existe mais qu'il ne pointe sur rien alors on cree la cible du lien symbolique
 		test -d $myCacheRootDir/$cacheLinkName/ || mkdir -p $myCacheRootDir/$cacheLinkName/
 	fi
+
 	tty -s && echo
-	
 	which ssh-agent >/dev/null 2>&1 && { pgrep -u $USER ssh-agent >/dev/null 2>&1 || eval `ssh-agent -s` >/dev/null; }
 	pgrep -lfu $USER ssh-agent 2>/dev/null
+	tty -s && echo
 	
 	#Definition des parametres de proxy dans cpan
 	if test "$http_proxy"
