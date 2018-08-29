@@ -79,14 +79,17 @@ if [ $os = Linux ] || [ $os = Darwin ]
 then
 	#Creation du lien symbolique du cache pointant sur /tmp/$USER/.cache
 	myCacheRootDir=/tmp/$USER
-	if [ ! -L ~/.cache ] 
+	[ $os = Linux  ] && cacheLinkName=.cache
+	[ $os = Darwin ] && cacheLinkName=Library/Caches
+	if [ ! -L ~/$cacheLinkName ] 
 	then
 		mkdir -p $myCacheRootDir/ 
-		test -d ~/.cache && mv ~/.cache $myCacheRootDir/ || mkdir -p $myCacheRootDir/.cache/
-		cd $HOME && ln -s $myCacheRootDir/.cache .cache
+		test -d ~/$cacheLinkName && mv ~/$cacheLinkName $myCacheRootDir/ || mkdir -p $myCacheRootDir/$cacheLinkName/
+		cd $HOME
+		ln -s $myCacheRootDir/$cacheLinkName $cacheLinkName
 	else
 		#Si le lien symbolique existe mais qu'il ne pointe sur rien alors on cree la cible du lien symbolique
-		test -d $myCacheRootDir/.cache/ || mkdir -p $myCacheRootDir/.cache/
+		test -d $myCacheRootDir/$cacheLinkName/ || mkdir -p $myCacheRootDir/$cacheLinkName/
 	fi
 	tty -s && echo
 	
