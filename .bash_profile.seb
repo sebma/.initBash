@@ -78,9 +78,8 @@ export RSYNC_EXCLUSION=$(printf " --exclude %s" .git/ watch_later/ '*.swp')
 if [ $os = Linux ] || [ $os = Darwin ]
 then
 	#Creation du lien symbolique du cache pointant sur /tmp/$USER/.cache
-	myCacheRootDir=/tmp/$USER
-	[ $os = Linux  ] && export cacheLinkName=.cache
-	[ $os = Darwin ] && export cacheLinkName=Library/Caches
+	[ $os = Linux  ] && export cacheLinkName=.cache && myCacheRootDir=/tmp/$USER
+	[ $os = Darwin ] && export cacheLinkName=Library/Caches && myCacheRootDir=$(dirname /tmp/$USER/$cacheLinkName)
 	if [ ! -L ~/$cacheLinkName ] 
 	then
 		mkdir -p $myCacheRootDir/ 
