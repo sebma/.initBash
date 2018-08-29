@@ -94,7 +94,6 @@ then
 	tty -s && echo
 	which ssh-agent >/dev/null 2>&1 && { pgrep -u $USER ssh-agent >/dev/null 2>&1 || eval `ssh-agent -s` >/dev/null; }
 	pgrep -lfu $USER ssh-agent 2>/dev/null
-	tty -s && echo
 	
 	#Definition des parametres de proxy dans cpan
 	if test "$http_proxy"
