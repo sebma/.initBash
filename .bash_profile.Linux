@@ -10,10 +10,10 @@ trap - INT
 test -d ~/local/lib && test $LD_LIBRARY_PATH && export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:~/local/lib || export LD_LIBRARY_PATH=~/local/lib
 if ls --color >/dev/null 2>&1 
 then
-	tty -s && ls -ld --color .cache | awk /$USER/'{print$(NF-2)" "$(NF-1)" "$NF}'
+	tty -s && ls -ld --color $cacheLinkName | awk /$USER/'{print$(NF-2)" "$(NF-1)" "$NF}'
 else
 	#C'est le cas pour Android
-	tty -s && ls -ld .cache | awk /$USER/'{print$(NF-2)" "$(NF-1)" "$NF}'
+	tty -s && ls -ld $cacheLinkName | awk /$USER/'{print$(NF-2)" "$(NF-1)" "$NF}'
 fi
 	
 if [ -e /etc/os-release ]
@@ -54,7 +54,7 @@ then
 fi
 
 #Cleanup previous XFCE Sessions
-rm -f ~/.cache/sessions/xf*
+rm -f ~/$cacheLinkName/sessions/xf*
 
 #printf "=> Server Signature : " >&2;ssh-keygen -lf /etc/ssh/ssh_host_rsa_key >&2
 if ip link show eth0 >/dev/null 2>&1 && [ -z $DISPLAY ] && tty -s
