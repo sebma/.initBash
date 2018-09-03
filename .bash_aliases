@@ -12,6 +12,7 @@ alias port="lsof -ni -P | grep LISTEN"
 alias ulogtodayerrors="egrep -iB4 -A1 'error|erreur|Err: [^0]' $ulog"
 alias vict2c="vim +'setf xml' $LOGDIR/ct2c.log"
 
+alias .....="cd ../../../.."
 alias ....="cd ../../.."
 alias ...="cd ../.."
 alias ..="cd .."
