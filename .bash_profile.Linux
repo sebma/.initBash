@@ -8,6 +8,19 @@ tty -s && echo "=> MIT-MAGIC-COOKIE-1:" && xauth list | grep :$(echo $DISPLAY | 
 trap - INT
 
 test -d ~/local/lib && test $LD_LIBRARY_PATH && export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:~/local/lib || export LD_LIBRARY_PATH=~/local/lib
+
+#Creation du .cache dans /tmp/$USER et pointage de ce dernier via le lien symbolique ~/.cache
+export cacheLinkName=.cache && export myCacheRootDir=/tmp/$USER && cd $HOME
+if [ ! -L $cacheLinkName ] 
+then
+	mkdir -p $myCacheRootDir/ 
+	test -d $cacheLinkName && { mv $cacheLinkName $myCacheRootDir/;true; } || mkdir -p $myCacheRootDir/$cacheLinkName/
+	\ln -vs $myCacheRootDir/$cacheLinkName $cacheLinkName
+else
+	#Si le lien symbolique existe mais qu'il ne pointe sur rien alors on cree la cible du lien symbolique
+	test -d $myCacheRootDir/$cacheLinkName/ || mkdir -p $myCacheRootDir/$cacheLinkName/
+fi
+
 if ls --color >/dev/null 2>&1 
 then
 	tty -s && [ -L $cacheLinkName ] && ls -ld --color $cacheLinkName | awk /$USER/'{print$(NF-2)" "$(NF-1)" "$NF}'
