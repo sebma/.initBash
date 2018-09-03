@@ -74,22 +74,8 @@ export RSYNC_SKIP_COMPRESS_LIST="7z/aac/avi/bz2/deb/flv/gz/iso/jpeg/jpg/mkv/mov/
 export RSYNC_EXCLUSION=$(printf " --exclude %s" .git/ watch_later/ '*.swp')
 #FIN DE DEFINITION DES VARIABLES
 
-#Creation du .cache dans /tmp et pointage de ce dernier via un lien symbolique
 if [ $os = Linux ] || [ $os = Darwin ]
 then
-	#Creation du lien symbolique du cache pointant sur /tmp/$USER/.cache
-	[ $os = Linux  ] && export cacheLinkName=.cache && export myCacheRootDir=/tmp/$USER && cd $HOME
-	[ $os = Darwin ] && export cacheLinkName=Caches && export myCacheRootDir=/tmp/$USER/Library && cd Library
-	if [ ! -L $cacheLinkName ] 
-	then
-		mkdir -p $myCacheRootDir/ 
-		test -d $cacheLinkName && { mv $cacheLinkName $myCacheRootDir/;true; } || mkdir -p $myCacheRootDir/$cacheLinkName/
-		\ln -vs $myCacheRootDir/$cacheLinkName $cacheLinkName
-	else
-		#Si le lien symbolique existe mais qu'il ne pointe sur rien alors on cree la cible du lien symbolique
-		test -d $myCacheRootDir/$cacheLinkName/ || mkdir -p $myCacheRootDir/$cacheLinkName/
-	fi
-
 	tty -s && echo
 	which ssh-agent >/dev/null 2>&1 && { pgrep -u $USER ssh-agent >/dev/null 2>&1 || eval `ssh-agent -s` >/dev/null; }
 	pgrep -lfu $USER ssh-agent 2>/dev/null
