@@ -78,14 +78,15 @@ export RSYNC_EXCLUSION=$(printf " --exclude %s" .git/ watch_later/ '*.swp')
 if [ $os = Linux ] || [ $os = Darwin ]
 then
 	#Creation du lien symbolique du cache pointant sur /tmp/$USER/.cache
-	[ $os = Linux  ] && export cacheLinkName=.cache && myCacheRootDir=/tmp/$USER
-	[ $os = Darwin ] && export cacheLinkName=Library/Caches && myCacheRootDir=$(dirname /tmp/$USER/$cacheLinkName)
+	[ $os = Linux  ] && export cacheLinkName=.cache && export myCacheRootDir=/tmp/$USER
+	[ $os = Darwin ] && export cacheLinkName=Caches && export myCacheRootDir=/tmp/$USER/Library
 	if [ ! -L ~/$cacheLinkName ] 
 	then
 		mkdir -p $myCacheRootDir/ 
-		test -d ~/$cacheLinkName && { mv ~/$cacheLinkName $myCacheRootDir/;true; } || mkdir -p $myCacheRootDir/$cacheLinkName/
-		cd $HOME
-		[ $os = Linux  ] && ln -s $myCacheRootDir/$cacheLinkName $cacheLinkName
+		[ $os = Linux ] && cd $HOME
+		[ $os = Darwin ] && cd Library
+		test -d $cacheLinkName && { mv $cacheLinkName $myCacheRootDir/;true; } || mkdir -p $myCacheRootDir/$cacheLinkName/
+		\ln -vs $myCacheRootDir/$cacheLinkName $cacheLinkName
 	else
 		#Si le lien symbolique existe mais qu'il ne pointe sur rien alors on cree la cible du lien symbolique
 		test -d $myCacheRootDir/$cacheLinkName/ || mkdir -p $myCacheRootDir/$cacheLinkName/
