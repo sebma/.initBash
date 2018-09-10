@@ -17,6 +17,7 @@ git config --global alias.mvv "mv -v"
 [ $os = Linux  ] && git config --global credential.helper "cache --timeout=86400"
 [ $os = Darwin ] && git config --global credential.helper osxkeychain
 
+alias gitEditConfig='\git config --local -e'
 alias gitConf-ci="git config alias.ci '!f() { for file; do git commit \$file -m \"Updated \$file\"; done; }; f'"
 alias gitCompareLocalRemote="\git fetch && \git diff origin"
 alias gitHTTP='\awk "/url .*https?/"{print\$NF} ./.git/config'
