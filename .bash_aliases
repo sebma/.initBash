@@ -146,6 +146,16 @@ alias mpvlive='mpv --no-resume-playback'
 alias mpvlocal='mpv --no-ytdl'
 alias mpvplaylist="mpv --playlist"
 alias mpvplaylistSD="mpv --ytdl-format 'best[height<=480]' --playlist"
+alias nohup_mpv="nohup mpv --ytdl-raw-options='sub-lang=\"en,eng,enUS,en-US,fr\",write-sub='"
+alias nohup_mpvFHD="nohup mpv --ytdl-format 'best[height<=1080]'"
+alias nohup_mpvFORMAT="nohup mpv --ytdl-format"
+alias nohup_mpvHD="nohup mpv --ytdl-format 'best[height<=720]'"
+alias nohup_mpvLD="nohup mpv --ytdl-format 'best[height<=240]'"
+alias nohup_mpvSD="nohup mpv --ytdl-format 'best[height<=480]'"
+alias nohup_mpvlive='nohup mpv --no-resume-playback'
+alias nohup_mpvlocal='nohup mpv --no-ytdl'
+alias nohup_mpvplaylist="nohup mpv --playlist"
+alias nohup_mpvplaylistSD="nohup mpv --ytdl-format 'best[height<=480]' --playlist"
 alias mutt="LANG=C.UTF-8 \mutt"
 alias muttDebug="LANG=C.UTF-8 \mutt -nd5"
 alias mv='\mv -vi'
