@@ -33,38 +33,47 @@ function mpv {
 }
 unset -f mpv
 function mpvFHD {
+	\rm nohup.out
 	nohup mpv --ytdl-format 'best[height<=1080]' $mpvOptions "$@" &
 	tail -f nohup.out
 }
 function mpvFORMAT {
+	\rm nohup.out
 	nohup mpv --ytdl-format $mpvOptions "$@" &
 	tail -f nohup.out
 }
 function mpvHD {
+	\rm nohup.out
 	nohup mpv --ytdl-format 'best[height<=720]' $mpvOptions "$@" &
 	tail -f nohup.out
 }
 function mpvLD {
+	\rm nohup.out
 	nohup mpv --ytdl-format 'best[height<=240]' $mpvOptions "$@" &
 	tail -f nohup.out
 }
 function mpvSD {
+	\rm nohup.out
 	nohup mpv --ytdl-format 'best[height<=480]' $mpvOptions "$@" &
 	tail -f nohup.out
 }
 function mpvlive {
+	\rm nohup.out
 	nohup mpv --no-resume-playback $mpvOptions "$@" &
 	tail -f nohup.out
 }
 function mpvlocal {
+	\rm nohup.out
 	nohup mpv --no-ytdl $mpvOptions "$@" &
 	tail -f nohup.out
 }
 function mpvplaylist {
+	\rm nohup.out
 	nohup mpv $mpvOptions --playlist "$@" &
 	tail -f nohup.out
 }
 function mpvplaylistSD {
+	\rm nohup.out
 	nohup mpv --ytdl-format 'best[height<=480]' $mpvOptions --playlist "$@" &
 	tail -f nohup.out
 }
