@@ -1,7 +1,7 @@
 # vim: set syn=sh noet:
 
+#mpvOptions=$'--geometry 0%:100% --ytdl-raw-options=\'sub-lang="en,eng,enUS,en-US,fr",write-sub=\''
 mpvOptions="--geometry 0%:100%"
-mpvOptions=$'--geometry 0%:100% --ytdl-raw-options=\'sub-lang="en,eng,enUS,en-US,fr",write-sub=\''
 function mpv {
 	which mpv >/dev/null && {
 	if [ $os = Linux ]
