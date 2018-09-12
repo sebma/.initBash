@@ -1,0 +1,68 @@
+# vim: set syn=sh noet:
+
+mpvOptions="-geometry 0%:100% --ytdl-raw-options='sub-lang=\"en,eng,enUS,en-US,fr\",write-sub='"
+function mpv {
+	which mpv >/dev/null && {
+	if [ $os = Linux ]
+		then
+	#		for urlOrFile; do
+	#			echo $urlOrFile | egrep -q "(http|ftp)s?://" && $youtube_dl -qs $urlOrFile 2>&1 | grep --color=auto --color -A1 ^ERROR: && continue
+				if tty | egrep -q "/dev/pts/[0-9]|/dev/ttys[0-9]+"
+				then # Si on est dans une fenetre de terminal
+					$(which mpv) -geometry 0%:100% "$@"
+				else # Si on est dans une console
+					if [ -c /dev/fb0 ]; then
+						if [ ! -w /dev/fb0 ]
+						then
+							\sudo chmod g+w /dev/fb0
+							groups | grep -wq video || { \sudo adduser $USER video; exit; }
+						fi
+						$(which mpv) -vo drm "$@"
+					else
+						echo "=> Function $FUNCNAME - ERROR: Framebuffer is not supported in this configuration." 1>&2
+						return 1
+					fi
+				fi
+	#		done
+		elif [ $os = Darwin ]
+		then
+			$(which mpv) "$@"
+		fi
+	}
+}
+function mpvFHD {
+	nohup mpv --ytdl-format 'best[height<=1080]' $mpvOptions "$@" &
+	tail -f nohup.out
+}
+function mpvFORMAT {
+	nohup mpv --ytdl-format $mpvOptions "$@" &
+	tail -f nohup.out
+}
+function mpvHD {
+	nohup mpv --ytdl-format 'best[height<=720]' $mpvOptions "$@" &
+	tail -f nohup.out
+}
+function mpvLD {
+	nohup mpv --ytdl-format 'best[height<=240]' $mpvOptions "$@" &
+	tail -f nohup.out
+}
+function mpvSD {
+	nohup mpv --ytdl-format 'best[height<=480]' $mpvOptions "$@" &
+	tail -f nohup.out
+}
+function mpvlive {
+	nohup mpv --no-resume-playback $mpvOptions "$@" &
+	tail -f nohup.out
+}
+function mpvlocal {
+	nohup mpv --no-ytdl $mpvOptions "$@" &
+	tail -f nohup.out
+}
+function mpvplaylist {
+	nohup mpv --playlist $mpvOptions "$@" &
+	tail -f nohup.out
+}
+function mpvplaylistSD {
+	nohup mpv --ytdl-format 'best[height<=480]' --playlist $mpvOptions "$@" &
+	tail -f nohup.out
+}
