@@ -1,6 +1,7 @@
 # vim: set syn=sh noet:
 
-mpvOptions="-geometry 0%:100% --ytdl-raw-options='sub-lang=\"en,eng,enUS,en-US,fr\",write-sub='"
+#mpvOptions="-geometry 0%:100% --ytdl-raw-options='sub-lang=\"en,eng,enUS,en-US,fr\",write-sub=''"
+mpvOptions="-geometry 0%:100%"
 function mpv {
 	which mpv >/dev/null && {
 	if [ $os = Linux ]
@@ -30,6 +31,7 @@ function mpv {
 		fi
 	}
 }
+unset -f mpv
 function mpvFHD {
 	nohup mpv --ytdl-format 'best[height<=1080]' $mpvOptions "$@" &
 	tail -f nohup.out
