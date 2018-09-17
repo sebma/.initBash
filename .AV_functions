@@ -866,6 +866,7 @@ function audioGet {
 			echo "=> INFO: The file $file has already been converted to $outputFileName." >&2
 			continue
 		fi
+		\mkdir -pv $(dirname $outputFileName)
 		time $ffmpeg -i "$file" -vn -sn -codec copy $options "$outputFileName" -y
 		touch -r "$file" "$outputFileName"
 		sync
@@ -888,6 +889,7 @@ function videoGet {
 			echo "=> INFO: The file $file has already been converted to $outputFileName." >&2
 			continue
 		fi
+		\mkdir -pv $(dirname $outputFileName)
 		time $ffmpeg -i "$file" -an -codec copy $options "$outputFileName" -y
 		touch -r "$file" "$outputFileName"
 		sync
