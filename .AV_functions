@@ -13,9 +13,9 @@ aac2m4aOptions="-bsf:a aac_adtstoasc"
 cdr_device=/dev/dvd
 
 [ $BASH_VERSINFO -ge 4 ] && declare -A audioExtension videoExtension audioDecode
-export audioExtension=( [libspeex]=oga [speex]=oga [opus]=oga [vorbis]=ogg [aac]=m4a [mp3]=mp3 [mp2]=mp2 [ac3]=ac3 [wmav2]=wma [pcm_dvd]=wav [pcm_s16le]=wav )
-export videoExtension=( [h264]=m4v [mpeg1video]=mpg [mpeg2video]=vob [mpeg4]=avi [flv1]=flv [wmv3]=wmv )
-export audioDecode=( [libspeex]=$(which speexdec 2>/dev/null) [speex]=$(which speexdec 2>/dev/null) [opus]=$(which opusdec 2>/dev/null) [vorbis]=$(which oggdec 2>/dev/null) )
+audioExtension=( [libspeex]=oga [speex]=oga [opus]=oga [vorbis]=ogg [aac]=m4a [mp3]=mp3 [mp2]=mp2 [ac3]=ac3 [wmav2]=wma [pcm_dvd]=wav [pcm_s16le]=wav )
+videoExtension=( [h264]=m4v [mpeg1video]=mpg [mpeg2video]=vob [mpeg4]=avi [flv1]=flv [wmv3]=wmv )
+audioDecode=( [libspeex]=$(which speexdec 2>/dev/null) [speex]=$(which speexdec 2>/dev/null) [opus]=$(which opusdec 2>/dev/null) [vorbis]=$(which oggdec 2>/dev/null) )
 
 alias mp32wavstdout="\mpg123 --wav - "
 alias ogg2wavstdout="\oggdec --output=- "
