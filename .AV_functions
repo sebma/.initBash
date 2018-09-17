@@ -1,4 +1,5 @@
 # vim: set syn=sh noet:
+set +x
 declare -A | grep -wq colors || source $initDir/.colors
 test "$debug" '>' 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
@@ -857,8 +858,8 @@ function audioGet {
 		extension=${file/*./}
 		audioFormat=$(ffprobe "$file" 2>&1 | awk '/Audio/{print$4}' | sed "s/,$//")
 		outputExtension=${audioExtension[$audioFormat]}
-#		outputFileName=${file/.$extension/_AUDIO.$outputExtension}
-		outputFileName=$(basename $file .$extension)_AUDIO.$outputExtension
+		outputFileName=${file/.$extension/_AUDIO.$outputExtension}
+		outputFileName=$(echo $outputFileName | cut -d/ -f3-) # Remove the two leading directories from the path
 		minimumAudioStreamSize=$(mediainfo --Output="Audio;%StreamSize%" "$file") || return
 		if test -s "$outputFileName" && [ $(stat -c '%s' "$outputFileName") -ge $minimumAudioStreamSize ]
 		then
@@ -879,8 +880,8 @@ function videoGet {
 		extension=${file/*./}
 		videoFormat=$(ffprobe "$file" 2>&1 | grep -v Video:.mjpeg | awk '/Video/{print$4}' | sed "s/,$//")
 		outputExtension=${videoExtension[$videoFormat]}
-#		outputFileName=${file/.$extension/_VIDEO.$outputExtension}
-		outputFileName=$(basename $file .$extension)_VIDEO.$outputExtension
+		outputFileName=${file/.$extension/_VIDEO.$outputExtension}
+		outputFileName=$(echo $outputFileName | cut -d/ -f3-) # Remove the two leading directories from the path
 		minimumVideoStreamSize=$(mediainfo --Output="Video;%StreamSize%" "$file") || return
 		if test -s "$outputFileName" && [ $(stat -c '%s' "$outputFileName") -ge $minimumVideoStreamSize ]
 		then
