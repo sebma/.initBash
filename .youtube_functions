@@ -507,7 +507,7 @@ function getRestrictedFilenamesFromFilesHD {
 		for url in $urls
 		do
 			printf "=> Testing $url ..."
-			\curl -o /dev/null -Lsw "%{http_code}\n" $url | \egrep -q "^(200|301)$" && echo OK && listOfUrls="$url " || echo DOWN >&2
+			\curl -o /dev/null -Lsw "%{http_code}\n" $url | \egrep -q "^(200|301)$" && echo OK && listOfUrls="$listOfUrls $url" || echo DOWN >&2
 		done
 
 		getRestrictedFilenamesHD $listOfUrls
@@ -523,7 +523,7 @@ function getRestrictedFilenamesFromFilesSD {
 		for url in $urls
 		do
 			printf "=> Testing $url ..."
-			\curl -o /dev/null -Lsw "%{http_code}\n" $url | \egrep -q "^(200|301)$" && echo OK && listOfUrls="$url " || echo DOWN >&2
+			\curl -o /dev/null -Lsw "%{http_code}\n" $url | \egrep -q "^(200|301)$" && echo OK && listOfUrls="$listOfUrls $url" || echo DOWN >&2
 		done
 
 		getRestrictedFilenamesSD $listOfUrls
@@ -539,7 +539,7 @@ function getRestrictedFilenamesFromFilesLD {
 		for url in $urls
 		do
 			printf "=> Testing $url ..."
-			\curl -o /dev/null -Lsw "%{http_code}\n" $url | \egrep -q "^(200|301)$" && echo OK && listOfUrls="$url " || echo DOWN >&2
+			\curl -o /dev/null -Lsw "%{http_code}\n" $url | \egrep -q "^(200|301)$" && echo OK && listOfUrls="$listOfUrls $url" || echo DOWN >&2
 		done
 
 		getRestrictedFilenamesLD $listOfUrls
