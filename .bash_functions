@@ -12,6 +12,12 @@ myDefault_sshOptions="-A -Y -C"
 
 trap 'echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $?' INT
 
+function lsgroup {
+	for group
+	do
+		printf "%s:" $group;awk -F: "/$group\>/"'{gsub(","," ");print$NF}' /etc/group
+	done
+}
 function testURLs {
 	for url
 	do
