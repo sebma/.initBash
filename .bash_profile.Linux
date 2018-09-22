@@ -93,7 +93,7 @@ then
 		$time test $profile && gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$profile/ login-shell true
 		$time gsettings set org.gnome.desktop.wm.preferences resize-with-right-button true
 		$time gsettings set org.gnome.desktop.wm.preferences mouse-button-modifier "\<Alt\>"
-		$time dconf write  /org/gnome/desktop/input-sources/xkb-options "\[\'terminate:ctrl_alt_bksp\'\]"
+		$time dconf write /org/gnome/desktop/input-sources/xkb-options "\[\'terminate:ctrl_alt_bksp\'\]" 2>/dev/null
 		[ "$debug" '<' 4 ] && set +x
 		[ "$debug" '>' 0 ] && echo "=> DONE."
 	fi
