@@ -172,6 +172,7 @@ alias putty='\putty -geometry 157x53 -l $USER -t -A -C -X'
 alias qrdecode="\zbarimg -q --raw"
 alias rcp="\rsync -uth -P"
 alias rdesktop="\rdesktop -k fr"
+alias rdiff="\diff -rq"
 alias reboot="\reboot && exit"
 alias recode="\recode -v"
 alias regrep="rgrep -EI"
