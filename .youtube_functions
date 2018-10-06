@@ -111,7 +111,6 @@ function ytget {
 	dailymotionURLPrefix=https://www.dailymotion.com/video/
 	format="mp4"
 	echo "=> There are $# urls to download ..."
-#	echo "=> listOfUrls = $@ ..."
 	for url
 	do
 		let i++
@@ -170,10 +169,7 @@ function getRestrictedFilenamesFORMAT {
 	}
 	format="$1"
 	shift
-	test $# != 0 && {
-		echo "=> There are $# urls to download ..."
-#		echo "=> listOfUrls = $@ ..."
-	}
+	test $# != 0 && echo "=> There are $# urls to download ..."
 	i=0
 	for url
 	do
@@ -183,7 +179,7 @@ function getRestrictedFilenamesFORMAT {
 		fileName=$($youtube_dl -f $format --get-filename "$url" --restrict-filenames || $youtube_dl -f $fallback --get-filename "$url" --restrict-filenames)
 		test -z "$fileName" && continue
 #		$youtube_dl -f "$format" -qs "$url" 2>&1 | \grep --color -A1 ^ERROR: && continue
-		if ! echo $url | \egrep -wq "www"
+		if ! echo $url | \egrep -q "https?://"
 		then
 			streamID=$url
 			fileName=$(basename $( $locate -er "$streamID.*__${format}__" | \egrep -v "\.part|AUDIO" | sort -rt. | head -1) 2>/dev/null)
@@ -231,10 +227,7 @@ function getRestrictedFilenamesBEST {
 	youtubeURLPrefix=https://www.youtube.com/watch?v=
 	dailymotionURLPrefix=https://www.dailymotion.com/video/
 	format=best[ext=mp4]/best[ext=webm]/best[ext=flv]
-	test $# != 0 && {
-		echo "=> There are $# urls to download ..."
-#		echo "=> listOfUrls = $@ ..."
-	}
+	test $# != 0 && echo "=> There are $# urls to download ..."
 	i=0
 	for url
 	do
@@ -276,11 +269,7 @@ function getRestrictedFilenamesHD {
 	youtubeURLPrefix=https://www.youtube.com/watch?v=
 	dailymotionURLPrefix=https://www.dailymotion.com/video/
 	format=mp4
-	test $# != 0 && {
-		echo "=> There are $# urls to download ..."
-		echo
-#		echo "=> listOfUrls = $@ ..."
-	}
+	test $# != 0 && echo "=> There are $# urls to download ..."
 	i=0
 	for url
 	do
@@ -322,11 +311,7 @@ function getRestrictedFilenamesSD {
 	youtubeURLPrefix=https://www.youtube.com/watch?v=
 	dailymotionURLPrefix=https://www.dailymotion.com/video/
 	format="mp4"
-	test $# != 0 && {
-		echo "=> There are $# urls to download ..."
-		echo
-#		echo "=> listOfUrls = $@ ..."
-	}
+	test $# != 0 && echo "=> There are $# urls to download ..."
 	i=0
 	for url
 	do
@@ -385,11 +370,7 @@ function getRestrictedFilenamesSD_PREV {
 	youtubeURLPrefix=https://www.youtube.com/watch?v=
 	dailymotionURLPrefix=https://www.dailymotion.com/video/
 	format="mp4"
-	test $# != 0 && {
-		echo "=> There are $# urls to download ..."
-		echo
-#		echo "=> listOfUrls = $@ ..."
-	}
+	test $# != 0 && echo "=> There are $# urls to download ..."
 	i=0
 	for url
 	do
@@ -446,11 +427,7 @@ function getRestrictedFilenamesLD {
 	youtubeURLPrefix=https://www.youtube.com/watch?v=
 	dailymotionURLPrefix=https://www.dailymotion.com/video/
 	format="mp4"
-	test $# != 0 && {
-		echo "=> There are $# urls to download ..."
-		echo
-#		echo "=> listOfUrls = $@ ..."
-	}
+	test $# != 0 && echo "=> There are $# urls to download ..."
 	i=0
 	for url
 	do
