@@ -900,7 +900,7 @@ function videoGet {
 function avprobe {
 	for arg
 	do
-		egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" <<< "$arg" && $avprobe $avprobeOptions "$($youtube_dl -gf best "$arg")" || $(which avprobe) $avprobeOptions -probesize 400M -analyzeduration 400M "$arg"
+		echo "$arg" | egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $avprobe $avprobeOptions "$($youtube_dl -gf best "$arg")" || $(which avprobe) $avprobeOptions -probesize 400M -analyzeduration 400M "$arg"
 	done 2>&1 | cut -c 1-$COLUMNS
 }
 function videoInfo {
@@ -908,7 +908,7 @@ function videoInfo {
 		for urlOrFile
 		do
 			echo "=> urlOrFile = $urlOrFile"
-			if egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" <<< "$urlOrFile"
+			if echo "$urlOrFile" | egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://"
 			then
 				#remote stream
 				if curl -s "$urlOrFile" | file -bi - | \grep -q "^text/"
@@ -917,8 +917,8 @@ function videoInfo {
 					possibleFormats=best[ext=mp4]/best[ext=webm]/best[ext=flv]/18/webm/sd/http-480
 					infos="$($youtube_dl -gef $possibleFormats "$urlOrFile")"
 					test -z "$infos" && continue
-					title="$(sed -n 1p <<< "$infos")"
-					directURLOfStream="$(sed -n 2p <<< "$infos")"
+					title="$(echo "$infos" | sed -n 1p )"
+					directURLOfStream="$(echo "$infos" | sed -n 2p)"
 					size=$(\curl -sI "$directURLOfStream" | awk 'BEGIN{IGNORECASE=1;size=0}/Content-Length:/{if($2>0)size=$2}END{printf "%8.3f MiB\n",size/2^20}')
 					echo "Title: $title"
 					echo "Size: $size"
@@ -945,7 +945,7 @@ function ffprobe {
 	which ffprobe >/dev/null && {
 		for arg
 		do
-			egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" <<< "$arg" && $ffprobe $ffprobeOptions "$($youtube_dl -gf best "$arg")" || $ffprobe $ffprobeOptions "$arg"
+			echo "$arg" | egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $ffprobe $ffprobeOptions "$($youtube_dl -gf best "$arg")" || $ffprobe $ffprobeOptions "$arg"
 		done 2>&1 | cut -c 1-$COLUMNS
 	}
 }
@@ -953,28 +953,28 @@ function ffprobeFlat {
 	ffprobeOptions="-v 0 -show_format -show_streams -of flat"
 	for arg
 	do
-		egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" <<< "$arg" && $ffprobe $ffprobeOptions "$($youtube_dl -gf best "$arg")" || $ffprobe $ffprobeOptions "$arg"
+		echo "$arg" | egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $ffprobe $ffprobeOptions "$($youtube_dl -gf best "$arg")" || $ffprobe $ffprobeOptions "$arg"
 	done 2>&1 | cut -c 1-$COLUMNS
 }
 function ffprobeIni {
 	ffprobeOptions="-v 0 -show_format -show_streams -of ini"
 	for arg
 	do
-		egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" <<< "$arg" && $ffprobe $ffprobeOptions "$($youtube_dl -gf best "$arg")" || $ffprobe $ffprobeOptions "$arg"
+		echo "$arg" | egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $ffprobe $ffprobeOptions "$($youtube_dl -gf best "$arg")" || $ffprobe $ffprobeOptions "$arg"
 	done 2>&1 | cut -c 1-$COLUMNS
 }
 function ffprobeJSON {
 	ffprobeOptions="-v 0 -show_format -show_streams -of json"
 	for arg
 	do
-		egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" <<< "$arg" && $ffprobe $ffprobeOptions "$($youtube_dl -gf best "$arg")" || $ffprobe $ffprobeOptions "$arg"
+		echo "$arg" | egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $ffprobe $ffprobeOptions "$($youtube_dl -gf best "$arg")" || $ffprobe $ffprobeOptions "$arg"
 	done 2>&1 | cut -c 1-$COLUMNS
 }
 function ffprobeXML {
 	ffprobeOptions="-v 0 -show_format -show_streams -of xml"
 	for arg
 	do
-		egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" <<< "$arg" && $ffprobe $ffprobeOptions "$($youtube_dl -gf best "$arg")" || $ffprobe $ffprobeOptions "$arg"
+		echo "$arg" | egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $ffprobe $ffprobeOptions "$($youtube_dl -gf best "$arg")" || $ffprobe $ffprobeOptions "$arg"
 	done 2>&1 | cut -c 1-$COLUMNS
 }
 function mp4Repair {
@@ -1018,9 +1018,9 @@ function videoRemux {
 function aac2m4a {
 #	file="$1"
 #	shift
+#	time ffmpeg -hide_banner -i "$file" -acodec copy $aac2m4aOptions $@ "${file/.aac/.m4a}"
 	for file
 	do
-#		time ffmpeg -hide_banner -i "$file" -acodec copy $aac2m4aOptions $@ "${file/.aac/.m4a}"
 		time ffmpeg -hide_banner -i "$file" -acodec copy $aac2m4aOptions "${file/.aac/.m4a}"
 		touch -r "$file" "${file/.aac/.m4a}"
 		sync
@@ -1029,11 +1029,22 @@ function aac2m4a {
 function m4a2aac {
 #	file="$1"
 #	shift
+#	time ffmpeg -hide_banner -i "$file" -acodec copy $@ "${file/.m4a/.aac}"
 	for file
 	do
-#		time ffmpeg -hide_banner -i "$file" -acodec copy $@ "${file/.m4a/.aac}"
 		time ffmpeg -hide_banner -i "$file" -acodec copy "${file/.m4a/.aac}"
 		touch -r "$file" "${file/.m4a/.aac}"
+		sync
+	done
+}
+function mkv2opus {
+#	file="$1"
+#	shift
+#	time ffmpeg -hide_banner -i "$file" -acodec copy $@ "${file/.mkv/.oga}"
+	for file
+	do
+		time ffmpeg -hide_banner -i "$file" -acodec copy "${file/.mkv/.oga}"
+		touch -r "$file" "${file/.mkv/.oga}"
 		sync
 	done
 }
