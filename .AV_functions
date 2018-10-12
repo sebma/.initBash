@@ -1037,13 +1037,13 @@ function m4a2aac {
 		sync
 	done
 }
-function mkv2opus {
+function mkv2oga {
 #	file="$1"
 #	shift
-#	time ffmpeg -hide_banner -i "$file" -acodec copy $@ "${file/.mkv/.oga}"
+#	time ffmpeg -hide_banner -i "$file" -vn -acodec copy $@ "${file/.mkv/.oga}"
 	for file
 	do
-		time ffmpeg -hide_banner -i "$file" -acodec copy "${file/.mkv/.oga}"
+		time ffmpeg -hide_banner -i "$file" -vn -acodec copy "${file/.mkv/.oga}"
 		touch -r "$file" "${file/.mkv/.oga}"
 		sync
 	done
