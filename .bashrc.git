@@ -18,7 +18,8 @@ git config --global alias.mvv "mv -v"
 [ $os = Darwin ] && git config --global credential.helper osxkeychain
 
 alias gitEditConfig='\git config --local -e'
-alias gitConf-ci="git config alias.ci '!f() { for file; do git commit \$file -m \"Updated \$file\"; done; }; f'"
+alias gitConf="\git config -l"
+alias gitConf-alias.ci="git config alias.ci '!f() { for file; do git commit \$file -m \"Updated \$file\"; done; }; f'"
 alias gitCompareLocalRemote="\git fetch && \git diff origin"
 alias gitHTTP='\awk "/url .*https?/"{print\$NF} ./.git/config'
 alias gitLocalUndelete="\git ls-files -d | grep . && \git ls-files -d | \xargs git checkout-index"
