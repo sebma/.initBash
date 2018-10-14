@@ -375,8 +375,8 @@ function os {
 	esac
 }
 function findLoops {
-	[ $os = Darwin ] && find=gfind || find=find
-	time $find . -follow 2>&1 >/dev/null | egrep -w "loop|denied"
+	[ $os = Darwin ] && find=gfind || find=$(which find)
+	time $find $@ -follow 2>&1 >/dev/null | egrep -w "loop|denied"
 }
 function dirName {
 	#NE MARCHE PAS LORSQUE LE CHEMIN NE CONTIENT PAS DE "/"
