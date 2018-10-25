@@ -12,6 +12,12 @@ myDefault_sshOptions="-A -Y -C"
 
 trap 'echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $?' INT
 
+function fileTypes {
+	time for dir
+	do
+		$(which find) /usr -xdev -ls | awk '{print substr($3,1,1)}' | sort -u
+	done
+}
 function lsgroup {
 	for group
 	do
