@@ -4,7 +4,7 @@ test "$debug" '>' 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 #trap 'rc=$?;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
 
 test -r $initDir/.colors && source $initDir/.colors
-which youtube-dl >/dev/null 2>&1 && youtube_dl=$(which youtube-dl)
+which youtube-dl >/dev/null 2>&1 && youtube_dl="LANG=C.UTF-8 $(which youtube-dl)"
 test $os = Linux  && export locate=$(which locate)
 test $os = Darwin && export locate="time -p $(which glocate)"
 
@@ -160,7 +160,7 @@ function ytget {
 }
 function getRestrictedFilenamesFORMAT {
 	trap 'rc=$?;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
-	youtube_dl=$(which youtube-dl)
+	youtube_dl="LANG=C.UTF-8 $(which youtube-dl)"
 	youtubeURLPrefix=https://www.youtube.com/watch?v=
 	dailymotionURLPrefix=https://www.dailymotion.com/video/
 	test $# = 0 && {
@@ -223,7 +223,7 @@ function getRestrictedFilenamesFORMAT {
 }
 function getRestrictedFilenamesBEST {
 	trap 'rc=$?;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
-	youtube_dl=$(which youtube-dl)
+	youtube_dl="LANG=C.UTF-8 $(which youtube-dl)"
 	youtubeURLPrefix=https://www.youtube.com/watch?v=
 	dailymotionURLPrefix=https://www.dailymotion.com/video/
 	format=best[ext=mp4]/best[ext=webm]/best[ext=flv]
@@ -265,7 +265,7 @@ function getRestrictedFilenamesBEST {
 }
 function getRestrictedFilenamesHD {
 	trap 'rc=$?;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
-	youtube_dl=$(which youtube-dl)
+	youtube_dl="LANG=C.UTF-8 $(which youtube-dl)"
 	youtubeURLPrefix=https://www.youtube.com/watch?v=
 	dailymotionURLPrefix=https://www.dailymotion.com/video/
 	format=mp4
@@ -307,7 +307,7 @@ function getRestrictedFilenamesHD {
 }
 function getRestrictedFilenamesSD {
 	trap 'rc=$?;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
-	youtube_dl=$(which youtube-dl)
+	youtube_dl="LANG=C.UTF-8 $(which youtube-dl)"
 	youtubeURLPrefix=https://www.youtube.com/watch?v=
 	dailymotionURLPrefix=https://www.dailymotion.com/video/
 	format="mp4"
@@ -366,7 +366,7 @@ function getRestrictedFilenamesSD {
 }
 function getRestrictedFilenamesSD_PREV {
 	trap 'rc=$?;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
-	youtube_dl=$(which youtube-dl)
+	youtube_dl="LANG=C.UTF-8 $(which youtube-dl)"
 	youtubeURLPrefix=https://www.youtube.com/watch?v=
 	dailymotionURLPrefix=https://www.dailymotion.com/video/
 	format="mp4"
@@ -423,7 +423,7 @@ function getRestrictedFilenamesSD_PREV {
 }
 function getRestrictedFilenamesLD {
 	trap 'rc=$?;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
-	youtube_dl=$(which youtube-dl)
+	youtube_dl="LANG=C.UTF-8 $(which youtube-dl)"
 	youtubeURLPrefix=https://www.youtube.com/watch?v=
 	dailymotionURLPrefix=https://www.dailymotion.com/video/
 	format="mp4"
@@ -560,7 +560,7 @@ function getPlaylistsRestrictedFilenamesSD {
 }
 function updateYoutubeDescription {
 	trap 'rc=$?;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
-	youtube_dl=$(which youtube-dl)
+	youtube_dl="LANG=C.UTF-8 $(which youtube-dl)"
 	youtubeURLPrefix=https://www.youtube.com/watch?v=
 	dailymotionURLPrefix=https://www.dailymotion.com/video/
 	format="mp4"
@@ -612,7 +612,7 @@ function updateYoutubeDescription {
 }
 function reget {
 	trap 'rc=$?;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
-	youtube_dl=$(which youtube-dl)
+	youtube_dl="LANG=C.UTF-8 $(which youtube-dl)"
 	local url=$1
 	local oldFile="$2"
 	local newFileName="$($youtube_dl -f 18 --get-filename $url || $youtube_dl --get-filename $url)"
