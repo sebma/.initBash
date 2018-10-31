@@ -6,7 +6,6 @@ test -r $initDir/.AV_functions && Source $initDir/.AV_functions
 test -r $initDir/.youtube_functions && Source $initDir/.youtube_functions
 test $os = Linux  && export locate=$(which locate) && openCommand=$(which xdg-open)
 test $os = Darwin && export locate="time -p $(which glocate)" && openCommand=$(which open)
-export LANG=C
 
 myDefault_sshOptions="-A -Y -C"
 
