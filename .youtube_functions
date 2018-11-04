@@ -10,6 +10,7 @@ test $os = Darwin && export locate="time -p $(which glocate)"
 
 function ytdlFormats {
 	trap 'rc=$?;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
+	youtube_dl=$(which youtube-dl)
 	for url
 	do
 		echo "=> url = $url"
@@ -20,6 +21,7 @@ function ytdlFormats {
 }
 function YTRenameFromFiles {
 	trap 'rc=$?;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
+	youtube_dl=$(which youtube-dl)
 #	local file="$1"
 	for file
 	do
@@ -39,6 +41,7 @@ function YTRenameFromFiles {
 }
 function updateYTMetadataFromFiles {
 	trap 'rc=$?;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
+	youtube_dl=$(which youtube-dl)
 	for file
 	do
 		echo "=> file = $file"
@@ -53,6 +56,7 @@ function updateYTMetadataFromFiles {
 }
 function YTRenameFromURLs {
 	trap 'rc=$?;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
+	youtube_dl=$(which youtube-dl)
 #	local URL="$1"
 	for URL
 	do
@@ -70,6 +74,7 @@ function YTRenameFromURLs {
 }
 function addYoutubeTDescription {
 	trap 'rc=$?;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
+	youtube_dl=$(which youtube-dl)
 	local file="$1"
 	local url="$2"
 	test $# != 2 && echo "=> Usage: $FUNCNAME file youtube-URL" && return 1
@@ -107,6 +112,7 @@ function sizeOf {
 }
 function ytget {
 	trap 'rc=$?;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
+	youtube_dl=$(which youtube-dl)
 	youtubeURLPrefix=https://www.youtube.com/watch?v=
 	dailymotionURLPrefix=https://www.dailymotion.com/video/
 	format="mp4"
