@@ -294,7 +294,8 @@ function getRestrictedFilenamesHD {
 			fi
 		fi
 
-		format=$(LANG=C.UTF-8 $youtube_dl -F $url | grep -vw only  | egrep '(m4a|mp4|flv) .*([0-9]+x[0-9]+)|(unknown)' | sort -k 2,2 -k 3,3rn | awk '{printf$1"/"}')
+#		format=$(LANG=C.UTF-8 $youtube_dl -F $url | grep -vw only  | egrep '(m4a|mp4|flv) .*([0-9]+x[0-9]+)|(unknown)' | sort -k 2,2 -k 3,3rn | awk '{printf$1"/"}')
+		format="mp4[height<=?720]"
 		echo
 		fileName=$(LANG=C.UTF-8 $youtube_dl -f $format --get-filename "$url" --restrict-filenames)
 		echo "=> fileName = <$fileName>"
