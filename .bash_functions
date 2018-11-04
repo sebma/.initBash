@@ -11,6 +11,27 @@ myDefault_sshOptions="-A -Y -C"
 
 trap 'echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $?' INT
 
+function sizeOfRemoteFile { 
+    trap 'rc=$?;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
+    local size
+    local total="0"
+    local format=18
+    echo $1 | \egrep -q "^https?://" || { 
+        format=$1
+        shift
+    }
+    for url in "$@"
+    do
+        size=$(curl -sI "$url" | awk 'BEGIN{IGNORECASE=1}/Content-?Length:/{print$2/2^20}')
+        total="$total+$size"
+        printf "%s %s Mo\n" $url $size
+    done
+    test $# -gt 1 && { 
+        total=$(echo $total | \bc -l)
+        echo "=> total = $total Mo"
+    }
+    trap - INT
+}
 function getField {
 	test $# -ne 3 && {
 		echo "=> ERROR on Usage: $BASH_FUNC <separator1 separator2 fieldNumber>" >&2
