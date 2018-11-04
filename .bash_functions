@@ -11,6 +11,16 @@ myDefault_sshOptions="-A -Y -C"
 
 trap 'echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $?' INT
 
+function getField {
+	test $# -ne 3 && {
+		echo "=> ERROR on Usage: $BASH_FUNC <separator1 separator2 fieldNumber>" >&2
+		return 1
+	}
+	local sep1="$1"
+	local sep2="$2"
+	declare -i fieldNumber=$3
+	awk -F "${sep1}|$sep2" "{print\$$fieldNumber}"
+}
 function fileTypes {
 	time for dir
 	do
