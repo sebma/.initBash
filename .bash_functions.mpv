@@ -39,7 +39,7 @@ function mpvFHD {
 function mpvFORMAT {
 	\rm nohup.out
 	touch nohup.out
-	nohup mpv --ytdl-format $mpvOptions "$@" &
+	nohup mpv $mpvOptions --ytdl-format "$@" &
 	tail -f nohup.out
 }
 function mpvHD {
