@@ -537,7 +537,7 @@ function getPlaylistsRestrictedFilenamesHD {
 		echo "=> Treating playList : $playList ..." >&2
 		if echo $playList | \egrep -q "youtube|dailymotion|vevo|tonvid"
 		then
-			listOfUrls=$(hxwls 2>/dev/null "$playList" | sort -u | \egrep -w "watch|video" | cut -d'&' -f1 | tr "\n" " ")
+			listOfUrls=$(hxwls 2>/dev/null "$playList" | awk -F '&' '/\<(watch|video)\>/{print$1}' | sort -u | tr "\n" " ")
 		else
 			urlPrefix=$(echo "$playList" | sed -r "s/https?:..//" | cut -d/ -f1)
 			listOfUrls=$(LANG=C.UTF-8 $youtube_dl --ignore-errors --get-id "$playList" | sed "s|^|$urlPrefix|g" | tr "\n" " ")
@@ -554,7 +554,7 @@ function getPlaylistsRestrictedFilenamesSD {
 		echo "=> Treating playList : $playList ..." >&2
 		if echo $playList | \egrep -q "youtube|dailymotion|vevo|tonvid"
 		then
-			listOfUrls=$(hxwls 2>/dev/null "$playList" | sort -u | \egrep -w "watch|video" | cut -d'&' -f1 | tr "\n" " ")
+			listOfUrls=$(hxwls 2>/dev/null "$playList" | awk -F '&' '/\<(watch|video)\>/{print$1}' | sort -u | tr "\n" " ")
 			test $? != 0 && return
 		else
 			urlPrefix=$(echo "$playList" | sed -r "s/https?:..//" | cut -d/ -f1)
