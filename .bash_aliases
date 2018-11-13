@@ -207,10 +207,10 @@ alias terminfo='echo "=> C est un terminal $(tput cols 2>/dev/null)x$(tput lines
 alias testLiveIso="\kvm -m 1G -cdrom"
 alias timestamp='\date +"%Y%m%d_%HH%M"'
 alias today="$(which find) . -type f -ctime -1"
-alias topd10="\du -cxsm */ .??*/ 2>/dev/null | sort -nr | head -10"
-alias topd5="\du  -cxsm */ .??*/ 2>/dev/null | sort -nr | head -5"
-alias topd="\du   -cxsm */ .??*/ 2>/dev/null | sort -nr | head -n"
-alias topdlines='\du -cxsm */ .??*/ 2>/dev/null | sort -nr | head -$(($LINES-2))'
+alias topd10="\du -xhd 1 2>/dev/null | sort -hr | head -$((10+1))"
+alias topd5="\du -xhd 1 2>/dev/null | sort -hr | head -$((5+1))"
+alias topd="\du -xhd 1 2>/dev/null | sort -hr | head -n"
+alias topdlines='\du -xhd 1 2>/dev/null | sort -hr | head -$(($LINES-2))'
 alias traceroute="\traceroute -I"
 alias ulogerrors="egrep -iB4 -A1 'error|erreur|Err: [^0]'"
 alias umask="\umask -S"
