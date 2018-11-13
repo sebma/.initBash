@@ -10,7 +10,7 @@ alias topd10="\du -cxsm */ .??*/ 2>/dev/null | sort -nr | head"
 alias topd5="\du  -cxsm */ .??*/ 2>/dev/null | sort -nr | head -5"
 alias topd5="\du  -cxsm */ .??*/ 2>/dev/null | sort -nr | head -50"
 alias topd="\du   -cxsm */ .??*/ 2>/dev/null | sort -nr | head -n"
-alias topdlines='\du   -cxsm */ .??*/ 2>/dev/null | sort -nr | head -$(($LINES-2))'
+alias topdlines='\du -cxsm */ .??*/ 2>/dev/null | sort -nr | head -$(($LINES-2))'
 alias topf10="$(which find) . -xdev -type f -size +10240k -exec ls -al {} + 2>/dev/null | sort -nrk4 | awk '{size=\$5/2^20;sub(\$5,size\"M\");print}' | head | awk '{total+=\$5;print}END{print\"=> total = \"total\" MiB\"}'"
 alias topf50="$(which find) . -xdev -type f -size +10240k -exec ls -al {} + 2>/dev/null | sort -nrk4 | awk '{size=\$5/2^20;sub(\$5,size\"M\");print}' | head -50 | awk '{total+=\$5;print}END{print\"=> total = \"total\" MiB\"}'"
 alias topf5="$(which find)  . -xdev -type f -size +10240k -exec ls -al {} + 2>/dev/null | sort -nrk4 | awk '{size=\$5/2^20;sub(\$5,size\"M\");print}' | head -5' | awk '{total+=\$5;print}END{print\"=> total = \"total\" MiB\"}'"
