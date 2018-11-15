@@ -11,6 +11,12 @@ myDefault_sshOptions="-A -Y -C"
 
 trap 'echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $?' INT
 
+function wgetParallel {
+	for url
+	do
+		wget -Nb "$url"
+	done
+}
 function sizeOfRemoteFile { 
     trap 'rc=$?;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
     local size
