@@ -21,6 +21,13 @@ audioDecode=( [libspeex]=$(which speexdec 2>/dev/null) [speex]=$(which speexdec 
 alias mp32wavstdout="\mpg123 --wav - "
 alias ogg2wavstdout="\oggdec --output=- "
 
+function frameCount {
+	for video
+	do
+		printf "Video : %s Frames : " "$video"
+		mediainfo --Inform="Video;%FrameCount%" "$video"
+	done
+}
 function mpvFrench {
 #	sid=$($ffprobe "$video" 2>&1 | awk -F ':|\\(' "/Stream .*$language.*Subtitle:/"'{sid=$2;sid+=-1}END{print sid}'); test -z $sid || sid="--sid=$sid"
 	language=fra
