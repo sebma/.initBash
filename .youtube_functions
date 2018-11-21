@@ -89,6 +89,14 @@ function addYoutubeTDescription {
 	chmod -w "$file"
 	trap - INT
 }
+function addArtWork2mp4 {
+	local artworkFile=$1
+	shift
+	for mpeg
+	do
+		AtomicParsley "$mpeg" --artwork "$artworkFile" --overWrite
+	done
+}
 function sizeOf {
 	trap 'rc=$?;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
 	local size
