@@ -24,8 +24,10 @@ alias ogg2wavstdout="\oggdec --output=- "
 function frameCount {
 	for video
 	do
-		printf "Video : %s Frames : " "$video"
+		echo "Video : $video"
+		printf "Frames : "
 		mediainfo --Inform="Video;%FrameCount%" "$video"
+		echo
 	done
 }
 function mpvFrench {
