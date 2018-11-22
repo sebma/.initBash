@@ -3,7 +3,7 @@ set +x
 declare -A | grep -wq colors || source $initDir/.colors
 test "$debug" '>' 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-\which ffmpeg >/dev/null 2>&1 && ffmpeg="$(which ffmpeg)   -hide_banner -probesize 400M -analyzeduration 400M"
+\which ffmpeg  >/dev/null 2>&1 && ffmpeg="$(which ffmpeg)   -hide_banner -probesize 400M -analyzeduration 400M"
 \which ffprobe >/dev/null 2>&1 && ffprobe="$(which ffprobe) -hide_banner -probesize 400M -analyzeduration 400M"
 \which youtube-dl >/dev/null 2>&1 && youtube_dl="LANG=C.UTF-8 $(\which youtube-dl)"
 
@@ -21,6 +21,16 @@ audioDecode=( [libspeex]=$(which speexdec 2>/dev/null) [speex]=$(which speexdec 
 alias mp32wavstdout="\mpg123 --wav - "
 alias ogg2wavstdout="\oggdec --output=- "
 
+function opus2WebM4YouTube {
+	test $# -ne 2 && {
+		echo "=> Usage: $FUNCNAME opusFile pictureFile" >&2
+		return 1
+	}
+
+	local audio=$1
+	local picture=$2
+	time $ffmpeg -i "$audio" -loop 1 -framerate 1 -i "$picture" -shortest -speed max -c:a copy "${audio}.webm"
+}
 function frameCount {
 	for video
 	do
@@ -160,6 +170,42 @@ function audioFormat {
 	local file="$1"
 	local codec=$($ffprobe "$file" -show_entries stream=codec_name -of flat -v 0 | awk -F'"' '{print$(NF-1)}')
 	echo ${audioExtension[$codec]}
+}
+function any2wavSTDOUT {
+for inputFile
+do
+	if [ -s "$inputFile" ]
+	then
+		echo "=> inputFile = <$inputFile>" >&2
+		time $ffmpeg -i "$inputFile" -vn -sn -f wav -
+	else
+		echo "=> ERROR: The file <$inputFile> does not exit or is empty." >&2
+	fi
+done
+}
+function any2wav {
+#	local inputFile="$1"
+for inputFile
+do
+	if [ -s "$inputFile" ]
+	then
+		echo "=> inputFile = <$inputFile>"
+		outputFile=${inputFile/.???/_opus.oga}
+		echo "==> outputFile = $outputFile"
+		if [ ! -s "$outputFile" ]
+		then
+			time $ffmpeg -i "$inputFile" -vn -sn -f wav - > "$outputFile"
+			sync
+			touch -r "$inputFile" "$outputFile"
+			echo "=> outputFile = <$outputFile>"
+		else
+			echo "=> ERROR: The file <$outputFile> already exits." >&2
+			continue
+		fi
+	else
+		echo "=> ERROR: The file <$inputFile> does not exit or is empty." >&2
+	fi
+done
 }
 function any216kHzopus {
 #	local inputFile="$1"
