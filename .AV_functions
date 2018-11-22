@@ -21,6 +21,16 @@ audioDecode=( [libspeex]=$(which speexdec 2>/dev/null) [speex]=$(which speexdec 
 alias mp32wavstdout="\mpg123 --wav - "
 alias ogg2wavstdout="\oggdec --output=- "
 
+function aac2MP44YouTube {
+	test $# -ne 2 && {
+		echo "=> Usage: $FUNCNAME aacFile pictureFile" >&2
+		return 1
+	}
+
+	local audio=$1
+	local picture=$2
+	time $ffmpeg -i "$audio" -loop 1 -framerate 1 -i "$picture" -shortest -speed max -c:a copy -preset medium -crf 18 -pix_fmt yuv420p -movflags +faststart "${audio}.mp4"
+}
 function opus2WebM4YouTube {
 	test $# -ne 2 && {
 		echo "=> Usage: $FUNCNAME opusFile pictureFile" >&2
