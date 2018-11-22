@@ -40,7 +40,7 @@ function sizeOfRemoteFile {
 }
 function getField {
 	test $# -ne 3 && {
-		echo "=> ERROR on Usage: $BASH_FUNC <separator1 separator2 fieldNumber>" >&2
+		echo "=> ERROR on Usage: $BASH_FUNC separator1 separator2 fieldNumber" >&2
 		return 1
 	}
 	local sep1="$1"
@@ -953,7 +953,7 @@ function watchProcess {
 	test $# = 1 && while true
 	do
 		pidList=$(\pgrep -f "$1")
-		test -n "$pidList" && \ps -fp $pidList && echo "=> Showing the parent process :" && \ps h -fp $(\ps -o ppid= $pidList) && break
+		test -n "$pidList" && \ps -fp $pidList && echo "=> Showing the parent process :" && \ps h -fp $(\ps -o ppid= $pidList) | tee -a processSPY.log && break
 		sleep 0.01
 	done
 }
