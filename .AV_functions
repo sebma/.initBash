@@ -21,6 +21,28 @@ audioDecode=( [libspeex]=$(which speexdec 2>/dev/null) [speex]=$(which speexdec 
 alias mp32wavstdout="\mpg123 --wav - "
 alias ogg2wavstdout="\oggdec --output=- "
 
+function audioDelay {
+	test $# -ne 2 && {
+		echo "=> Usage: $FUNCNAME video delay" >&2
+		return 1
+	}
+
+	local video=$1
+	local delay=$2
+	local extension=${video#*.}
+	time $ffmpeg -i "$video" -itsoffset $delay -i "$video" -c copy -map 0:v -map 1:a "${video%.*}-FIXED.$extension" #cf. https://superuser.com/questions/982342/in-ffmpeg-how-to-delay-only-the-audio-of-a-mp4-video-without-converting-the-au/983153#983153
+}
+function videoDelay {
+	test $# -ne 2 && {
+		echo "=> Usage: $FUNCNAME video delay" >&2
+		return 1
+	}
+
+	local video=$1
+	local delay=$2
+	local extension=${video#*.}
+	time $ffmpeg -i "$video" -itsoffset $delay -i "$video" -c copy -map 1:v -map 0:a "${video%.*}-FIXED.$extension" #cf. https://superuser.com/questions/982342/in-ffmpeg-how-to-delay-only-the-audio-of-a-mp4-video-without-converting-the-au/983153#983153
+}
 function aac2MP44YouTube {
 	test $# -ne 2 && {
 		echo "=> Usage: $FUNCNAME aacFile pictureFile" >&2
