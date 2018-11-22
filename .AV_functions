@@ -51,7 +51,7 @@ function aac2MP44YouTube {
 
 	local audio=$1
 	local picture=$2
-	time $ffmpeg -i "$audio" -loop 1 -framerate 4 -i "$picture" -shortest -speed max -c:a copy -preset medium -tune stillimage -crf 18 -pix_fmt yuv420p -movflags +frag_keyframe "${audio%.*}.mp4" #cf. https://trac.ffmpeg.org/wiki/Encode/YouTube
+	time $ffmpeg -i "$audio" -loop 1 -framerate 4 -i "$picture" -shortest -speed max -c:a copy -preset medium -tune stillimage -crf 18 -pix_fmt yuv420p -movflags +faststart "${audio%.*}.mp4" #cf. https://trac.ffmpeg.org/wiki/Encode/YouTube
 }
 function opus2WebM4YouTube {
 	test $# -ne 2 && {
