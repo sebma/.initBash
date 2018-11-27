@@ -11,6 +11,13 @@ myDefault_sshOptions="-A -Y -C"
 
 trap 'echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $?' INT
 
+function aptPrintURIS {
+	aptGet=$(which apt-get)
+	for apt
+	do
+		$aptGet download --print-uris "$apt"
+	done
+}
 function wgetParallel {
 	for url
 	do
