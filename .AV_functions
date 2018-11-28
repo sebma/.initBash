@@ -21,6 +21,17 @@ audioDecode=( [libspeex]=$(which speexdec 2>/dev/null) [speex]=$(which speexdec 
 alias mp32wavstdout="\mpg123 --wav - "
 alias ogg2wavstdout="\oggdec --output=- "
 
+function mp3opus {
+#	file="$1"
+#	shift
+#	time $ffmpeg -i "$file" $@ "${file%.*}.opus"
+	for file
+	do
+		time $ffmpeg -i "$file" "${file%.*}.opus"
+		touch -r "$file" "${file%.*}.opus"
+		sync
+	done
+}
 function audioDelay {
 	test $# -ne 2 && {
 		echo "=> Usage: $FUNCNAME video delay" >&2
@@ -141,7 +152,7 @@ function cropdetect {
 function dvdinfo {
 	cdr_device=/dev/dvd
 	longestTrack=$(\lsdvd -Oy | awk -F ':|,| ' '/longest_track/{print$(NF-1)}')
-	tccat -i $cdr_device -T $longestTrack,-1 2>/dev/null | $(which ffprobe) -hide_banner - 2>&1
+	tccat -i $cdr_device -T $longestTrack,-1 2>/dev/null | $ffprobe - 2>&1
 }
 function mp4Info {
 	for file
@@ -187,7 +198,7 @@ function urlinfo {
 	for url
 	do
 		echo "=> url = $url"
-		$(which ffprobe) -hide_banner $(youtube-dl -gf best "$url")
+		$ffprobe $(youtube-dl -gf best "$url")
 	done
 }
 function urlplayer {
@@ -1105,10 +1116,10 @@ function videoRemux {
 function aac2m4a {
 #	file="$1"
 #	shift
-#	time ffmpeg -hide_banner -i "$file" -acodec copy $aac2m4aOptions $@ "${file/.aac/.m4a}"
+#	time $ffmpeg -i "$file" -acodec copy $aac2m4aOptions $@ "${file/.aac/.m4a}"
 	for file
 	do
-		time ffmpeg -hide_banner -i "$file" -acodec copy $aac2m4aOptions "${file/.aac/.m4a}"
+		time $ffmpeg -i "$file" -acodec copy $aac2m4aOptions "${file/.aac/.m4a}"
 		touch -r "$file" "${file/.aac/.m4a}"
 		sync
 	done
@@ -1116,10 +1127,10 @@ function aac2m4a {
 function m4a2aac {
 #	file="$1"
 #	shift
-#	time ffmpeg -hide_banner -i "$file" -acodec copy $@ "${file/.m4a/.aac}"
+#	time $ffmpeg -i "$file" -acodec copy $@ "${file/.m4a/.aac}"
 	for file
 	do
-		time ffmpeg -hide_banner -i "$file" -acodec copy "${file/.m4a/.aac}"
+		time $ffmpeg -i "$file" -acodec copy "${file/.m4a/.aac}"
 		touch -r "$file" "${file/.m4a/.aac}"
 		sync
 	done
@@ -1127,10 +1138,10 @@ function m4a2aac {
 function mkv2oga {
 #	file="$1"
 #	shift
-#	time ffmpeg -hide_banner -i "$file" -vn -acodec copy $@ "${file/.mkv/.oga}"
+#	time $ffmpeg -i "$file" -vn -acodec copy $@ "${file/.mkv/.oga}"
 	for file
 	do
-		time ffmpeg -hide_banner -i "$file" -vn -acodec copy "${file/.mkv/.oga}"
+		time $ffmpeg -i "$file" -vn -acodec copy "${file/.mkv/.oga}"
 		touch -r "$file" "${file/.mkv/.oga}"
 		sync
 	done
