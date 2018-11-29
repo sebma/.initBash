@@ -21,7 +21,7 @@ audioDecode=( [libspeex]=$(which speexdec 2>/dev/null) [speex]=$(which speexdec 
 alias mp32wavstdout="\mpg123 --wav - "
 alias ogg2wavstdout="\oggdec --output=- "
 
-function mp3opus {
+function mp32opus {
 #	file="$1"
 #	shift
 #	time $ffmpeg -i "$file" $@ "${file%.*}.opus"
@@ -233,11 +233,11 @@ do
 	if [ -s "$inputFile" ]
 	then
 		echo "=> inputFile = <$inputFile>"
-		outputFile=${inputFile/.???/_opus.oga}
+		outputFile="${inputFile%.*}.wav"
 		echo "==> outputFile = $outputFile"
 		if [ ! -s "$outputFile" ]
 		then
-			time $ffmpeg -i "$inputFile" -vn -sn -f wav - > "$outputFile"
+			time $ffmpeg -i "$inputFile" -vn -sn -f wav "$outputFile"
 			sync
 			touch -r "$inputFile" "$outputFile"
 			echo "=> outputFile = <$outputFile>"
@@ -257,7 +257,7 @@ do
 	if [ -s "$inputFile" ]
 	then
 		echo "=> inputFile = <$inputFile>"
-		outputFile=${inputFile/.???/_opus.oga}
+		outputFile="${inputFile%.*}.opus"
 		echo "==> outputFile = $outputFile"
 		if [ ! -s "$outputFile" ]
 		then
@@ -281,7 +281,7 @@ do
 	if [ -s "$inputFile" ]
 	then
 		echo "=> inputFile = <$inputFile>"
-		outputFile=${inputFile/.???/_opus.oga}
+		outputFile="${inputFile%.*}.opus"
 		echo "==> outputFile = $outputFile"
 		if [ ! -s "$outputFile" ]
 		then
@@ -305,7 +305,7 @@ do
 	if [ -s "$inputFile" ]
 	then
 		echo "=> inputFile = <$inputFile>"
-		outputFile=${inputFile/.???/_opus.oga}
+		outputFile="${inputFile%.*}.opus"
 		echo "==> outputFile = $outputFile"
 		if [ ! -s "$outputFile" ]
 		then
@@ -329,7 +329,7 @@ do
 	if [ -s "$inputFile" ]
 	then
 		echo "=> inputFile = <$inputFile>"
-		outputFile=${inputFile/.???/_opus.oga}
+		outputFile="${inputFile%.*}.opus"
 		echo "==> outputFile = $outputFile"
 		if [ ! -s "$outputFile" ]
 		then
@@ -353,7 +353,7 @@ do
 	if [ -s "$inputFile" ]
 	then
 		echo "=> inputFile = <$inputFile>"
-		outputFile=${inputFile/.???/_opus.oga}
+		outputFile="${inputFile%.*}.opus"
 		echo "==> outputFile = $outputFile"
 		if [ ! -s "$outputFile" ]
 		then
@@ -509,7 +509,7 @@ function spx216kHzopus {
 	typeset inputFile="$1"
 	if [ -s "$inputFile" ]
 	then
-		outputFile=${inputFile/.oga/_opus.oga}
+		outputFile="${inputFile%.*}.opus"
 		echo "==> outputFile = $outputFile"
 		if [ ! -s "$outputFile" ]
 		then
@@ -560,7 +560,7 @@ function spx2opus {
 	typeset inputFile="$1"
 	if [ -s "$inputFile" ]
 	then
-		outputFile=${inputFile/.oga/_opus.oga}
+		outputFile="${inputFile%.*}.opus"
 		echo "==> outputFile = $outputFile"
 		if [ ! -s "$outputFile" ]
 		then
@@ -601,32 +601,6 @@ function mp32spx {
 		if [ ! -s "$outputFile" ]
 		then
 			time sox -V "$inputFile" -t wav - channels 1 rate 16k norm | speexenc --title "$title" --comment ALBUM="$album" -V --vbr --quality 10 - "$outputFile"
-			sync
-			touch -r "$inputFile" "$outputFile"
-		else
-			echo "=> ERROR: The file <$outputFile> already exits." >&2
-			return 1
-		fi
-		echo "=> outputFile = <$outputFile>"
-	else
-		echo "=> ERROR: The file <$inputFile> does not exit or is empty." >&2
-	fi
-}
-function mp32opus {
-	typeset inputFile="$1"
-	if [ -s "$inputFile" ]
-	then
-		title=$(mp3info2 -p %t "$inputFile")
-		echo "==> title = <$title>"
-		album=$(mp3info -p %l "$inputFile")
-		echo "==> album = <$album>"
-#		artist=$(mp3info -p %a "$inputFile")
-
-		outputFile=${inputFile/.mp3/_opus.oga}
-		echo "==> outputFile = $outputFile"
-		if [ ! -s "$outputFile" ]
-		then
-			time sox -V "$inputFile" -t wav - channels 1 rate 16k norm | opusenc --title "$title" --album "$album" - "$outputFile"
 			sync
 			touch -r "$inputFile" "$outputFile"
 		else
@@ -748,7 +722,7 @@ function wav2opus {
 #		echo "==> album = <$album>"
 #		   artist=$(mp3info -p %a "$inputFile")
 
-		outputFile=${inputFile/.wav/_opus.oga}
+		outputFile="${inputFile%.*}.opus"
 		echo "==> outputFile = $outputFile"
 		if [ ! -s "$outputFile" ]
 		then
@@ -779,7 +753,7 @@ function _16kwav16k2opus {
 #		echo "==> album = <$album>"
 #		   artist=$(mp3info -p %a "$inputFile")
 
-		outputFile=${inputFile/.wav/_opus.oga}
+		outputFile="${inputFile%.*}.opus"
 		echo "==> outputFile = $outputFile"
 		if [ ! -s "$outputFile" ]
 		then
