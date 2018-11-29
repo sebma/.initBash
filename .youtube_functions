@@ -13,6 +13,7 @@ function continueYoutube_Download {
 	do
 		format=$(echo $videoFile | awk -F__ '{print$(NF-1)}')
 		url=$(echo $videoFile | awk -F"__|[.]" '{print$(NF-2)}')
+		time LANG=C.UTF-8 $youtube_dl -f "$format" -qs "$url" 2>&1 | \grep --color -A1 ^ERROR: && echo && continue
 		cd $(dirname $videoFile)
 		getRestrictedFilenamesFORMAT $format $url
 		cd - >/dev/null
@@ -140,7 +141,7 @@ function ytget {
 		let i++
 		echo "=> Downloading url #$i/$# ..."
 		echo "=> url = $url"
-		LANG=C.UTF-8 $youtube_dl -f "$format" -qs "$url" 2>&1 | grep --color -A1 ^ERROR: && continue
+		LANG=C.UTF-8 $youtube_dl -f "$format" -qs "$url" 2>&1 | \grep --color -A1 ^ERROR: && echo && continue
 		if echo $url | \egrep -vq "www"
 		then
 			if   LANG=C.UTF-8 $youtube_dl -e $youtubeURLPrefix$url	 >/dev/null 2>&1
@@ -200,10 +201,10 @@ function getRestrictedFilenamesFORMAT {
 		let i++
 		echo "=> Downloading url # $i/$# ..."
 		echo "=> url = $url"
-		LANG=C.UTF-8 $youtube_dl -f "$format" -qs "$url" 2>&1 | grep --color --color -A1 ^ERROR: && continue
+		LANG=C.UTF-8 $youtube_dl -f "$format" -qs "$url" 2>&1 | \grep --color -A1 ^ERROR: && echo && continue
 		fileName=$(LANG=C.UTF-8 $youtube_dl -f $format --get-filename "$url" --restrict-filenames || LANG=C.UTF-8 $youtube_dl -f $fallback --get-filename "$url" --restrict-filenames)
 		test -z "$fileName" && continue
-#		LANG=C.UTF-8 $youtube_dl -f "$format" -qs "$url" 2>&1 | \grep --color -A1 ^ERROR: && continue
+#		LANG=C.UTF-8 $youtube_dl -f "$format" -qs "$url" 2>&1 | \grep --color -A1 ^ERROR: && echo && continue
 		if ! echo $url | \egrep -q "https?://"
 		then
 			streamID=$url
@@ -259,7 +260,7 @@ function getRestrictedFilenamesBEST {
 		let i++
 		echo "=> Downloading url # $i/$# ..."
 		echo "=> url = $url"
-		LANG=C.UTF-8 $youtube_dl -f "$format" -qs "$url" 2>&1 | grep --color -A1 ^ERROR: && continue
+		LANG=C.UTF-8 $youtube_dl -f "$format" -qs "$url" 2>&1 | \grep --color -A1 ^ERROR: && echo && continue
 		if echo $url | \egrep -vq "www"
 		then
 			if   LANG=C.UTF-8 $youtube_dl -f "$format" -qs $youtubeURLPrefix$url   2>/dev/null
@@ -301,7 +302,7 @@ function getRestrictedFilenamesHD {
 		let i++
 		echo "=> Downloading url # $i/$# ..."
 		echo "=> url = $url"
-		LANG=C.UTF-8 $youtube_dl -f "$format" -qs "$url" 2>&1 | grep --color -A1 ^ERROR: && continue
+		LANG=C.UTF-8 $youtube_dl -f "$format" -qs "$url" 2>&1 | \grep --color -A1 ^ERROR: && echo && continue
 		if echo $url | \egrep -vq "www"
 		then
 			if   LANG=C.UTF-8 $youtube_dl -f "$format" -qs $youtubeURLPrefix$url   2>/dev/null
@@ -345,7 +346,7 @@ function getRestrictedFilenamesSD {
 		echo "=> Downloading url # $i/$# ..."
 		echo "=> url = $url"
 		echo "=> Testing if $url still exists ..."
-		time LANG=C.UTF-8 $youtube_dl -f "$format" -qs "$url" 2>&1 | grep --color -A1 ^ERROR: && continue
+		time LANG=C.UTF-8 $youtube_dl -f "$format" -qs "$url" 2>&1 | \grep --color -A1 ^ERROR: && echo && continue
 		if ! echo $url | \egrep -wq "www"
 		then
 			fileName=$(basename $( $locate -er "$url.*mp4$" | \egrep -v "\.part|AUDIO" | sort -rt. | head -1) 2>/dev/null)
@@ -403,7 +404,7 @@ function getRestrictedFilenamesSD_PREV {
 		let i++
 		echo "=> Downloading url # $i/$# ..."
 		echo "=> url = $url"
-		LANG=C.UTF-8 $youtube_dl -f "$format" -qs "$url" 2>&1 | grep --color -A1 ^ERROR: && continue
+		LANG=C.UTF-8 $youtube_dl -f "$format" -qs "$url" 2>&1 | \grep --color -A1 ^ERROR: && echo && continue
 		if ! echo $url | \egrep -wq "www"
 		then
 			fileName=$(basename $( $locate -er "$url" | \egrep -v "\.part|AUDIO" | sort -rt. | head -1) 2>/dev/null)
@@ -460,7 +461,7 @@ function getRestrictedFilenamesLD {
 		let i++
 		echo "=> Downloading url # $i/$# ..."
 		echo "=> url = $url"
-		LANG=C.UTF-8 $youtube_dl -f "$format" -qs "$url" 2>&1 | grep --color -A1 ^ERROR: && continue
+		LANG=C.UTF-8 $youtube_dl -f "$format" -qs "$url" 2>&1 | \grep --color -A1 ^ERROR: && echo && continue
 		if echo $url | \egrep -vq "www"
 		then
 			if   LANG=C.UTF-8 $youtube_dl -f "$format" -qs $youtubeURLPrefix$url   2>/dev/null
@@ -596,7 +597,7 @@ function updateYoutubeDescription {
 		let i++
 		echo "=> Downloading url #$i/$# ..."
 		echo "=> url = $url"
-		LANG=C.UTF-8 $youtube_dl -f "$format" -qs $url 2>&1 | grep --color -A1 ^ERROR: && continue
+		LANG=C.UTF-8 $youtube_dl -f "$format" -qs $url 2>&1 | \grep --color -A1 ^ERROR: && echo && continue
 		if echo $url | \egrep -vq "www"
 		then
 			if   LANG=C.UTF-8 $youtube_dl -e $youtubeURLPrefix$url	 >/dev/null 2>&1
