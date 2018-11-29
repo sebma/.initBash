@@ -8,6 +8,14 @@ which youtube-dl >/dev/null 2>&1 && youtube_dl=$(which youtube-dl)
 test $os = Linux  && export locate=$(which locate)
 test $os = Darwin && export locate="time -p $(which glocate)"
 
+function continueYoutube_Download {
+	for videoFile
+	do
+		format=$(echo $videoFile | awk -F__ '{print$(NF-1)}')
+		url=$(echo $videoFile | awk -F"__|[.]" '{print$(NF-2)}')
+		getRestrictedFilenamesFORMAT $format $url
+	done
+}
 function ytdlFormats {
 	trap 'rc=$?;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
 	youtube_dl=$(which youtube-dl)
