@@ -11,6 +11,13 @@ myDefault_sshOptions="-A -Y -C"
 
 trap 'echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $?' INT
 
+function extractURLs {
+	sed="$(which sed) -E"
+	for file
+	do
+		$sed 's/^.*http/http/;s/[<"].*$//;/^\s*$/d;/http/!d' "$file"
+	done | sort -u
+}
 function bible {
 	bible=$(which bible)
 	for verses
