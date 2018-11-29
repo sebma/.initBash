@@ -13,7 +13,9 @@ function continueYoutube_Download {
 	do
 		format=$(echo $videoFile | awk -F__ '{print$(NF-1)}')
 		url=$(echo $videoFile | awk -F"__|[.]" '{print$(NF-2)}')
+		cd $(dirname $videoFile)
 		getRestrictedFilenamesFORMAT $format $url
+		cd - >/dev/null
 	done
 }
 function ytdlFormats {
@@ -346,7 +348,7 @@ function getRestrictedFilenamesSD {
 		time LANG=C.UTF-8 $youtube_dl -f "$format" -qs "$url" 2>&1 | grep --color -A1 ^ERROR: && continue
 		if ! echo $url | \egrep -wq "www"
 		then
-			fileName=$(basename $( $locate -er "$url" | \egrep -v "\.part|AUDIO" | sort -rt. | head -1) 2>/dev/null)
+			fileName=$(basename $( $locate -er "$url.*mp4$" | \egrep -v "\.part|AUDIO" | sort -rt. | head -1) 2>/dev/null)
 			if test -s "$fileName"
 			then
 				echo "${colors[yellowOnBlue]}=> The file <$fileName> is already downloaded, skipping ...$normal" >&2
