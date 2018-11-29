@@ -198,6 +198,7 @@ function getRestrictedFilenamesFORMAT {
 		let i++
 		echo "=> Downloading url # $i/$# ..."
 		echo "=> url = $url"
+		LANG=C.UTF-8 $youtube_dl -f "$format" -qs "$url" 2>&1 | grep --color --color -A1 ^ERROR: && continue
 		fileName=$(LANG=C.UTF-8 $youtube_dl -f $format --get-filename "$url" --restrict-filenames || LANG=C.UTF-8 $youtube_dl -f $fallback --get-filename "$url" --restrict-filenames)
 		test -z "$fileName" && continue
 #		LANG=C.UTF-8 $youtube_dl -f "$format" -qs "$url" 2>&1 | \grep --color -A1 ^ERROR: && continue
