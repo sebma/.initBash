@@ -14,7 +14,7 @@ function continueYoutube_Download {
 		format=$(echo $videoFile | awk -F__ '{print$(NF-1)}')
 		url=$(echo $videoFile | awk -F"__|[.]" '{print$(NF-2)}')
 		time LANG=C.UTF-8 $youtube_dl -f "$format" -qs "$url" 2>&1 | \grep --color -A1 ^ERROR: && echo && continue
-		cd $(dirname $videoFile)
+		cd $(dirname $videoFile) && pwd
 		getRestrictedFilenamesFORMAT $format $url
 		cd - >/dev/null
 	done
