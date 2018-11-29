@@ -13,7 +13,7 @@ trap 'echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $?' INT
 
 function bible {
 	bible=$(which bible)
-	for $verses
+	for verses
 	do
 		$bible $verses | sed -n "2,3p"
 		$bible -f $verses | cut -d: -f2
