@@ -377,7 +377,7 @@ do
 	if [ -s "$inputFile" ]
 	then
 		echo "=> inputFile = <$inputFile>"
-		outputFile=${inputFile/.???/.m4a}
+		outputFile="${inputFile%.*}.m4a"
 		echo "==> outputFile = $outputFile"
 		if [ ! -s "$outputFile" ]
 		then
@@ -401,7 +401,7 @@ do
 	if [ -s "$inputFile" ]
 	then
 		echo "=> inputFile = <$inputFile>"
-		outputFile=${inputFile/.???/_HE-AAC.m4a}
+		outputFile="${inputFile%.*}_HE-AAC.m4a"
 		echo "==> outputFile = $outputFile"
 		if [ ! -s "$outputFile" ]
 		then
@@ -430,7 +430,7 @@ do
 	if [ -s "$inputFile" ]
 	then
 		echo "=> inputFile = <$inputFile>"
-		outputFile=${inputFile/.???/.aac}
+		outputFile="${inputFile%.*}.aac"
 		echo "==> outputFile = $outputFile"
 		if [ ! -s "$outputFile" ]
 		then
@@ -454,7 +454,7 @@ do
 	if [ -s "$inputFile" ]
 	then
 		echo "=> inputFile = <$inputFile>"
-		outputFile=${inputFile/.???/_HE-AAC.aac}
+		outputFile="${inputFile%.*}_HE-AAC.aac"
 		echo "==> outputFile = $outputFile"
 		if [ ! -s "$outputFile" ]
 		then
