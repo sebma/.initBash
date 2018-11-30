@@ -75,6 +75,7 @@ alias dos2unix='\perl -pi -e "s/\r//g"'
 alias doublons='\fdupes -rnASd'
 alias driveinfo='\cdrecord -prcap'
 alias du="LANG=C \du -h"
+alias echo="set +o histexpand;echo" # Turn off history expansion to be able easily use the exclamation mark in strings i.e https://stackoverflow.com/a/22130745/5649639
 alias ejectcd='\eject $CDR_DEVICE'
 alias enman="\man -L en"
 alias erasecd='\cdrecord -v speed=12 blank=fast gracetime=10 -eject'
