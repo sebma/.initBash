@@ -4,9 +4,9 @@ test "$debug" '>' 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 #trap 'rc=$?;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
 
 test -r $initDir/.colors && source $initDir/.colors
-which youtube-dl >/dev/null 2>&1 && youtube_dl=$(which youtube-dl)
-test $os = Linux  && export locate=$(which locate)
-test $os = Darwin && export locate="time -p $(which glocate)"
+which youtube-dl >/dev/null 2>&1 && youtube_dl="command youtube-dl"
+test $os = Linux  && export locate="command locate"
+test $os = Darwin && export locate="time -p command glocate"
 
 function continueYoutube_Download {
 	for videoFile
@@ -176,7 +176,7 @@ function ytget {
 		mp4tags -m "$url" "$fileName"
 		chmod -w "$fileName"
 		echo
-		$(which ffprobe) -hide_banner "$fileName"
+		command ffprobe -hide_banner "$fileName"
 		echo
 	done
 	\rm -v *.description
@@ -241,7 +241,7 @@ function getRestrictedFilenamesFORMAT {
 			echo
 			continue
 		fi
-		LANG=C.UTF-8 $youtube_dl -f $format "$url" --restrict-filenames && mp4tags -m "$url" "$fileName" && chmod -w "$fileName" && echo && $(which ffprobe) -hide_banner "$fileName"
+		LANG=C.UTF-8 $youtube_dl -f $format "$url" --restrict-filenames && mp4tags -m "$url" "$fileName" && chmod -w "$fileName" && echo && command ffprobe -hide_banner "$fileName"
 		echo
 	done
 	sync
@@ -283,7 +283,7 @@ function getRestrictedFilenamesBEST {
 			echo
 			continue
 		fi
-		LANG=C.UTF-8 $youtube_dl -f $format "$url" --restrict-filenames && mp4tags -m "$url" "$fileName" && chmod -w "$fileName" && echo && $(which ffprobe) -hide_banner "$fileName"
+		LANG=C.UTF-8 $youtube_dl -f $format "$url" --restrict-filenames && mp4tags -m "$url" "$fileName" && chmod -w "$fileName" && echo && command ffprobe -hide_banner "$fileName"
 		echo
 	done
 	sync
@@ -326,7 +326,7 @@ function getRestrictedFilenamesHD {
 			echo
 			continue
 		fi
-		LANG=C.UTF-8 $youtube_dl -f $format "$url" --restrict-filenames && mp4tags -m "$url" "$fileName" && chmod -w "$fileName" && echo && $(which ffprobe) -hide_banner "$fileName"
+		LANG=C.UTF-8 $youtube_dl -f $format "$url" --restrict-filenames && mp4tags -m "$url" "$fileName" && chmod -w "$fileName" && echo && command ffprobe -hide_banner "$fileName"
 		echo
 	done
 	sync
@@ -385,7 +385,7 @@ function getRestrictedFilenamesSD {
 			echo
 			continue
 		fi
-		LANG=C.UTF-8 $youtube_dl -f $format "$url" --restrict-filenames && mp4tags -m "$url" "$fileName" && chmod -w "$fileName" && echo && $(which ffprobe) -hide_banner "$fileName"
+		LANG=C.UTF-8 $youtube_dl -f $format "$url" --restrict-filenames && mp4tags -m "$url" "$fileName" && chmod -w "$fileName" && echo && command ffprobe -hide_banner "$fileName"
 		echo
 	done
 	sync
@@ -442,7 +442,7 @@ function getRestrictedFilenamesSD_PREV {
 			echo
 			continue
 		fi
-		LANG=C.UTF-8 $youtube_dl -f $format "$url" --restrict-filenames && mp4tags -m "$url" "$fileName" && chmod -w "$fileName" && echo && $(which ffprobe) -hide_banner "$fileName"
+		LANG=C.UTF-8 $youtube_dl -f $format "$url" --restrict-filenames && mp4tags -m "$url" "$fileName" && chmod -w "$fileName" && echo && command ffprobe -hide_banner "$fileName"
 		echo
 	done
 	sync
@@ -484,7 +484,7 @@ function getRestrictedFilenamesLD {
 			echo
 			continue
 		fi
-		LANG=C.UTF-8 $youtube_dl -f $format "$url" --restrict-filenames && mp4tags -m "$url" "$fileName" && chmod -w "$fileName" && echo && $(which ffprobe) -hide_banner "$fileName"
+		LANG=C.UTF-8 $youtube_dl -f $format "$url" --restrict-filenames && mp4tags -m "$url" "$fileName" && chmod -w "$fileName" && echo && command ffprobe -hide_banner "$fileName"
 		echo
 	done
 	sync
@@ -630,7 +630,7 @@ function updateYoutubeDescription {
 		mp4tags -c "$(<$descFileName)" "$fileName" && \rm $descFileName	
 		mp4tags -m "$url" "$fileName" && chmod -w "$fileName" && echo "=> Done."
 		echo
-		$(which ffprobe) -hide_banner "$fileName"
+		command ffprobe -hide_banner "$fileName"
 		echo
 		test -f $descFileName && \rm -v $descFileName
 	done
