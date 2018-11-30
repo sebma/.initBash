@@ -75,7 +75,6 @@ alias dos2unix='\perl -pi -e "s/\r//g"'
 alias doublons='\fdupes -rnASd'
 alias driveinfo='\cdrecord -prcap'
 alias du="LANG=C \du -h"
-alias echo="set +o histexpand;echo" # Turn off history expansion to be able easily use the exclamation mark in strings i.e https://stackoverflow.com/a/22130745/5649639
 alias ejectcd='\eject $CDR_DEVICE'
 alias enman="\man -L en"
 alias erasecd='\cdrecord -v speed=12 blank=fast gracetime=10 -eject'
@@ -272,4 +271,4 @@ which lsb_release >/dev/null 2>&1 && alias lsb_release="\lsb_release -s"
 which vim >/dev/null && alias vim="LANG=$(locale -a 2>/dev/null | egrep -i '(fr_fr|en_us|en_uk).*utf' | sort -r | head -1) \vim" && alias vi=vim
 
 set +x
-test "$debug" '>' 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
+test "$debug" '>' 0 && \echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
