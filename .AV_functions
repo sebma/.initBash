@@ -129,7 +129,7 @@ function mpvSpanish {
 }
 
 function mpvOld {
-	which mpv $(\youtube-dl -g "$@")
+	which mpv $($youtube_dl -g "$@")
 }
 function to16_9 {
 	for video
@@ -198,11 +198,11 @@ function urlinfo {
 	for url
 	do
 		echo "=> url = $url"
-		$ffprobe $(youtube-dl -gf best "$url")
+		$ffprobe $($youtube_dl -gf best -- "$url")
 	done
 }
 function urlplayer {
-	mpv $(youtube-dl -gf best "$1")
+	mpv $($youtube_dl -gf best "$1")
 }
 function audioCodec {
 	local file="$1"
@@ -906,7 +906,7 @@ function sizeofStream {
 	}
 	for url in "$@"
 	do
-		size=$(curl -sI "$(youtube-dl -gf best "$url")" | awk 'BEGIN{IGNORECASE=1}/Content-Length:/{print$2/2^20}')
+		size=$(curl -sI "$($youtube_dl -gf best -- "$url")" | awk 'BEGIN{IGNORECASE=1}/Content-Length:/{print$2/2^20}')
 		total="$total+$size"
 		printf "%s %s Mo\n" $url $size
 	done
@@ -972,7 +972,7 @@ function videoGet {
 function avprobe {
 	for arg
 	do
-		echo "$arg" | egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $avprobe $avprobeOptions "$($youtube_dl -gf best "$arg")" || command avprobe $avprobeOptions -probesize 400M -analyzeduration 400M "$arg"
+		echo "$arg" | egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $avprobe $avprobeOptions "$($youtube_dl -gf best -- "$arg")" || command avprobe $avprobeOptions -probesize 400M -analyzeduration 400M "$arg"
 	done 2>&1 | cut -c 1-$COLUMNS
 }
 function videoInfo {
@@ -987,7 +987,7 @@ function videoInfo {
 				#remote stream
 				if curl -s "$urlOrFile" | file -bi - | \grep -q "^text/"
 				then
-					echo "=> This stream needs first to be resolved by $youtube_dl ..."
+					echo "=> This stream needs first to be resolved by youtube-dl ..."
 					possibleFormats=best[ext=mp4]/best[ext=webm]/best[ext=flv]/18/webm/sd/http-480
 					infos="$($youtube_dl -gef $possibleFormats "$urlOrFile")"
 					test -z "$infos" && continue
@@ -1018,7 +1018,7 @@ function ffprobe {
 	which ffprobe >/dev/null && {
 		for arg
 		do
-			echo "$arg" | egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $ffprobe $ffprobeOptions "$($youtube_dl -gf best "$arg")" || $ffprobe $ffprobeOptions "$arg"
+			echo "$arg" | egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $ffprobe $ffprobeOptions "$($youtube_dl -gf best -- "$arg")" || $ffprobe $ffprobeOptions "$arg"
 		done 2>&1 | cut -c 1-$COLUMNS
 	}
 }
@@ -1026,28 +1026,28 @@ function ffprobeFlat {
 	local ffprobeOptions="-v 0 -show_format -show_streams -of flat"
 	for arg
 	do
-		echo "$arg" | egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $ffprobe $ffprobeOptions "$($youtube_dl -gf best "$arg")" || $ffprobe $ffprobeOptions "$arg"
+		echo "$arg" | egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $ffprobe $ffprobeOptions "$($youtube_dl -gf best -- "$arg")" || $ffprobe $ffprobeOptions "$arg"
 	done 2>&1 | cut -c 1-$COLUMNS
 }
 function ffprobeIni {
 	local ffprobeOptions="-v 0 -show_format -show_streams -of ini"
 	for arg
 	do
-		echo "$arg" | egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $ffprobe $ffprobeOptions "$($youtube_dl -gf best "$arg")" || $ffprobe $ffprobeOptions "$arg"
+		echo "$arg" | egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $ffprobe $ffprobeOptions "$($youtube_dl -gf best -- "$arg")" || $ffprobe $ffprobeOptions "$arg"
 	done 2>&1 | cut -c 1-$COLUMNS
 }
 function ffprobeJSON {
 	local ffprobeOptions="-v 0 -show_format -show_streams -of json"
 	for arg
 	do
-		echo "$arg" | egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $ffprobe $ffprobeOptions "$($youtube_dl -gf best "$arg")" || $ffprobe $ffprobeOptions "$arg"
+		echo "$arg" | egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $ffprobe $ffprobeOptions "$($youtube_dl -gf best -- "$arg")" || $ffprobe $ffprobeOptions "$arg"
 	done 2>&1 | cut -c 1-$COLUMNS
 }
 function ffprobeXML {
 	local ffprobeOptions="-v 0 -show_format -show_streams -of xml"
 	for arg
 	do
-		echo "$arg" | egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $ffprobe $ffprobeOptions "$($youtube_dl -gf best "$arg")" || $ffprobe $ffprobeOptions "$arg"
+		echo "$arg" | egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $ffprobe $ffprobeOptions "$($youtube_dl -gf best -- "$arg")" || $ffprobe $ffprobeOptions "$arg"
 	done 2>&1 | cut -c 1-$COLUMNS
 }
 function mp4Repair {
@@ -1138,7 +1138,7 @@ function mplayer {
 	fi
 }
 function mpvalt {
-	test $1 && command mpv --no-ytdl $(youtube-dl -gf best $@ | uniq)
+	test $1 && command mpv --no-ytdl $($youtube_dl -gf best $@ | uniq)
 }
 
 set +x
