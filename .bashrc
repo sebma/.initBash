@@ -19,4 +19,4 @@ fi
 tty -s && test -f $initDir/.bashrc.seb && Source $initDir/.bashrc.seb #Pour que "scp/rsync" fonctionnent meme si il y a des commandes "echo"
 
 set +x
-test "$debug" '>' 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
+test "$debug" '>' 0 && \echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
