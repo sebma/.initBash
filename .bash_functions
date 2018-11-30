@@ -4,22 +4,31 @@ test "$debug" '>' 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 
 test -r $initDir/.AV_functions && Source $initDir/.AV_functions
 test -r $initDir/.youtube_functions && Source $initDir/.youtube_functions
-test $os = Linux  && export locate=$(which locate) && openCommand=$(which xdg-open)
-test $os = Darwin && export locate="time -p $(which glocate)" && openCommand=$(which open)
+test $os = Linux  && export locate="command locate" && openCommand="command xdg-open"
+test $os = Darwin && export locate="time -p \"command glocate\"" && openCommand="command open"
 
 myDefault_sshOptions="-A -Y -C"
 
 trap 'echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $?' INT
 
+function Echo {
+	local rc=$?
+	set +o histexpand # Turn off history expansion to be able easily use the exclamation mark in strings i.e https://stackoverflow.com/a/22130745/5649639
+	command echo "$@"
+	set -o histexpand
+	return $rc
+}
 function extractURLs {
-	sed="$(which sed) -E"
+	local sed="command sed -E"
 	for file
 	do
+		xmllint --format "$file" > "$file".indented
+		\mv "$file".indented "$file"
 		$sed 's/^.*http/http/;s/[<"].*$//;/^\s*$/d;/http/!d' "$file"
 	done | sort -u
 }
 function bible {
-	bible=$(which bible)
+	local bible="command bible"
 	for verses
 	do
 		$bible $verses | sed -n "2,3p"
@@ -27,7 +36,7 @@ function bible {
 	done
 }
 function aptPrintURIS {
-	aptGet=$(which apt-get)
+	local aptGet="command apt-get"
 	for apt
 	do
 		$aptGet download --print-uris "$apt"
@@ -36,7 +45,7 @@ function aptPrintURIS {
 function wgetParallel {
 	for url
 	do
-		wget -Nb "$url"
+		\wget -Nb "$url"
 	done
 }
 function sizeOfRemoteFile { 
@@ -71,9 +80,10 @@ function getField {
 	awk -F "${sep1}|$sep2" "{print\$$fieldNumber}"
 }
 function fileTypes {
+	local find="command find"
 	time for dir
 	do
-		$(which find) $dir -xdev -ls | awk '{print substr($3,1,1)}' | sort -u
+		$find $dir -xdev -ls | awk '{print substr($3,1,1)}' | sort -u
 	done
 }
 function lsgroup {
@@ -101,7 +111,7 @@ function testURLsFromFILE {
 	done
 }
 function sortInPlace {
-	local sort=$(which sort)
+	local sort="command sort"
 	for file
 	do
 		$sort -uo "$file" "$file"
@@ -209,8 +219,8 @@ function rtt {
 	local NBPackets=10
 	local interval=0.2
 	local deadline
-	local ping=$(which ping)
-	awk=$(which awk)
+	local ping="command ping"
+	local awk="command awk"
 	[ $os = Darwin ] && deadline="-t 5"
 	[ $os = Linux ]  && deadline="-w 5"
 	$ping -c $NBPackets $deadline -i $interval $remote | $awk -F/ '//{print}/min\/avg\/max\/\w+dev/{avg=$5}END{print "=> avg = "avg" ms"}'
@@ -295,28 +305,30 @@ function pingMyLAN {
 }
 function Nohup {
 	local firstArg=$1
+	local nohup="command nohup"
 	if [ $(type -t $firstArg) = function ] 
 	then
-		shift && $(which nohup) $(which bash) -c "$(declare -f $firstArg);$firstArg $*"
+		shift && $nohup bash -c "$(declare -f $firstArg);$firstArg $*"
 	elif [ $(type -t $firstArg) = alias ]
 	then
 		alias nohup='\nohup '
 		eval "nohup $@"
 	else
-		$(which nohup) "$@"
+		$nohup "$@"
 	fi
 }
 function Sudo {
 	local firstArg=$1
+	local sudo="command sudo"
 	if [ $(type -t $firstArg) = function ] 
 	then
-		shift && $(which sudo) $(which bash) -c "$(declare -f $firstArg);$firstArg $*"
+		shift && $sudo bash -c "$(declare -f $firstArg);$firstArg $*"
 	elif [ $(type -t $firstArg) = alias ]
 	then
 		alias sudo='\sudo '
 		eval "sudo $@"
 	else
-		$(which sudo) "$@"
+		$sudo "$@"
 	fi
 }
 function lswifi {
@@ -336,12 +348,13 @@ function wlanmac {
 	test "$wlanIF" && ip link show $wlanIF | awk '/link\/ether /{print$2}'
 }
 function apt_cache {
+	local apt_cache="command apt-cache"
 	firstArg=$1
 	if [ "$firstArg" = search ]
 	then
-		$(which apt-cache) $@ | sort -u
+		$apt_cache $@ | sort -u
 	else
-		$(which apt-cache) $@
+		$apt_cache $@
 	fi
 }
 function pem2cer {
@@ -367,8 +380,8 @@ function renameFileInsideZIP {
 	zipFile=$lastArg
 	oldName=$1
 	newName=$2
-#	$(which printf) "@ $oldName\n@=$newName\n" | $(which zipnote) -w $zipFile #necessite zip > v3.1beta
-	$(which 7za) $zipFile $oldName $newName
+#	command printf "@ $oldName\n@=$newName\n" | command zipnote -w $zipFile #necessite zip > v3.1beta
+	command 7za $zipFile $oldName $newName
 }
 function odf2 {
 	formats="pdf|doc|docx|odt|odp|ods|ppt|pptx|xls|xlsx"
@@ -388,8 +401,8 @@ function odf2 {
 	do
 		extension=${file/*./}
 		ls $file >/dev/null && {
-			echo "$(which loffice) --headless --convert-to $format $file ..."
-			$(which loffice) --headless --convert-to $format $file
+			echo "loffice --headless --convert-to $format $file ..."
+			command loffice --headless --convert-to $format $file
 			\ls -l ${file/$extension/$format}
 		}
 	done
@@ -397,28 +410,28 @@ function odf2 {
 function make {
 	if [ -s Makefile ] || [ -s makefile ]
 	then
-		CFLAGS=-g $(which make) $@
+		CFLAGS="-g $(which make) $@"
 	else
 		\mkdir ../bin 2>/dev/null
 		if which gcc >/dev/null 2>&1
 		then
 			for file
 			do
-				echo $(which gcc) -ggdb $file.c -o ../bin/$file
-				$(which gcc) -ggdb $file.c -o ../bin/$file
+				echo gcc -ggdb $file.c -o ../bin/$file
+				command gcc -ggdb $file.c -o ../bin/$file
 			done
 		else
 			for file
 			do
-				echo $(which cc) -g $file.c -o ../bin/$file
-				$(which cc) -g $file.c -o ../bin/$file
+				echo cc -g $file.c -o ../bin/$file
+				command cc -g $file.c -o ../bin/$file
 			done
 		fi
 	fi
 }
 function gitUpdateAllLocalRepos {
 	local dir=""
-	$(which gfind) ~ -type d -name .git | while read dir
+	command gfind ~ -type d -name .git | while read dir
 	do
 		cd $dir/..
 		echo "=> Updating <$dir> local repo. ..." >&2
@@ -429,17 +442,17 @@ function gitUpdateAllLocalRepos {
 	unset dir
 }
 function env {
-	$(which env) $@ | sort
+	command env $@ | sort
 }
 function os {
 	case $os in
-	Darwin) sw_vers >/dev/null 2>&1 && echo $(sw_vers -productName) $(sw_vers -productVersion) || system_profiler SPSoftwareDataType || defaults read /System/Library/CoreServices/SystemVersion ProductVersion ;;
-	Linux) \lsb_release -scd | tr "\n" " ";echo 2>/dev/null || awk -F'[="]' '/PRETTY_NAME/{printf$(NF-1)" "}/VERSION_CODENAME/{codeName=$2}END{if(codeName)print codeName;else print""}' /etc/os-release || sed -n 's/\\[nl]//g;1p' /etc/issue ;;
-	*) ;;
+		Darwin) sw_vers >/dev/null 2>&1 && echo $(sw_vers -productName) $(sw_vers -productVersion) || system_profiler SPSoftwareDataType || defaults read /System/Library/CoreServices/SystemVersion ProductVersion ;;
+		Linux) \lsb_release -scd | tr "\n" " ";echo 2>/dev/null || awk -F'[="]' '/PRETTY_NAME/{printf$(NF-1)" "}/VERSION_CODENAME/{codeName=$2}END{if(codeName)print codeName;else print""}' /etc/os-release || sed -n 's/\\[nl]//g;1p' /etc/issue ;;
+		*) ;;
 	esac
 }
 function findLoops {
-	[ $os = Darwin ] && find=gfind || find=$(which find)
+	[ $os = Darwin ] && find=gfind || find="command find"
 	time $find $@ -xdev -follow 2>&1 >/dev/null | egrep -w "loop|denied"
 }
 function dirName {
@@ -473,7 +486,7 @@ function nbPages {
 function lprPageRange {
 	pageRange=$1
 	shift
-	test $pageRange && echo $pageRange | grep -ivq "[A-Z]" && $(which lpr) -o page-ranges=$pageRange $@ && lpq
+	test $pageRange && echo $pageRange | grep -ivq "[A-Z]" && command lpr -o page-ranges=$pageRange $@ && lpq
 }
 function lprColorPageRange {
 	test -n "$colorPrinter" && test $colorPrinter && lprPageRange $@ -P $colorPrinter
@@ -484,28 +497,30 @@ function getFiles {
 		return 1
 	}
 
-	lastArg="$(eval echo \${$#})"
-	url=$lastArg
+	local lastArg="$(eval echo \${$#})"
+	local url=$lastArg
 	echo $url | \egrep "^(https?|ftp)://" || {
 		echo "=> ERROR: This protocol is not supported by GNU Wget." >&2
 		return 2
 	}
-	baseUrl=$(echo $url | awk -F/ '{print$3}')
-#	$(which wget) --no-parent --continue --timestamping --random-wait --user-agent=Mozilla --content-disposition --convert-links --page-requisites --recursive --reject index.html --accept "$@"
+	local baseUrl=$(echo $url | awk -F/ '{print$3}')
+	local wget="command wget"
+#	$wget --no-parent --continue --timestamping --random-wait --user-agent=Mozilla --content-disposition --convert-links --page-requisites --recursive --reject index.html --accept "$@"
 	set -x
-	$(which wget) --no-parent --continue --timestamping --random-wait --user-agent=Mozilla --content-disposition --convert-links --page-requisites --recursive --accept "$@"
+	$wget --no-parent --continue --timestamping --random-wait --user-agent=Mozilla --content-disposition --convert-links --page-requisites --recursive --accept "$@"
 	set +x
 }
 function ssh {
 	local reachable=""
 	local timeout=5
+	local ssh="command ssh"
 	type ssh >/dev/null || return
 	local remoteSSHServer=$(echo $@ | awk '{sub("^(-[[:alnum:]_]+ ?)+","");sub("[[:alnum:]_]+@","");print$1}')
 	if test -n "$remoteSSHServer"
 	then
-		time $(which ssh) $myDefault_sshOptions -o ConnectTimeout=$timeout $@
+		time $ssh $myDefault_sshOptions -o ConnectTimeout=$timeout $@
 	else
-		time $(which ssh) -o ConnectTimeout=$timeout $@
+		time $ssh -o ConnectTimeout=$timeout $@
 	fi
 }
 function sshStartLocalForward {
@@ -516,9 +531,9 @@ function sshStartLocalForward {
 		then
 			if ! ssh-add -l | \grep agent
 			then
-				if ! $(which autossh) -M 0 -Nf $tunnelDef 2>/dev/null
+				if ! command autossh -M 0 -Nf $tunnelDef 2>/dev/null
 				then
-					$(which ssh) -Nf $tunnelDef
+					command ssh -Nf $tunnelDef
 				fi
 			else
 				rc=$?
@@ -555,10 +570,10 @@ function createSshTunnel {
 
 	if autossh -V >/dev/null 2>&1
 	then
-#		$(which autossh) -M 0 -f -T -N cli-myJupyter-Tunnel
-		$(which autossh) -M 0 -o "ServerAliveInterval 30" -o "ServerAliveCountMax 3" -f -N -L $localPort:$remoteServer:$remotePort $sshServer
+#		command autossh -M 0 -f -T -N cli-myJupyter-Tunnel
+		command autossh -M 0 -o "ServerAliveInterval 30" -o "ServerAliveCountMax 3" -f -N -L $localPort:$remoteServer:$remotePort $sshServer
 	else
-		$(which ssh) -f -N -L $localPort:$remoteServer:$remotePort $sshServer
+		command ssh -f -N -L $localPort:$remoteServer:$remotePort $sshServer
 	fi
 
 	pgrep ssh.*-L
@@ -566,7 +581,7 @@ function createSshTunnel {
 function aria2c {
 	for url
 	do
-		$(which aria2c) "$url"
+		command aria2c "$url"
 	done
 }
 function systemType {
@@ -584,7 +599,7 @@ function installDate {
 		Debian|Ubuntu) \ls -lact --full-time /etc | awk 'END {print $6,substr($7,1,8)}' ;;
 		Mer|Redhat) \rpm -q basesystem --qf '%{installtime:date}\n' ;;
 		darwin15*) \ls -lactL -T /etc | awk 'END {print $6,$7,$8}' ;;
-	*)	;;
+		*)	;;
 	esac
 }
 function whereisIP {
@@ -599,23 +614,23 @@ function pip {
 	then
 		if groups | egrep -wq "sudo|admin"
 		then
-			\sudo -H $(which $caller) $@
+			\sudo -H command $caller $@
 		else
-			$(which $caller) $@ --user
+			command $caller $@ --user
 		fi
 	elif [ "$firstArg" = uninstall ]
 	then
 		if groups | egrep -wq "sudo|admin"
 		then
-			\sudo -H $(which $caller) $@ 
+			\sudo -H command $caller $@ 
 		else
-			$(which $caller) $@
+			command $caller $@
 		fi
 	elif [ "$firstArg" = search ]
 	then
-		$(which $caller) $@ | sort
+		command $caller $@ | sort
 	else
-		$(which $caller) $@
+		command $caller $@
 	fi
 }
 function pip2 {
@@ -809,7 +824,7 @@ function tcpConnetTest {
 #		local remoteSSHServer=$(echo $@ | awk '{sub("^(-[[:alnum:]_]+ ?)+","");sub("[[:alnum:]_]+@","");print$1}')
 		local remoteSSHServer=$1
 		local remotePort=$2
-		time $(which bash) -c ": < /dev/tcp/$remoteSSHServer/$remotePort"
+		time command bash -c ": < /dev/tcp/$remoteSSHServer/$remotePort"
 	fi
 }
 function addKeys {
@@ -821,8 +836,8 @@ function addKeys {
 function downgradePackages {
 	for package
 	do
-		previousVersion=$($(which apt-cache) show $package | grep Version | sed -n '2p' | cut -d' ' -f2)
-		sudo $(which apt) install -V $package=$previousVersion
+		previousVersion=$(command apt-cache show $package | grep Version | sed -n '2p' | cut -d' ' -f2)
+		sudo command apt install -V $package=$previousVersion
 	done
 }
 function ldapUserFind {
@@ -906,13 +921,13 @@ function whatPackageContainsExecutable {
 			rpm) findPackage="rpm -qf"; searchPackage="yum whatprovides";;
 			deb) findPackage="dpkg -S"; searchPackage="apt-file search";;
 		esac
-		if $findPackage $(which $executable | sed "s|/||");then
+		if $findPackage command $executable | sed "s|/||";then
 			:
 		else
 			if which $executable >/dev/null 2>&1
 			then
-				echo "=> Using : $searchPackage $(which $executable) ..." >&2
-				$searchPackage $(which $executable)
+				echo "=> Using : $searchPackage command $executable ..." >&2
+				$searchPackage command $executable
 			else
 				echo "=> Using : $searchPackage bin/$executable ..." >&2
 				$searchPackage bin/$executable
@@ -963,7 +978,7 @@ function updateRepositoryKeys {
 }
 function reinstallOrignialPackages {
 	local packagesList=$@
-	test $# != 0 && sudo $(which apt) install -V $(printf "%s/$(lsb_release -sc) " $packagesList)
+	test $# != 0 && sudo command apt install -V $(printf "%s/$(lsb_release -sc) " $packagesList)
 }
 function timeprocess {
 	local process=$1
@@ -983,8 +998,8 @@ function processSPY {
 	watchProcess $@
 }
 function website {
-	$(which apt-cache) show $@ | egrep "Homepage:|Package:" | sort -u
-#	open $($(which apt-cache) show $@ | egrep "Homepage:" | sort -u)
+	command apt-cache show $@ | egrep "Homepage:|Package:" | sort -u
+#	open $(command apt-cache show $@ | egrep "Homepage:" | sort -u)
 }
 function cleanFirefoxLock {
 	case $(lsb_release -si) in
@@ -1005,39 +1020,39 @@ function dfc {
 	if echo "$firstArg" | \egrep -q "^\-|^$"
 	then
 		args=$@
-		$(which dfc) -TW $args
+		command dfc -TW $args
 	else
 		shift
 		args=$@
 		test "$args" && argsRE="|"$(echo $@ | tr -s / | tr " " "|" | sed "s,/$,,")
 		firstArg="$(echo "$firstArg" | tr -s /)"
 		test "$firstArg" != / && firstArg="$(echo "$firstArg" | sed "s,/$,,")"
-		$(which dfc) -TWfc always | \egrep "FILESYSTEM|$firstArg$argsRE"
+		command dfc -TWfc always | \egrep "FILESYSTEM|$firstArg$argsRE"
 	fi
 }
 function aptGet {
 	args=$@
 	firstArg=$1
 	case $firstArg in
-	install|purge) sudo $(which apt) $args -V;;
-	download) $(which apt-get) $args --print-uris && $(which apt-get) $args;;
-	*) $(which apt-get) $args;;
+	install|purge) sudo command apt $args -V;;
+	download) command apt-get $args --print-uris && $(which apt-get) $args;;
+	*) command apt-get $args;;
 	esac
 }
 function apt {
 	args=$@
 	firstArg=$1
 	case $firstArg in
-	install|purge) sudo $(which apt) $args -V;;
-	*) $(which apt) $args;;
+	install|purge) sudo command apt $args -V;;
+	*) command apt $args;;
 	esac
 }
 function aptitude {
 	args=$@
 	firstArg=$1
 	case $firstArg in
-	install|reinstall|purge) sudo $(which aptitude) $args -V;;
-	*) $(which aptitude) $args;;
+	install|reinstall|purge) sudo command aptitude $args -V;;
+	*) command aptitude $args;;
 	esac
 }
 function httpserver {
@@ -1050,7 +1065,7 @@ function httpserver {
 		return 1
 	}
 
-	$(which ps) -fu $USER | grep -v grep | grep -q SimpleHTTPServer && echo "=> SimpleHTTPServer is already running on http://$fqdn:$(\ps -fu $USER | grep -v awk | awk '/SimpleHTTPServer/{print$NF}')/" || {
+	command ps -fu $USER | grep -v grep | grep -q SimpleHTTPServer && echo "=> SimpleHTTPServer is already running on http://$fqdn:$(\ps -fu $USER | grep -v awk | awk '/SimpleHTTPServer/{print$NF}')/" || {
 		logfilePrefix=SimpleHTTPServer_$(date +%Y%m%d)
 		nohup python -m SimpleHTTPServer $port >~/log/${logfilePrefix}.log 2>&1 &
 		test $? = 0 && {
@@ -1182,7 +1197,7 @@ function resizePics_4096 {
 	done
 }
 function find {
-	[ $os = Darwin ] && find=gfind || find=$(which find)
+	[ $os = Darwin ] && find=gfind || find="command find"
 	dir=$1
 	if echo $dir | \grep -q "^-"
 	then
@@ -1318,8 +1333,8 @@ function downgradeTo {
 	sudo sed -i".$(date +%Y%m%d)" "s/$(lsb_release -sc)/$distribCodename/" /etc/apt/sources.list
 	if test -s /etc/apt/preferences.d/99-downgrade
 	then
-		time sudo $(which apt) update
-		sudo $(which apt) dist-upgrade -V
+		time sudo command apt update
+		sudo command apt dist-upgrade -V
 	else
 		echo "=> ERROR: The file </etc/apt/preferences.d/99-downgrade> does not exist, generating it ..." >&2 && {
 			cat <<-EOF
@@ -1355,7 +1370,7 @@ function totalSize {
 function rsyncIncludeOnly {
 	local destination="$(eval echo \$$#)"
 	local rsyncCommandSuffix="--include='*/' --exclude='*'"
-	local rsyncCommand="$(which rsync) -r -uth -P -z"
+	local rsyncCommand="command rsync -r -uth -P -z"
 
 	for arg
 	do
@@ -1381,16 +1396,17 @@ function reload_SHELL_Functions_And_Aliases {
 	done
 }
 function mplayer {
+	local mplayer="command mplayer"
 	which mplayer >/dev/null 2>&1 && {
 		if tty | grep -q "/dev/pts/[0-9]"; then
-			$(which mplayer) -idx -geometry 0%:100% "$@" 2> /dev/null | egrep "stream |dump|Track |VIDEO:|AUDIO:|VO:|AO:|A:"
+			$mplayer -idx -geometry 0%:100% "$@" 2> /dev/null | egrep "stream |dump|Track |VIDEO:|AUDIO:|VO:|AO:|A:"
 		else
 			if [ -c /dev/fb0 ]; then
 				if [ ! -w /dev/fb0 ]; then
 				groups | grep -wq video || \sudo adduser $USER video
 				\sudo chmod g+w /dev/fb0
 				fi
-				$(which mplayer) -vo fbdev2 -idx "$@" 2> /dev/null | egrep "stream |dump|Track |VIDEO:|AUDIO:|VO:|AO:|A:"
+				$mplayer -vo fbdev2 -idx "$@" 2> /dev/null | egrep "stream |dump|Track |VIDEO:|AUDIO:|VO:|AO:|A:"
 			else
 				echo "=> Function $FUNCNAME - ERROR: Framebuffer is not supported in this configuration." 1>&2
 				return 1
