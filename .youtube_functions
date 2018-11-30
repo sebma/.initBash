@@ -13,7 +13,8 @@ function continueYoutube_Download {
 	do
 		format=$(echo $videoFile | awk -F__ '{print$(NF-1)}')
 		url=$(echo $videoFile | awk -F"__|[.]" '{print$(NF-2)}')
-		time LANG=C.UTF-8 $youtube_dl -f "$format" -qs "$url" 2>&1 | \grep --color -A1 ^ERROR: && echo && continue
+		echo "=> url = <$url>"
+		time LANG=C.UTF-8 $youtube_dl -f "$format" -qs -- "$url" 2>&1 | \grep --color -A1 ^ERROR: && echo && continue
 		cd $(dirname $videoFile) && pwd
 		getRestrictedFilenamesFORMAT $format $url
 		cd - >/dev/null
@@ -42,9 +43,9 @@ function YTRenameFromFiles {
 		format=$(awk -F__ '{print$(NF-1)}' <<< $file)
 #		url="$2"
 #		test $# != 2 && echo "=> Usage: $FUNCNAME file youtube-URL" && return 1
-		newName="$(youtube-dl -f "$format" --get-filename -- $id)"
+		newName="$($youtube_dl -f "$format" --get-filename -- $id)"
 		test $newName || continue
-#		mp4tags -c "$(youtube-dl --get-description "$url")" "$file"
+#		mp4tags -c "$($youtube_dl --get-description "$url")" "$file"
 #		mp4tags -m "$url" "$file"
 		test "$(basename $file)" != "$newName" && mv -v "$file" "$(dirname $file)/$newName"
 	done
@@ -59,7 +60,7 @@ function updateYTMetadataFromFiles {
 		grep -q __ <<< $file || continue
 		id=$(awk -F"__|[.]" '{print$(NF-1)}' <<< $file)
 		format=$(awk -F__ '{print$(NF-1)}' <<< $file)
-		LANG=C.UTF-8 $youtube_dl -qs "http://www.youtube.com/watch?v=$id" 2>/dev/null && url="http://www.youtube.com/watch?v=$id"
+		LANG=C.UTF-8 $youtube_dl -qs -- "http://www.youtube.com/watch?v=$id" 2>/dev/null && url="http://www.youtube.com/watch?v=$id"
 		chmod +w $file
 		[ $format = 22 ] && getRestrictedFilenamesHD $url || getRestrictedFilenamesSD $url
 	done
@@ -72,9 +73,9 @@ function YTRenameFromURLs {
 	for URL
 	do
 		echo "=> URL = $URL"
-#		format=$(youtube-dl --get-format $URL)
+#		format=$($youtube_dl --get-format $URL)
 		format=18
-		newName="$(youtube-dl -f "$format" --get-filename -- $URL)"
+		newName="$($youtube_dl -f "$format" --get-filename -- $URL)"
 		test $newName || { echo "=> ERROR : This URL contains no file to download." >&2;continue; }
 		test -s $newName && echo "=> File Already renamed to <$newName>." >&2 && continue
 		oldName="$(LANG=C.UTF-8 $youtube_dl -f "$format" --get-filename -o "%(title)s.%(ext)s" -- $URL)"
@@ -89,10 +90,10 @@ function addYoutubeTDescription {
 	local file="$1"
 	local url="$2"
 	test $# != 2 && echo "=> Usage: $FUNCNAME file youtube-URL" && return 1
-	LANG=C.UTF-8 $youtube_dl -qs "https://www.youtube.com/watch?v=$url" 2>/dev/null && url="https://www.youtube.com/watch?v=$url"
-	mp4tags -c "$(youtube-dl --get-description "$url")" "$file"
+	LANG=C.UTF-8 $youtube_dl -qs -- "https://www.youtube.com/watch?v=$url" 2>/dev/null && url="https://www.youtube.com/watch?v=$url"
+	mp4tags -c "$($youtube_dl --get-description "$url")" "$file"
 	mp4tags -m "$url" "$file"
-#	artworkURL=$(youtube-dl --list-thumbnails "$url" | awk '/http/{print$NF}')
+#	artworkURL=$($youtube_dl --list-thumbnails "$url" | awk '/http/{print$NF}')
 #	wget -nv "$artworkURL"
 #	artworkFile=$(basename "$artworkURL")
 #	AtomicParsley "$file" --artwork "$artworkFile" --overWrite
@@ -119,7 +120,7 @@ function sizeOf {
 	}
 	for url in "$@"
 	do
-	size=$(curl -sI "$(youtube-dl -gf $format $url)" | awk 'BEGIN{IGNORECASE=1}/Content-?Length:/{print$2/2^20}')
+	size=$(curl -sI "$($youtube_dl -gf $format $url)" | awk 'BEGIN{IGNORECASE=1}/Content-?Length:/{print$2/2^20}')
 	total="$total+$size"
 	printf "%s %s Mo\n" $url $size
 	done
@@ -141,7 +142,7 @@ function ytget {
 		let i++
 		echo "=> Downloading url #$i/$# ..."
 		echo "=> url = $url"
-		LANG=C.UTF-8 $youtube_dl -f "$format" -qs "$url" 2>&1 | \grep --color -A1 ^ERROR: && echo && continue
+		LANG=C.UTF-8 $youtube_dl -f "$format" -qs -- "$url" 2>&1 | \grep --color -A1 ^ERROR: && echo && continue
 		if echo $url | \egrep -vq "www"
 		then
 			if   LANG=C.UTF-8 $youtube_dl -e $youtubeURLPrefix$url	 >/dev/null 2>&1
@@ -201,10 +202,10 @@ function getRestrictedFilenamesFORMAT {
 		let i++
 		echo "=> Downloading url # $i/$# ..."
 		echo "=> url = $url"
-		LANG=C.UTF-8 $youtube_dl -f "$format" -qs "$url" 2>&1 | \grep --color -A1 ^ERROR: && echo && continue
+		LANG=C.UTF-8 $youtube_dl -f "$format" -qs -- "$url" 2>&1 | \grep --color -A1 ^ERROR: && echo && continue
 		fileName=$(LANG=C.UTF-8 $youtube_dl -f $format --get-filename "$url" --restrict-filenames || LANG=C.UTF-8 $youtube_dl -f $fallback --get-filename "$url" --restrict-filenames)
 		test -z "$fileName" && continue
-#		LANG=C.UTF-8 $youtube_dl -f "$format" -qs "$url" 2>&1 | \grep --color -A1 ^ERROR: && echo && continue
+#		LANG=C.UTF-8 $youtube_dl -f "$format" -qs -- "$url" 2>&1 | \grep --color -A1 ^ERROR: && echo && continue
 		if ! echo $url | \egrep -q "https?://"
 		then
 			streamID=$url
@@ -214,10 +215,10 @@ function getRestrictedFilenamesFORMAT {
 				echo "${colors[yellowOnBlue]}=> The file <$fileName> is already downloaded, skipping ...$normal" >&2
 				echo
 				continue
-			elif  LANG=C.UTF-8 $youtube_dl -f "$format" -qs $youtubeURLPrefix$url	   2>/dev/null
+			elif  LANG=C.UTF-8 $youtube_dl -f "$format" -qs -- $youtubeURLPrefix$url	   2>/dev/null
 			then
 				url=$youtubeURLPrefix$url
-			elif LANG=C.UTF-8 $youtube_dl -f "$format" -qs $dailymotionURLPrefix$url 2>/dev/null
+			elif LANG=C.UTF-8 $youtube_dl -f "$format" -qs -- $dailymotionURLPrefix$url 2>/dev/null
 			then
 				url=$dailymotionURLPrefix$url
 			fi
@@ -260,13 +261,13 @@ function getRestrictedFilenamesBEST {
 		let i++
 		echo "=> Downloading url # $i/$# ..."
 		echo "=> url = $url"
-		LANG=C.UTF-8 $youtube_dl -f "$format" -qs "$url" 2>&1 | \grep --color -A1 ^ERROR: && echo && continue
+		LANG=C.UTF-8 $youtube_dl -f "$format" -qs -- "$url" 2>&1 | \grep --color -A1 ^ERROR: && echo && continue
 		if echo $url | \egrep -vq "www"
 		then
-			if   LANG=C.UTF-8 $youtube_dl -f "$format" -qs $youtubeURLPrefix$url   2>/dev/null
+			if   LANG=C.UTF-8 $youtube_dl -f "$format" -qs -- $youtubeURLPrefix$url   2>/dev/null
 			then
 				url=$youtubeURLPrefix$url
-			elif LANG=C.UTF-8 $youtube_dl -f "$format" -qs $dailymotionURLPrefix$url 2>/dev/null
+			elif LANG=C.UTF-8 $youtube_dl -f "$format" -qs -- $dailymotionURLPrefix$url 2>/dev/null
 			then
 				url=$dailymotionURLPrefix$url
 			fi
@@ -302,13 +303,13 @@ function getRestrictedFilenamesHD {
 		let i++
 		echo "=> Downloading url # $i/$# ..."
 		echo "=> url = $url"
-		LANG=C.UTF-8 $youtube_dl -f "$format" -qs "$url" 2>&1 | \grep --color -A1 ^ERROR: && echo && continue
+		LANG=C.UTF-8 $youtube_dl -f "$format" -qs -- "$url" 2>&1 | \grep --color -A1 ^ERROR: && echo && continue
 		if echo $url | \egrep -vq "www"
 		then
-			if   LANG=C.UTF-8 $youtube_dl -f "$format" -qs $youtubeURLPrefix$url   2>/dev/null
+			if   LANG=C.UTF-8 $youtube_dl -f "$format" -qs -- $youtubeURLPrefix$url   2>/dev/null
 			then
 				url=$youtubeURLPrefix$url
-			elif LANG=C.UTF-8 $youtube_dl -f "$format" -qs $dailymotionURLPrefix$url 2>/dev/null
+			elif LANG=C.UTF-8 $youtube_dl -f "$format" -qs -- $dailymotionURLPrefix$url 2>/dev/null
 			then
 				url=$dailymotionURLPrefix$url
 			fi
@@ -346,7 +347,7 @@ function getRestrictedFilenamesSD {
 		echo "=> Downloading url # $i/$# ..."
 		echo "=> url = $url"
 		echo "=> Testing if $url still exists ..."
-		time LANG=C.UTF-8 $youtube_dl -f "$format" -qs "$url" 2>&1 | \grep --color -A1 ^ERROR: && echo && continue
+		time LANG=C.UTF-8 $youtube_dl -f "$format" -qs -- "$url" 2>&1 | \grep --color -A1 ^ERROR: && echo && continue
 		if ! echo $url | \egrep -wq "www"
 		then
 			fileName=$(basename $( $locate -er "$url.*mp4$" | \egrep -v "\.part|AUDIO" | sort -rt. | head -1) 2>/dev/null)
@@ -355,10 +356,10 @@ function getRestrictedFilenamesSD {
 				echo "${colors[yellowOnBlue]}=> The file <$fileName> is already downloaded, skipping ...$normal" >&2
 				echo
 				continue
-			elif  LANG=C.UTF-8 $youtube_dl -f "$format" -qs $youtubeURLPrefix$url	   2>/dev/null
+			elif  LANG=C.UTF-8 $youtube_dl -f "$format" -qs -- $youtubeURLPrefix$url	   2>/dev/null
 			then
 				url=$youtubeURLPrefix$url
-			elif LANG=C.UTF-8 $youtube_dl -f "$format" -qs $dailymotionURLPrefix$url 2>/dev/null
+			elif LANG=C.UTF-8 $youtube_dl -f "$format" -qs -- $dailymotionURLPrefix$url 2>/dev/null
 			then
 				url=$dailymotionURLPrefix$url
 			fi
@@ -404,7 +405,7 @@ function getRestrictedFilenamesSD_PREV {
 		let i++
 		echo "=> Downloading url # $i/$# ..."
 		echo "=> url = $url"
-		LANG=C.UTF-8 $youtube_dl -f "$format" -qs "$url" 2>&1 | \grep --color -A1 ^ERROR: && echo && continue
+		LANG=C.UTF-8 $youtube_dl -f "$format" -qs -- "$url" 2>&1 | \grep --color -A1 ^ERROR: && echo && continue
 		if ! echo $url | \egrep -wq "www"
 		then
 			fileName=$(basename $( $locate -er "$url" | \egrep -v "\.part|AUDIO" | sort -rt. | head -1) 2>/dev/null)
@@ -413,10 +414,10 @@ function getRestrictedFilenamesSD_PREV {
 				echo "${colors[yellowOnBlue]}=> The file <$fileName> is already downloaded, skipping ...$normal" >&2
 				echo
 				continue
-			elif  LANG=C.UTF-8 $youtube_dl -f "$format" -qs $youtubeURLPrefix$url	   2>/dev/null
+			elif  LANG=C.UTF-8 $youtube_dl -f "$format" -qs -- $youtubeURLPrefix$url	   2>/dev/null
 			then
 				url=$youtubeURLPrefix$url
-			elif LANG=C.UTF-8 $youtube_dl -f "$format" -qs $dailymotionURLPrefix$url 2>/dev/null
+			elif LANG=C.UTF-8 $youtube_dl -f "$format" -qs -- $dailymotionURLPrefix$url 2>/dev/null
 			then
 				url=$dailymotionURLPrefix$url
 			fi
@@ -461,13 +462,13 @@ function getRestrictedFilenamesLD {
 		let i++
 		echo "=> Downloading url # $i/$# ..."
 		echo "=> url = $url"
-		LANG=C.UTF-8 $youtube_dl -f "$format" -qs "$url" 2>&1 | \grep --color -A1 ^ERROR: && echo && continue
+		LANG=C.UTF-8 $youtube_dl -f "$format" -qs -- "$url" 2>&1 | \grep --color -A1 ^ERROR: && echo && continue
 		if echo $url | \egrep -vq "www"
 		then
-			if   LANG=C.UTF-8 $youtube_dl -f "$format" -qs $youtubeURLPrefix$url   2>/dev/null
+			if   LANG=C.UTF-8 $youtube_dl -f "$format" -qs -- $youtubeURLPrefix$url   2>/dev/null
 			then
 				url=$youtubeURLPrefix$url
-			elif LANG=C.UTF-8 $youtube_dl -f "$format" -qs $dailymotionURLPrefix$url 2>/dev/null
+			elif LANG=C.UTF-8 $youtube_dl -f "$format" -qs -- $dailymotionURLPrefix$url 2>/dev/null
 			then
 				url=$dailymotionURLPrefix$url
 			fi
@@ -597,7 +598,7 @@ function updateYoutubeDescription {
 		let i++
 		echo "=> Downloading url #$i/$# ..."
 		echo "=> url = $url"
-		LANG=C.UTF-8 $youtube_dl -f "$format" -qs $url 2>&1 | \grep --color -A1 ^ERROR: && echo && continue
+		LANG=C.UTF-8 $youtube_dl -f "$format" -qs -- $url 2>&1 | \grep --color -A1 ^ERROR: && echo && continue
 		if echo $url | \egrep -vq "www"
 		then
 			if   LANG=C.UTF-8 $youtube_dl -e $youtubeURLPrefix$url	 >/dev/null 2>&1
