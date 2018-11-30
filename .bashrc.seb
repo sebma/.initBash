@@ -9,6 +9,8 @@ Debug "=> Running $(basename ${BASH_SOURCE[0]}) ..."
 function Source { test "$debug" '>' 0 && time source "$@" && echo || source "$@" ; }
 test "$debug" '>' "2" && set -x
 
+set -o histexpand # Re-enable the history expansion disabled previously by my "echo" alias
+
 #test -n "$bashRCLoaded" && return
 bashRCLoaded=1
 export os=$(uname -s)
