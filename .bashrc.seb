@@ -9,6 +9,9 @@ Debug "=> Running $(basename ${BASH_SOURCE[0]}) ..."
 function Source { test "$debug" '>' 0 && time source "$@" && echo || source "$@" ; }
 test "$debug" '>' "2" && set -x
 
+# Turn off history expansion to be able easily use the exclamation mark in strings # i.e. https://superuser.com/questions/133780/in-bash-how-do-i-escape-an-exclamation-mark/133782#133782
+set +o histexpand
+
 #test -n "$bashRCLoaded" && return
 bashRCLoaded=1
 export os=$(uname -s)
