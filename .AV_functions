@@ -3,9 +3,9 @@ set +x
 declare -A | grep -wq colors || source $initDir/.colors
 test "$debug" '>' 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-\which ffmpeg  >/dev/null 2>&1 && ffmpeg="$(which ffmpeg)   -hide_banner -probesize 400M -analyzeduration 400M"
-\which ffprobe >/dev/null 2>&1 && ffprobe="$(which ffprobe) -hide_banner -probesize 400M -analyzeduration 400M"
-\which youtube-dl >/dev/null 2>&1 && youtube_dl="LANG=C.UTF-8 $(\which youtube-dl)"
+\which ffmpeg  >/dev/null 2>&1 && ffmpeg="command  ffmpeg  -hide_banner -probesize 400M -analyzeduration 400M"
+\which ffprobe >/dev/null 2>&1 && ffprobe="command ffprobe -hide_banner -probesize 400M -analyzeduration 400M" && ffprobeOptions="-hide_banner"
+\which youtube-dl >/dev/null 2>&1 && youtube_dl="LANG=C.UTF-8 command youtube-dl"
 
 remuxOptions="-map 0 -c copy"
 mp4Options="-movflags frag_keyframe"
@@ -972,10 +972,12 @@ function videoGet {
 function avprobe {
 	for arg
 	do
-		echo "$arg" | egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $avprobe $avprobeOptions "$($youtube_dl -gf best "$arg")" || $(which avprobe) $avprobeOptions -probesize 400M -analyzeduration 400M "$arg"
+		echo "$arg" | egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $avprobe $avprobeOptions "$($youtube_dl -gf best "$arg")" || command avprobe $avprobeOptions -probesize 400M -analyzeduration 400M "$arg"
 	done 2>&1 | cut -c 1-$COLUMNS
 }
 function videoInfo {
+	local ffprobeOptions=$ffprobeOptions
+	local size=0
 	which ffprobe >/dev/null && {
 		for urlOrFile
 		do
@@ -994,21 +996,20 @@ function videoInfo {
 					size=$(\curl -sI "$directURLOfStream" | awk 'BEGIN{IGNORECASE=1;size=0}/Content-Length:/{if($2>0)size=$2}END{printf "%8.3f MiB\n",size/2^20}')
 					echo "Title: $title"
 					echo "Size: $size"
-					ffprobeOptions="-hide_banner"
-					$(which ffprobe) $ffprobeOptions "$URL" 2>&1
+					command ffprobe $ffprobeOptions "$URL" 2>&1
 				else
 					#direct stream
-					ffprobeOptions="-hide_banner -probesize 400M -analyzeduration 400M"
+					ffprobeOptions="$ffprobeOptions -probesize 400M -analyzeduration 400M"
 					size=$(\curl -sI "$urlOrFile" | awk 'BEGIN{IGNORECASE=1;size=0}/Content-Length:/{if($2>0)size=$2}END{printf "%8.3f MiB\n",size/2^20}')
 					echo "Size: $size"
-					$(which ffprobe) $ffprobeOptions "$urlOrFile"
+					command ffprobe $ffprobeOptions "$urlOrFile"
 				fi
 			else
 				#Local file
-				ffprobeOptions="-hide_banner -probesize 400M -analyzeduration 400M"
+				ffprobeOptions="$ffprobeOptions -probesize 400M -analyzeduration 400M"
 				size=$(\ls -l "$urlOrFile" | awk '/[0-9]+/{printf "%8.3f MiB\n",$5/1024^2}')
 				echo "Size: $size"
-				$(which ffprobe) $ffprobeOptions "$urlOrFile"
+				command ffprobe $ffprobeOptions "$urlOrFile"
 			fi
 		done 2>&1 | cut -c 1-$COLUMNS | egrep -iw "urlOrFile|kb/s|Input|Size:|Title:|Duration:|Stream|Chapter|Invalid|error|bad| no such file|^\[.* not"
 	}
@@ -1022,28 +1023,28 @@ function ffprobe {
 	}
 }
 function ffprobeFlat {
-	ffprobeOptions="-v 0 -show_format -show_streams -of flat"
+	local ffprobeOptions="-v 0 -show_format -show_streams -of flat"
 	for arg
 	do
 		echo "$arg" | egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $ffprobe $ffprobeOptions "$($youtube_dl -gf best "$arg")" || $ffprobe $ffprobeOptions "$arg"
 	done 2>&1 | cut -c 1-$COLUMNS
 }
 function ffprobeIni {
-	ffprobeOptions="-v 0 -show_format -show_streams -of ini"
+	local ffprobeOptions="-v 0 -show_format -show_streams -of ini"
 	for arg
 	do
 		echo "$arg" | egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $ffprobe $ffprobeOptions "$($youtube_dl -gf best "$arg")" || $ffprobe $ffprobeOptions "$arg"
 	done 2>&1 | cut -c 1-$COLUMNS
 }
 function ffprobeJSON {
-	ffprobeOptions="-v 0 -show_format -show_streams -of json"
+	local ffprobeOptions="-v 0 -show_format -show_streams -of json"
 	for arg
 	do
 		echo "$arg" | egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $ffprobe $ffprobeOptions "$($youtube_dl -gf best "$arg")" || $ffprobe $ffprobeOptions "$arg"
 	done 2>&1 | cut -c 1-$COLUMNS
 }
 function ffprobeXML {
-	ffprobeOptions="-v 0 -show_format -show_streams -of xml"
+	local ffprobeOptions="-v 0 -show_format -show_streams -of xml"
 	for arg
 	do
 		echo "$arg" | egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $ffprobe $ffprobeOptions "$($youtube_dl -gf best "$arg")" || $ffprobe $ffprobeOptions "$arg"
@@ -1071,7 +1072,7 @@ function videoRemux {
 	local inputFile="$1"
 	if [ $# != 2 ]
 	then
-		echo "=> Usage: $(basename $0) inputFileName outputFileName [ffmpegOptions]" >&2
+		echo "=> Usage: $(basename $0) inputFileName outputFileName [ffmpegCLIParameters]" >&2
 		exit 1
 	fi
 
@@ -1122,14 +1123,14 @@ function mkv2oga {
 }
 function mplayer {
 	if tty | grep -q "/dev/pts/[0-9]"; then
-		$(which mplayer) -idx -geometry 0%:100% "$@" 2> /dev/null | egrep "stream |dump|Track |VIDEO:|AUDIO:|VO:|AO:|A:"
+		command mplayer -idx -geometry 0%:100% "$@" 2> /dev/null | egrep "stream |dump|Track |VIDEO:|AUDIO:|VO:|AO:|A:"
 	else
 		if [ -c /dev/fb0 ]; then
 			if [ ! -w /dev/fb0 ]; then
 			groups | grep -wq video || \sudo adduser $USER video
 			\sudo chmod g+w /dev/fb0
 			fi
-			$(which mplayer) -vo fbdev2 -idx "$@" 2> /dev/null | egrep "stream |dump|Track |VIDEO:|AUDIO:|VO:|AO:|A:"
+			command mplayer -vo fbdev2 -idx "$@" 2> /dev/null | egrep "stream |dump|Track |VIDEO:|AUDIO:|VO:|AO:|A:"
 		else
 			echo "=> Function $FUNCNAME - ERROR: Framebuffer is not supported in this configuration." 1>&2
 			return 1
@@ -1137,7 +1138,7 @@ function mplayer {
 	fi
 }
 function mpvalt {
-	test $1 && $(which mpv) --no-ytdl $(youtube-dl -gf best $@ | uniq)
+	test $1 && command mpv --no-ytdl $(youtube-dl -gf best $@ | uniq)
 }
 
 set +x
