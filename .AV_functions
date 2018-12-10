@@ -21,6 +21,18 @@ audioDecode=( [libspeex]=$(which speexdec 2>/dev/null) [speex]=$(which speexdec 
 alias mp32wavstdout="\mpg123 --wav - "
 alias ogg2wavstdout="\oggdec --output=- "
 
+function mkvInfo {
+#	file="$1"
+#	shift
+#	time time mkvinfo -s "$file" | grep Track
+	for file
+	do
+		echo "=> file = $file" >&2
+		echo >&2
+		time mkvinfo -s "$file" 
+		echo >&2
+	done | grep Track
+}
 function mp32opus {
 #	file="$1"
 #	shift
