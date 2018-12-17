@@ -724,9 +724,14 @@ function configure {
 #			test -s ./bootstrap.sh && time ./bootstrap.sh || { test -s ./bootstrap && time ./bootstrap || test -s ./autogen.sh && time ./autogen.sh; }
 			for autoconfProg in bootstrap.sh bootstrap autogen.sh
 			do	
-				test -s $autoconfProg && set -x && time ./$autoconfProg $configureArgs && break
+				if test -x $autoconfProg 
+				then
+					set -x
+					time ./$autoconfProg $configureArgs || time ./$autoconfProg
+					break
+				fi
 			done
-			test $? != 0 && set -x && autoreconf -vi
+			test -x ./configure || autoreconf -vi
 			returnCode=$?
 			set +x
 		fi
