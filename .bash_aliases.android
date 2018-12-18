@@ -11,13 +11,13 @@ alias topd5="\du  -xmd 1 2>/dev/null | sort -nr | head -5"
 alias topd5="\du  -xmd 1 2>/dev/null | sort -nr | head -50"
 alias topd="\du   -xmd 1 2>/dev/null | sort -nr | head -n"
 alias topdlines='\du -xmd 1 2>/dev/null | sort -nr | head -$(($LINES-2))'
-alias topf10="$(which find) . -xdev -type f -size +10240k -exec ls -al {} + 2>/dev/null | sort -nrk4 | awk '{size=\$5/2^20;sub(\$5,size\"M\");print}' | head | awk '{total+=\$5;print}END{print\"=> total = \"total\" MiB\"}'"
-alias topf50="$(which find) . -xdev -type f -size +10240k -exec ls -al {} + 2>/dev/null | sort -nrk4 | awk '{size=\$5/2^20;sub(\$5,size\"M\");print}' | head -50 | awk '{total+=\$5;print}END{print\"=> total = \"total\" MiB\"}'"
-alias topf5="$(which find)  . -xdev -type f -size +10240k -exec ls -al {} + 2>/dev/null | sort -nrk4 | awk '{size=\$5/2^20;sub(\$5,size\"M\");print}' | head -5' | awk '{total+=\$5;print}END{print\"=> total = \"total\" MiB\"}'"
-alias topf="$(which find)   . -xdev -type f -size +10240k -exec ls -al {} + 2>/dev/null | sort -nrk4 | awk '{size=\$5/2^20;sub(\$5,size\"M\");print}' | head -n | awk '{total+=\$5;print}END{print\"=> total = \"total\" MiB\"}'"
-#alias topflines="$(which find)   . -xdev -type f -size +10240k -exec ls -al {} + 2>/dev/null | sort -nrk4 | awk '{size=\$5/2^20;sub(\$5,size\"M\");print}' | head -n $(($LINES-4)) | awk '{total+=\$5;print}END{print\"=> total = \"total\" MiB\"}'"
+alias topf10="$(which find) . -xdev -type f -size +10240k -exec ls -al {} + 2>/dev/null | sort -nrk4 | awk '{size=\$5/2^20;sub(\" *\"\$5,sprintf(\" %10.3fM\",size));print}' | head | awk '{total+=\$5;print}END{print\"=> total = \"total\" MiB\"}'"
+alias topf50="$(which find) . -xdev -type f -size +10240k -exec ls -al {} + 2>/dev/null | sort -nrk4 | awk '{size=\$5/2^20;sub(\" *\"\$5,sprintf(\" %10.3fM\",size));print}' | head -50 | awk '{total+=\$5;print}END{print\"=> total = \"total\" MiB\"}'"
+alias topf5="$(which find)  . -xdev -type f -size +10240k -exec ls -al {} + 2>/dev/null | sort -nrk4 | awk '{size=\$5/2^20;sub(\" *\"\$5,sprintf(\" %10.3fM\",size));print}' | head -5' | awk '{total+=\$5;print}END{print\"=> total = \"total\" MiB\"}'"
+alias topf="$(which find)   . -xdev -type f -size +10240k -exec ls -al {} + 2>/dev/null | sort -nrk4 | awk '{size=\$5/2^20;sub(\" *\"\$5,sprintf(\" %10.3fM\",size));print}' | head -n | awk '{total+=\$5;print}END{print\"=> total = \"total\" MiB\"}'"
+#alias topflines="$(which find)   . -xdev -type f -size +10240k -exec ls -al {} + 2>/dev/null | sort -nrk4 | awk '{size=\$5/2^20;sub(\" *\"\$5,sprintf(\" %10.3fM\",size));print}' | head -n $(($LINES-4)) | awk '{total+=\$5;print}END{print\"=> total = \"total\" MiB\"}'"
 function topflines {
-	$(which find) "$@" -xdev -type f -size +10240k -exec ls -al {} + 2>/dev/null | sort -nrk4 | awk '{size=$5/2^20;sub($5,size"M");print}' | head -n $(($LINES-4)) | awk '{total+=$5;print}END{if(total) print"=> total = "total" MiB"}'
+	$(which find) "$@" -xdev -type f -size +10240k -exec ls -al {} + 2>/dev/null | sort -nrk4 | awk '{size=$5/2^20;sub(" *"$5,sprintf(" %10.3fM",size));print}' | head -n $(($LINES-4)) | awk '{total+=$5;print}END{if(total) print"=> total = "total" MiB"}'
 }
 
 set +x
