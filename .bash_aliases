@@ -110,6 +110,7 @@ alias inxiSummary="\inxi -c21 -Admi -v4"
 alias ip@=lanip
 alias jpeg2pdf="\convert -gravity center"
 alias jpeg2pdfA4="\convert -set density '%[fx:w/8.27]' -gravity center"
+alias jpeg2pdfA4R="\convert -page 842x595"
 alias jpg2pdf=jpeg2pdf
 alias jpg2pdfA4=jpeg2pdfA4
 alias killall="\killall -v"
