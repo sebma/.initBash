@@ -11,6 +11,14 @@ myDefault_sshOptions="-A -Y -C"
 
 trap 'echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $?' INT
 
+function addUsersInGroup {
+	local lastArg="$(eval echo \${$#})"
+	local allArgsButLast="${@:1:$#-1}"
+	for user in $allArgsButLast
+	do
+		sudo adduser $user $lastArg
+	done
+}
 function Echo {
 	local rc=$?
 	set +o histexpand # Turn off history expansion to be able easily use the exclamation mark in strings i.e https://stackoverflow.com/a/22130745/5649639
@@ -376,10 +384,10 @@ function renameFileInsideZIP {
 		echo "=> Usage: $FUNCNAME oldName newName zipFile" >&2
 		return 1
 	}
-	lastArg="$(eval echo \${$#})"
-	zipFile=$lastArg
-	oldName=$1
-	newName=$2
+	local lastArg="$(eval echo \${$#})"
+	local zipFile=$lastArg
+	local oldName=$1
+	local newName=$2
 #	command printf "@ $oldName\n@=$newName\n" | command zipnote -w $zipFile #necessite zip > v3.1beta
 	command 7za $zipFile $oldName $newName
 }
@@ -853,9 +861,8 @@ function ldapUserFind {
 }
 function pdfConcat {
 	test "$1" && {
-		args=$@
-		lastArg="$(eval echo \${$#})"
-		allArgsButLast="${@:1:$#-1}"
+		local lastArg="$(eval echo \${$#})"
+		local allArgsButLast="${@:1:$#-1}"
 		time gs -dBATCH -dNOPAUSE -sDEVICE=pdfwrite -dAutoRotatePages=/None -sOutputFile="$lastArg" $allArgsButLast && open "$lastArg" || time pdfjoin --rotateoversize false $allArgsButLast -o $lastArg || time pdftk $allArgsButLast cat output $lastArg verbose
 	}
 }
