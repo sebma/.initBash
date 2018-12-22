@@ -784,6 +784,7 @@ function buildSourceCode {
 
 	unset CC
 	echo "=> returnCode = $returnCode" >&2
+	sudo ldconfig
 	return $returnCode
 }
 function buildSourceCodeForAndroid {
