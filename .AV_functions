@@ -14,7 +14,7 @@ aac2m4aOptions="-bsf:a aac_adtstoasc"
 cdr_device=/dev/dvd
 
 [ $BASH_VERSINFO -ge 4 ] && declare -A audioExtension videoExtension audioDecode
-audioExtension=( [libspeex]=oga [speex]=oga [opus]=oga [vorbis]=ogg [aac]=m4a [mp3]=mp3 [mp2]=mp2 [ac3]=ac3 [wmav2]=wma [pcm_dvd]=wav [pcm_s16le]=wav )
+audioExtension=( [libspeex]=oga [speex]=oga [opus]=opus [vorbis]=ogg [aac]=m4a [mp3]=mp3 [mp2]=mp2 [ac3]=ac3 [wmav2]=wma [pcm_dvd]=wav [pcm_s16le]=wav )
 videoExtension=( [h264]=m4v [mpeg1video]=mpg [mpeg2video]=vob [mpeg4]=avi [flv1]=flv [wmv3]=wmv )
 audioDecode=( [libspeex]=$(which speexdec 2>/dev/null) [speex]=$(which speexdec 2>/dev/null) [opus]=$(which opusdec 2>/dev/null) [vorbis]=$(which oggdec 2>/dev/null) )
 
@@ -216,14 +216,15 @@ function urlinfo {
 function urlplayer {
 	mpv $($youtube_dl -gf best "$1")
 }
-function audioCodec {
+function audioCodecOfFile {
 	local file="$1"
-	local codec=$($ffprobe "$file" -show_entries stream=codec_name -of flat -v 0 | awk -F'"' '{print$(NF-1)}')
+	local codec=$($ffprobe "$file" -select_streams a:0 -show_entries stream=codec_name -of flat -v 0 | awk -F'"' '{print$(NF-1)}')
 	echo $codec
 }
-function audioFormat {
+function audioExtensionFromFile {
 	local file="$1"
-	local codec=$($ffprobe "$file" -show_entries stream=codec_name -of flat -v 0 | awk -F'"' '{print$(NF-1)}')
+	local codec=$(audioCodecOfFile "$file")
+	declare -A audioExtension=( [libspeex]=oga [speex]=oga [opus]=opus [vorbis]=ogg [aac]=m4a [mp3]=mp3 [mp2]=mp2 [ac3]=ac3 [wmav2]=wma [pcm_dvd]=wav [pcm_s16le]=wav )
 	echo ${audioExtension[$codec]}
 }
 function any2wavSTDOUT {
@@ -526,7 +527,7 @@ function spx216kHzopus {
 		if [ ! -s "$outputFile" ]
 		then
 #			if $ffprobe "$inputFile" 2>&1 | grep -q stereo
-			if $ffprobe "$inputFile" -show_entries stream=channel_layout -of flat 2>&1 | grep -q stereo
+			if $ffprobe "$inputFile" -select_streams a:0 -show_entries stream=channel_layout -of flat 2>&1 | grep -q stereo
 			then
 				time speexdec -V "$inputFile" - | sox -t raw -V -b 16 -e signed -r 44.1k -c 2 - -t wav - channels 1 rate 16k norm | opusenc - "$outputFile"
 			else
@@ -937,11 +938,12 @@ function aacDir2mp3 { shopt -s globstar && for f in **/*.aac; do /bin/mv -vi "$f
 
 function audioGet {
 	ls "$@" >/dev/null || return
+	declare -A audioExtension=( [libspeex]=oga [speex]=oga [opus]=opus [vorbis]=ogg [aac]=m4a [mp3]=mp3 [mp2]=mp2 [ac3]=ac3 [wmav2]=wma [pcm_dvd]=wav [pcm_s16le]=wav )
 	for file
 	do
 		extension=${file/*./}
-		audioFormat=$(ffprobe "$file" 2>&1 | awk '/Audio/{print$4}' | sed "s/,$//")
-		outputExtension=${audioExtension[$audioFormat]}
+		audioCodec=$(audioCodecOfFile "$file")
+		outputExtension=${audioExtension[$audioCodec]}
 		outputFileName=${file/.$extension/_AUDIO.$outputExtension}
 		outputFileName=$(echo $outputFileName | cut -d/ -f3-) # Remove the two leading directories from the path
 		minimumAudioStreamSize=$(mediainfo --Output="Audio;%StreamSize%" "$file") || return
