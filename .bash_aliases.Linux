@@ -78,6 +78,9 @@ then
 	test -f /etc/debian_version && Source $initDir/.bash_aliases.Debian
 	alias checkSudoFile="\visudo -cf"
 	alias cupsRestart="pgrep -a cupsd;\sudo killall -HUP cupsd;sleep 1;pgrep -a cupsd"
+	alias dosfsck="\dosfsck -r"
+	alias lvextend="\lvextend -r"
+	alias lvreduce="\lvreduce -r"
 	alias nmRestart="sudo service network-manager restart"
 	alias pgrep="\pgrep -lf"
 	alias pipInstall=pip2Install
