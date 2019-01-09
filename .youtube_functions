@@ -114,7 +114,7 @@ function sizeOf {
 	local size
 	local total="0"
 	local format=18
-	echo $1 | \egrep -q "^https?://" || {
+	echo $1 | \egrep -q "^https?:" || {
 		format=$1
 	shift
 	}
@@ -143,7 +143,7 @@ function ytget {
 		echo "=> Downloading url #$i/$# ..."
 		echo "=> url = $url"
 		LANG=C.UTF-8 $youtube_dl -f "$format" -qs -- "$url" 2>&1 | \grep --color -A1 ^ERROR: && echo && continue
-		if echo $url | \egrep -vq "www"
+		if ! echo $url | \egrep -wq "https?:"
 		then
 			if   LANG=C.UTF-8 $youtube_dl -e $youtubeURLPrefix$url	 >/dev/null 2>&1
 			then
@@ -206,7 +206,7 @@ function getRestrictedFilenamesFORMAT {
 		fileName=$(LANG=C.UTF-8 $youtube_dl -f $format --get-filename "$url" --restrict-filenames || LANG=C.UTF-8 $youtube_dl -f $fallback --get-filename "$url" --restrict-filenames)
 		test -z "$fileName" && continue
 #		LANG=C.UTF-8 $youtube_dl -f "$format" -qs -- "$url" 2>&1 | \grep --color -A1 ^ERROR: && echo && continue
-		if ! echo $url | \egrep -q "https?://"
+		if ! echo $url | \egrep -q "https?:"
 		then
 			streamID=$url
 			fileName=$(basename $( $locate -er "$streamID.*__${format}__" | \egrep -v "\.part|AUDIO" | sort -rt. | head -1) 2>/dev/null)
@@ -262,7 +262,7 @@ function getRestrictedFilenamesBEST {
 		echo "=> Downloading url # $i/$# ..."
 		echo "=> url = $url"
 		LANG=C.UTF-8 $youtube_dl -f "$format" -qs -- "$url" 2>&1 | \grep --color -A1 ^ERROR: && echo && continue
-		if echo $url | \egrep -vq "www"
+		if ! echo $url | \egrep -wq "https?:"
 		then
 			if   LANG=C.UTF-8 $youtube_dl -f "$format" -qs -- $youtubeURLPrefix$url   2>/dev/null
 			then
@@ -304,7 +304,7 @@ function getRestrictedFilenamesHD {
 		echo "=> Downloading url # $i/$# ..."
 		echo "=> url = $url"
 		LANG=C.UTF-8 $youtube_dl -f "$format" -qs -- "$url" 2>&1 | \grep --color -A1 ^ERROR: && echo && continue
-		if echo $url | \egrep -vq "www"
+		if ! echo $url | \egrep -wq "https?:"
 		then
 			if   LANG=C.UTF-8 $youtube_dl -f "$format" -qs -- $youtubeURLPrefix$url   2>/dev/null
 			then
@@ -348,7 +348,7 @@ function getRestrictedFilenamesSD {
 		echo "=> url = $url"
 		echo "=> Testing if $url still exists ..."
 		time LANG=C.UTF-8 $youtube_dl -f "$format" -qs -- "$url" 2>&1 | \grep --color -A1 ^ERROR: && echo && continue
-		if ! echo $url | \egrep -wq "www"
+		if ! echo $url | \egrep -wq "https?:"
 		then
 			fileName=$(basename $( $locate -er "$url.*mp4$" | \egrep -v "\.part|AUDIO" | sort -rt. | head -1) 2>/dev/null)
 			if test -s "$fileName"
@@ -406,7 +406,7 @@ function getRestrictedFilenamesSD_PREV {
 		echo "=> Downloading url # $i/$# ..."
 		echo "=> url = $url"
 		LANG=C.UTF-8 $youtube_dl -f "$format" -qs -- "$url" 2>&1 | \grep --color -A1 ^ERROR: && echo && continue
-		if ! echo $url | \egrep -wq "www"
+		if ! echo $url | \egrep -wq "https?:"
 		then
 			fileName=$(basename $( $locate -er "$url" | \egrep -v "\.part|AUDIO" | sort -rt. | head -1) 2>/dev/null)
 			if test -s "$fileName"
@@ -463,7 +463,7 @@ function getRestrictedFilenamesLD {
 		echo "=> Downloading url # $i/$# ..."
 		echo "=> url = $url"
 		LANG=C.UTF-8 $youtube_dl -f "$format" -qs -- "$url" 2>&1 | \grep --color -A1 ^ERROR: && echo && continue
-		if echo $url | \egrep -vq "www"
+		if ! echo $url | \egrep -wq "https?:"
 		then
 			if   LANG=C.UTF-8 $youtube_dl -f "$format" -qs -- $youtubeURLPrefix$url   2>/dev/null
 			then
@@ -599,7 +599,7 @@ function updateYoutubeDescription {
 		echo "=> Downloading url #$i/$# ..."
 		echo "=> url = $url"
 		LANG=C.UTF-8 $youtube_dl -f "$format" -qs -- $url 2>&1 | \grep --color -A1 ^ERROR: && echo && continue
-		if echo $url | \egrep -vq "www"
+		if ! echo $url | \egrep -wq "https?:"
 		then
 			if   LANG=C.UTF-8 $youtube_dl -e $youtubeURLPrefix$url	 >/dev/null 2>&1
 			then
