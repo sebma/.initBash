@@ -622,7 +622,7 @@ function pip {
 	then
 		if groups | egrep -wq "sudo|admin"
 		then
-			\sudo -H command $caller $@
+			\sudo -H $caller $@
 		else
 			command $caller $@ --user
 		fi
@@ -630,7 +630,7 @@ function pip {
 	then
 		if groups | egrep -wq "sudo|admin"
 		then
-			\sudo -H command $caller $@ 
+			\sudo -H $caller $@ 
 		else
 			command $caller $@
 		fi
