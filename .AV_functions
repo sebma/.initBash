@@ -3,8 +3,8 @@ set +x
 declare -A | grep -wq colors || source $initDir/.colors
 test "$debug" '>' 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-\which ffmpeg  >/dev/null 2>&1 && ffmpeg="command  ffmpeg  -hide_banner -probesize 400M -analyzeduration 400M"
-\which ffprobe >/dev/null 2>&1 && ffprobe="command ffprobe -hide_banner -probesize 400M -analyzeduration 400M" && ffprobeOptions="-hide_banner"
+\which ffmpeg  >/dev/null 2>&1 && ffmpeg="command  ffmpeg  -hide_banner" &&  ffmpegOptions="-probesize 400M -analyzeduration 400M"
+\which ffprobe >/dev/null 2>&1 && ffprobe="command ffprobe -hide_banner" && ffprobeOptions="-probesize 400M -analyzeduration 400M"
 \which youtube-dl >/dev/null 2>&1 && youtube_dl="LANG=C.UTF-8 command youtube-dl"
 
 remuxOptions="-map 0 -c copy"
@@ -990,7 +990,6 @@ function avprobe {
 	done 2>&1 | cut -c 1-$COLUMNS
 }
 function videoInfo {
-	local ffprobeOptions=$ffprobeOptions
 	local size=0
 	which ffprobe >/dev/null && {
 		for urlOrFile
@@ -1013,19 +1012,20 @@ function videoInfo {
 					command ffprobe $ffprobeOptions "$URL" 2>&1
 				else
 					#direct stream
-					ffprobeOptions="$ffprobeOptions -probesize 400M -analyzeduration 400M"
+					echo "=> This stream is direct stream"
 					size=$(\curl -sI "$urlOrFile" | awk 'BEGIN{IGNORECASE=1;size=0}/Content-Length:/{if($2>0)size=$2}END{printf "%8.3f MiB\n",size/2^20}')
 					echo "Size: $size"
-					command ffprobe $ffprobeOptions "$urlOrFile"
+					$ffprobe "$urlOrFile"
 				fi
 			else
+				echo "=> The file is local to this machine."
 				#Local file
-				ffprobeOptions="$ffprobeOptions -probesize 400M -analyzeduration 400M"
 				size=$(\ls -l "$urlOrFile" | awk '/[0-9]+/{printf "%8.3f MiB\n",$5/1024^2}')
 				echo "Size: $size"
-				command ffprobe $ffprobeOptions "$urlOrFile"
+				$ffprobe "$urlOrFile" || $ffprobe $ffprobeOptions "$urlOrFile"
 			fi
-		done 2>&1 | cut -c 1-$COLUMNS | egrep -iw "urlOrFile|kb/s|Input|Size:|Title:|Duration:|Stream|Chapter|Invalid|error|bad| no such file|^\[.* not"
+#		done 2>&1 | cut -c 1-$COLUMNS | egrep -iw "stream|local|urlOrFile|kb/s|Input|Size:|Title:|Duration:|Stream|Chapter|Invalid|error|bad| no such file|^\[.* not"
+		done 2>&1 | cut -c 1-$COLUMNS | \egrep -iw "stream|local|urlOrFile|kb/s|Input|Size:|Title:|Duration:|Stream|Chapter|Invalid|error|bad| no such file|^\[.* not" | uniq | \egrep -iw --color "stream|local|urlOrFile|kb/s|Input|Size:|Title:|Duration:|Stream|Chapter|Invalid|error|bad| no such file|^\[.* not"
 	}
 }
 function ffprobe {
