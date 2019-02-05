@@ -11,6 +11,9 @@ myDefault_sshOptions="-A -Y -C"
 
 trap 'echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $?' INT
 
+function mkdircd {
+	\mkdir -pv $1 && cd $1
+}
 function addUsersInGroup {
 	local lastArg="$(eval echo \${$#})"
 	local allArgsButLast="${@:1:$#-1}"
