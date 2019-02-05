@@ -32,7 +32,7 @@ do
 done
 export PATH
 
-manPathsList="/opt/ffmpeg/share/man $HOME/.local/share/man /usr/local/share/man /usr/share/man"
+manPathsList="/opt/ffmpeg/share/man $HOME/.local/share/man /usr/local/share/man /usr/share/man /usr/local/miniconda3/share/man /usr/local/miniconda2/share/man"
 for manpath in $manPathsList
 do
   addmanpath $manpath
