@@ -11,6 +11,12 @@ myDefault_sshOptions="-A -Y -C"
 
 trap 'echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $?' INT
 
+function gdebiALL {
+	for package
+	do
+		sudo gdebi -n $package
+	done
+}
 function mountISO {
 	loopBackDevice=$(udisksctl loop-setup -r -f "$1" | awk -F "[ .]" '{print$(NF-1)}')
 	udisksctl mount -b $loopBackDevice
