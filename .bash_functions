@@ -11,6 +11,16 @@ myDefault_sshOptions="-A -Y -C"
 
 trap 'echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $?' INT
 
+function mountISO {
+	loopBackDevice=$(udisksctl loop-setup -r -f "$1" | awk -F "[ .]" '{print$(NF-1)}')
+	udisksctl mount -b $loopBackDevice
+}
+function umountISO {
+	loopBackDevice=$(sudo losetup -a | grep $1 | cut -d: -f1)
+	test -z $loopBackDevice && loopBackDevice=$1
+	udisksctl unmount -b $loopBackDevice
+	udisksctl loop-delete -b $loopBackDevice
+}
 function mkdircd {
 	\mkdir -pv $1
 	cd $1 && pwd -P
