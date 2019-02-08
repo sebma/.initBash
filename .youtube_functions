@@ -224,7 +224,7 @@ function getRestrictedFilenamesFORMAT {
 			fi
 		else
 			# URL complete
-			local urlSuffix
+			local urlSuffix=""
 			echo $url | grep -q youtube.com/ && urlSuffix="$(echo $url | cut -d= -f2 | sed 's/^-/\\&/')"
 			if test "$urlSuffix" && fileName=$(basename $( $locate -er "$urlSuffix.*__${format}__" | \egrep -v "\.part|AUDIO" | sort -rt. | head -1) 2>/dev/null) && test -s "$fileName"
 			then
@@ -232,7 +232,6 @@ function getRestrictedFilenamesFORMAT {
 				echo
 				continue
 			fi
-			unset urlSuffix
 		fi
 
 		echo
@@ -369,7 +368,7 @@ function getRestrictedFilenamesSD {
 			fi
 		else
 			# URL complete
-			local urlSuffix
+			local urlSuffix=""
 			echo $url | grep -q youtube.com/ && urlSuffix="$(echo $url | cut -d= -f2 | sed 's/^-/\\&/')"
 			if test "$urlSuffix" && fileName=$(basename $( $locate -er "$urlSuffix.*mp4$" | \egrep -v "\.part|AUDIO" | sort -rt. | head -1) 2>/dev/null) && test -s "$fileName"
 			then
@@ -377,7 +376,6 @@ function getRestrictedFilenamesSD {
 				echo
 				continue
 			fi
-			unset urlSuffix
 		fi
 		set +x
 
@@ -430,7 +428,7 @@ function getRestrictedFilenamesSD_PREV {
 			fi
 		else
 			# URL complete
-			local urlSuffix
+			local urlSuffix=""
 			echo $url | grep -q youtube.com/ && urlSuffix="$(echo $url | cut -d= -f2 | sed 's/^-/\\&/')"
 			if test "$urlSuffix" && fileName=$(basename $( $locate -er "$urlSuffix" | \egrep -v "\.part|AUDIO" | sort -rt. | head -1) 2>/dev/null) && test -s "$fileName"
 			then
@@ -438,7 +436,6 @@ function getRestrictedFilenamesSD_PREV {
 				echo
 				continue
 			fi
-			unset urlSuffix
 		fi
 
 		format=$(LANG=C.UTF-8 $youtube_dl -F $url | egrep -vw "only|hls-[0-9]+"  | egrep '(webm|mp4|flv) .*([0-9]+p?(x[0-9]+)?)|(unknown)' | egrep -wv "22|hd|http-720" | sort -k 2,2 -k 3,3rn | awk '{printf$1"/"}')
