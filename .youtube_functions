@@ -232,6 +232,7 @@ function getRestrictedFilenamesFORMAT {
 				echo
 				continue
 			fi
+			unset urlSuffix
 		fi
 
 		echo
@@ -376,6 +377,7 @@ function getRestrictedFilenamesSD {
 				echo
 				continue
 			fi
+			unset urlSuffix
 		fi
 		set +x
 
@@ -436,6 +438,7 @@ function getRestrictedFilenamesSD_PREV {
 				echo
 				continue
 			fi
+			unset urlSuffix
 		fi
 
 		format=$(LANG=C.UTF-8 $youtube_dl -F $url | egrep -vw "only|hls-[0-9]+"  | egrep '(webm|mp4|flv) .*([0-9]+p?(x[0-9]+)?)|(unknown)' | egrep -wv "22|hd|http-720" | sort -k 2,2 -k 3,3rn | awk '{printf$1"/"}')
