@@ -223,6 +223,8 @@ function getRestrictedFilenamesFORMAT {
 				url=$dailymotionURLPrefix$url
 			fi
 		else
+			# URL complete
+			local urlSuffix
 			echo $url | grep -q youtube.com/ && urlSuffix="$(echo $url | cut -d= -f2 | sed 's/^-/\\&/')"
 			if test "$urlSuffix" && fileName=$(basename $( $locate -er "$urlSuffix.*__${format}__" | \egrep -v "\.part|AUDIO" | sort -rt. | head -1) 2>/dev/null) && test -s "$fileName"
 			then
@@ -350,6 +352,7 @@ function getRestrictedFilenamesSD {
 		time LANG=C.UTF-8 $youtube_dl -f "$format" -qs -- "$url" 2>&1 | \grep --color -A1 ^ERROR: && echo && continue
 		if ! echo $url | \egrep -wq "https?:"
 		then
+			# URL courte
 			fileName=$(basename $( $locate -er "$url.*mp4$" | \egrep -v "\.part|AUDIO" | sort -rt. | head -1) 2>/dev/null)
 			if test -s "$fileName"
 			then
@@ -364,7 +367,9 @@ function getRestrictedFilenamesSD {
 				url=$dailymotionURLPrefix$url
 			fi
 		else
-			echo $url | grep -q youtube.com/ && urlSuffix="$(echo $url | cut -d= -f2 | sed 's/^-/\\&/')"
+			# URL complete
+			local urlSuffix
+			ech $url | grep -q youtube.com/ && urlSuffix="$(echo $url | cut -d= -f2 | sed 's/^-/\\&/')"
 			if test "$urlSuffix" && fileName=$(basename $( $locate -er "$urlSuffix.*mp4$" | \egrep -v "\.part|AUDIO" | sort -rt. | head -1) 2>/dev/null) && test -s "$fileName"
 			then
 				echo "${colors[yellowOnBlue]}=> The file <$fileName> is already downloaded, skipping ...$normal" >&2
@@ -422,6 +427,8 @@ function getRestrictedFilenamesSD_PREV {
 				url=$dailymotionURLPrefix$url
 			fi
 		else
+			# URL complete
+			local urlSuffix
 			echo $url | grep -q youtube.com/ && urlSuffix="$(echo $url | cut -d= -f2 | sed 's/^-/\\&/')"
 			if test "$urlSuffix" && fileName=$(basename $( $locate -er "$urlSuffix" | \egrep -v "\.part|AUDIO" | sort -rt. | head -1) 2>/dev/null) && test -s "$fileName"
 			then
