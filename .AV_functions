@@ -21,6 +21,22 @@ audioDecode=( [libspeex]=$(which speexdec 2>/dev/null) [speex]=$(which speexdec 
 alias mp32wavstdout="\mpg123 --wav - "
 alias ogg2wavstdout="\oggdec --output=- "
 
+function videoRotateLeft {
+	local extension
+	for video
+	do
+		extension=${video#*.}
+		$ffmpeg -i "$video" -c copy -metadata:s:v:0 rotate=90 "${video%.*}-ROTATED.$extension"
+	done
+}
+function videoRotateRight {
+	local extension
+	for video
+	do
+		extension=${video#*.}
+		$ffmpeg -i "$video" -c copy -metadata:s:v:0 rotate=-90 "${video%.*}-ROTATED.$extension"
+	done
+}
 function mkvInfo {
 #	file="$1"
 #	shift
