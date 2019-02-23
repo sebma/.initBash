@@ -1088,22 +1088,23 @@ function aptitude {
 	*) command aptitude $args;;
 	esac
 }
-function httpserver {
-	mkdir -p ~/log
-#	fqdn=$(host $(hostname) | awk '/address/{print$1}')
-	fqdn=localhost
+function httpLocalServer {
+#	local fqdn=$(host $(hostname) | awk '/address/{print$1}')
+	local fqdn=localhost
 	test $1 && port=$1 || port=1234
 	test $port -lt 1024 && {
 		echo "=> ERROR: Only root can bind to a tcp port lower than 1024." >&2
 		return 1
 	}
 
-	command ps -fu $USER | grep -v grep | grep -q SimpleHTTPServer && echo "=> SimpleHTTPServer is already running on http://$fqdn:$(\ps -fu $USER | grep -v awk | awk '/SimpleHTTPServer/{print$NF}')/" || {
+	local oldPort=$(\ps -fu $USER | \grep -v awk | awk '/SimpleHTTPServer/{print$NF}')
+	command ps -fu $USER | \grep -v grep | \grep -q SimpleHTTPServer && echo "=> SimpleHTTPServer is already running on http://$fqdn:$oldPort/" || {
 		logfilePrefix=SimpleHTTPServer_$(date +%Y%m%d)
+		mkdir -p ~/log
 		nohup python -m SimpleHTTPServer $port >~/log/${logfilePrefix}.log 2>&1 &
 		test $? = 0 && {
-			echo "=> SimpleHTTPServer started on http://$fqdn:$port/"
-			echo "=> logFile = ~/log/${logfilePrefix}.log"
+			echo "=> SimpleHTTPServer started on http://$fqdn:$port/" >&2
+			echo "=> logFile = ~/log/${logfilePrefix}.log" >&2
 		}
 	}
 }
