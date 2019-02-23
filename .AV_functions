@@ -899,14 +899,18 @@ function videoSplit {
 	outputFile="$fileBaseName-CUT.$extension"
 	chmod -x "$fileName"
 
+#	[ $extension = mp4 ] && remuxOptions="$remuxOptions $mp4Options"
 	if test $# = 3
 	then
 		end=$3
 		duration=$(echo $(date +%s.%N -d $end) - $(date +%s.%N -d $begin) | bc -l)
+		set -x
 		time $ffmpeg -ss $begin -t $duration -i "$fileName" $remuxOptions "$outputFile"
 	else
+		set -x
 		time $ffmpeg -ss $begin -i "$fileName" $remuxOptions "$outputFile"
 	fi
+	set +x
 	sync
 	touch -r "$fileName" "$outputFile"
 	echo "=> outputFile = <$outputFile>"
