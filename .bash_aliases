@@ -113,6 +113,7 @@ alias jpeg2pdfA4="\convert -set density '%[fx:w/8.27]' -gravity center"
 alias jpeg2pdfA4R="\convert -page 842x595"
 alias jpg2pdf=jpeg2pdf
 alias jpg2pdfA4=jpeg2pdfA4
+alias keyFrames="command ffprobe -hide_banner -loglevel error -skip_frame nokey -select_streams v:0 -show_entries frame=pkt_pts_time -of csv=print_section=0"
 alias killall="\killall -v"
 alias kshVersion="type ksh >/dev/null && strings $(which ksh) | grep Version | tail -2"
 alias lastfiles='$(which find) . -xdev -type f -mmin -2'
