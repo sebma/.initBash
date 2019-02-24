@@ -980,6 +980,7 @@ function lsbin {
 	done | grep bin/ | sort -u
 }
 function fixAptKeys {
+	LANG=C apt-key list | awk -F"/| *" '/expired/{print"sudo apt-key del "$3}' | sh -x
 	time sudo apt-get update 2>&1 | tee /tmp/keymissing
 	for key in $(awk '/Release:.*not available: NO_PUBKEY/{print substr($NF,9)}' /tmp/keymissing | sort -u)
 	do
