@@ -981,7 +981,7 @@ function lsbin {
 }
 function fixAptKeys {
 	LANG=C apt-key list | awk -F"/| *" '/expired/{print"sudo apt-key del "$3}' | sh -x
-	time sudo apt-get update 2>&1 | tee /tmp/keymissing
+	time (sudo apt-get update 2>/tmp/keymissing; cat /tmp/keymissing)
 	for key in $(awk '/Release:.*not available: NO_PUBKEY/{print substr($NF,9)}' /tmp/keymissing | sort -u)
 	do
 		echo
@@ -994,7 +994,7 @@ function fixAptKeys {
 	do
 		sudo rm -v $keyFile
 	done
-	\rm -v /tmp/keymissing
+#	\rm -v /tmp/keymissing
 }
 function updateRepositoryKeys {
 	time sudo apt-get update 2>&1 >/dev/null | awk '/Release:.*not available: NO_PUBKEY/{print "sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys "$NF}' | sh -x
