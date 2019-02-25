@@ -994,7 +994,7 @@ function fixAptKeys {
 	do
 		sudo rm -v $keyFile
 	done
-#	\rm -v /tmp/keymissing
+	\rm -v /tmp/keymissing
 }
 function updateRepositoryKeys {
 	time sudo apt-get update 2>&1 >/dev/null | awk '/Release:.*not available: NO_PUBKEY/{print "sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys "$NF}' | sh -x
