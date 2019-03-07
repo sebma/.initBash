@@ -11,6 +11,12 @@ myDefault_sshOptions="-A -Y -C"
 
 trap 'echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $?' INT
 
+function hide {
+	for file
+	do
+		mv $file .$file
+	done
+}
 function connect2SSID {
 	local ssid=$1
 	set -x
