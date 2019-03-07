@@ -17,7 +17,7 @@ function connect2SSID {
 	nmcli con status
 	time nmcli con up id $ssid
 	nmcli con status
-	wanip
+	time \curl -A "" ipinfo.io/ip || time \wget -qU "" -O- ipinfo.io/ip
 	set +x
 }
 function gdebiALL {
