@@ -14,10 +14,14 @@ trap 'echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $?' INT
 function lvmDM2LVMMapperPath {
 	local fs
 	local dm
+	local dmNumber
 	for fs
 	do
 		dm=$(\df $fs | grep /dev/dm- | awk -F"[ /]" "$fs/"'{print$3}')
 		\ls -l /dev/mapper | awk "/$dm/"'{printf"/dev/mapper/"$(NF-2)}'
+#		dmNumber=$(echo $dm | cut -d- -f2)
+#		sudo dmsetup ls | awk  "/:$dmNumber.$/"'{printf"/dev/mapper/"$1}'
+#		sudo lvdisplay -c | awk -F" *|:"  "/:$dmNumber$/"'{printf$2}'
 	done
 }
 function fscreationDate {
