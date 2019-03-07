@@ -21,9 +21,9 @@ test $wifiInterface && alias wifiRestart=restartWifi
 
 alias brewUnInstall='$(which ruby) -e "$(\curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/uninstall)"'
 alias catFiles="\tail -vn +1"
-alias connect2MyHiddenWifi="set -x;time nmcli con up id sebWlan && wanip;set +x"
-alias connect2Bbox="set -x;time nmcli con up id sebBbox-5GHz && wanip;set +x"
-alias connect2eduroam="set -x;time nmcli con up id eduroam && wanip;set +x"
+alias connect2MyHiddenWifi="set -x;nmcli con status;time nmcli con up id sebWlan && wanip;nmcli con status;set +x"
+alias connect2Bbox="set -x;nmcli con status;time nmcli con up id sebBbox-5GHz && wanip;nmcli con status;set +x"
+alias connect2eduroam="set -x;nmcli con status;time nmcli con up id eduroam && wanip;nmcli con status;set +x"
 alias cp='\cp --preserve=timestamps -uv'
 alias df="\df -PTh"
 alias dnsInfo="\nmcli | sed -n '/^DNS /,+3p'"
