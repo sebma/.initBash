@@ -11,12 +11,12 @@ myDefault_sshOptions="-A -Y -C"
 
 trap 'echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $?' INT
 
-function lvmMount2MapperPath {
+function lvmDM2LVMMapperPath {
 	local fs
 	local dm
 	for fs
 	do
-		dm=$(\df $fs | awk -F"[ /]" "$fs/"'{print$3}')
+		dm=$(\df $fs | grep /dev/dm- | awk -F"[ /]" "$fs/"'{print$3}')
 		\ls -l /dev/mapper | awk "/$dm/"'{printf"/dev/mapper/"$(NF-2)}'
 	done
 }
@@ -24,7 +24,7 @@ function fscreationDate {
 	sudo printf ""
 	for fs
 	do
-		sudo lvdisplay $(lvmMount2MapperPath $fs)
+		sudo lvdisplay $(lvmDM2LVMMapperPath $fs)
 	done | egrep "LV Path|Creation"
 }
 function lvcreationDate {
