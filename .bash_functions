@@ -14,6 +14,7 @@ trap 'echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $?' INT
 function connect2SSID {
 	local ssid=$1
 	set -x
+	nmcli con status
 	time nmcli con up id $ssid
 	nmcli con status
 	wanip
