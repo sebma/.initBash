@@ -11,24 +11,25 @@ myDefault_sshOptions="-A -Y -C"
 
 trap 'echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $?' INT
 
-function lvmDM2LVMMapperPath {
-	local fs
-	local dm
-	local dmNumber
+function lvm_DM_Paths_2_LVM_Paths {
+	for dmPath
+	do
+		lsblk -n $dmPath | awk '{print"/dev/mapper/"$1}'
+	done
+}
+function lvm_Mount_Point_2_LVM_Paths {
+	local dmPath
 	for fs
 	do
-		dm=$(\df $fs | grep /dev/dm- | awk -F"[ /]" "$fs/"'{print$3}')
-		\ls -l /dev/mapper | awk "/$dm/"'{printf"/dev/mapper/"$(NF-2)}'
-#		dmNumber=$(echo $dm | cut -d- -f2)
-#		sudo dmsetup ls | awk  "/:$dmNumber.$/"'{printf"/dev/mapper/"$1}'
-#		sudo lvdisplay -c | awk -F" *|:"  "/:$dmNumber$/"'{printf$2}'
+		dmPath=$(\df $fs | awk "$fs/"'{print$1}')
+		lsblk -n $dmPath | awk '{print"/dev/mapper/"$1}'
 	done
 }
 function fscreationDate {
 	sudo printf ""
 	for fs
 	do
-		sudo lvdisplay $(lvmDM2LVMMapperPath $fs)
+		sudo lvdisplay $(lvm_Mount_Point_2_LVM_Paths $fs)
 	done | egrep "LV Path|Creation"
 }
 function lvcreationDate {
