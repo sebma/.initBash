@@ -75,7 +75,9 @@ function mkdircd {
 	cd $1 && pwd -P
 }
 function addUsersInGroup {
-	local lastArg="$(eval echo \${$#})"
+#	local lastArg="$(eval echo \${$#})"
+#	local lastArg="${@:$#}"
+	local lastArg="${@: -1}"
 	local allArgsButLast="${@:1:$#-1}"
 	for user in $allArgsButLast
 	do
