@@ -28,6 +28,7 @@ function ytdlFormats {
 		echo "=> url = $url"
 		streamID=$(basename "$url" | cut -d= -f2)
 		LANG=C.UTF-8 $youtube_dl -F "$url" | \egrep -v "only|$streamID"
+		echo
 	done
 	trap - INT
 }
