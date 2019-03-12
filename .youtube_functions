@@ -291,8 +291,7 @@ function getRestrictedFilenamesHD {
 	trap 'rc=130;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
 	youtubeURLPrefix=https://www.youtube.com/watch?v=
 	dailymotionURLPrefix=https://www.dailymotion.com/video/
-#	youtube_dl_Format=$($youtube_dl -F $url | grep -vw only  | egrep '(m4a|mp4|flv) .*([0-9]+x[0-9]+)|(unknown)' | sort -k 2,2 -k 3,3rn | awk '{printf$1"/"}')
-	youtube_dl_Format="mp4[height<=?720]"
+	youtube_dl_Format='"mp4[height<=?720]"' # because of the "eval" statement in the "youtube_dl" bash variable
 	test $# != 0 && echo "=> There are $# urls to download ..."
 	i=0
 	for url
@@ -332,7 +331,7 @@ function getRestrictedFilenamesHD {
 }
 function getRestrictedFilenamesSD {
 	trap 'rc=130;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
-	youtube_dl_Format="mp4[height<=?480]"
+	youtube_dl_Format='"mp4[height<=?480]"' # because of the "eval" statement in the "youtube_dl" bash variable
 	i=0
 	for url
 	do
@@ -355,7 +354,7 @@ function getRestrictedFilenamesSD {
 		echo
 
 		echo $url | \egrep -wq "https?:" || url=https://www.youtube.com/watch?v=$url #Only youtube short urls are handled by "youtube-dl"
-		$youtube_dl -f $youtube_dl_Format "$url" --restrict-filenames && mp4tags -m "$url" "$fileName" && chmod -w "$fileName" && echo && command ffprobe -hide_banner "$fileName"
+		$youtube_dl -f "$youtube_dl_Format" "$url" --restrict-filenames && mp4tags -m "$url" "$fileName" && chmod -w "$fileName" && echo && command ffprobe -hide_banner "$fileName"
 
 		echo
 	done
@@ -426,8 +425,7 @@ function getRestrictedFilenamesLD {
 	trap 'rc=130;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
 	youtubeURLPrefix=https://www.youtube.com/watch?v=
 	dailymotionURLPrefix=https://www.dailymotion.com/video/
-#	youtube_dl_Format=$($youtube_dl -F $url | egrep -vw "only|hls-[0-9]+"  | egrep '(webm|mp4|flv) .*([0-9]+x[0-9]+)|(unknown)' | egrep -wv "22|hd|http-720|18|hq|http-480" | sort -k 2,2 -k 3,3rn | awk '{printf$1"/"}')
-	youtube_dl_Format="mp4[height<=?240]"
+	youtube_dl_Format='"mp4[height<=?240]"' # because of the "eval" statement in the "youtube_dl" bash variable
 	test $# != 0 && echo "=> There are $# urls to download ..."
 	i=0
 	for url
