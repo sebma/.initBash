@@ -11,6 +11,16 @@ myDefault_sshOptions="-A -Y -C"
 
 trap 'echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $?' INT
 
+function img2pdfA4R {
+	local lastArg="${@: -1}"
+	local allArgsButLast="${@:1:$#-1}"
+	img2pdf --pagesize A4^T $allArgsButLast -o $lastArg
+}
+function img2pdfA4 {
+	local lastArg="${@: -1}"
+	local allArgsButLast="${@:1:$#-1}"
+	img2pdf --pagesize A4 $allArgsButLast -o $lastArg
+}
 function lvm_DM_Paths_2_LVM_Paths {
 	for dmPath
 	do
