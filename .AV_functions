@@ -5,8 +5,7 @@ test "$debug" '>' 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 
 \which ffmpeg  >/dev/null 2>&1 && ffmpeg="command  ffmpeg  -hide_banner" &&  ffmpegOptions="-probesize 400M -analyzeduration 400M"
 \which ffprobe >/dev/null 2>&1 && ffprobe="command ffprobe -hide_banner" && ffprobeOptions="-probesize 400M -analyzeduration 400M"
-#\which youtube-dl >/dev/null 2>&1 && youtube_dl="LANG=C.UTF-8 command youtube-dl"
-\which youtube-dl >/dev/null 2>&1 && youtube_dl="command youtube-dl"
+\which youtube-dl >/dev/null 2>&1 && youtube_dl="eval LANG=C.UTF-8 command youtube-dl"
 
 remuxOptions="-map 0 -c copy"
 mp4Options="-movflags frag_keyframe"
