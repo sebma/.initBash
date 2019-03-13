@@ -35,15 +35,15 @@ function lvm_Mount_Point_2_LVM_Paths {
 		lsblk -n $dmPath | awk '{print"/dev/mapper/"$1}'
 	done
 }
-function fscreationDate {
-	sudo printf ""
+function lv_FS_Creation_Date {
+	sudo -v
 	for fs
 	do
 		sudo lvdisplay $(lvm_Mount_Point_2_LVM_Paths $fs)
 	done | egrep "LV Path|Creation"
 }
-function lvcreationDate {
-	sudo printf ""
+function lv_Dev_Creation_Date {
+	sudo -v
 	for lv
 	do
 		sudo lvdisplay
