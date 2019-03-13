@@ -181,157 +181,9 @@ function ytget {
 }
 function getRestrictedFilenamesFORMAT {
 	trap 'rc=130;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
-	youtubeURLPrefix=https://www.youtube.com/watch?v=
-	dailymotionURLPrefix=https://www.dailymotion.com/video/
-	test $# = 0 && {
-		echo "=> Usage: $FUNCNAME <siteVideoFormat> url1 [url2] ..." >&2
-		return 1
-	}
 	siteVideoFormat="$1"
+	local downloadOK extension
 	shift
-	test $# != 0 && echo "=> There are $# urls to download ..."
-	i=0
-	for url
-	do
-		let i++
-		echo "=> Downloading url # $i/$# ..."
-		echo "=> url = $url"
-		$youtube_dl -f "$siteVideoFormat" -qs -- "$url" 2>&1 | \grep --color -A1 ^ERROR: && echo && continue
-		fileName=$($youtube_dl -f $siteVideoFormat --get-filename "$url" --restrict-filenames || $youtube_dl -f $fallback --get-filename "$url" --restrict-filenames)
-		test -z "$fileName" && continue
-#		$youtube_dl -f "$siteVideoFormat" -qs -- "$url" 2>&1 | \grep --color -A1 ^ERROR: && echo && continue
-		if ! echo $url | \egrep -q "https?:"
-		then
-			streamID=$url
-			fileName=$(basename $( $locate -er "$streamID.*__${siteVideoFormat}__" | \egrep -v "\.part|AUDIO" | sort -rt. | head -1) 2>/dev/null)
-			if test -s "$fileName"
-			then
-				echo "${colors[yellowOnBlue]}=> The file <$fileName> is already downloaded, skipping ...$normal" >&2
-				echo
-				continue
-			elif  $youtube_dl -f "$siteVideoFormat" -qs -- $youtubeURLPrefix$url	   2>/dev/null
-			then
-				url=$youtubeURLPrefix$url
-			elif $youtube_dl -f "$siteVideoFormat" -qs -- $dailymotionURLPrefix$url 2>/dev/null
-			then
-				url=$dailymotionURLPrefix$url
-			fi
-		else
-			# URL complete
-			local urlSuffix=""
-			echo $url | grep -q youtube.com/ && urlSuffix="$(echo $url | cut -d= -f2 | sed 's/^-/\\&/')"
-			if test "$urlSuffix" && fileName=$(basename $( $locate -er "$urlSuffix.*__${siteVideoFormat}__" | \egrep -v "\.part|AUDIO" | sort -rt. | head -1) 2>/dev/null) && test -s "$fileName"
-			then
-				echo
-				echo "${colors[yellowOnBlue]}=> The file <$fileName> is already downloaded, skipping ...$normal" >&2
-				echo
-				continue
-			fi
-		fi
-
-		fileName=$($youtube_dl -f $siteVideoFormat --get-filename "$url" --restrict-filenames || $youtube_dl -f $fallback --get-filename "$url" --restrict-filenames)
-		echo
-		if [ -f "$fileName" ] && [ ! -w "$fileName" ]
-		then
-			echo "${colors[yellowOnBlue]}=> The file <$fileName> is already downloaded, skipping ...$normal" >&2
-			echo
-			continue
-		else
-			echo "=> fileName = <$fileName>"
-			echo
-		fi
-		$youtube_dl -f $siteVideoFormat "$url" --restrict-filenames && mp4tags -m "$url" "$fileName" && chmod -w "$fileName" && echo && command ffprobe -hide_banner "$fileName"
-		echo
-	done
-	sync
-	trap - INT
-}
-function getRestrictedFilenamesBEST {
-	trap 'rc=130;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
-	youtubeURLPrefix=https://www.youtube.com/watch?v=
-	dailymotionURLPrefix=https://www.dailymotion.com/video/
-	youtube_dl_Format=best[ext=mp4]/best[ext=webm]/best[ext=flv]
-	test $# != 0 && echo "=> There are $# urls to download ..."
-	i=0
-	for url
-	do
-		let i++
-		echo "=> Downloading url # $i/$# ..."
-		echo "=> url = $url"
-		$youtube_dl -f "$youtube_dl_Format" -qs -- "$url" 2>&1 | \grep --color -A1 ^ERROR: && echo && continue
-		if ! echo $url | \egrep -wq "https?:"
-		then
-			if   $youtube_dl -f "$youtube_dl_Format" -qs -- $youtubeURLPrefix$url   2>/dev/null
-			then
-				url=$youtubeURLPrefix$url
-			elif $youtube_dl -f "$youtube_dl_Format" -qs -- $dailymotionURLPrefix$url 2>/dev/null
-			then
-				url=$dailymotionURLPrefix$url
-			fi
-		fi
-
-		fileName=$($youtube_dl -f $youtube_dl_Format --get-filename "$url" --restrict-filenames)
-		echo
-		if [ -f "$fileName" ] && [ ! -w "$fileName" ]
-		then
-			echo "${colors[yellowOnBlue]}=> The file <$fileName> is already downloaded, skipping ...$normal" >&2
-			echo
-			continue
-		else
-			echo "=> fileName = <$fileName>"
-			echo
-		fi
-		$youtube_dl -f $youtube_dl_Format "$url" --restrict-filenames && mp4tags -m "$url" "$fileName" && chmod -w "$fileName" && echo && command ffprobe -hide_banner "$fileName"
-		echo
-	done
-	sync
-	trap - INT
-}
-function getRestrictedFilenamesHD {
-	trap 'rc=130;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
-	youtubeURLPrefix=https://www.youtube.com/watch?v=
-	dailymotionURLPrefix=https://www.dailymotion.com/video/
-	youtube_dl_Format='"mp4[height<=?720]"' # because of the "eval" statement in the "youtube_dl" bash variable
-	test $# != 0 && echo "=> There are $# urls to download ..."
-	i=0
-	for url
-	do
-		let i++
-		echo "=> Downloading url # $i/$# ..."
-		echo "=> url = $url"
-		$youtube_dl -f "$youtube_dl_Format" -qs -- "$url" 2>&1 | \grep --color -A1 ^ERROR: && echo && continue
-		if ! echo $url | \egrep -wq "https?:"
-		then
-			if   $youtube_dl -f "$youtube_dl_Format" -qs -- $youtubeURLPrefix$url   2>/dev/null
-			then
-				url=$youtubeURLPrefix$url
-			elif $youtube_dl -f "$youtube_dl_Format" -qs -- $dailymotionURLPrefix$url 2>/dev/null
-			then
-				url=$dailymotionURLPrefix$url
-			fi
-		fi
-
-		fileName=$($youtube_dl -f $youtube_dl_Format --get-filename "$url" --restrict-filenames)
-
-		echo
-		if [ -f "$fileName" ] && [ ! -w "$fileName" ]
-		then
-			echo "${colors[yellowOnBlue]}=> The file <$fileName> is already downloaded, skipping ...$normal" >&2
-			echo
-			continue
-		else
-			echo "=> fileName = <$fileName>"
-			echo
-		fi
-		$youtube_dl -f $youtube_dl_Format "$url" --restrict-filenames && mp4tags -m "$url" "$fileName" && chmod -w "$fileName" && echo && command ffprobe -hide_banner "$fileName"
-		echo
-	done
-	sync
-	trap - INT
-}
-function getRestrictedFilenamesSD {
-	trap 'rc=130;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
-	youtube_dl_Format='"mp4[height<=?480]"' # because of the "eval" statement in the "youtube_dl" bash variable
 	i=0
 	for url
 	do
@@ -339,7 +191,7 @@ function getRestrictedFilenamesSD {
 		echo "=> Downloading url # $i/$# ..."
 		echo "=> url = $url"
 		echo "=> Testing if $url still exists ..."
-		fileName=$(time $youtube_dl -f "$youtube_dl_Format" --get-filename --restrict-filenames -- "$url" 2>&1)
+		fileName=$(time $youtube_dl -f "$siteVideoFormat" --get-filename --restrict-filenames -- "$url" 2>&1)
 		echo $fileName | \egrep --color -A1 ^ERROR: && echo && continue
 		echo
 
@@ -354,114 +206,34 @@ function getRestrictedFilenamesSD {
 		echo
 
 		echo $url | \egrep -wq "https?:" || url=https://www.youtube.com/watch?v=$url #Only youtube short urls are handled by "youtube-dl"
-		$youtube_dl -f "$youtube_dl_Format" "$url" --restrict-filenames && mp4tags -m "$url" "$fileName" && chmod -w "$fileName" && echo && command ffprobe -hide_banner "$fileName"
+		$youtube_dl -f "$siteVideoFormat" "$url" --restrict-filenames
+		downloadOK=$?
+		if [ $downloadOK = 0 ] 
+		then
+			extension="${fileName#*.}"
+			[ $extension = mp4 ] && mp4tags -m "$url" "$fileName"
+			chmod -w "$fileName" && echo && command ffprobe -hide_banner "$fileName"
+		fi
 
 		echo
 	done
 	sync
 	trap - INT
 }
-function getRestrictedFilenamesSD_PREV {
-	trap 'rc=130;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
-	youtubeURLPrefix=https://www.youtube.com/watch?v=
-	dailymotionURLPrefix=https://www.dailymotion.com/video/
-	youtube_dl_Format=$($youtube_dl -F $url | egrep -vw "only|hls-[0-9]+"  | egrep '(webm|mp4|flv) .*([0-9]+p?(x[0-9]+)?)|(unknown)' | egrep -wv "22|hd|http-720" | sort -k 2,2 -k 3,3rn | awk '{printf$1"/"}')
-
-	test $# != 0 && echo "=> There are $# urls to download ..."
-	i=0
-	for url
-	do
-		let i++
-		echo "=> Downloading url # $i/$# ..."
-		echo "=> url = $url"
-		$youtube_dl -f "$youtube_dl_Format" -qs -- "$url" 2>&1 | \grep --color -A1 ^ERROR: && echo && continue
-		if ! echo $url | \egrep -wq "https?:"
-		then
-			fileName=$(basename $( $locate -er "$url" | \egrep -v "\.part|AUDIO" | sort -rt. | head -1) 2>/dev/null)
-			if test -s "$fileName"
-			then
-				echo "${colors[yellowOnBlue]}=> The file <$fileName> is already downloaded, skipping ...$normal" >&2
-				echo
-				continue
-			elif  $youtube_dl -f "$youtube_dl_Format" -qs -- $youtubeURLPrefix$url	   2>/dev/null
-			then
-				url=$youtubeURLPrefix$url
-			elif $youtube_dl -f "$youtube_dl_Format" -qs -- $dailymotionURLPrefix$url 2>/dev/null
-			then
-				url=$dailymotionURLPrefix$url
-			fi
-		else
-			# URL complete
-			local urlSuffix=""
-			echo $url | grep -q youtube.com/ && urlSuffix="$(echo $url | cut -d= -f2 | sed 's/^-/\\&/')"
-#			if test "$urlSuffix" && fileName=$(basename $( $locate -er "$urlSuffix.*mp4$" | \egrep -v "\.part|AUDIO" | sort -rt. | head -1) 2>/dev/null) && test -s "$fileName"
-			if test "$urlSuffix" && fileName=$(basename $( $locate -er "$urlSuffix" | \egrep -v "\.part|AUDIO" | sort -rt. | head -1) 2>/dev/null) && test -s "$fileName"
-			then
-				echo
-				echo "${colors[yellowOnBlue]}=> The file <$fileName> is already downloaded, skipping ...$normal" >&2
-				echo
-				continue
-			fi
-		fi
-
-		fileName=$($youtube_dl -f $youtube_dl_Format --get-filename "$url" --restrict-filenames || $youtube_dl -f $fallback --get-filename "$url" --restrict-filenames)
-		echo
-		if [ -f "$fileName" ] && [ ! -w "$fileName" ]
-		then
-			echo "${colors[yellowOnBlue]}=> The file <$fileName> is already downloaded, skipping ...$normal" >&2
-			echo
-			continue
-		else
-			echo "=> fileName = <$fileName>"
-			echo
-		fi
-		$youtube_dl -f $youtube_dl_Format "$url" --restrict-filenames && mp4tags -m "$url" "$fileName" && chmod -w "$fileName" && echo && command ffprobe -hide_banner "$fileName"
-		echo
-	done
-	sync
-	trap - INT
+function getRestrictedFilenamesBEST {
+	getRestrictedFilenamesFORMAT "best[ext=mp4]/best[ext=webm]/best[ext=flv]" $@ # because of the "eval" statement in the "youtube_dl" bash variable
+}
+function getRestrictedFilenamesFHD {
+	getRestrictedFilenamesFORMAT '"mp4[height<=?1080]"' $@ # because of the "eval" statement in the "youtube_dl" bash variable
+}
+function getRestrictedFilenamesHD {
+	getRestrictedFilenamesFORMAT '"mp4[height<=?720]"'  $@ # because of the "eval" statement in the "youtube_dl" bash variable
+}
+function getRestrictedFilenamesSD {
+	getRestrictedFilenamesFORMAT '"mp4[height<=?480]"'  $@ # because of the "eval" statement in the "youtube_dl" bash variable
 }
 function getRestrictedFilenamesLD {
-	trap 'rc=130;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
-	youtubeURLPrefix=https://www.youtube.com/watch?v=
-	dailymotionURLPrefix=https://www.dailymotion.com/video/
-	youtube_dl_Format='"mp4[height<=?240]"' # because of the "eval" statement in the "youtube_dl" bash variable
-	test $# != 0 && echo "=> There are $# urls to download ..."
-	i=0
-	for url
-	do
-		let i++
-		echo "=> Downloading url # $i/$# ..."
-		echo "=> url = $url"
-		$youtube_dl -f "$youtube_dl_Format" -qs -- "$url" 2>&1 | \grep --color -A1 ^ERROR: && echo && continue
-		if ! echo $url | \egrep -wq "https?:"
-		then
-			if   $youtube_dl -f "$youtube_dl_Format" -qs -- $youtubeURLPrefix$url   2>/dev/null
-			then
-				url=$youtubeURLPrefix$url
-			elif $youtube_dl -f "$youtube_dl_Format" -qs -- $dailymotionURLPrefix$url 2>/dev/null
-			then
-				url=$dailymotionURLPrefix$url
-			fi
-		fi
-
-		fileName=$($youtube_dl -f $youtube_dl_Format --get-filename "$url" --restrict-filenames || $youtube_dl --get-filename "$url" --restrict-filenames)
-
-		echo
-		if [ -f "$fileName" ] && [ ! -w "$fileName" ]
-		then
-			echo "${colors[yellowOnBlue]}=> The file <$fileName> is already downloaded, skipping ...$normal" >&2
-			echo
-			continue
-		else
-			echo "=> fileName = <$fileName>"
-			echo
-		fi
-		$youtube_dl -f $youtube_dl_Format "$url" --restrict-filenames && mp4tags -m "$url" "$fileName" && chmod -w "$fileName" && echo && command ffprobe -hide_banner "$fileName"
-		echo
-	done
-	sync
-	trap - INT
+	getRestrictedFilenamesFORMAT '"mp4[height<=?240]"'  $@ # because of the "eval" statement in the "youtube_dl" bash variable
 }
 function ytdlSDFormats {
 	trap 'rc=130;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
