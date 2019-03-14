@@ -1007,9 +1007,12 @@ function avprobe {
 	for arg
 	do
 		echo "$arg" | egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $avprobe $avprobeOptions "$($youtube_dl -gf best -- "$arg")" || command avprobe $avprobeOptions -probesize 400M -analyzeduration 400M "$arg"
-	done 2>&1 | cut -c 1-$COLUMNS
+#	done 2>&1 | cut -c 1-$COLUMNS
+	done
 }
 function videoInfo {
+	local columns=$COLUMNS
+#	local columns="" # To see more info than the width of the screen
 	local size=0
 	which ffprobe >/dev/null && {
 		for urlOrFile
@@ -1018,11 +1021,11 @@ function videoInfo {
 			if echo "$urlOrFile" | egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://"
 			then
 				#remote stream
-				if curl -s "$urlOrFile" | file -bi - | \grep -q "^text/"
+				if \curl -s "$urlOrFile" | file -bi - | \grep -q "^text/"
 				then
 					echo "=> This stream needs first to be resolved by youtube-dl ..."
 					possibleFormats=best[ext=mp4]/best[ext=webm]/best[ext=flv]/18/webm/sd/http-480
-					infos="$($youtube_dl -gef $possibleFormats "$urlOrFile")"
+					infos="$($youtube_dl -gef $possibleFormats -- "$urlOrFile")"
 					test -z "$infos" && continue
 					title="$(echo "$infos" | sed -n 1p )"
 					directURLOfStream="$(echo "$infos" | sed -n 2p)"
@@ -1045,8 +1048,9 @@ function videoInfo {
 				$ffprobe "$urlOrFile" || $ffprobe $ffprobeOptions "$urlOrFile"
 			fi
 			echo
-#		done 2>&1 | cut -c 1-$COLUMNS | egrep -iw "stream|local|urlOrFile|kb/s|Input|Size:|Title:|Duration:|Stream|Chapter|Invalid|error|bad| no such file|^\[.* not"
-		done 2>&1 | cut -c 1-$COLUMNS | \egrep -iw "^$|stream|local|urlOrFile|kb/s|Input|Size:|Title:|Duration:|Stream|Chapter|Invalid|error|bad| no such file|^\[.* not" | uniq | \egrep -iw --color "^$|stream|local|urlOrFile|kb/s|Input|Size:|Title:|Duration:|Stream|Chapter|Invalid|error|bad| no such file|^\[.* not"
+#		done 2>&1 | cut -c 1-$columns | egrep -iw "stream|local|urlOrFile|kb/s|Input|Size:|Title:|Duration:|Stream|Chapter|Invalid|error|bad| no such file|^\[.* not"
+#		done 2>&1 | cut -c 1-$columns | \egrep -iw "^$|stream|local|urlOrFile|kb/s|Input|Size:|Title:|Duration:|Stream|Chapter|Invalid|error|bad| no such file|^\[.* not" | uniq | \egrep -iw --color "^$|stream|local|urlOrFile|kb/s|Input|Size:|Title:|Duration:|Stream|Chapter|Invalid|error|bad| no such file|^\[.* not"
+		done 2>&1 | \egrep -iw "^$|stream|local|urlOrFile|kb/s|Input|Size:|Title:|Duration:|Stream|Chapter|Invalid|error|bad| no such file|^\[.* not" | uniq | \egrep -iw --color "^$|stream|local|urlOrFile|kb/s|Input|Size:|Title:|Duration:|Stream|Chapter|Invalid|error|bad| no such file|^\[.* not"
 	}
 }
 function ffprobe {
@@ -1054,7 +1058,8 @@ function ffprobe {
 		for arg
 		do
 			echo "$arg" | egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $ffprobe $ffprobeOptions "$($youtube_dl -gf best -- "$arg")" || $ffprobe $ffprobeOptions "$arg"
-		done 2>&1 | cut -c 1-$COLUMNS
+#		done 2>&1 | cut -c 1-$COLUMNS
+		done
 	}
 }
 function ffprobeFlat {
