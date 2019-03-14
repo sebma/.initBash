@@ -1058,7 +1058,7 @@ function mediainfoSummary {
 	do
 		mediainfo "$media"
 		echo >&2
-	done | \egrep "^Complete name|^Format  |^Format version|^Format profile| size|^Duration|^Video|^Audio|Kbps|[Bb]it ?rate"
+	done | \egrep "^Complete name|^Format  |^Format version|^Format profile| size|^Duration|^Video|^Audio|^Text|^Menu|^Language|Kbps|[Bb]it ?rate"
 }
 function ffprobe {
 	which ffprobe >/dev/null && {
