@@ -22,6 +22,7 @@ alias ..="cd .."
 #alias reset="\reset;\printf '\33c\e[3J'"
 
 alias Cat='\highlight -O ansi --force'
+alias Cut='\cut -c 1-$COLUMNS'
 alias acp='\advcp -gpuv'
 alias amv='\advmv -gvi'
 alias audioInfo="which mplayer >/dev/null 2>&1 && \mplayer -identify -vo null -ao null -frames 0"
