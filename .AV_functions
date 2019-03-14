@@ -1053,6 +1053,13 @@ function videoInfo {
 		done 2>&1 | \egrep -iw "^$|stream|local|urlOrFile|kb/s|Input|Size:|Title:|Duration:|Stream|Chapter|Invalid|error|bad| no such file|^\[.* not" | uniq | \egrep -iw --color "^$|stream|local|urlOrFile|kb/s|Input|Size:|Title:|Duration:|Stream|Chapter|Invalid|error|bad| no such file|^\[.* not"
 	}
 }
+function mediainfoSummary {
+	for media
+	do
+		mediainfo "$media" | \egrep "^Complete name|^Format  |^Format version|^Format profile| size|^Duration|^Video|^Audio|Kbps"
+		echo
+	done
+}
 function ffprobe {
 	which ffprobe >/dev/null && {
 		for arg
