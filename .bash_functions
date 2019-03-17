@@ -24,7 +24,7 @@ function img2pdfA4 {
 function lvm_DM_Paths_2_LVM_Paths {
 	for dmPath
 	do
-		lsblk -n $dmPath | awk '{print"/dev/mapper/"$1}'
+		\lsblk -nf $dmPath | awk '{print"/dev/mapper/"$1}'
 	done
 }
 function lvm_Mount_Point_2_LVM_Paths {
@@ -32,7 +32,7 @@ function lvm_Mount_Point_2_LVM_Paths {
 	for fs
 	do
 		dmPath=$(\df $fs | awk "$fs/"'{print$1}')
-		lsblk -n $dmPath | awk '{print"/dev/mapper/"$1}'
+		\lsblk -nf $dmPath | awk '{print"/dev/mapper/"$1}'
 	done
 }
 function lv_FS_Creation_Date {
