@@ -1069,7 +1069,7 @@ function watchProcess {
 	test $# = 1 && while true
 	do
 		pidList=$(\pgrep -f "$1")
-		test -n "$pidList" && \ps -fp $pidList && echo "=> Showing the parent process :" && \ps h -fp $(\ps -o ppid= $pidList) | tee -a processSPY.log && break
+		test -n "$pidList" && ( \ps -fp $pidList && echo "=> Showing the parent process :" && \ps h -fp $(\ps -o ppid= $pidList) ) | tee -a processSPY.log && break
 		sleep 0.01
 	done
 }
