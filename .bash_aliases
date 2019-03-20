@@ -82,6 +82,7 @@ alias erasecd='\cdrecord -v speed=12 blank=fast gracetime=10 -eject'
 alias erasewholecd='\cdrecord -v speed=12 blank=all gracetime=10 -eject'
 alias errors="\egrep -iC2 'error|erreur|java.*exception'"
 alias ffmpeg="time \ffmpeg -hide_banner"
+alias ffprobe="time \ffprobe -hide_banner"
 alias ffplay="\ffplay -hide_banner"
 alias findFunctions="grep -P '(^| )\w+\(\)|\bfunction\b'"
 alias findSpecialFiles="$(which find) . -xdev '(' -type b -o -type c -o -type p -o -type s ')' -a -ls"
