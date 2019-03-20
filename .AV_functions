@@ -1064,11 +1064,12 @@ function ffprobe {
 	which ffprobe >/dev/null && {
 		for arg
 		do
-			echo "$arg" | egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $ffprobe $ffprobeOptions "$($youtube_dl -gf best -- "$arg")" || $ffprobe $ffprobeOptions "$arg"
+			echo "$arg" | \egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $ffprobe $ffprobeOptions "$($youtube_dl -gf best -- "$arg")" || $ffprobe $ffprobeOptions "$arg"
 #		done 2>&1 | cut -c 1-$COLUMNS
 		done
 	}
 }
+unset -f ffprobe
 function ffprobeFlat {
 	local ffprobeOptions="-v 0 -show_format -show_streams -of flat"
 	for arg
