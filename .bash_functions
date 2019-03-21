@@ -374,9 +374,6 @@ function Less {
 function resetRESOLUTION {
 	\xrandr | awk '{if(/\<connected/)output=$1;if(/\*/){print"xrandr --output "output" --mode "$1;exit}}' | sh -x
 }
-function locateHere {
-	locate "$@" | grep $PWD
-}
 function pingMyLAN {
 	local myLAN=$(\ip addr show | awk '/inet /{print$2}' | egrep -v '127.0.0.[0-9]|192.168.122.[0-9]')
 	if which fping >/dev/null 2>&1
@@ -1370,6 +1367,9 @@ function locate {
 }
 function locateBin {
 	locate "${@}" | grep bin/
+}
+function locateHere {
+	locate "$@" | \grep $PWD
 }
 function txt2pdf {
 	for file
