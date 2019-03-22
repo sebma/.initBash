@@ -26,8 +26,8 @@ function ytdlFormats {
 	do
 		echo "=> url = $url"
 		streamID=$(basename "$url" | cut -d= -f2)
-		$youtube_dl -F "$url" | \egrep -v "only|$streamID"
-		echo
+		$youtube_dl -F "$url" | \egrep -v "only|$streamID|\[youtube\]"
+		echo >&2
 	done
 	trap - INT
 }
