@@ -802,17 +802,26 @@ function configure {
 		if [ ! -s configure ]
 		then
 #			test -s ./bootstrap.sh && time ./bootstrap.sh || { test -s ./bootstrap && time ./bootstrap || test -s ./autogen.sh && time ./autogen.sh; }
-			for autoconfProg in bootstrap.sh bootstrap autogen.sh
+			for autoconfProg in bootstrap.py bootstrap.sh bootstrap autogen.sh
 			do	
 				if test -x $autoconfProg 
 				then
 					set -x
 					time ./$autoconfProg $configureArgs || time ./$autoconfProg
+					returnCode=$?
 					break
 				fi
 			done
-			test -x ./configure || autoreconf -vi
-			returnCode=$?
+			if [ $returnCode = 0 ]
+			then
+				if [ -x ./waf ]
+				then
+					./waf configure
+				else
+					test -x ./configure || autoreconf -vi
+				fi
+				returnCode=$?
+			fi
 			set +x
 		fi
 		if [ ! -s Makefile ]
@@ -856,7 +865,8 @@ function buildSourceCode {
 
 	unset CC
 	echo "=> returnCode = $returnCode" >&2
-	sudo ldconfig
+	[ $returnCode = 0 ] && set -x && sudo ldconfig
+	set +x
 	return $returnCode
 }
 function buildSourceCodeForAndroid {
