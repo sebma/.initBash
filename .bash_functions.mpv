@@ -45,19 +45,19 @@ function mpvFORMAT {
 function mpvHD {
 	\rm nohup.out
 	touch nohup.out
-	nohup mpv --ytdl-format 'best[height<=720]' $mpvOptions "$@" &
+	nohup mpv --ytdl-format 'best[height<=720]/mp4/best' $mpvOptions "$@" &
 	tail -f nohup.out
 }
 function mpvLD {
 	\rm nohup.out
 	touch nohup.out
-	nohup mpv --ytdl-format 'best[height<=240]' $mpvOptions "$@" &
+	nohup mpv --ytdl-format 'best[height<=240]/mp4/best' $mpvOptions "$@" &
 	tail -f nohup.out
 }
 function mpvSD {
 	\rm nohup.out
 	touch nohup.out
-	nohup mpv --ytdl-format 'best[height<=480]' $mpvOptions "$@" &
+	nohup mpv --ytdl-format 'best[height<=480]/mp4/best' $mpvOptions "$@" &
 	tail -f nohup.out
 }
 function mpvdirectly {
@@ -73,20 +73,17 @@ function mpvlive {
 	tail -f nohup.out
 }
 function mpvlocal {
-	\rm nohup.out
-	touch nohup.out
-	nohup mpv --no-ytdl $mpvOptions "$@" &
-	tail -f nohup.out
+	mpvdirectly "$@"
 }
 function mpvplaylist {
 	\rm nohup.out
 	touch nohup.out
-	nohup mpv $mpvOptions --ytdl-raw-options "--ignore-errors" --playlist "$@" &
+	nohup mpv $mpvOptions --ytdl-raw-options=ignore-errors= --playlist "$@" &
 	tail -f nohup.out
 }
 function mpvplaylistSD {
 	\rm nohup.out
 	touch nohup.out
-	nohup mpv --ytdl-format 'best[height<=480]' $mpvOptions --playlist "$@" &
+	nohup mpv --ytdl-format 'best[height<=480]/mp4/best' $mpvOptions --playlist "$@" &
 	tail -f nohup.out
 }
