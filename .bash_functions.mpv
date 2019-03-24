@@ -1,7 +1,7 @@
 # vim: set syn=sh noet:
 
 #mpvOptions='--geometry 0%:100% --ytdl-raw-options=sub-lang="en,eng,enUS,en-US,fr",write-sub=,abort-on-error='
-mpv="command mpv --geometry 0%:100% --ytdl-raw-options=sub-lang=\"en,eng,enUS,en-US,fr\",write-sub=,abort-on-error="
+mpv="$(which mpv) --geometry 0%:100% --ytdl-raw-options=sub-lang=\"en,eng,enUS,en-US,fr\",write-sub=,abort-on-error="
 function mpv {
 	which mpv >/dev/null && {
 	if [ $os = Linux ]
@@ -80,7 +80,7 @@ function mpvlocal {
 function mpvplaylist {
 	\rm nohup.out
 	touch nohup.out
-	nohup $mpv --ytdl-raw-options=abort-on-error= --playlist "$@" &
+	nohup $mpv --playlist "$@" &
 	tail -f nohup.out
 }
 function mpvplaylistSD {
