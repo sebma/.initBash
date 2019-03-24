@@ -1,6 +1,7 @@
 # vim: set syn=sh noet:
 
-mpvOptions='--geometry 0%:100% --ytdl-raw-options=sub-lang="en,eng,enUS,en-US",write-sub='
+#mpvOptions='--geometry 0%:100% --ytdl-raw-options=sub-lang="en,eng,enUS,en-US,fr",write-sub=,abort-on-error='
+mpv="command mpv --geometry 0%:100% --ytdl-raw-options=sub-lang=\"en,eng,enUS,en-US,fr\",write-sub=,abort-on-error="
 function mpv {
 	which mpv >/dev/null && {
 	if [ $os = Linux ]
@@ -9,13 +10,14 @@ function mpv {
 	#			echo $urlOrFile | egrep -q "(http|ftp)s?://" && $youtube_dl -qs $urlOrFile 2>&1 | grep --color=auto --color -A1 ^ERROR: && continue
 				if tty | egrep -q "/dev/pts/[0-9]|/dev/ttys[0-9]+"
 				then # Si on est dans une fenetre de terminal
-					$(which mpv) -geometry 0%:100% "$@"
+					$mpv "$@"
 				else # Si on est dans une console
+					echo "=> INFO: You are in a console terminal, therefore framebuffering will be used." >&2
 					if [ -c /dev/fb0 ]; then
 						if [ ! -w /dev/fb0 ]
 						then
 							\sudo chmod g+w /dev/fb0
-							groups | grep -wq video || { \sudo adduser $USER video; exit; }
+							groups | grep -wq video || { echo "=> INFO: Adding $USER in the video group and logging out." >&2 ; \sudo adduser $USER video;sleep 3; exit; }
 						fi
 						$(which mpv) -vo drm "$@"
 					else
@@ -33,43 +35,43 @@ function mpv {
 function mpvFHD {
 	\rm nohup.out
 	touch nohup.out
-	nohup mpv --ytdl-format 'best[height<=1080]' $mpvOptions "$@" &
+	nohup $mpv --ytdl-format 'best[height<=1080]/best' "$@" &
 	tail -f nohup.out
 }
 function mpvFORMAT {
 	\rm nohup.out
 	touch nohup.out
-	nohup mpv $mpvOptions --ytdl-format "$@" &
+	nohup $mpv --ytdl-format "$@" &
 	tail -f nohup.out
 }
 function mpvHD {
 	\rm nohup.out
 	touch nohup.out
-	nohup mpv --ytdl-format 'best[height<=720]/mp4/best' $mpvOptions "$@" &
+	nohup $mpv --ytdl-format 'best[height<=720]/best' "$@" &
 	tail -f nohup.out
 }
 function mpvLD {
 	\rm nohup.out
 	touch nohup.out
-	nohup mpv --ytdl-format 'best[height<=240]/mp4/best' $mpvOptions "$@" &
+	nohup $mpv --ytdl-format 'best[height<=240]/best' "$@" &
 	tail -f nohup.out
 }
 function mpvSD {
 	\rm nohup.out
 	touch nohup.out
-	nohup mpv --ytdl-format 'best[height<=480]/mp4/best' $mpvOptions "$@" &
+	nohup $mpv --ytdl-format 'best[height<=480]/best' "$@" &
 	tail -f nohup.out
 }
 function mpvdirectly {
 	\rm nohup.out
 	touch nohup.out
-	nohup mpv --no-ytdl $mpvOptions "$@" &
+	nohup $mpv --no-ytdl "$@" &
 	tail -f nohup.out
 }
 function mpvlive {
 	\rm nohup.out
 	touch nohup.out
-	nohup mpv --no-resume-playback $mpvOptions "$@" &
+	nohup $mpv --no-resume-playback "$@" &
 	tail -f nohup.out
 }
 function mpvlocal {
@@ -78,12 +80,12 @@ function mpvlocal {
 function mpvplaylist {
 	\rm nohup.out
 	touch nohup.out
-	nohup mpv $mpvOptions --ytdl-raw-options=ignore-errors= --playlist "$@" &
+	nohup $mpv --ytdl-raw-options=abort-on-error= --playlist "$@" &
 	tail -f nohup.out
 }
 function mpvplaylistSD {
 	\rm nohup.out
 	touch nohup.out
-	nohup mpv --ytdl-format 'best[height<=480]/mp4/best' $mpvOptions --playlist "$@" &
+	nohup $mpv --ytdl-format 'best[height<=480]/best' --playlist "$@" &
 	tail -f nohup.out
 }
