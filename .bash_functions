@@ -118,13 +118,6 @@ function bible {
 		$bible -f $verses | cut -d: -f2
 	done
 }
-function aptPrintURIS {
-	local aptGet="command apt-get"
-	for apt
-	do
-		$aptGet download --print-uris "$apt"
-	done
-}
 function wgetParallel {
 	for url
 	do
@@ -426,16 +419,6 @@ function lseth {
 function wlanmac {
 	wlanIF=$(iwconfig 2>&1 | awk '/ESSID:/{print$1}')
 	test "$wlanIF" && ip link show $wlanIF | awk '/link\/ether /{print$2}'
-}
-function apt_cache {
-	local apt_cache="command apt-cache"
-	firstArg=$1
-	if [ "$firstArg" = search ]
-	then
-		$apt_cache $@ | sort -u
-	else
-		$apt_cache $@
-	fi
 }
 function pem2cer {
 	for pemCertificate
@@ -923,19 +906,6 @@ function tcpConnetTest {
 		time command bash -c ": < /dev/tcp/$remoteSSHServer/$remotePort"
 	fi
 }
-function addKeys {
-	for key
-	do
-		sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys $key
-	done
-}
-function downgradePackages {
-	for package
-	do
-		previousVersion=$(command apt-cache show $package | grep Version | sed -n '2p' | cut -d' ' -f2)
-		sudo command apt install -V $package=$previousVersion
-	done
-}
 function ldapUserFind {
 	if which ldapsearch >/dev/null 2>&1
 	then
@@ -1041,31 +1011,6 @@ function lsbin {
 		$packageContents $package
 	done | grep bin/ | sort -u
 }
-function fixAptKeys {
-	LANG=C apt-key list | awk -F"/| *" '/expired/{print"sudo apt-key del "$3}' | sh -x
-	time (sudo apt-get update 2>/tmp/keymissing; cat /tmp/keymissing)
-	for key in $(awk '/Release:.*not available: NO_PUBKEY/{print substr($NF,9)}' /tmp/keymissing | sort -u)
-	do
-		echo
-		echo "=> Processing key: $key"
-		sudo apt-key del $key
-		sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys $key 
-	done
-
-	for keyFile in $(awk '/gpg: keyblock resource .*resource limit/{print gensub("\`|.:","","g",$4)" "}' /tmp/keymissing)
-	do
-		sudo rm -v $keyFile
-	done
-	\rm -v /tmp/keymissing
-}
-function updateRepositoryKeys {
-	time sudo apt-get update 2>&1 >/dev/null | awk '/Release:.*not available: NO_PUBKEY/{print "sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys "$NF}' | sh -x
-	sudo apt-key update
-}
-function reinstallOrignialPackages {
-	local packagesList=$@
-	test $# != 0 && sudo command apt install -V $(printf "%s/$(lsb_release -sc) " $packagesList)
-}
 function timeprocess {
 	local process=$1
 	local pid=$(\pgrep -f "$1" | head -1)
@@ -1082,10 +1027,6 @@ function watchProcess {
 }
 function processSPY {
 	watchProcess $@
-}
-function website {
-	command apt-cache show $@ | egrep "Homepage:|Package:" | sort -u
-#	open $(command apt-cache show $@ | egrep "Homepage:" | sort -u)
 }
 function cleanFirefoxLock {
 	case $(lsb_release -si) in
@@ -1115,31 +1056,6 @@ function dfc {
 		test "$firstArg" != / && firstArg="$(echo "$firstArg" | sed "s,/$,,")"
 		command dfc -TWfc always | \egrep "FILESYSTEM|$firstArg$argsRE"
 	fi
-}
-function aptGet {
-	args=$@
-	firstArg=$1
-	case $firstArg in
-	install|purge) sudo command apt $args -V;;
-	download) command apt-get $args --print-uris && $(which apt-get) $args;;
-	*) command apt-get $args;;
-	esac
-}
-function apt {
-	args=$@
-	firstArg=$1
-	case $firstArg in
-	install|purge) sudo command apt $args -V;;
-	*) command apt $args;;
-	esac
-}
-function aptitude {
-	args=$@
-	firstArg=$1
-	case $firstArg in
-	install|reinstall|purge) sudo command aptitude $args -V;;
-	*) command aptitude $args;;
-	esac
 }
 function httpLocalServer {
 #	local fqdn=$(host $(hostname) | awk '/address/{print$1}')
