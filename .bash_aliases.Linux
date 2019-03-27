@@ -77,7 +77,7 @@ function topflines {
 
 if groups 2>/dev/null | egrep -wq "sudo|admin"
 then
-	test -f /etc/debian_version && Source $initDir/.bash_aliases.Debian
+	test -f /etc/debian_version && Source $initDir/.bash_aliases.Debian && Source $initDir/.bash_functions.Debian
 	alias checkSudoFile="\visudo -cf"
 	alias cupsRestart="pgrep -a cupsd;\sudo killall -HUP cupsd;sleep 1;pgrep -a cupsd"
 	alias dosfsck="\dosfsck -r"
