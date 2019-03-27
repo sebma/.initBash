@@ -1,0 +1,91 @@
+# vim: set syn=sh noet:
+declare -A | grep -wq colors || source $initDir/.colors
+test "$debug" '>' 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
+
+function aptGet {
+	args=$@
+	firstArg=$1
+	case $firstArg in
+	install|purge) sudo command apt $args -V;;
+	download) command apt-get $args --print-uris && $(which apt-get) $args;;
+	*) command apt-get $args;;
+	esac
+}
+function apt {
+	args=$@
+	firstArg=$1
+	case $firstArg in
+	install|purge) sudo command apt $args -V;;
+	*) command apt $args;;
+	esac
+}
+function aptitude {
+	args=$@
+	firstArg=$1
+	case $firstArg in
+	install|reinstall|purge) sudo command aptitude $args -V;;
+	*) command aptitude $args;;
+	esac
+}
+function aptPrintURIS {
+	local aptGet="command apt-get"
+	for apt
+	do
+		$aptGet download --print-uris "$apt"
+	done
+}
+function apt_cache {
+	local apt_cache="command apt-cache"
+	firstArg=$1
+	if [ "$firstArg" = search ]
+	then
+		$apt_cache $@ | sort -u
+	else
+		$apt_cache $@
+	fi
+}
+function addKeys {
+	for key
+	do
+		sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys $key
+	done
+}
+function downgradePackages {
+	for package
+	do
+		previousVersion=$(command apt-cache show $package | grep Version | sed -n '2p' | cut -d' ' -f2)
+		sudo command apt install -V $package=$previousVersion
+	done
+}
+function fixAptKeys {
+	LANG=C apt-key list | awk -F"/| *" '/expired/{print"sudo apt-key del "$3}' | sh -x
+	time (sudo apt-get update 2>/tmp/keymissing; cat /tmp/keymissing)
+	for key in $(awk '/Release:.*not available: NO_PUBKEY/{print substr($NF,9)}' /tmp/keymissing | sort -u)
+	do
+		echo
+		echo "=> Processing key: $key"
+		sudo apt-key del $key
+		sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys $key 
+	done
+
+	for keyFile in $(awk '/gpg: keyblock resource .*resource limit/{print gensub("\`|.:","","g",$4)" "}' /tmp/keymissing)
+	do
+		sudo rm -v $keyFile
+	done
+	\rm -v /tmp/keymissing
+}
+function updateRepositoryKeys {
+	time sudo apt-get update 2>&1 >/dev/null | awk '/Release:.*not available: NO_PUBKEY/{print "sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys "$NF}' | sh -x
+	sudo apt-key update
+}
+function reinstallOrignialPackages {
+	local packagesList=$@
+	test $# != 0 && sudo command apt install -V $(printf "%s/$(lsb_release -sc) " $packagesList)
+}
+function website {
+	command apt-cache show $@ | egrep "Homepage:|Package:" | sort -u
+#	open $(command apt-cache show $@ | egrep "Homepage:" | sort -u)
+}
+
+set +x
+test "$debug" '>' 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
