@@ -45,6 +45,7 @@ alias nmStatus="\service network-manager status"
 alias northBridge="\lspci -nnvs 0:0.0 | egrep '^00:|Kernel|Subsystem'"
 alias southBridge="\lspci | awk '/ISA bridge/{print \"lspci -nnvs \" \$1}' | sh | egrep '^00:|Kernel|Subsystem'"
 #alias os="\lsb_release -sd"
+alias odtinfo=odfInfo
 alias pip_pypy="\pypy -m pip"
 alias pip_pypy3="\pypy3 -m pip"
 alias Pgrep="\grep -P"
