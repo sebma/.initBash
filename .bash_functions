@@ -15,7 +15,7 @@ function gpgPrint {
 	for pubKey
 	do
 		echo $pubKey
-		printf -- "-%.0s" $(seq ${#pubKey})
+		printf -- "-%.s" $(seq ${#pubKey})
 		echo
 		gpg $pubKey | awk '{printf$1"   "$2" "$3"\n""uid\t\t  ";$1=$2=$3="";print}'
 		echo
@@ -361,10 +361,10 @@ function Top {
 	else
 		if [ $os = Linux ]
 		then
-			$top -d 1 $(printf " -p %d" $processPIDs) $@
+			$top -d 1 $(printf -- "-p %d " $processPIDs) $@
 		elif [ $os = Darwin ]
 		then
-			$top -i 1 $(printf " -pid %d" $processPIDs) $@
+			$top -i 1 $(printf -- "-pid %d " $processPIDs) $@
 		fi
 	fi
 }
