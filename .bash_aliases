@@ -231,7 +231,6 @@ alias updateBrew="time \brew update -v"
 alias updatePip="pip install -U pip"
 alias updateThumbnail="\exiftran -gi"
 alias updateYoutube-dl="pip install -U youtube-dl"
-alias updatedb='updatedb -l 0 -o ~/.local/lib/mlocate/mlocate.db --prunefs "rpc_pipefs afs binfmt_misc proc smbfs iso9660 ncpfs coda devpts ftpfs devfs mfs shfs sysfs cifs lustre tmpfs usbfs udf fuse.glusterfs fuse.sshfs curlftpfs"'
 alias uuidGet="\blkid -o value -s UUID"
 alias venv="\python3 -m venv"
 alias view='vim -R'
