@@ -11,6 +11,12 @@ myDefault_sshOptions="-A -Y -C"
 
 trap 'echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $?' INT
 
+function odfInfo {
+	for document
+	do
+		\unzip -c $document meta.xml | tr -s " " "\n" | fmt
+	done
+}
 function img2pdfA4R {
 	local lastArg="${@: -1}"
 	local allArgsButLast="${@:1:$#-1}"
