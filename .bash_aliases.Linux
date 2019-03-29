@@ -76,7 +76,7 @@ function topflines {
 }
 
 
-if groups 2>/dev/null | egrep -wq "sudo|admin"
+if groups 2>/dev/null | \egrep -wq "sudo|admin"
 then
 	test -f /etc/debian_version && Source $initDir/.bash_aliases.Debian && Source $initDir/.bash_functions.Debian
 	alias checkSudoFile="\visudo -cf"
@@ -102,6 +102,8 @@ then
 	alias wifiList="which nmcli >/dev/null && nmcli dev wifi list || sudo iw dev $wifiInterface scan || sudo iwlist $wifiInterface scan"
 	alias youtube-dlUpdate='\sudo -H $(which pip3) install -U youtube-dl || \sudo -H $(which pip) install -U youtube-dl'
 	alias ytdlUpdate='\sudo -H $(which pip3) install -U youtube-dl || \sudo -H $(which pip) install -U youtube-dl'
+else
+	alias updatedb='time updatedb -l 0 -o ~/.local/lib/mlocate/mlocate.db --prunefs "rpc_pipefs afs binfmt_misc proc smbfs iso9660 ncpfs coda devpts ftpfs devfs mfs shfs sysfs cifs lustre tmpfs usbfs udf fuse.glusterfs fuse.sshfs curlftpfs"'
 fi
 
 set +x
