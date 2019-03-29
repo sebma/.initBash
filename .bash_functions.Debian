@@ -74,6 +74,9 @@ function fixAptKeys {
 	done
 	\rm -v /tmp/keymissing
 }
+function move_Extra_Keys_To_Main_APT_KeyRing {
+	apt-key list 2>&1 >/dev/null | awk -F"[\`']" '/resource limit/{print "sudo apt-key add "$2"; sudo \\rm -vf "$2}' | sh -x
+}
 function removePackages {
 	#echo "=> regexp = $regexp" >&2
 	local regexp=$1
