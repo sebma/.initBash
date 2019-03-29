@@ -74,6 +74,15 @@ function fixAptKeys {
 	done
 	\rm -v /tmp/keymissing
 }
+function removePackages {
+	#echo "=> regexp = $regexp" >&2
+	local regexp=$1
+	shift
+	case $regexp in
+	""|.) echo "=> Usage: $FUNCNAME non-empty-regexp" >&2;return 1;;
+	esac
+	dpkg -l | awk 'BEGIN {printf"sudo apt purge -V "}'"/$regexp/"'{printf $2" "}'"END{print \"$*\"}" | sh -x
+}
 function updateRepositoryKeys {
 	time sudo apt-get update 2>&1 >/dev/null | awk '/Release:.*not available: NO_PUBKEY/{print "sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys "$NF}' | sh -x
 	sudo apt-key update
