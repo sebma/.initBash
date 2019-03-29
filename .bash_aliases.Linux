@@ -10,9 +10,9 @@ wifiInterface=$(iwconfig 2>/dev/null | grep -v ESSID:off/any | awk '/ESSID/{prin
 #alias lpr="\lpr -o PageSize=A4 -o PageRegion=A4 -o Resolution=default -o InputSlot=Tray2 -o Duplex=DuplexNoTumble -o PreFilter=No"
 
 findExcludedPathList="./proc ./sys ./dev"
-prunePathsFindExpression=$(printf " -path %s -prune -o" $findExcludedPathList)
+prunePathsFindExpression=$(printf -- "-path %s -prune -o " $findExcludedPathList)
 duExcludedPathList="./proc ./sys ./dev"
-excludePathsDuExpression=$(printf " --exclude %s" $duExcludedPathList)
+excludePathsDuExpression=$(printf -- "--exclude %s " $duExcludedPathList)
 
 test $wifiInterface && alias wifiList="which nmcli >/dev/null && \nmcli con || iw dev $wifiInterface scan || iwlist $wifiInterface scan"
 test $wifiInterface && alias wifiSpeed="\iwlist $wifiInterface bitrate;\iw dev $wifiInterface link"
