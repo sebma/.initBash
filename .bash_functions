@@ -11,6 +11,16 @@ myDefault_sshOptions="-A -Y -C"
 
 trap 'echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $?' INT
 
+function gpgPrint {
+	for pubKey
+	do
+		echo $pubKey
+		printf -- "-%.0s" $(seq ${#pubKey})
+		echo
+		gpg $pubKey | awk '{printf$1"   "$2" "$3"\n""uid\t\t  ";$1=$2=$3="";print}'
+		echo
+	done
+}
 function odfInfo {
 	for document
 	do
