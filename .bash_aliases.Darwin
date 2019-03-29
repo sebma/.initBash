@@ -66,7 +66,7 @@ alias xlock="\/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resou
 which gcp >/dev/null 2>&1 && alias cp='\gcp -puv' || alias cp='\cp -pv'
 alias pkgInstaller="\installer -pkg"
 
-if groups 2>/dev/null | egrep -wq "sudo|admin"
+if groups 2>/dev/null | \egrep -wq "sudo|admin"
 then
 	macOSServiceDIR=/System/Library/LaunchDaemons
 
@@ -83,6 +83,8 @@ then
 	alias sshRestart="sshStop;sshStart"
 
 	alias updatedb="time sudo gupdatedb"
+else
+	alias updatedb='time gupdatedb -l 0 -o ~/.local/lib/mlocate/mlocate.db --prunefs "rpc_pipefs afs binfmt_misc proc smbfs iso9660 ncpfs coda devpts ftpfs devfs mfs shfs sysfs cifs lustre tmpfs usbfs udf fuse.glusterfs fuse.sshfs curlftpfs"'
 fi
 
 set +x
