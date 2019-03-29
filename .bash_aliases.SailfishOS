@@ -3,9 +3,9 @@ declare -A | grep -wq colors || source $initDir/.colors
 test "$debug" '>' 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 findExcludedPathList="./proc ./sys ./dev ./media ./opt/alien ./home/$USER/android_storage"
-prunePathsFindExpression=$(printf " -path %s -prune -o" $findExcludedPathList)
+prunePathsFindExpression=$(printf -- "-path %s -prune -o " $findExcludedPathList)
 duExcludedPathList="./proc ./sys ./dev ./opt/alien"
-excludePathsDuExpression=$(printf " --exclude %s" $duExcludedPathList)
+excludePathsDuExpression=$(printf -- "--exclude %s " $duExcludedPathList)
 
 alias androidVersion="\grep version.release /opt/alien/system/build.prop"
 alias notesGrep='sqlite3 ~/.local/share/jolla-notes/QML/OfflineStorage/Databases/8b63c31a7656301b3f7bcbbfef8a2b6f.sqlite "select body from notes;" | grep'
