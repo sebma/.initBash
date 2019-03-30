@@ -489,7 +489,7 @@ function odf2 {
 function make {
 	if [ -s Makefile ] || [ -s makefile ]
 	then
-		CFLAGS="-g $(which make) $@"
+		CFLAGS="-g" $(which make) $@
 	else
 		\mkdir ../bin 2>/dev/null
 		if which gcc >/dev/null 2>&1
