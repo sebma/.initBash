@@ -25,7 +25,7 @@ function addURL2Audio_Video {
 	local url=$1
 	local fileName=$2
 	extension=${fileName#*.}
-	$ffmpeg -i "$fileName" -c copy -metadata description="$url" "${fileName%.*}-NEW.$extension" && mv -vf "${fileName%.*}-NEW.$extension" $fileName
+#	$ffmpeg -i "$fileName" -c copy -metadata description="$url" "${fileName%.*}-NEW.$extension" && mv -vf "${fileName%.*}-NEW.$extension" $fileName
 	[ [ $extension = mp4 ] || [ $extension = m4a ] ] && mp4tags -m "$url" "$fileName"
 	sync
 }
