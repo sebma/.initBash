@@ -191,7 +191,7 @@ function getRestrictedFilenamesFORMAT {
 		echo "=> Downloading url # $i/$# ..."
 		echo "=> url = $url"
 		echo "=> Testing if $url still exists ..."
-		fileName=$(time $youtube_dl -f "$siteVideoFormat" --get-filename --restrict-filenames -- "$url" 2>&1)
+		fileName=$(time $youtube_dl -f "$siteVideoFormat" --get-filename -- "$url" 2>&1)
 		echo $fileName | \egrep --color -A1 ^ERROR: && echo && continue
 		echo
 
@@ -206,12 +206,12 @@ function getRestrictedFilenamesFORMAT {
 		echo
 
 		echo $url | \egrep -wq "https?:" || url=https://www.youtube.com/watch?v=$url #Only youtube short urls are handled by "youtube-dl"
-		$youtube_dl -f "$siteVideoFormat" "$url" --restrict-filenames
+		extension="${fileName#*.}"
+		[ $extension = mp4 ] || [ $extension = m4a ] || [ $extension = mp3 ] && $youtube_dl -f "$siteVideoFormat" "$url" --embed-thumbnail || $youtube_dl -f "$siteVideoFormat" "$url"
 		downloadOK=$?
 		if [ $downloadOK = 0 ] 
 		then
-			extension="${fileName#*.}"
-			[ [ $extension = mp4 ] || [ $extension = m4a ] ] && mp4tags -m "$url" "$fileName"
+			[ $extension = mp4 ] || [ $extension = m4a ] || [ $extension = mp3 ] && mp4tags -m "$url" "$fileName"
 			chmod -w "$fileName" && echo && command ffprobe -hide_banner "$fileName"
 		fi
 
