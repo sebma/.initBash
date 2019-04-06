@@ -21,6 +21,21 @@ audioDecode=( [libspeex]=$(which speexdec 2>/dev/null) [speex]=$(which speexdec 
 alias mp32wavstdout="\mpg123 --wav - "
 alias ogg2wavstdout="\oggdec --output=- "
 
+function addThumbnail2mp4 {
+	local artworkFile=$1
+	shift
+	for mpeg
+	do
+		AtomicParsley "$mpeg" --artwork "$artworkFile" --overWrite
+	done
+}
+function videoURL {
+	for video
+	do
+		printf "$video : "
+		$ffprobe "$video" 2>&1 | awk '/PURL|description/{print$3;exit;}'
+	done
+}
 function addURL2Audio_Video {
 	local url=$1
 	local fileName=$2
@@ -89,6 +104,25 @@ function videoDelay {
 	local delay=$2
 	local extension=${video#*.}
 	time $ffmpeg -i "$video" -itsoffset $delay -i "$video" -c copy -map 1:v -map 0:a "${video%.*}-FIXED.$extension" #cf. https://superuser.com/questions/982342/in-ffmpeg-how-to-delay-only-the-audio-of-a-mp4-video-without-converting-the-au/983153#983153
+}
+function audio2Video4YouTube {
+	test $# -ne 2 && {
+		echo "=> Usage: $FUNCNAME aacFile pictureFile" >&2
+		return 1
+	}
+
+	local audio=$1
+	local picture=$2
+	audioCodec=$(audioCodecOfFile $audio)
+	case audioCodec in
+	aac)
+		time $ffmpeg -i "$audio" -loop 1 -framerate 4 -i "$picture" -shortest -speed max -c:a copy -preset medium -tune stillimage -crf 18 -pix_fmt yuv420p -movflags +faststart "${audio%.*}.mp4" #cf. https://trac.ffmpeg.org/wiki/Encode/YouTube
+		;;
+	opus|vorbis)
+		time $ffmpeg -i "$audio" -loop 1 -framerate 1 -i "$picture" -shortest -speed max -c:a copy "${audio%.*}.webm"
+		;;
+	*) echo "=> ERROR : FUNCNAME : $codec is not supported yet." >&2;return 1 ;;
+	esac
 }
 function aac2MP44YouTube {
 	test $# -ne 2 && {
@@ -240,16 +274,20 @@ function urlinfo {
 function urlplayer {
 	mpv $($youtube_dl -gf best "$1")
 }
+function audioChannelsLayoutOfFile {
+	local file="$1"
+	local layout=$($ffprobe "$file" -select_streams a:0 -show_entries stream=channel_layout -of default=noprint_wrappers=1:nokey=1 -v error)
+	echo $layout
+}
 function audioCodecOfFile {
 	local file="$1"
-	local codec=$($ffprobe "$file" -select_streams a:0 -show_entries stream=codec_name -of flat -v 0 | awk -F'"' '{print$(NF-1)}')
+	local codec=$($ffprobe "$file" -select_streams a:0 -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 -v error)
 	echo $codec
 }
-function audioExtensionFromFile {
+function videoCodecOfFile {
 	local file="$1"
-	local codec=$(audioCodecOfFile "$file")
-	declare -A audioExtension=( [libspeex]=oga [speex]=oga [opus]=opus [vorbis]=ogg [aac]=m4a [mp3]=mp3 [mp2]=mp2 [ac3]=ac3 [wmav2]=wma [pcm_dvd]=wav [pcm_s16le]=wav )
-	echo ${audioExtension[$codec]}
+	local codec=$($ffprobe "$file" -select_streams v:0 -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 -v error)
+	echo $codec
 }
 function any2wavSTDOUT {
 for inputFile
@@ -550,8 +588,7 @@ function spx216kHzopus {
 		echo "==> outputFile = $outputFile"
 		if [ ! -s "$outputFile" ]
 		then
-#			if $ffprobe "$inputFile" 2>&1 | grep -q stereo
-			if $ffprobe "$inputFile" -select_streams a:0 -show_entries stream=channel_layout -of flat 2>&1 | grep -q stereo
+			if [ $(audioChannelsLayoutOfFile "$inputFile") = stereo ]
 			then
 				time speexdec -V "$inputFile" - | sox -t raw -V -b 16 -e signed -r 44.1k -c 2 - -t wav - channels 1 rate 16k norm | opusenc - "$outputFile"
 			else
@@ -1117,28 +1154,28 @@ function ffprobe {
 	}
 }
 function ffprobeFlat {
-	local ffprobeOptions="-v 0 -show_format -show_streams -of flat"
+	local ffprobeOptions="-v error -show_format -show_streams -of flat"
 	for arg
 	do
 		echo "$arg" | egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $ffprobe $ffprobeOptions "$($youtube_dl -gf best -- "$arg")" || $ffprobe $ffprobeOptions "$arg"
 	done 2>&1 | cut -c 1-$COLUMNS
 }
 function ffprobeIni {
-	local ffprobeOptions="-v 0 -show_format -show_streams -of ini"
+	local ffprobeOptions="-v error -show_format -show_streams -of ini"
 	for arg
 	do
 		echo "$arg" | egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $ffprobe $ffprobeOptions "$($youtube_dl -gf best -- "$arg")" || $ffprobe $ffprobeOptions "$arg"
 	done 2>&1 | cut -c 1-$COLUMNS
 }
 function ffprobeJSON {
-	local ffprobeOptions="-v 0 -show_format -show_streams -of json"
+	local ffprobeOptions="-v error -show_format -show_streams -of json"
 	for arg
 	do
 		echo "$arg" | egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $ffprobe $ffprobeOptions "$($youtube_dl -gf best -- "$arg")" || $ffprobe $ffprobeOptions "$arg"
 	done 2>&1 | cut -c 1-$COLUMNS
 }
 function ffprobeXML {
-	local ffprobeOptions="-v 0 -show_format -show_streams -of xml"
+	local ffprobeOptions="-v error -show_format -show_streams -of xml"
 	for arg
 	do
 		echo "$arg" | egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $ffprobe $ffprobeOptions "$($youtube_dl -gf best -- "$arg")" || $ffprobe $ffprobeOptions "$arg"
