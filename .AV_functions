@@ -8,7 +8,7 @@ test "$debug" '>' 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 \which youtube-dl >/dev/null 2>&1 && youtube_dl="eval LANG=C.UTF-8 command youtube-dl"
 
 remuxOptions="-map 0 -c copy"
-mp4Options="-movflags frag_keyframe"
+mp4Options="-movflags +frag_keyframe"
 mp4RemuxOptions="-map 0 -c copy -c:s mov_text"
 aac2m4aOptions="-bsf:a aac_adtstoasc"
 cdr_device=/dev/dvd
@@ -113,16 +113,18 @@ function audio2Video4YouTube {
 
 	local audio=$1
 	local picture=$2
-	audioCodec=$(audioCodecOfFile $audio)
-	case audioCodec in
-	aac)
-		time $ffmpeg -i "$audio" -loop 1 -framerate 4 -i "$picture" -shortest -speed max -c:a copy -preset medium -tune stillimage -crf 18 -pix_fmt yuv420p -movflags +faststart "${audio%.*}.mp4" #cf. https://trac.ffmpeg.org/wiki/Encode/YouTube
+	local audioCodec=$(audioCodecOfFile $audio)
+	local video4YouTubeFile
+	case $audioCodec in
+	aac)video4YouTubeFile="${audio%.*}__4YouTube.mp4"
+		time $ffmpeg -i "$audio" -loop 1 -framerate 4 -i "$picture" -shortest -speed max -map 0:a -c:a copy -map 1:v -preset medium -tune stillimage -crf 18 -pix_fmt yuv420p -movflags +frag_keyframe "$video4YouTubeFile" #cf. https://trac.ffmpeg.org/wiki/Encode/YouTube
 		;;
-	opus|vorbis)
-		time $ffmpeg -i "$audio" -loop 1 -framerate 1 -i "$picture" -shortest -speed max -c:a copy "${audio%.*}.webm"
+	opus|vorbis)video4YouTubeFile="${audio%.*}__4YouTube.webm"
+		time $ffmpeg -i "$audio" -loop 1 -framerate 1 -i "$picture" -shortest -speed max -map 0:a -c:a copy -map 1:v "$video4YouTubeFile"
 		;;
-	*) echo "=> ERROR : FUNCNAME : $codec is not supported yet." >&2;return 1 ;;
+	*) echo "=> ERROR : $FUNCNAME : $audioCodec is not supported yet." >&2;return 1 ;;
 	esac
+	videoInfo "$video4YouTubeFile"
 }
 function aac2MP44YouTube {
 	test $# -ne 2 && {
@@ -132,7 +134,7 @@ function aac2MP44YouTube {
 
 	local audio=$1
 	local picture=$2
-	time $ffmpeg -i "$audio" -loop 1 -framerate 4 -i "$picture" -shortest -speed max -c:a copy -preset medium -tune stillimage -crf 18 -pix_fmt yuv420p -movflags +faststart "${audio%.*}.mp4" #cf. https://trac.ffmpeg.org/wiki/Encode/YouTube
+	time $ffmpeg -i "$audio" -loop 1 -framerate 4 -i "$picture" -shortest -speed max -c:a copy -preset medium -tune stillimage -crf 18 -pix_fmt yuv420p -movflags +frag_keyframe "${audio%.*}.mp4" #cf. https://trac.ffmpeg.org/wiki/Encode/YouTube
 }
 function opus2WebM4YouTube {
 	test $# -ne 2 && {
@@ -1185,7 +1187,7 @@ function mp4Repair {
 	for file
 	do
 		extension=mp4
-		time $ffmpeg -i "$file" $remuxOptions -movflags +faststart "${file/.$extension/_REPAIRED.$extension}"
+		time $ffmpeg -i "$file" $remuxOptions $mp4Options "${file/.$extension/_REPAIRED.$extension}"
 		sync
 		touch -r "$file" "${file/.$extension/_REPAIRED.$extension}"
 	done
