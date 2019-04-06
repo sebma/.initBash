@@ -21,6 +21,18 @@ audioDecode=( [libspeex]=$(which speexdec 2>/dev/null) [speex]=$(which speexdec 
 alias mp32wavstdout="\mpg123 --wav - "
 alias ogg2wavstdout="\oggdec --output=- "
 
+function addSubtitles2mp4 {
+	local inputVideo=$1
+	local outputVideo=${inputVideo/.mp4/_NEW.mp4}
+	shift
+	local numberOfSubtitles=$#
+	(printf "ffmpeg -hide_banner -i $inputVideo ";printf -- "-i %s " "$@";printf -- "-map %d " $(seq $numberOfSubtitles);printf -- "-map 0:a -map 0:v -c copy -c:s mov_text $outputVideo\n") | sh -x
+	local codeRet=$?
+	sync
+	sleep 1
+	touch -r "$inputVideo" "$outputVideo"
+	[ $codeRet = 0 ] && \mv -vf "$outputVideo" "$inputVideo"
+}
 function addThumbnail2mp4 {
 	local artworkFile=$1
 	shift
