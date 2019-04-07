@@ -245,24 +245,6 @@ function mp4Info {
 		AtomicParsley "$file" -T 1 | sed '/Movie duration/,$!d'
 	done
 }
-function videoRemux {
-	inputFile="$1"
-	if [ $# != 2 ]
-	then
-		echo "=> Usage: $(basename $0) inputFileName outputFileName" >&2
-		exit 1
-	fi
-
-	shift
-	extension=$(echo $1 | awk -F. '{print$NF}')
-
-	case $extension in
-	vob) options="-f mpeg" ;;
-	*) options="" ;;
-	esac
-
-	time $ffmpeg -i "$inputFile" $remuxOptions $options "$@"
-}
 function addChaptersToMP4 {
 	for file
 	do
@@ -1014,7 +996,6 @@ function vlcRecord {
 
 #function aacDir2mp3 { inp=aac; shopt -s globstar && time for f in **/*.$inp; do time avconv -i "$f" "${f/.$inp/.mp3}" && rm -v "$f"; done; }
 function aacDir2mp3 { shopt -s globstar && for f in **/*.aac; do /bin/mv -vi "$f" "${f/.aac/.m4a}"; done; time pacpl -v --eopts "-v" -r -k -t mp3 .; }
-
 function audioGet {
 	ls "$@" >/dev/null || return
 	declare -A audioExtension=( [libspeex]=oga [speex]=oga [opus]=opus [vorbis]=ogg [aac]=m4a [mp3]=mp3 [mp2]=mp2 [ac3]=ac3 [wmav2]=wma [pcm_dvd]=wav [pcm_s16le]=wav )
@@ -1224,6 +1205,7 @@ function videoRemux {
 	shift
 	outputFile="$1"
 	outputExtension=${outputFile/*./}
+	local options
 	case $outputExtension in
 		vob) options="-f mpeg" ;;
 		*) options="" ;;
@@ -1267,20 +1249,23 @@ function mkv2oga {
 	done
 }
 function mplayer {
-	if tty | grep -q "/dev/pts/[0-9]"; then
-		command mplayer -idx -geometry 0%:100% "$@" 2> /dev/null | egrep "stream |dump|Track |VIDEO:|AUDIO:|VO:|AO:|A:"
-	else
-		if [ -c /dev/fb0 ]; then
-			if [ ! -w /dev/fb0 ]; then
-			groups | grep -wq video || \sudo adduser $USER video
-			\sudo chmod g+w /dev/fb0
-			fi
-			command mplayer -vo fbdev2 -idx "$@" 2> /dev/null | egrep "stream |dump|Track |VIDEO:|AUDIO:|VO:|AO:|A:"
+	local mplayer="command mplayer"
+	which mplayer >/dev/null 2>&1 && {
+		if tty | grep -q "/dev/pts/[0-9]"; then
+			$mplayer -idx -geometry 0%:100% "$@" 2> /dev/null | egrep "stream |dump|Track |VIDEO:|AUDIO:|VO:|AO:|A:"
 		else
-			echo "=> Function $FUNCNAME - ERROR: Framebuffer is not supported in this configuration." 1>&2
-			return 1
+			if [ -c /dev/fb0 ]; then
+				if [ ! -w /dev/fb0 ]; then
+				groups | grep -wq video || \sudo adduser $USER video
+				\sudo chmod g+w /dev/fb0
+				fi
+				$mplayer -vo fbdev2 -idx "$@" 2> /dev/null | egrep "stream |dump|Track |VIDEO:|AUDIO:|VO:|AO:|A:"
+			else
+				echo "=> Function $FUNCNAME - ERROR: Framebuffer is not supported in this configuration." 1>&2
+				return 1
+			fi
 		fi
-	fi
+	}
 }
 function mpvalt {
 	test $1 && command mpv --no-ytdl $($youtube_dl -gf best $@ | uniq)
