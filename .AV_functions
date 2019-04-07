@@ -1013,9 +1013,11 @@ function audioGet {
 			continue
 		fi
 		\mkdir -pv $(dirname $outputFileName)
-#		time $ffmpeg -i "$file" -map 0:a -map 0:s -map 0:v:1 -codec copy "$outputFileName" -y
-#		time $ffmpeg -i "$file" -map 0:a -map 0:s -codec copy "$outputFileName" -y
-		time $ffmpeg -i "$file" -map 0:a -codec copy "$outputFileName" -y
+		if [ $outputExtension = aac ];then
+			time $ffmpeg -i "$file" -map 0 -map -0:v -codec copy "$outputFileName" -y
+		else
+			time $ffmpeg -i "$file" -map 0 -map -0:v:0 -codec copy "$outputFileName" -y
+		fi
 		touch -r "$file" "$outputFileName"
 		sync
 		echo
