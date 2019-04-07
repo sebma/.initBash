@@ -1013,7 +1013,8 @@ function audioGet {
 			continue
 		fi
 		\mkdir -pv $(dirname $outputFileName)
-		time $ffmpeg -i "$file" -vn -sn -codec copy $options "$outputFileName" -y
+#		time $ffmpeg -i "$file" -map 0:a -map 0:s -map 0:v:1 -codec copy "$outputFileName" -y
+		time $ffmpeg -i "$file" -map 0:a -map 0:s -codec copy "$outputFileName" -y
 		touch -r "$file" "$outputFileName"
 		sync
 		echo
