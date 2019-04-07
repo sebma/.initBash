@@ -1345,8 +1345,6 @@ function printrv {
 }
 
 function renameExtension { test $# = 2 && shopt -s globstar && for f in **/*.$1; do /bin/mv -vi "$f" "${f/.$1/.$2}"; done; }
-function aacDir2mp3 { shopt -s globstar && for f in **/*.aac; do /bin/mv -vi "$f" "${f/.aac/.m4a}"; done; time pacpl -v --eopts "-v" -r -k -t mp3 .; }
-
 function downgradeTo {
 	distribCodename=$1
 	case $distribCodename in
@@ -1425,25 +1423,6 @@ function reload_SHELL_Functions_And_Aliases {
 	do
 		source $script
 	done
-}
-function mplayer {
-	local mplayer="command mplayer"
-	which mplayer >/dev/null 2>&1 && {
-		if tty | grep -q "/dev/pts/[0-9]"; then
-			$mplayer -idx -geometry 0%:100% "$@" 2> /dev/null | egrep "stream |dump|Track |VIDEO:|AUDIO:|VO:|AO:|A:"
-		else
-			if [ -c /dev/fb0 ]; then
-				if [ ! -w /dev/fb0 ]; then
-				groups | grep -wq video || \sudo adduser $USER video
-				\sudo chmod g+w /dev/fb0
-				fi
-				$mplayer -vo fbdev2 -idx "$@" 2> /dev/null | egrep "stream |dump|Track |VIDEO:|AUDIO:|VO:|AO:|A:"
-			else
-				echo "=> Function $FUNCNAME - ERROR: Framebuffer is not supported in this configuration." 1>&2
-				return 1
-			fi
-		fi
-	}
 }
 function ddPV {
 	test $# -lt 2 && {
