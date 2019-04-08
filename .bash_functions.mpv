@@ -2,6 +2,7 @@
 
 #mpvOptions='--geometry 0%:100% --ytdl-raw-options=sub-lang="en,eng,enUS,en-US,fr",write-sub=,abort-on-error='
 mpv="$(which mpv) --geometry 0%:100% --ytdl-raw-options=sub-lang=\"en,eng,enUS,en-US,fr\",write-sub=,abort-on-error="
+export perl_script='$| = 1;s/\n/\r/g if $_ =~ /^AV:/;s/Saving state/\nSaving state/'
 function mpv {
 	which mpv >/dev/null && {
 	if [ $os = Linux ]
