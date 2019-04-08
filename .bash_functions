@@ -1319,7 +1319,7 @@ function locate {
 function locateBin {
 	locate "${@}" | grep bin/
 }
-function locateHere {
+function locateFromHere {
 	locate "$@" | \grep $PWD
 }
 function txt2pdf {
