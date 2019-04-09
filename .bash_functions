@@ -774,7 +774,7 @@ function configure {
 			prefix=$HOME/local
 		fi
 	else
-		prefix=$(echo $1 | awk -F'=' '{print$2}')
+		for arg in $@;do echo $arg | \grep -q -- --prefix= && prefix=${arg/*=/};done
 		prefix=$(echo $prefix | sed 's/~/$HOME/') #Configure ne supporte parfois pas les chemins contenant '~'
 		shift
 	fi
@@ -850,7 +850,7 @@ function buildSourceCode {
 			\mkdir -p $prefix
 			if test -w $prefix
 			then
-				$install
+				$make install
 				returnCode=$?
 			else
 				sudo $install
