@@ -8,6 +8,8 @@ test $os = Linux  && export locate="command locate" && openCommand="command xdg-
 test $os = Darwin && export locate="time -p \"command glocate\"" && openCommand="command open"
 
 myDefault_sshOptions="-A -Y -C"
+test "$make" || which remake >/dev/null && export make="$(which remake)" || export make="$(which make)"
+test "$install" || { which checkinstall >/dev/null && export install="$(which checkinstall)" || export install="$make install";}
 
 trap 'echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $?' INT
 
@@ -489,7 +491,7 @@ function odf2 {
 function make {
 	if [ -s Makefile ] || [ -s makefile ]
 	then
-		CFLAGS="-g" $(which make) $@
+		CFLAGS="-g" $make $@
 	else
 		\mkdir ../bin 2>/dev/null
 		if which gcc >/dev/null 2>&1
@@ -760,7 +762,7 @@ function configure {
 		echo "=> Usage: $FUNCNAME [--prefix=/installation/path] [./configure arguments ...]" >&2
 		return 1
 	}
-	if [ $# = 0 ] || ! echo "$@" | \egrep -q "\--prefix=[0-9a-zA-Z_/]+"
+	if [ $# = 0 ] || ! echo "$@" | \grep -q -- "--prefix="
 	then
 		if groups | \egrep -wq "sudo|adm|root"
 		then
@@ -842,16 +844,16 @@ function buildSourceCode {
 
 	if [ $returnCode = 0 ] && ( [ -s Makefile ] || [ -s makefile ] || [ -s GNUmakefile ] )
 	then
-		if time -p make
+		if time -p $make
 		then
 			returnCode=$?
 			\mkdir -p $prefix
 			if test -w $prefix
 			then
-				make install
+				$install
 				returnCode=$?
 			else
-				sudo make install
+				sudo $install
 				returnCode=$?
 			fi
 		else
@@ -1265,32 +1267,32 @@ function split4GiB {
 function build_in_HOME {
 	test -s configure || time ./bootstrap.sh || time ./bootstrap || time ./autogen.sh
 	test -s Makefile || time ./configure --prefix=$HOME/gnu --sysconfdir=$HOME/gnu $@
-	test -s Makefile && time make && make install
-	test -s GNUmakefile && time make && make install
+	test -s Makefile && time $make && $make install
+	test -s GNUmakefile && time $make && $make install
 }
 function build_in_usr {
 	test -s configure || time ./bootstrap.sh || time ./bootstrap || time ./autogen.sh
 	test -s Makefile || time ./configure --prefix=/usr --sysconfdir=/etc $@
-	test -s Makefile && time make && sudo make install
-	test -s GNUmakefile && time make && sudo make install
+	test -s Makefile && time $make && sudo $make install
+	test -s GNUmakefile && time $make && sudo $make install
 }
 function build_in_usr_DEBIAN {
 	test -s configure || time ./bootstrap.sh || time ./bootstrap || time ./autogen.sh
 	test -s Makefile || time ./configure --prefix=/usr --sysconfdir=/etc $@
-	test -s Makefile && time make && sudo make install
-	test -s GNUmakefile && time make && sudo checkinstall
+	test -s Makefile && time $make && sudo $make install
+	test -s GNUmakefile && time $make && sudo checkinstall
 }
 function build_in_usr_local {
 	test -s configure || time ./bootstrap.sh || time ./bootstrap || time ./autogen.sh
 	test -s Makefile || time ./configure --prefix=/usr/local $@
-	test -s Makefile && time make && sudo make install
-	test -s GNUmakefile && time make && sudo make install
+	test -s Makefile && time $make && sudo $make install
+	test -s GNUmakefile && time $make && sudo $make install
 }
 function build_in_usr_local_DEBIAN {
 	test -s configure || time ./bootstrap.sh || time ./bootstrap || time ./autogen.sh
 	test -s Makefile || time ./configure --prefix=/usr/local $@
-	test -s Makefile && time make && sudo checkinstall
-	test -s GNUmakefile && time make && sudo checkinstall
+	test -s Makefile && time $make && sudo checkinstall
+	test -s GNUmakefile && time $make && sudo checkinstall
 }
 function updateYoutubeLUAForVLC {
 	local youtubeLuaURL=https://raw.githubusercontent.com/videolan/vlc/master/share/lua/playlist/youtube.lua
