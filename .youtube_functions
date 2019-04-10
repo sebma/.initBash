@@ -174,7 +174,7 @@ function ytget {
 function getRestrictedFilenamesFORMAT {
 	trap 'rc=130;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
 	local initialSiteVideoFormat="$1"
-	local siteVideoFormat downloadOK extension
+	local siteVideoFormat downloadOK extension fqdn
 	shift
 	local -i i=0
 	for url
@@ -184,6 +184,7 @@ function getRestrictedFilenamesFORMAT {
 		echo
 		echo "=> url = $url"
 		echo $url | \egrep -wq "https?:" || url=https://www.youtube.com/watch?v=$url #Only youtube short urls are handled by "youtube-dl"
+		fqdn=$(echo $url | awk -F "[./]" '{print$4"_"$5}')
 
 		case $url in
 		*.facebook.com/*) siteVideoFormat=\"$(echo $initialSiteVideoFormat+m4a | \sed "s/^\((\?\)\w\+/\1bestvideo/g")\";; #Replace the first word after the oopening parenthesis
@@ -196,6 +197,9 @@ function getRestrictedFilenamesFORMAT {
 
 		echo "=> Testing if $url still exists ..."
 		fileName=$(time $youtube_dl -f "$siteVideoFormat" --get-filename -- "$url" 2>&1)
+		extension="${fileName/*./}"
+		fileName="${fileName/.$extension/__$fqdn.$extension}"
+
 		echo $fileName | \egrep --color -A1 ^ERROR: && echo && continue
 		echo
 
@@ -209,8 +213,7 @@ function getRestrictedFilenamesFORMAT {
 		echo "=> fileName to be downloaded = <$fileName>"
 		echo
 
-		extension="${fileName#*.}"
-		[ $extension = mp4 ] || [ $extension = m4a ] || [ $extension = mp3 ] && $youtube_dl -f "$siteVideoFormat" "$url" --embed-thumbnail || $youtube_dl -f "$siteVideoFormat" "$url"
+		[ $extension = mp4 ] || [ $extension = m4a ] || [ $extension = mp3 ] && $youtube_dl -o "$fileName" -f "$siteVideoFormat" "$url" --embed-thumbnail || $youtube_dl -o $fileName -f "$siteVideoFormat" "$url"
 		downloadOK=$?
 		if [ $downloadOK = 0 ] 
 		then
