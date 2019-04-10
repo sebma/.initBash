@@ -23,6 +23,11 @@ alias ogg2wavstdout="\oggdec --output=- "
 
 function addSubtitles2mp4 {
 	local inputVideo=$1
+	test $# -le 1 && {
+		echo "=> Usage: $FUNCNAME inputVideo subFile1 subFile2 subFile3 ..." >&2
+		return 1
+	}
+
 	local outputVideo=${inputVideo/.mp4/_NEW.mp4}
 	shift
 	local numberOfSubtitles=$#
@@ -31,7 +36,7 @@ function addSubtitles2mp4 {
 	sync
 	sleep 1
 	touch -r "$inputVideo" "$outputVideo"
-	[ $codeRet = 0 ] && \mv -vf "$outputVideo" "$inputVideo"
+	[ $codeRet = 0 ] && echo && \mv -vf "$outputVideo" "$inputVideo"
 }
 function addThumbnail2mp4 {
 	local artworkFile=$1
@@ -1142,7 +1147,7 @@ function mediainfoSummary {
 	do
 		mediainfo "$media"
 		echo
-	done | \egrep "^$|^Complete name|^Format  |^Format version|^Format profile| size|^Duration|^Video|^Audio|^Text|^Menu|^Language|Kbps|[Bb]it ?rate"
+	done | \egrep "^($|Complete name|Width|Height|Encoding settings|Format  |Format version|Format profile|Duration|Video|Audio|Text|Menu|Language)| size|Kbps|[Bb]it ?rate"
 }
 function ffprobe {
 	which ffprobe >/dev/null && {
