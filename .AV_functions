@@ -21,6 +21,20 @@ audioDecode=( [libspeex]=$(which speexdec 2>/dev/null) [speex]=$(which speexdec 
 alias mp32wavstdout="\mpg123 --wav - "
 alias ogg2wavstdout="\oggdec --output=- "
 
+function urlOfVideo {
+	local extension
+	for video
+	do
+		extension=${video/*./}
+		case $extension in
+		mp4|m4a|m4b|m4v) tag=description;;
+		webm|mkv) tag=purl;;
+		*) echo "=> The $extension is not supported yet." >&2 && continue;;
+		esac
+		echo "=> video = $video"
+		$ffprobe -v error -show_entries format_tags=$tag -of default=noprint_wrappers=1:nokey=1 "$video"
+	done
+}
 function addSubtitles2mp4 {
 	local inputVideo=$1
 	test $# -le 1 && {
