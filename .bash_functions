@@ -1250,7 +1250,7 @@ function find {
 function getBJC {
 	#bjcUrl=http://www.bibledejesuschrist.org/downloads/bjc_internet.pdf
 	bjcUrl=http://www.bibledejesuschrist.org/downloads/bjc.pdf
-	extension=$(echo $bjcUrl | awk -F. '{print$NF}')
+	extension=${bjcUrl/*./}
 	bjcBaseName=$(basename $bjcUrl .$extension)
 	echo "=> Downloading last BJC version ..."
 	wget $bjcUrl
