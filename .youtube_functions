@@ -173,15 +173,27 @@ function ytget {
 }
 function getRestrictedFilenamesFORMAT {
 	trap 'rc=130;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
-	siteVideoFormat="$1"
-	local downloadOK extension
+	local initialSiteVideoFormat="$1"
+	local siteVideoFormat downloadOK extension
 	shift
 	i=0
 	for url
 	do
 		let i++
 		echo "=> Downloading url # $i/$# ..."
+		echo
 		echo "=> url = $url"
+		echo $url | \egrep -wq "https?:" || url=https://www.youtube.com/watch?v=$url #Only youtube short urls are handled by "youtube-dl"
+
+		case $url in
+		*.facebook.com/*) siteVideoFormat=\"$(echo $initialSiteVideoFormat+m4a | \sed "s/^\w\+/bestvideo/g")\";;
+		*) siteVideoFormat=\"$initialSiteVideoFormat\";;
+		esac
+
+		echo
+		echo "=> Downloading $url using the $siteVideoFormat format ..."
+		echo
+
 		echo "=> Testing if $url still exists ..."
 		fileName=$(time $youtube_dl -f "$siteVideoFormat" --get-filename -- "$url" 2>&1)
 		echo $fileName | \egrep --color -A1 ^ERROR: && echo && continue
@@ -197,7 +209,6 @@ function getRestrictedFilenamesFORMAT {
 		echo "=> fileName to be downloaded = <$fileName>"
 		echo
 
-		echo $url | \egrep -wq "https?:" || url=https://www.youtube.com/watch?v=$url #Only youtube short urls are handled by "youtube-dl"
 		extension="${fileName#*.}"
 		[ $extension = mp4 ] || [ $extension = m4a ] || [ $extension = mp3 ] && $youtube_dl -f "$siteVideoFormat" "$url" --embed-thumbnail || $youtube_dl -f "$siteVideoFormat" "$url"
 		downloadOK=$?
@@ -216,16 +227,16 @@ function getRestrictedFilenamesBEST {
 	getRestrictedFilenamesFORMAT "best[ext=mp4]/best[ext=webm]/best[ext=flv]" $@ # because of the "eval" statement in the "youtube_dl" bash variable
 }
 function getRestrictedFilenamesFHD {
-	getRestrictedFilenamesFORMAT '"mp4[height<=?1080]/mp4/best"' $@ # because of the "eval" statement in the "youtube_dl" bash variable
+	getRestrictedFilenamesFORMAT "mp4[height<=?1080]/mp4/best" $@ # because of the "eval" statement in the "youtube_dl" bash variable
 }
 function getRestrictedFilenamesHD {
-	getRestrictedFilenamesFORMAT '"mp4[height<=?720]/mp4/best"'  $@ # because of the "eval" statement in the "youtube_dl" bash variable
+	getRestrictedFilenamesFORMAT "mp4[height<=?720]/mp4/best"  $@ # because of the "eval" statement in the "youtube_dl" bash variable
 }
 function getRestrictedFilenamesSD {
-	getRestrictedFilenamesFORMAT '"mp4[height<=?480]/mp4/best"'  $@ # because of the "eval" statement in the "youtube_dl" bash variable
+	getRestrictedFilenamesFORMAT "mp4[height<=?480]/mp4/best"  $@ # because of the "eval" statement in the "youtube_dl" bash variable
 }
 function getRestrictedFilenamesLD {
-	getRestrictedFilenamesFORMAT '"mp4[height<=?240]/mp4/best"'  $@ # because of the "eval" statement in the "youtube_dl" bash variable
+	getRestrictedFilenamesFORMAT "mp4[height<=?240]/mp4/best"  $@ # because of the "eval" statement in the "youtube_dl" bash variable
 }
 function ytdlSDFormats {
 	trap 'rc=130;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
