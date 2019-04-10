@@ -56,7 +56,7 @@ function videoURL {
 function addURL2Audio_Video {
 	local url=$1
 	local fileName=$2
-	extension=${fileName#*.}
+	extension=${fileName/*./}
 #	$ffmpeg -i "$fileName" -c copy -metadata description="$url" "${fileName%.*}-NEW.$extension" && mv -vf "${fileName%.*}-NEW.$extension" $fileName
 	[ $extension = mp4 ] || [ $extension = m4a ] && mp4tags -m "$url" "$fileName"
 	sync
@@ -65,7 +65,7 @@ function videoRotateLeft {
 	local extension
 	for video
 	do
-		extension=${video#*.}
+		extension=${video/*./}
 		$ffmpeg -i "$video" -c copy -metadata:s:v:0 rotate=90 "${video%.*}-ROTATED.$extension"
 	done
 }
@@ -73,7 +73,7 @@ function videoRotateRight {
 	local extension
 	for video
 	do
-		extension=${video#*.}
+		extension=${video/*./}
 		$ffmpeg -i "$video" -c copy -metadata:s:v:0 rotate=-90 "${video%.*}-ROTATED.$extension"
 	done
 }
@@ -108,7 +108,7 @@ function audioDelay {
 
 	local video=$1
 	local delay=$2
-	local extension=${video#*.}
+	local extension=${video/*./}
 	time $ffmpeg -i "$video" -itsoffset $delay -i "$video" -c copy -map 0:v -map 1:a "${video%.*}-FIXED.$extension" #cf. https://superuser.com/questions/982342/in-ffmpeg-how-to-delay-only-the-audio-of-a-mp4-video-without-converting-the-au/983153#983153
 }
 function videoDelay {
@@ -119,7 +119,7 @@ function videoDelay {
 
 	local video=$1
 	local delay=$2
-	local extension=${video#*.}
+	local extension=${video/*./}
 	time $ffmpeg -i "$video" -itsoffset $delay -i "$video" -c copy -map 1:v -map 0:a "${video%.*}-FIXED.$extension" #cf. https://superuser.com/questions/982342/in-ffmpeg-how-to-delay-only-the-audio-of-a-mp4-video-without-converting-the-au/983153#983153
 }
 function audio2Video4YouTube {
@@ -221,9 +221,11 @@ function mpvOld {
 	which mpv $($youtube_dl -g "$@")
 }
 function to16_9 {
+	local extension
 	for video
 	do
-		$ffmpeg -i "$video" -aspect 16/9 $remuxOptions "$(basename "$video" .mp4)_16_9eme.mp4"
+		extension=${video/*./}
+		$ffmpeg -i "$video" -aspect 16/9 $remuxOptions "${video/.$extension/_16_9eme.$extension}"
 	done
 }
 function moov_atomFix {
@@ -939,8 +941,8 @@ function videoSplit {
 	fi
 
 	fileName="$1"
-	extension=$(echo $fileName | sed "s/^.*\.//")
-	fileBaseName=$(basename "$fileName" .$extension)
+	extension=${fileName/*./}
+	fileBaseName=${fileName%.???}
 	begin=$2
 	outputFile="$fileBaseName-CUT.$extension"
 	chmod -x "$fileName"
@@ -968,8 +970,8 @@ function audioShift {
 	fi
 
 	fileName="$1"
-	extension=$(echo $fileName | sed "s/^.*\.//")
-	fileBaseName=$(basename "$fileName" .$extension)
+	extension=${fileName/*./}
+	fileBaseName=${fileName%.???}
 	shift=$2
 	time $ffmpeg -itsoffset $shift -i "$fileName" $remuxOptions "$fileBaseName-SHIFTED.$extension"
 	sync
@@ -1207,7 +1209,7 @@ function videoRemux {
 	local inputFile="$1"
 	if [ $# != 2 ]
 	then
-		echo "=> Usage: $(basename $0) inputFileName outputFileName [ffmpegCLIParameters]" >&2
+		echo "=> Usage: $FUNCNAME inputFileName outputFileName [ffmpegCLIParameters]" >&2
 		exit 1
 	fi
 
