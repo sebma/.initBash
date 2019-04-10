@@ -16,7 +16,7 @@ function continueYoutube_Download {
 		echo "=> url = <$url>"
 		time $youtube_dl -f "$format" -qs -- "$url" 2>&1 | \grep --color -A1 ^ERROR: && echo && continue
 		cd $(dirname $videoFile) && pwd
-		getRestrictedFilenamesFORMAT $format $url
+		getRestrictedFilenamesFORMAT "$format" $url
 		cd - >/dev/null
 	done
 }
@@ -176,7 +176,7 @@ function getRestrictedFilenamesFORMAT {
 	local initialSiteVideoFormat="$1"
 	local siteVideoFormat downloadOK extension
 	shift
-	i=0
+	local -i i=0
 	for url
 	do
 		let i++
@@ -186,7 +186,7 @@ function getRestrictedFilenamesFORMAT {
 		echo $url | \egrep -wq "https?:" || url=https://www.youtube.com/watch?v=$url #Only youtube short urls are handled by "youtube-dl"
 
 		case $url in
-		*.facebook.com/*) siteVideoFormat=\"$(echo $initialSiteVideoFormat+m4a | \sed "s/^\w\+/bestvideo/g")\";;
+		*.facebook.com/*) siteVideoFormat=\"$(echo $initialSiteVideoFormat+m4a | \sed "s/^\((\?\)\w\+/\1bestvideo/g")\";; #Replace the first word after the oopening parenthesis
 		*) siteVideoFormat=\"$initialSiteVideoFormat\";;
 		esac
 
@@ -224,19 +224,19 @@ function getRestrictedFilenamesFORMAT {
 	trap - INT
 }
 function getRestrictedFilenamesBEST {
-	getRestrictedFilenamesFORMAT "best[ext=mp4]/best[ext=webm]/best[ext=flv]" $@ # because of the "eval" statement in the "youtube_dl" bash variable
+	getRestrictedFilenamesFORMAT "(best[ext=mp4]/best[ext=webm]/best[ext=flv])" $@ # because of the "eval" statement in the "youtube_dl" bash variable
 }
 function getRestrictedFilenamesFHD {
-	getRestrictedFilenamesFORMAT "mp4[height<=?1080]/mp4/best" $@ # because of the "eval" statement in the "youtube_dl" bash variable
+	getRestrictedFilenamesFORMAT "(mp4[height<=?1080]/mp4/best)" $@ # because of the "eval" statement in the "youtube_dl" bash variable
 }
 function getRestrictedFilenamesHD {
-	getRestrictedFilenamesFORMAT "mp4[height<=?720]/mp4/best"  $@ # because of the "eval" statement in the "youtube_dl" bash variable
+	getRestrictedFilenamesFORMAT "(mp4[height<=?720]/mp4/best)"  $@ # because of the "eval" statement in the "youtube_dl" bash variable
 }
 function getRestrictedFilenamesSD {
-	getRestrictedFilenamesFORMAT "mp4[height<=?480]/mp4/best"  $@ # because of the "eval" statement in the "youtube_dl" bash variable
+	getRestrictedFilenamesFORMAT "(mp4[height<=?480]/mp4/best)"  $@ # because of the "eval" statement in the "youtube_dl" bash variable
 }
 function getRestrictedFilenamesLD {
-	getRestrictedFilenamesFORMAT "mp4[height<=?240]/mp4/best"  $@ # because of the "eval" statement in the "youtube_dl" bash variable
+	getRestrictedFilenamesFORMAT "(mp4[height<=?240]/mp4/best)"  $@ # because of the "eval" statement in the "youtube_dl" bash variable
 }
 function ytdlSDFormats {
 	trap 'rc=130;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
