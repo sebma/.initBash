@@ -13,6 +13,13 @@ test "$install" || { which checkinstall >/dev/null && export install="$(which ch
 
 trap 'echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $?' INT
 
+function upgradeDistrib {
+	local distrib=$(distribType)
+	case $distrib in
+		debian|ubuntu) sudo updatedb; sync && sudo apt -V upgrade "$@" && sudo apt -V autoremove "$@" && sudo updatedb; sync;;
+		*)	;;
+	esac
+}
 function gpgPrint {
 	for pubKey
 	do
@@ -666,6 +673,7 @@ function aria2c {
 	done
 }
 function systemType {
+	local system
 	if which lsb_release >/dev/null
 	then
 		system=$(lsb_release -si)
@@ -675,7 +683,7 @@ function systemType {
 	echo $system
 }
 function installDate {
-	system=$(systemType)
+	local system=$(systemType)
 	case $system in
 		Debian|Ubuntu) \ls -lact --full-time /etc | awk 'END {print $6,substr($7,1,8)}' ;;
 		Mer|Redhat) \rpm -q basesystem --qf '%{installtime:date}\n' ;;
