@@ -60,6 +60,7 @@ function addThumbnail2mp4 {
 		AtomicParsley "$mpeg" --artwork "$artworkFile" --overWrite
 	done
 }
+alias addCover2mp4=addThumbnail2mp4
 function videoURL {
 	for video
 	do
