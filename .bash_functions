@@ -1235,7 +1235,8 @@ function resizePics_4096 {
 	done
 }
 function find {
-	[ $os = Darwin ] && find=gfind || find="command find"
+	local find="command find"
+	[ $os = Darwin ] && find=gfind
 	dir=$1
 	if echo $dir | \grep -q "^-"
 	then
@@ -1253,6 +1254,31 @@ function find {
 	else
 #		$find $dir $firstPredicate "$arg"
 		$find $dir $firstPredicate "$@"
+	fi
+}
+function findHumanReadable {
+	local find="command find"
+	[ $os = Darwin ] && find=gfind
+	dir=$1
+	echo $dir | \grep -q "\-" && dir=. || shift
+	args="$@"
+	if echo $args | \grep -q "\-ls"
+	then
+		$find $dir $firstPredicate $args | awk '{
+unit=" "
+size=int($7)
+if(size==0)exponent=0
+else exponent=10*int(log(size)/(10*log(2)))
+size=size/(2**exponent)
+if(exponent==10)unit="K"
+else if(exponent==20)unit="M"
+else if(exponent==30)unit="G"
+#sub($7,sprintf("%10.3f%s",size,unit))
+sub(" *"$7,sprintf(" %10.3f%s",size,unit))
+print
+}' | \column -t
+	else
+		$find $dir $firstPredicate $args
 	fi
 }
 function getBJC {
