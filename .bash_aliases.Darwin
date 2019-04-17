@@ -19,7 +19,7 @@ alias airport="\/System/Library/PrivateFrameworks/Apple80211.framework/Versions/
 alias groupadd=addgroup
 alias adduser="\dseditgroup -o edit -t user -a"
 alias useradd=adduser
-alias brewUnInstall='$(which ruby) -e "$(\curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall)"'
+alias brewUnInstall='\ruby -e "$(\curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall)"'
 alias catFiles="\tail -n +1"
 alias cpuInfo="\sysctl machdep.cpu | egrep 'brand_string|count|size|VMX|SVM'"
 alias df="\df -Ph"
@@ -51,9 +51,9 @@ alias sed="\sed -E"
 alias showHiddenFiles='defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app'
 alias showWiFiPassword='\security find-generic-password -D "AirPort network password" -gw -a'
 alias stat="\stat -x"
-#alias svgView="$(which open) -a safari"
-alias svgView="$(which open) -a firefox"
-alias tcpPorts="$(which netstat) -nap tcp"
+#alias svgView="command open -a safari"
+alias svgView="command open -a firefox"
+alias tcpPorts="command netstat -nap tcp"
 alias topf10='$(which find) . $prunePathsFindExpression -xdev -type f -size +10M -exec ls -lT {} \; 2>/dev/null | sort -nrk5 | column -t | head -10 | awk '\''{total+=$5;print}END{print"=> total = "total" MiB"}'\'''
 alias topf50='$(which find) . $prunePathsFindExpression -xdev -type f -size +10M -exec ls -lT {} \; 2>/dev/null | sort -nrk5 | column -t | head -50 | awk '\''{total+=$5;print}END{print"=> total = "total" MiB"}'\'''
 alias topf5='$(which find) . $prunePathsFindExpression -xdev -type f -size +10M -exec ls -lT {} \; 2>/dev/null | sort -nrk5 |  column -t | head -5 | awk '\''{total+=$5;print}END{print"=> total = "total" MiB"}'\'''
