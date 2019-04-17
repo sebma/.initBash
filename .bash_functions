@@ -1348,16 +1348,6 @@ function updateYoutubePlaylistLUAForVLC {
 		wget --content-disposition -NP ~/.local/share/vlc/lua/playlist/ $playlist_youtubeLuaURL
 	fi
 }
-function locate {
-	groups 2>/dev/null | \egrep -wq "sudo|admin" && locateOptions="-e" || locateOptions="--database $HOME/.local/lib/mlocate/mlocate.db -e"
-	echo "$@" | \grep -q "\-[a-z]*r" && $locate $locateOptions "$@" || $locate $locateOptions -ir "${@}"
-}
-function locateBin {
-	locate "${@}" | grep bin/
-}
-function locateFromHere {
-	locate "$@" | \grep $PWD/
-}
 function txt2pdf {
 	for file
 	do
