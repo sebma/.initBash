@@ -4,7 +4,7 @@ test "$debug" '>' 0 && \echo "=> Running $bold${colors[blue]}$(basename ${BASH_S
 
 #wifiInterface="$(which iwconfig >/dev/null 2>&1 && iwconfig 2>/dev/null | awk '/^[^ \t]/ { if ($1 ~ /^[0-9]+:/) { print $2 } else { print $1 } }' || ( which iw >/dev/null 2>&1 && iw dev | awk '/Interface/{lastInterface=$NF}END{print lastInterface}') )"
 #wifiInterface="$(iwconfig 2>/dev/null | awk '/^[^ \t]/ { if ($1 ~ /^[0-9]+:/) { print $2 } else { print $1 } }' | iw dev 2>/dev/null | awk '/Interface/{lastInterface=$NF}END{print lastInterface}')"
-wifiInterface=$(iwconfig 2>/dev/null | grep -v ESSID:off/any | awk '/ESSID/{print$1}')
+wifiInterface=$(iwconfig 2>/dev/null | grep -v ESSID:off/any | awk '/ESSID/{print$1}' | sort -V | head -1)
 
 #alias lpr="\lpr -P ppti-14-503-imp -o PageSize=A4 -o PageRegion=A4 -o Resolution=default -o InputSlot=Tray2 -o Duplex=DuplexNoTumble -o PreFilter=No"
 #alias lpr="\lpr -o PageSize=A4 -o PageRegion=A4 -o Resolution=default -o InputSlot=Tray2 -o Duplex=DuplexNoTumble -o PreFilter=No"
@@ -15,10 +15,11 @@ duExcludedPathList="./proc ./sys ./dev"
 excludePathsDuExpression=$(printf -- "--exclude %s " $duExcludedPathList)
 find="command find"
 
-test $wifiInterface && alias wifiList="which nmcli >/dev/null && \nmcli con || iw dev $wifiInterface scan || iwlist $wifiInterface scan"
-test $wifiInterface && alias wifiSpeed="\iwlist $wifiInterface bitrate;\iw dev $wifiInterface link"
-test $wifiInterface && alias restartWifi="which nmcli >/dev/null && \nmcli nm wifi off;nmcli nm wifi on;sleep 10;wanip"
-test $wifiInterface && alias wifiRestart=restartWifi
+test "$wifiInterface" && alias wifiList="which nmcli >/dev/null && \nmcli con || iw dev $wifiInterface scan || iwlist $wifiInterface scan"
+test "$wifiInterface" && alias wifiSpeed="\iwlist $wifiInterface bitrate;\iw dev $wifiInterface link"
+test "$wifiInterface" && alias restartWifi="which nmcli >/dev/null && \nmcli nm wifi off;nmcli nm wifi on;sleep 10;wanip"
+test "$wifiInterface" && alias wifiRestart=restartWifi
+set +x
 
 alias brewUnInstall='\ruby -e "$(\curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/uninstall)"'
 alias catFiles="\tail -vn +1"
