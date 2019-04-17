@@ -184,7 +184,7 @@ function getRestrictedFilenamesFORMAT {
 		echo
 		echo "=> url = $url"
 		echo $url | \egrep -wq "https?:" || url=https://www.youtube.com/watch?v=$url #Only youtube short urls are handled by "youtube-dl"
-		fqdn=$(echo $url | awk -F "[./]" '{print$4"_"$5}')
+		fqdn=$(echo $url | awk -F "[./]" '{gsub("www.","");print$3"_"$4}')
 
 		case $url in
 		*.facebook.com/*) siteVideoFormat=\"$(echo $initialSiteVideoFormat+m4a | \sed -E "s/^(\(?)\w+/\1bestvideo/g")\";; #Replace the first word after the oopening parenthesis
