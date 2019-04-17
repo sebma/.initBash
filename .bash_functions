@@ -16,7 +16,7 @@ trap 'echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $?' INT
 function updateDistrib {
 	local distrib=$(distribType)
 	case $distrib in
-		debian|ubuntu) sudo apt -V upgrade "$@" && sudo apt-get -V autoremove "$@" && sudo \updatedb; sync;;
+		debian|ubuntu) sudo apt -V upgrade "$@" && echo && sudo apt-get -V autoremove "$@" && sudo \updatedb; sync;;
 		*)	;;
 	esac
 }
