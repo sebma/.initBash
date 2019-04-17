@@ -13,10 +13,10 @@ test "$install" || { which checkinstall >/dev/null && export install="$(which ch
 
 trap 'echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $?' INT
 
-function upgradeDistrib {
+function updateDistrib {
 	local distrib=$(distribType)
 	case $distrib in
-		debian|ubuntu) sudo \updatedb; sync && sudo apt -V upgrade "$@" && sudo apt-get -V autoremove "$@" && sudo \updatedb; sync;;
+		debian|ubuntu) sudo apt -V upgrade "$@" && sudo apt-get -V autoremove "$@" && sudo \updatedb; sync;;
 		*)	;;
 	esac
 }
