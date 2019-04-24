@@ -16,7 +16,7 @@ test "$install" || { which checkinstall >/dev/null && export install="$(which ch
 function updateDistrib {
 	local distrib=$(distribType)
 	case $distrib in
-		debian|ubuntu) sudo apt -V upgrade --download-only "$@" && sync && sudo apt -V upgrade --yes "$@" && echo && sudo apt-get -V autoremove "$@" && sudo \updatedb; sync;;
+		debian|ubuntu) sudo apt -V upgrade --download-only "$@" && sync && echo && sudo apt -V upgrade --yes "$@" && echo && sudo apt-get -V autoremove "$@" && sudo \updatedb; sync;;
 		*)	;;
 	esac
 }
