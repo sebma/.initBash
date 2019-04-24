@@ -591,10 +591,10 @@ function getFiles {
 		return 2
 	}
 	local baseUrl=$(echo $url | awk -F/ '{print$3}')
-	local wget="command wget"
-#	$wget --no-parent --continue --timestamping --random-wait --user-agent=Mozilla --content-disposition --convert-links --page-requisites --recursive --reject index.html --accept "$@"
+	local wget="$(which wget2 2>/dev/null || which wget)"
+#	time $wget --no-parent --continue --timestamping --random-wait --user-agent=Mozilla --content-disposition --convert-links --page-requisites --recursive --reject index.html --accept "$@"
 	set -x
-	$wget --no-parent --continue --timestamping --random-wait --user-agent=Mozilla --content-disposition --convert-links --page-requisites --recursive --accept "$@"
+	time $wget --no-parent --continue --timestamping --random-wait --user-agent=Mozilla --content-disposition --convert-links --page-requisites --recursive --accept "$@"
 	set +x
 }
 function ssh {
