@@ -507,28 +507,6 @@ function odf2 {
 		}
 	done
 }
-function make {
-	if [ -s Makefile ] || [ -s makefile ]
-	then
-		CFLAGS="-g" $make $@
-	else
-		\mkdir ../bin 2>/dev/null
-		if which gcc >/dev/null 2>&1
-		then
-			for file
-			do
-				echo gcc -ggdb $file.c -o ../bin/$file
-				command gcc -ggdb $file.c -o ../bin/$file
-			done
-		else
-			for file
-			do
-				echo cc -g $file.c -o ../bin/$file
-				command cc -g $file.c -o ../bin/$file
-			done
-		fi
-	fi
-}
 function gitUpdateAllLocalRepos {
 	local dir=""
 	command gfind ~ -type d -name .git | while read dir
