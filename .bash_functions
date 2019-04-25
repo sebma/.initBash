@@ -9,10 +9,6 @@ test $os = Linux  && export locate="command locate" && openCommand="command xdg-
 test $os = Darwin && export locate="time -p \"command glocate\"" && openCommand="command open"
 
 myDefault_sshOptions="-A -Y -C"
-test "$make" || which remake >/dev/null && export make="$(which remake)" || export make="$(which make)"
-test "$install" || { which checkinstall >/dev/null && export install="$(which checkinstall)" || export install="$make install";}
-
-#trap 'echo "=> ${BASH_SOURCE[0]}: CTRL+C Interruption trapped.">&2;return $?' INT
 
 function updateDistrib {
 	local distrib=$(distribType)
