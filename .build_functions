@@ -2,6 +2,9 @@
 declare -A | grep -wq colors || source $initDir/.colors
 test "$debug" '>' 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
+test "$make" || which remake >/dev/null && export make="$(which remake)" || export make="$(which make)"
+test "$install" || { which checkinstall >/dev/null && export install="$(which checkinstall)" || export install="$make install";}
+
 function make {
 	if [ -s Makefile ] || [ -s makefile ]
 	then
