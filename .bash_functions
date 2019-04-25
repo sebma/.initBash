@@ -20,13 +20,25 @@ function updateDistrib {
 		*)	;;
 	esac
 }
+function asc2gpg {
+	for ascFile
+	do
+		\gpg -v -o "${ascFile/.asc/.gpg}" --dearmor "$ascFile"
+	done
+}
+function gpg2asc {
+	for gpgFile
+	do
+		\gpg -v -o "${gpgFile/.gpg/.asc}" --enarmor "$gpgFile"
+	done
+}
 function gpgPrint {
 	for pubKey
 	do
 		echo $pubKey
 		printf -- "-%.s" $(seq ${#pubKey})
 		echo
-		gpg $pubKey | awk '{printf$1"   "$2" "$3"\n""uid\t\t  ";$1=$2=$3="";print}'
+		\gpg $pubKey | awk '{printf$1"   "$2" "$3"\n""uid\t\t  ";$1=$2=$3="";print}'
 		echo
 	done
 }
