@@ -2,6 +2,7 @@
 declare -A | grep -wq colors || source $initDir/.colors
 test "$debug" '>' 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
+test -r $initDir/.build_functions && Source $initDir/.build_functions
 test -r $initDir/.AV_functions && Source $initDir/.AV_functions
 test -r $initDir/.youtube_functions && Source $initDir/.youtube_functions
 test $os = Linux  && export locate="command locate" && openCommand="command xdg-open"
@@ -772,155 +773,6 @@ function gitCloneNonEmptyDir {
 function gitCloneHome {
 	test $# -ge 1 && gitCloneNonEmptyDir $@ $HOME
 }
-function configure {
-	test $CC || export CC=$(echo $HOSTTYPE-$OSTYPE-gcc | sed "s/armv[^-]*-/arm-/")
-	local defaultBuildOptions="--enable-shared"
-	local project=$(basename $PWD)
-	local returnCode=0
-	test "$1" = "-h" && {
-		echo "=> Usage: $FUNCNAME [--prefix=/installation/path] [./configure arguments ...]" >&2
-		return 1
-	}
-	if [ $# = 0 ] || ! echo "$@" | \grep -q -- "--prefix="
-	then
-		if groups | \egrep -wq "sudo|adm|root"
-		then
-			prefix=/usr/local
-		elif grep -wq GNU README* COPYING
-		then
-			prefix=$HOME/gnu
-		else
-			prefix=$HOME/local
-		fi
-	else
-		for arg in $@;do echo $arg | \grep -q -- --prefix= && prefix=${arg/*=/};done
-		prefix=$(echo $prefix | sed 's/~/$HOME/') #Configure ne supporte parfois pas les chemins contenant '~'
-		shift
-	fi
-	configureArgs="--prefix=$prefix --exec-prefix=$prefix $defaultBuildOptions $@"
-	echo "=> pwd = $PWD"
-	echo "=> prefix = $prefix"
-	\grep -w url ./.git/config && which git >/dev/null 2>&1 && git pull
-	if [ -d cmake ]
-	then
-		mkdir -p build
-		cd build
-		if groups | \egrep -wq "sudo|adm|root" && echo $prefix | grep -q /usr
-		then
-			unset CC
-			cmake .. $@
-			returnCode=$?
-		else
-			unset CC
-			cmake .. -DPREFIX=$prefix -DEPREFIX=$prefix $@
-			returnCode=$?
-		fi
-		returnCode=$?
-		grep ":PATH=.*$prefix" CMakeCache.txt
-		cd -
-	else
-		if [ ! -s configure ]
-		then
-#			test -s ./bootstrap.sh && time ./bootstrap.sh || { test -s ./bootstrap && time ./bootstrap || test -s ./autogen.sh && time ./autogen.sh; }
-			for autoconfProg in bootstrap.py bootstrap.sh bootstrap autogen.sh
-			do	
-				if test -x $autoconfProg 
-				then
-					set -x
-					time ./$autoconfProg $configureArgs || time ./$autoconfProg
-					returnCode=$?
-					break
-				fi
-			done
-			if [ $returnCode = 0 ]
-			then
-				if [ -x ./waf ]
-				then
-					./waf configure
-				else
-					test -x ./configure || autoreconf -vi
-				fi
-				returnCode=$?
-			fi
-			set +x
-		fi
-		if [ ! -s Makefile ]
-		then
-			test -s ./configure && set -x && time ./configure $configureArgs
-			returnCode=$?;set +x
-		fi
-	fi
-	echo "=> returnCode = $returnCode" >&2
-	return $returnCode
-}
-function buildSourceCode {
-	test $CC || export CC=$(echo $HOSTTYPE-$OSTYPE-gcc | sed "s/armv[^-]*-/arm-/")
-	local defaultBuildOptions=""
-	local returnCode=0
-	local project=$(basename $PWD)
-	configure $defaultBuildOptions "$@"
-	returnCode=$?
-
-	if [ $returnCode = 0 ] && ( [ -s Makefile ] || [ -s makefile ] || [ -s GNUmakefile ] )
-	then
-		if time -p $make
-		then
-			returnCode=$?
-			\mkdir -p $prefix
-			if test -w $prefix
-			then
-				$make install
-				returnCode=$?
-			else
-				sudo $install
-				returnCode=$?
-			fi
-		else
-			returnCode=$?
-		fi
-	else
-		returnCode=$?
-		printf "=> ERROR: The Makefile could not be generated therefore the building the <$project> source code has failed !\n=> Listing the files :\n$(ls -l)\n" >&2
-	fi
-
-	unset CC
-	echo "=> returnCode = $returnCode" >&2
-	[ $returnCode = 0 ] && set -x && sudo ldconfig
-	set +x
-	return $returnCode
-}
-function buildSourceCodeForAndroid {
-	local dest=arm-linux-androideabi
-	test $CC || export CC=$dest-gcc
-	local defaultBuildOptions="--prefix=$HOME/build/android --host=$dest --build=$MACHTYPE"
-	local returnCode=0
-	buildSourceCode $defaultBuildOptions "$@"
-	return $?
-}
-function configureForAndroid {
-	local dest=arm-linux-androideabi
-	test $CC || export CC=$dest-gcc
-	local defaultBuildOptions="--prefix=$HOME/build/android --host=$dest --build=$MACHTYPE"
-	local returnCode=0
-	configure $defaultBuildOptions "$@"
-	return $?
-}
-function buildSourceCodeForJolla {
-	local dest=arm-linux-gnueabihf
-	test $CC || export CC=$dest-gcc
-	local defaultBuildOptions="--prefix=$HOME/build/jolla --host=$dest"
-	local returnCode=0
-	buildSourceCode $defaultBuildOptions "$@"
-	return $?
-}
-function configureForJolla {
-	local dest=arm-linux-gnueabihf
-	test $CC || export CC=$dest-gcc
-	local defaultBuildOptions="--prefix=$HOME/build/jolla --host=$dest"
-	local returnCode=0
-	configure $defaultBuildOptions "$@"
-	return $?
-}
 function tcpConnetTest {
 	if which netcat > /dev/null 2>&1
 	then
@@ -1309,36 +1161,6 @@ function webgrep {
 function split4GiB {
 	test $# = 1 && time split -d -b 4095m $1 $1.
 }
-function build_in_HOME {
-	test -s configure || time ./bootstrap.sh || time ./bootstrap || time ./autogen.sh
-	test -s Makefile || time ./configure --prefix=$HOME/gnu --sysconfdir=$HOME/gnu $@
-	test -s Makefile && time $make && $make install
-	test -s GNUmakefile && time $make && $make install
-}
-function build_in_usr {
-	test -s configure || time ./bootstrap.sh || time ./bootstrap || time ./autogen.sh
-	test -s Makefile || time ./configure --prefix=/usr --sysconfdir=/etc $@
-	test -s Makefile && time $make && sudo $make install
-	test -s GNUmakefile && time $make && sudo $make install
-}
-function build_in_usr_DEBIAN {
-	test -s configure || time ./bootstrap.sh || time ./bootstrap || time ./autogen.sh
-	test -s Makefile || time ./configure --prefix=/usr --sysconfdir=/etc $@
-	test -s Makefile && time $make && sudo $make install
-	test -s GNUmakefile && time $make && sudo checkinstall
-}
-function build_in_usr_local {
-	test -s configure || time ./bootstrap.sh || time ./bootstrap || time ./autogen.sh
-	test -s Makefile || time ./configure --prefix=/usr/local $@
-	test -s Makefile && time $make && sudo $make install
-	test -s GNUmakefile && time $make && sudo $make install
-}
-function build_in_usr_local_DEBIAN {
-	test -s configure || time ./bootstrap.sh || time ./bootstrap || time ./autogen.sh
-	test -s Makefile || time ./configure --prefix=/usr/local $@
-	test -s Makefile && time $make && sudo checkinstall
-	test -s GNUmakefile && time $make && sudo checkinstall
-}
 function updateYoutubeLUAForVLC {
 	local youtubeLuaURL=https://raw.githubusercontent.com/videolan/vlc/master/share/lua/playlist/youtube.lua
 	if groups 2>/dev/null | egrep -wq "sudo|admin"
@@ -1356,7 +1178,7 @@ function updateYoutubePlaylistLUAForVLC {
 		test $os = Linux &&  \sudo \wget --content-disposition -NP /usr/lib/vlc/lua/playlist/ $playlist_youtubeLuaURL
 		test $os = Darwin && \sudo \wget --content-disposition -NP /Applications/VLC.app/Contents/MacOS/share/lua/playlist/ $playlist_youtubeLuaURL
 	else
-		wget --content-disposition -NP ~/.local/share/vlc/lua/playlist/ $playlist_youtubeLuaURL
+		\wget --content-disposition -NP ~/.local/share/vlc/lua/playlist/ $playlist_youtubeLuaURL
 	fi
 }
 function txt2pdf {
