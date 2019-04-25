@@ -29,7 +29,7 @@ function asc2gpg {
 function gpg2asc {
 	for gpgFile
 	do
-		\gpg -v -o "${gpgFile/.gpg/.asc}" --enarmor "$gpgFile"
+		\gpg -v -o - --enarmor "$gpgFile" | sed "s/ARMORED FILE/PUBLIC KEY BLOCK/" | tee "${gpgFile/.gpg/.asc}"
 	done
 }
 function gpgPrint {
