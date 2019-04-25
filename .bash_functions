@@ -11,7 +11,7 @@ test $os = Darwin && export locate="time -p \"command glocate\"" && openCommand=
 myDefault_sshOptions="-A -Y -C"
 
 function termtitle {
-	printf "\033]0;$*\007"
+	printf "\e]0;$*\7"
 }
 function updateDistrib {
 	local distrib=$(distribType)
