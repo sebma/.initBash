@@ -8,6 +8,7 @@ if tty -s
 then
 	set -o | \grep -wq xtrace.*on && trace=1 || trace=0
 	export normal=$(tput sgr0)
+	export bell=$(tput bel)
 	export bold=$(tput bold)
 	export dim=$(tput dim)
 	export italics=$(tput sitm)
