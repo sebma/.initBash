@@ -10,6 +10,9 @@ test $os = Darwin && export locate="time -p \"command glocate\"" && openCommand=
 
 myDefault_sshOptions="-A -Y -C"
 
+function awkCalc {
+	awk "BEGIN{ print $* }"
+}
 function termtitle {
 	printf "\e]0;$*\7"
 }
