@@ -11,10 +11,16 @@ test $os = Darwin && export locate="time -p \"command glocate\"" && openCommand=
 myDefault_sshOptions="-A -Y -C"
 
 function awkCalc {
-	awk "BEGIN{ print $* }"
+	\awk "BEGIN{ print $* }"
+}
+function perlCalc {
+	\perl -le "print ${*/^/**}"
+}
+function pythonCalc {
+	\python -c "print(${*/^/**})"
 }
 function termtitle {
-	printf "\e]0;$*\7"
+	printf "\e]0;$*\a"
 }
 function updateDistrib {
 	local distrib=$(distribType)
