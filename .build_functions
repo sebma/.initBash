@@ -93,7 +93,7 @@ function configure {
 				then
 					./waf configure
 				else
-					test -x ./configure || autoreconf -vi
+					test -x ./configure || time autoreconf -vi
 				fi
 				returnCode=$?
 			fi
