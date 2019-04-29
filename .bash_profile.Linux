@@ -62,7 +62,7 @@ if test -w /boot/grub/today.jpg
 then
 	for dir in /datas/ImagesVersets $HOME/ImagesVersets
 	do
-		test -d $dir && $(which find) $dir -type f | egrep -q '(png|jpg)$' && cp -pv "$(shuf -n1 -e $dir/*/*.{jpg,png})" /boot/grub/today.jpg
+		test -d $dir && $(which find) $dir -type f 2>/dev/null | egrep -q '(png|jpg)$' && cp -pv "$(shuf -n1 -e $dir/*/*.{jpg,png})" /boot/grub/today.jpg 2>/dev/null
 	done
 fi
 
