@@ -15,6 +15,15 @@ set -o histexpand # Re-enable the history expansion disabled previously by my "e
 bashRCLoaded=1
 export os=$(uname -s)
 
+function addpaths {
+	for path
+	do
+		test ! -d "$path" && continue
+		echo $PATH | grep -wq "$path" || PATH=$path:$PATH
+	done
+	export PATH
+}
+
 function addmanpaths {
 	for manpath
 	do
