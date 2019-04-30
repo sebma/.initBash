@@ -249,6 +249,8 @@ alias wanip='time \curl -A "" ipinfo.io/ip || time \wget -qU "" -O- ipinfo.io/ip
 alias wanipOLD='time \dig +short myip.opendns.com @resolver1.opendns.com'
 alias wavemon="xterm -e wavemon &"
 alias wget="\wget -c --content-disposition"
+alias wgetnoconfig="\wget --config=/dev/null"
+alias wget2noconfig="\wget2 --no-config"
 alias xargs="\xargs -ri"
 alias xclock="\xclock -digital -update 1"
 alias xfree="\xterm -geometry 73x5 -e watch -n2 free -om &"
@@ -270,7 +272,7 @@ grep  --help 2>&1 | \grep -qw "\--color" && alias grep="grep --color"
 type arch >/dev/null 2>&1 || alias arch="uname -m"
 uname -s | grep -q AIX && alias stat="istat"
 which cleartool >/dev/null 2>&1 && alias ct=cleartool
-which curl >/dev/null 2>&1 && alias curl="\curl -L"
+which curl >/dev/null 2>&1 && alias curl="\curl -L" && alias curlnoconfig="\curl -q"
 which hexdump >/dev/null && alias hexdump="\hexdump -C" || alias hexdump="\od -ctx1"
 which lsb_release >/dev/null 2>&1 && alias lsb_release="\lsb_release -s"
 which vim >/dev/null && alias vim="LANG=$(locale -a 2>/dev/null | egrep -i '(fr_fr|en_us|en_uk).*utf' | sort -r | head -1) \vim" && alias vi=vim
