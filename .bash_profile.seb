@@ -122,6 +122,7 @@ addpaths /home/linuxbrew/.linuxbrew/bin $HOME/.linuxbrew/bin
 
 which matlab >/dev/null 2>&1 && test -r $initDir/.bash_profile.matlab && Source $initDir/.bash_profile.matlab
 which brew >/dev/null 2>&1 && eval $(brew shellenv)
+which hub >/dev/null 2>&1 && eval "$(hub alias -s)"
 which brew >/dev/null 2>&1 && [ $BASH_VERSINFO -ge 4 ] && [ -r $(brew --prefix)/share/bash-completion/bash_completion ] && Source $(brew --prefix)/share/bash-completion/bash_completion
 
 set +x
