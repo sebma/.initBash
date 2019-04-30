@@ -8,7 +8,7 @@ test "$install" || { which checkinstall >/dev/null && export install="$(which ch
 function make {
 	if [ -s Makefile ] || [ -s makefile ]
 	then
-		time CFLAGS="-g" $make $@
+		time CFLAGS="-g" $make -j$(nproc) $@
 	else
 		\mkdir ../bin 2>/dev/null
 		if which gcc >/dev/null 2>&1
