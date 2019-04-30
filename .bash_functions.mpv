@@ -90,3 +90,4 @@ function mpvplaylistSD {
 	nohup $mpv --ytdl-format 'best[height<=480]/best' --playlist "$@" &
 	tail -f nohup.out
 }
+alias mpvnoconfig="mpv --no-config"
