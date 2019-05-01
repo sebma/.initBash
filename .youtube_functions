@@ -258,53 +258,53 @@ function ytdlSDFormats {
 	done
 	trap - INT
 }
-function getRestrictedFilenamesFromFilesHD {
+function getAliveURLsFromFile {
 	trap 'rc=130;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
+	local listOfUrls=""
 	for file
 	do
-		echo "=> Treating file : $file ..." >&2
+		echo "=> Checking if urls in \"$file\" are alive ..." >&2
+		echo >&2
 		urls=$(awk '{printf$1" "}' $file)
 		for url in $urls
 		do
-			printf "=> Testing $url ..."
-			\curl -o /dev/null -Lsw "%{http_code}\n" $url | \egrep -q "^(200|301)$" && echo OK && listOfUrls="$listOfUrls $url" || echo DOWN >&2
+			printf "=> Testing $url ..." >&2
+			\curl -o /dev/null -Lsw "%{http_code}\n" $url | \egrep -q "^(200|301)$" && echo OK >&2 && listOfUrls="$listOfUrls $url" || echo DOWN >&2
 		done
-
-		getRestrictedFilenamesHD $listOfUrls
+		echo >&2
 	done
+	echo $listOfUrls
 	trap - INT
+}
+function getRestrictedFilenamesFromFilesFORMAT {
+	trap 'rc=130;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
+	local listOfUrls=""
+	local format="$1"
+	shift
+	listOfUrls=$(getAliveURLsFromFile "$@")
+	getRestrictedFilenamesFORMAT "$format" $listOfUrls
+	trap - INT
+}
+function getRestrictedFilenamesFromFilesBEST {
+	getRestrictedFilenamesFromFilesFORMAT "best" "$@"
+}
+function getRestrictedFilenamesFromFilesFHD {
+	getRestrictedFilenamesFromFilesFORMAT "mp4[height<=?1080]/mp4/best)" "$@"
+}
+function getRestrictedFilenamesFromFilesHD {
+	getRestrictedFilenamesFromFilesFORMAT "mp4[height<=?720]/mp4/best)" "$@"
+}
+function getRestrictedFilenamesFromFilesFSD {
+	getRestrictedFilenamesFromFilesFORMAT "mp4[height<=?480]/mp4/best)" "$@"
 }
 function getRestrictedFilenamesFromFilesSD {
-	trap 'rc=130;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
-	for file
-	do
-		echo "=> Treating file : $file ..." >&2
-		urls=$(awk '{printf$1" "}' $file)
-		for url in $urls
-		do
-			printf "=> Testing $url ..."
-			\curl -o /dev/null -Lsw "%{http_code}\n" $url | \egrep -q "^(200|301)$" && echo OK && listOfUrls="$listOfUrls $url" || echo DOWN >&2
-		done
-
-		getRestrictedFilenamesSD $listOfUrls
-	done
-	trap - INT
+	getRestrictedFilenamesFromFilesFORMAT "mp4[height<=?360]/mp4/best)" "$@"
 }
 function getRestrictedFilenamesFromFilesLD {
-	trap 'rc=130;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
-	for file
-	do
-		echo "=> Treating file : $file ..." >&2
-		urls=$(awk '{printf$1" "}' $file)
-		for url in $urls
-		do
-			printf "=> Testing $url ..."
-			\curl -o /dev/null -Lsw "%{http_code}\n" $url | \egrep -q "^(200|301)$" && echo OK && listOfUrls="$listOfUrls $url" || echo DOWN >&2
-		done
-
-		getRestrictedFilenamesLD $listOfUrls
-	done
-	trap - INT
+	getRestrictedFilenamesFromFilesFORMAT "mp4[height<=?240]/mp4/best)" "$@"
+}
+function getRestrictedFilenamesFromFilesVLD {
+	getRestrictedFilenamesFromFilesFORMAT "mp4[height<=?144]/mp4/best)" "$@"
 }
 function getPlaylistsRestrictedFilenamesHD {
 	trap 'rc=130;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
