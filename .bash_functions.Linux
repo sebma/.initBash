@@ -35,7 +35,7 @@ function mac@ {
 	fi
 }
 function brewInstall {
-	which brew >/dev/null 2>&1 || $(which ruby) -e "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install)"
+	which brew >/dev/null 2>&1 || sh -c "$(\curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
 	which brew >/dev/null || return 1
 	brew update
 }
