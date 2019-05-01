@@ -187,42 +187,52 @@ function getRestrictedFilenamesFORMAT {
 		fqdn=$(echo $url | awk -F "[./]" '{gsub("www.","");print$3"_"$4}')
 
 		case $url in
-		*.facebook.com/*) siteVideoFormat=\"$(echo $initialSiteVideoFormat+m4a | \sed -E "s/^(\(?)\w+/\1bestvideo/g")\";; #Replace the first word after the oopening parenthesis
-		*) siteVideoFormat=\"$initialSiteVideoFormat\";;
+		*.facebook.com/*) siteVideoFormat=$(echo $initialSiteVideoFormat+m4a | \sed -E "s/^(\(?)\w+/\1bestvideo/g");; #Replace the first word after the opening parenthesis
+		*) siteVideoFormat=$initialSiteVideoFormat;;
 		esac
-
-		echo
-		echo "=> Downloading $url using the $siteVideoFormat format ..."
-		echo
+		echo $siteVideoFormat | grep -q '[<>]' && siteVideoFormat=\"$siteVideoFormat\"
 
 		echo "=> Testing if $url still exists ..."
-		fileName=$(time $youtube_dl -f "$siteVideoFormat" --get-filename -- "$url" 2>&1)
-		echo $fileName | \egrep --color -A1 ERROR: && echo && continue
-		extension="${fileName/*./}"
-		fileName="${fileName/.$extension/__$fqdn.$extension}"
+		fileNames=$(time $youtube_dl -f "$siteVideoFormat" --get-filename -- "$url" 2>&1)
+		echo $fileNames | \egrep --color -A1 ERROR: && echo && continue
 
-		echo
-		if [ -f "$fileName" ] && [ ! -w "$fileName" ]
-		then
-			echo "${colors[yellowOnBlue]}=> The file <$fileName> is already downloaded, skipping ...$normal" >&2
+		local -i j=0
+		declare -a formats=( $(echo $siteVideoFormat | \sed "s/,/ /g") )
+		for fileName in $fileNames
+		do
 			echo
-			continue
-		fi
+			echo "=> Downloading $url using the ${formats[$j]} format ..."
+			echo
 
-		echo "=> fileName to be downloaded = <$fileName>"
-		echo
-
-		[ $extension = mp4 ] || [ $extension = m4a ] || [ $extension = mp3 ] && $youtube_dl -o "$fileName" -f "$siteVideoFormat" "$url" --embed-thumbnail || $youtube_dl -o $fileName -f "$siteVideoFormat" "$url"
-		downloadOK=$?
-		if [ $downloadOK = 0 ] 
-		then
-			[ $extension = mp4 ] || [ $extension = m4a ] || [ $extension = mp3 ] && mp4tags -m "$url" "$fileName"
-			chmod -w "$fileName" && echo && videoInfo "$fileName"
-		fi
-
-		echo
+			extension="${fileName/*./}"
+			fileName="${fileName/.$extension/__$fqdn.$extension}"
+	
+			echo
+			if [ -f "$fileName" ] && [ ! -w "$fileName" ]
+			then
+				echo "${colors[yellowOnBlue]}=> The file <$fileName> is already downloaded, skipping ...$normal" >&2
+				echo
+				let j++
+				continue
+			fi
+	
+			echo "=> fileName to be downloaded = <$fileName>"
+			echo
+	
+			[ $extension = mp4 ] || [ $extension = m4a ] || [ $extension = mp3 ] && $youtube_dl -o "$fileName" -f "${formats[$j]}" "$url" --embed-thumbnail || $youtube_dl -o $fileName -f "${formats[$j]}" "$url"
+			downloadOK=$?
+			if [ $downloadOK = 0 ] 
+			then
+				[ $extension = mp4 ] || [ $extension = m4a ] || [ $extension = mp3 ] && mp4tags -m "$url" "$fileName"
+				chmod -w "$fileName" && echo && videoInfo "$fileName"
+			fi
+	
+			echo
+			let j++
+		done
 	done
 	sync
+	set +x
 	trap - INT
 }
 function getRestrictedFilenamesBEST {
