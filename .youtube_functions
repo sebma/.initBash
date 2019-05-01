@@ -207,11 +207,9 @@ function getRestrictedFilenamesFORMAT {
 			extension="${fileName/*./}"
 			fileName="${fileName/.$extension/__$fqdn.$extension}"
 	
-			echo
 			if [ -f "$fileName" ] && [ ! -w "$fileName" ]
 			then
 				echo "${colors[yellowOnBlue]}=> The file <$fileName> is already downloaded, skipping ...$normal" >&2
-				echo
 				let j++
 				continue
 			fi
@@ -227,10 +225,10 @@ function getRestrictedFilenamesFORMAT {
 				chmod -w "$fileName" && echo && videoInfo "$fileName"
 			fi
 	
-			echo
 			let j++
 		done
 	done
+	echo
 	sync
 	set +x
 	trap - INT
