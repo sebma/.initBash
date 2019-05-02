@@ -10,6 +10,22 @@ test $os = Darwin && export locate="time -p \"command glocate\"" && openCommand=
 
 myDefault_sshOptions="-A -Y -C"
 
+function castnowURLs {
+	test $# = 0 && {
+		echo "=> Usage: $FUNCNAME [ytdl-format] url1 url2 ..." >&2
+		return 1
+	}
+
+	local format="mp4[height<=480]/mp4/best"
+	echo $1 | egrep -q "^(https?|s?ftps?)://" || { format="$1"; shift; }
+
+	for url
+	do
+		nohup youtube-dl --no-continue -qf "$format" -o- -- "$url" | castnow --quiet - &
+	done
+	echo
+	echo "=> Run \"castnow\" to re-attach to a currently running playback session."
+}
 function awkCalc {
 	\awk "BEGIN{ print $* }"
 }
@@ -193,7 +209,7 @@ function sizeOfRemoteFile {
 }
 function getField {
 	test $# -ne 3 && {
-		echo "=> ERROR on Usage: $BASH_FUNC separator1 separator2 fieldNumber" >&2
+		echo "=> ERROR on Usage: $FUNCNAME separator1 separator2 fieldNumber" >&2
 		return 1
 	}
 	local sep1="$1"
@@ -253,7 +269,7 @@ function pdfSelect {
 	pages=$2
 	output=$3
 	test $# != 3 && {
-		echo "=> Usage : $BASH_FUNC <inputFile> <pageRanges> <outputFile>" >&2
+		echo "=> Usage : $FUNCNAME <inputFile> <pageRanges> <outputFile>" >&2
 		return 1
 	}
 	time \pdfjam $input $pages -o $output
@@ -634,9 +650,9 @@ function sshStartLocalForward {
 }
 function createSshTunnel {
 	test $# '<' 3 && {
-		echo "=> Usage : $BASH_FUNC <localPort> <remotePort> <remoteServer> <sshServer>"
+		echo "=> Usage : $FUNCNAME <localPort> <remotePort> <remoteServer> <sshServer>"
 		echo "OR"
-		echo "=> Usage : $BASH_FUNC <localPort> <remotePort> <sshServer>"
+		echo "=> Usage : $FUNCNAME <localPort> <remotePort> <sshServer>"
 		return 1
 	} >&2
 
