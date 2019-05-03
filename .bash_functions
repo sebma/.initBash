@@ -1277,7 +1277,7 @@ EOF
 }
 function totalSize {
 	local column=$1
-	awk -v "column=$column" '{total+=$column}END{if(total>2^30)print total/2^30" GiB" > "/dev/stderr"; else if(total>2^20) print total/2^20" MiB" > "/dev/stderr"; else if(total>2^10) print total/2^10" KiB" > "/dev/stderr"; else print total" Bytes" > "/dev/stderr";}'
+	awk "{print \$$column}" | LC_ALL=C numfmt --from=iec | paste -sd+ | bc | numfmt --to=iec
 }
 function rsyncIncludeOnly {
 	local destination="$(eval echo \$$#)"
