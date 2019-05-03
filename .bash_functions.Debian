@@ -95,8 +95,11 @@ function reinstallOrignialPackages {
 	test $# != 0 && sudo command apt install -V $(printf "%s/$(lsb_release -sc) " $packagesList)
 }
 function website {
-	command apt-cache show $@ | egrep "Homepage:|Package:" | sort -u
-#	open $(command apt-cache show $@ | egrep "Homepage:" | sort -u)
+	for pkg
+	do
+		command apt-cache show $pkg | egrep "Homepage:|Package:" | sort -u
+#		open $(command apt-cache show $pkg | egrep "Homepage:" | sort -u)
+	done
 }
 
 set +x
