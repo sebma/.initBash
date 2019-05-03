@@ -873,25 +873,30 @@ function distribPackageMgmt {
 	echo $packageType
 }
 function whatPackageContainsExecutable {
-	for executable
-	do
-		case "$(distribPackageMgmt)" in
-			rpm) findPackage="rpm -qf"; searchPackage="yum whatprovides";;
-			deb) findPackage="dpkg -S"; searchPackage="apt-file search";;
-		esac
-		if $findPackage command $executable | sed "s|/||";then
-			:
-		else
-			if which $executable >/dev/null 2>&1
-			then
-				echo "=> Using : $searchPackage command $executable ..." >&2
-				$searchPackage command $executable
+	if [ "$(distribPackageMgmt)" = deb ]
+	then
+		findPackage="dpkg -S"; searchPackage="apt-file search";
+		$findPackage $(printf "bin/%s " "$@")
+	else 
+		for executable
+		do
+			case "$(distribPackageMgmt)" in
+				rpm) findPackage="rpm -qf"; searchPackage="yum whatprovides";;
+			esac
+			if $findPackage command $executable | sed "s|/||";then
+				:
 			else
-				echo "=> Using : $searchPackage bin/$executable ..." >&2
-				$searchPackage bin/$executable
+				if which $executable >/dev/null 2>&1
+				then
+					echo "=> Using : $searchPackage command $executable ..." >&2
+					$searchPackage command $executable
+				else
+					echo "=> Using : $searchPackage bin/$executable ..." >&2
+					$searchPackage bin/$executable
+				fi
 			fi
-		fi
-	done
+		done
+	fi
 }
 function lsbin {
 	for package
