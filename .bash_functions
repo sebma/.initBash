@@ -10,6 +10,21 @@ test $os = Darwin && export locate="time -p \"command glocate\"" && openCommand=
 
 myDefault_sshOptions="-A -Y -C"
 
+function html2pdf {
+	test $# = 0 && {
+		echo "=> Usage: $FUNCNAME url_or_file1 url_or_file1 ..." >&2
+		return 1
+	}
+
+	local pdfFiles=""
+	for url_or_file
+	do
+		pdfFileName=$(basename $url_or_file | \sed -E "s/#.*//;s/$|\.[^.]+$/.pdf/")
+		pdfFiles+="$pdfFileName "
+		wkhtmltopdf --outline --header-line --footer-line --header-left [webpage] --footer-left "[isodate] [time]" --footer-right [page]/[toPage] "$url_or_file" "$pdfFileName"
+	done
+	open $pdfFiles
+}
 function castnowURLs {
 	test $# = 0 && {
 		echo "=> Usage: $FUNCNAME [ytdl-format] url1 url2 ..." >&2
