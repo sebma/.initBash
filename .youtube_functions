@@ -25,10 +25,9 @@ function ytdlFormats {
 	for url
 	do
 		echo "=> url = $url"
-		streamID=$(basename "$url" | cut -d= -f2)
 		$youtube_dl -F "$url"
 		echo >&2
-	done  | \egrep -v "\[youtube\]"
+	done  | egrep -v "\[\w+\]"
 	trap - INT
 }
 function YTRenameFromFiles {
