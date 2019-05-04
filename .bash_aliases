@@ -168,7 +168,6 @@ alias pic2pdfA4=jpeg2pdfA4
 alias pic2pdfA4R=jpeg2pdfA4R
 alias pip2Install="curl -s https://bootstrap.pypa.io/get-pip.py | python2"
 alias pip3Install="curl -s https://bootstrap.pypa.io/get-pip.py | python3"
-alias piphelp="\pip help"
 alias pipInstall=pip2Install
 alias pipUpdate=pip2Update
 alias pip2Update="pip2 install -U pip"
@@ -210,7 +209,6 @@ alias speedtestSimple="time \speedtest --simple"
 alias sshStatusLocalForward="$(which ssh) -O check"
 alias sshStopLocalForward="$(which ssh) -O exit"
 alias sudo="\sudo "
-alias sum="\awk '{sum+=\$1}END{print sum}'"
 alias swapUsage="\free -m | awk '/^Swap/{print 100*\$3/\$2}'"
 alias tcpPorts="\netstat -ntl"
 alias terminfo='echo "=> C est un terminal $(tput cols 2>/dev/null)x$(tput lines 2>/dev/null)."'
