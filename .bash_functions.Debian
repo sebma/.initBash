@@ -2,6 +2,9 @@
 declare -A | grep -wq colors || source $initDir/.colors
 test "$debug" '>' 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
+function dpkgExists {
+	test $1 && return $(dpkg -l $1 | grep -q ^ii)
+}
 function dpkgEditDependencies {
 	test $# = 0 && {
 		echo "=> Usage: $FUNCNAME debianPackageFileName" >&2
@@ -15,8 +18,8 @@ function dpkgEditDependencies {
 	$dpkg_deb -x $pkg $tmp/
 	$dpkg_deb --control $pkg $tmp/DEBIAN
 	$EDITOR $tmp/DEBIAN/control
-	dpkg -l gdebi || sudo apt install -Vy gdebi
-	$dpkg_deb -b $tmp/ $newPackage && echo "=> Installing \"$pkg\" and its dependencies ..." && sudo gdebi $newPackage
+	dpkg -l gdebi | grep -q ^ii || sudo apt install -Vy gdebi
+	dpkg -l $pkg  | grep -q ^ii || $dpkg_deb -b $tmp/ $newPackage && echo "=> Installing \"$pkg\" and its dependencies ..." && sudo gdebi $newPackage
 	rm -fr $tmp/
 }
 function aptGet {
