@@ -2,7 +2,9 @@
 declare -A | grep -wq colors || source $initDir/.colors
 test "$debug" '>' 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-test $os = Linux  && export locate="command locate" && openCommand="command xdg-open"
+test $os = Linux  && export locate="command locate" openCommand="command xdg-open"
+
+test -f /etc/debian_version && Source $initDir/.bash_functions.Debian # Si c'est un Linux de type Debian
 
 function locate {
 	groups 2>/dev/null | \egrep -wq "sudo|admin" && locateOptions="-e" || locateOptions="--database $HOME/.local/lib/mlocate/mlocate.db -e"
