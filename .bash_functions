@@ -8,8 +8,12 @@ test -r $initDir/.youtube_functions && Source $initDir/.youtube_functions
 test $os = Linux  && export locate="command locate" && openCommand="command xdg-open"
 test $os = Darwin && export locate="time -p \"command glocate\"" && openCommand="command open"
 
-myDefault_sshOptions="-A -Y -C"
-
+function piphelp {
+	pip help $1 | less
+}
+function sum {
+	awk "{print \$1}" | LC_ALL=C numfmt --from=iec | paste -sd+ | bc | numfmt --to=iec
+}
 function html2pdf {
 	test $# = 0 && {
 		echo "=> Usage: $FUNCNAME url_or_file1 url_or_file1 ..." >&2
