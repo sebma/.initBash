@@ -5,6 +5,21 @@ test "$debug" '>' 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 test "$make" || which remake >/dev/null && export make="$(which remake)" || export make="$(which make)"
 test "$install" || { which checkinstall >/dev/null && export install="$(which checkinstall)" || export install="$make install";}
 
+function pipInstallFromDIR {
+	local dir=${1:-../$(basename $PWD)} # Set dir to current directory by default
+	local -r isAdmin=$(groups 2>/dev/null | egrep -wq "sudo|adm|admin|root" && echo true || echo false)
+	local sudo="command sudo"
+
+	if $isAdmin
+	then
+		set -x
+		$sudo -H pip install $dir
+	else
+		set -x
+		pip install --user $dir
+	fi
+	set +x
+}
 function make {
 	if [ -s Makefile ] || [ -s makefile ]
 	then
