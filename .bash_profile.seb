@@ -110,8 +110,8 @@ Linux)
 esac
 
 which matlab >/dev/null 2>&1 && test -r $initDir/.bash_profile.matlab && Source $initDir/.bash_profile.matlab
-brew=$(\ls ~/.linuxbrew/bin/brew /home/linuxbrew/.linuxbrew/bin/brew 2>/dev/null)
-test -x $brew && eval $($brew shellenv) && [ $BASH_VERSINFO -ge 4 ] && [ -r $(brew --prefix)/share/bash-completion/bash_completion ] && Source $(brew --prefix)/share/bash-completion/bash_completion
+brew=$(\ls ~/.linuxbrew/bin/brew /home/linuxbrew/.linuxbrew/bin/brew 2>/dev/null | head -1)
+test -x "$brew" && eval $($brew shellenv) && [ $BASH_VERSINFO -ge 4 ] && [ -r $($brew --prefix)/share/bash-completion/bash_completion ] && Source $($brew --prefix)/share/bash-completion/bash_completion
 which hub >/dev/null 2>&1 && eval "$(hub alias -s)"
 
 set +x
