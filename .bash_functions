@@ -42,11 +42,10 @@ function castnowURLs {
 #	set -x
 	for url
 	do
-		youtube-dl --no-continue -qf "$format" -o- -- "$url" | castnow --quiet - &
+		youtube-dl --no-continue --ignore-config -f "$format" -o- -- "$url" | castnow --quiet -
 	done
 	set +x
 	echo
-	echo "=> Run \"castnow\" to re-attach to a currently running playback session."
 }
 function awkCalc {
 	\awk "BEGIN{ print $* }"
