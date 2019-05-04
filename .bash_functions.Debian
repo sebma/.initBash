@@ -17,6 +17,7 @@ function dpkgEditDependencies {
 	$EDITOR $tmp/DEBIAN/control
 	dpkg -l gdebi || sudo apt install -Vy gdebi
 	$dpkg_deb -b $tmp/ $newPackage && echo "=> Installing \"$pkg\" and its dependencies ..." && sudo gdebi $newPackage
+	rm -fr $tmp/usr/
 }
 function aptGet {
 	args=$@
