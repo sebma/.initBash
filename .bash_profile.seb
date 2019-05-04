@@ -25,6 +25,7 @@ export EDITOR=vim
 export UPMC_ID=3607968
 export UPMC=$UPMC_ID@ssh.ufr-info-p6.jussieu.fr
 export ENST=mansfeld@ssh.enst.fr
+export myDefault_sshOptions="-A -Y -C"
 export JOLLA=nemo@jolla-wlan
 #export HOMEBREW_TEMP=$HOME/tmp
 export HOMEBREW_NO_GITHUB_API=1
