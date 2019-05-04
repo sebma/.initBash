@@ -222,7 +222,9 @@ function getRestrictedFilenamesFORMAT {
 			if [ $downloadOK = 0 ] 
 			then
 				[ $extension = mp4 ] || [ $extension = m4a ] || [ $extension = mp3 ] && mp4tags -m "$url" "$fileName"
-				chmod -w "$fileName" && echo && videoInfo "$fileName"
+				chmod -w "$fileName"
+				echo
+				videoInfo "$fileName"
 			fi
 	
 			let j++
