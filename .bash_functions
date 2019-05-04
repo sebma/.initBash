@@ -30,6 +30,17 @@ function html2pdf {
 	done
 	open $pdfFiles
 }
+function castnowPlaylist {
+	test $# = 0 && {
+		echo "=> Usage: $FUNCNAME [index] playlistFile ..." >&2
+		return 1
+	}
+
+	local index=${1:-1}
+	test $# = 2 && shift
+	local playlist=$1
+	castnowURLs $(tail -n +$index $playlist)
+}
 function castnowURLs {
 	test $# = 0 && {
 		echo "=> Usage: $FUNCNAME [ytdl-format] url1 url2 ..." >&2
