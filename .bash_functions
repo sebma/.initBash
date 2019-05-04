@@ -2,7 +2,7 @@
 declare -A | grep -wq colors || source $initDir/.colors
 test "$debug" '>' 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-test -r $initDir/.build_functions && Source $initDir/.build_functions
+test -r $initDir/.bash_functions.build && Source $initDir/.bash_functions.build
 test -r $initDir/.AV_functions && Source $initDir/.AV_functions
 test -r $initDir/.youtube_functions && Source $initDir/.youtube_functions
 test $os = Linux  && export locate="command locate" && openCommand="command xdg-open"
