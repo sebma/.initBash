@@ -25,9 +25,9 @@ function ytdlFormats {
 	for url
 	do
 		echo "=> url = $url"
-		$youtube_dl -F "$url"
+		time $youtube_dl -F "$url" | grep -Pv "\[\w+\]"
 		echo >&2
-	done  | egrep -v "\[\w+\]"
+	done
 	trap - INT
 }
 function YTRenameFromFiles {
