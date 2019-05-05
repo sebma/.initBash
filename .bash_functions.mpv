@@ -97,3 +97,11 @@ function mpvplaylistBEST {
 	nohup $mpv --ytdl-format 'best' --playlist "$@" &
 	tail -f nohup.out
 }
+function mpvplaylistFORMAT {
+	\rm nohup.out
+	touch nohup.out
+	local format="$1"
+	shift
+	nohup $mpv --ytdl-format "$format" --playlist "$@" &
+	tail -f nohup.out
+}
