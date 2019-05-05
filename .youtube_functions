@@ -3,12 +3,31 @@ declare -A | grep -wq colors || source $initDir/.colors
 test "$debug" '>' 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 #trap 'rc=130;set +x;echo "=> ${BASH_SOURCE[0]}: CTRL+C Interruption trapped.">&2;return $rc' INT
 
+\which youtube-dl >/dev/null || { echo "=> ERROR: <youtube-dl> is not installed,  type \"sudo -H $(which pip3) install -U youtube-dl\" to install it" >&2; return 1; }
+
 test -r $initDir/.colors && source $initDir/.colors
 test $os = Linux  && export locate="command locate"
 test $os = Darwin && export locate="time -p command glocate"
-\which youtube-dl >/dev/null 2>&1 && youtube_dl="eval LANG=C.UTF-8 command youtube-dl" # i.e https://unix.stackexchange.com/questions/505733/
 
-alias ytdlnoconfig="LANG=C.UTF-8 command youtube-dl --ignore-config"
+export LANG=C.UTF-8 # Pour eviter des soucis avec youtube-dl et certains caracteres bizarres
+youtube_dl="eval LANG=C.UTF-8 command youtube-dl" # i.e https://unix.stackexchange.com/questions/505733/
+ytdl="command youtube-dl"
+ytdlnoconfig="command youtube-dl --ignore-config"
+alias ytdlnoconfig="$ytdlnoconfig"
+
+function ytdlGetFormat {
+	test $# = 0 && {
+		echo "=> Usage: $FUNCNAME [format] url1 url2 ..." >&2
+		return 1
+	}
+
+	local format=${1:-mp4[height<=?360]/mp4/best}
+	test $# = 2 && shift
+	for url
+	do
+		$ytdlnoconfig --get-filename -o "=> format_id = %(format_id)s" "$url"
+	done
+}
 function continueYoutube_Download {
 	for videoFile
 	do
@@ -180,7 +199,7 @@ function ytget {
 	trap - INT
 }
 function getRestrictedFilenamesFORMAT {
-	trap 'rc=130;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
+	trap 'rc=127;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
 	local initialSiteVideoFormat="$1"
 	local siteVideoFormat downloadOK extension fqdn
 	shift
