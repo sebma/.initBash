@@ -22,10 +22,18 @@ function continueYoutube_Download {
 }
 function ytdlFormats {
 	trap 'rc=130;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
+	test $# = 0 && {
+		echo "=> Usage: $FUNCNAME [filterFormats] url1 url2 ..." >&2
+		return 1
+	}
+
+	local filterFormats
+	echo $1 | egrep -q '(https?|s?ftps?):' || { filterFormats=$1;shift; }
 	for url
 	do
+		echo >&2
 		echo "=> url = $url"
-		time $youtube_dl -F "$url" | grep -Pv "\[\w+\]"
+		time $youtube_dl -F "$url" | grep -Pv "\[\w+\]" | grep -P "$filterFormats|\<url\>"
 		echo >&2
 	done
 	trap - INT
