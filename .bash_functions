@@ -9,6 +9,9 @@ Source $initDir/.youtube_functions
 test $os = Linux  && export locate="command locate" openCommand="command xdg-open"
 test $os = Darwin && export locate="time -p \"command glocate\"" openCommand="command open"
 
+function greplast {
+	grep "$@" | awk 'END{print}'
+}
 function piphelp {
 	pip help $1 | less
 }
