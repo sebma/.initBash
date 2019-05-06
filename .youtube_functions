@@ -220,7 +220,7 @@ function getRestrictedFilenamesFORMAT {
 		echo $siteVideoFormat | grep -q '[<>]' && siteVideoFormat=\"$siteVideoFormat\"
 
 		echo "=> Testing if $url still exists ..."
-		fileNames=$(time $youtube_dl -f "$siteVideoFormat" --get-filename -- "$url" 2>&1)
+		fileNames=$(set +x;time $youtube_dl -f "$siteVideoFormat" --get-filename -- "$url" 2>&1)
 		echo $fileNames | \egrep --color -A1 ERROR: && echo && continue
 
 		local -i j=0
