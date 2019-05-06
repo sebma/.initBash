@@ -3,7 +3,9 @@
 alias mpvnoconfig="mpv --no-config"
 #mpvOptions='--geometry 0%:100% --ytdl-raw-options=sub-lang="en,eng,enUS,en-US,fr",write-sub=,abort-on-error='
 mpv="$(which mpv) --geometry 0%:100% --ytdl-raw-options=sub-lang=\"en,eng,enUS,en-US,fr\",write-sub=,abort-on-error="
+
 export mpv_Output_Perl_Script="'\$| = 1;s/\n/\r/g if \$_ =~ /AV: /;s/Saving state/\nSaving state/'"
+mpvOptionsForBackgroundPlaying="--quiet"
 
 FHD_Format="bestvideo[height<=?1080]+bestaudio[acodec=opus]/bestvideo[height<=?1080]+m4a/bestvideo+bestaudio/best"
 HD_Format="bestvideo[height<=?720]+bestaudio[acodec=opus]/bestvideo[height<=?720]+m4a/bestvideo+bestaudio/hd/best"
