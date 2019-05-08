@@ -244,7 +244,7 @@ function getRestrictedFilenamesFORMAT {
 			echo "=> fileName to be downloaded = <$fileName>"
 			echo
 	
-			[ $extension = mp4 ] || [ $extension = m4a ] || [ $extension = mp3 ] && $youtube_dl -o "$fileName" -f "${formats[$j]}" "$url" --embed-thumbnail || $youtube_dl -o $fileName -f "${formats[$j]}" "$url" 2>&1 | \egrep --color -A1 'ERROR:.*No space left on device' >&2 && echo && return 1
+			[ $extension = mp4 ] || [ $extension = m4a ] || [ $extension = mp3 ] && $youtube_dl -o "$fileName" -f "${formats[$j]}" "$url" --embed-thumbnail || $youtube_dl -o $fileName -f "${formats[$j]}" "$url" 2>&1 | { \egrep --color -A1 'ERROR:.*No space left on device' >&2 && echo && return 1; }
 			downloadOK=$?
 			if [ $downloadOK = 0 ] 
 			then
