@@ -16,6 +16,13 @@ function locateBin {
 function locateFromHere {
 	locate "$@" | \grep $PWD/
 }
+function open {
+	[ $# = 0 ] && set -- .
+	for file
+	do
+		$openCommand "$file" 2>&1 | egrep -v "MBuntu-Y-For-Unity"
+	done
+}
 function lanip {
 	ethName=$1
 	if [ -n "$ethName" ]
