@@ -864,12 +864,6 @@ function memUsage {
 		\free -m | awk '/Mem:/{total=$2}/buffers.cache:/{used=$3}END{printf "%5.2lf%%\n", 100*used/total}'
 	fi
 }
-function open {
-	for file
-	do
-		$openCommand "$file" 2>&1 | egrep -v "MBuntu-Y-For-Unity"
-	done
-}
 function distribType {
 	distribType=unknown
 	if which lsb_release >/dev/null 2>&1
