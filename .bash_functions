@@ -9,6 +9,12 @@ Source $initDir/.youtube_functions
 test $os = Linux  && export locate="command locate" openCommand="command xdg-open"
 test $os = Darwin && export locate="time -p \"command glocate\"" openCommand="command open"
 
+function picMpixels {
+	for fileName
+	do
+		LC_NUMERIC=C \perl -le "printf \"=> fileName = %s size = %.2f Mpix\n\", \"$fileName\", $(identify -format '%w*%h/10**6' $fileName)"
+	done | \column -t
+}
 function greplast {
 	grep "$@" | awk 'END{print}'
 }
