@@ -95,7 +95,7 @@ alias fuser="\fuser -v"
 alias fuserumount="\fusermount -u"
 alias gateWay="\route -n | awk '/^(0.0.0.0|default)/{print\$2}'"
 alias gdmlogout="\gnome-session-quit --force"
-alias getPip="\wget -qO- https://bootstrap.pypa.io/get-pip.py | python"
+alias getPip="wget -qO- https://bootstrap.pypa.io/get-pip.py | python"
 alias getUuid="\blkid -o value -s UUID"
 alias grepfirst="grep -m1"
 alias egrepfirst="grepfirst -E"
@@ -254,10 +254,10 @@ alias vihistory='\vim ~/.bash_history'
 alias vimatlab="vim +'setf matlab'"
 alias vioctave=vimatlab
 alias vlclocal='DISPLAY=:0 vlc'
-alias wanip='time \curl -A "" ipinfo.io/ip || time \wget -qU "" -O- ipinfo.io/ip'
+alias wanip='time \curl -A "" ipinfo.io/ip || time wget -qU "" -O- ipinfo.io/ip'
 alias wanipOLD='time \dig +short myip.opendns.com @resolver1.opendns.com'
 alias wavemon="xterm -e wavemon &"
-alias wget="\wget -c --content-disposition"
+alias wget="$(which wget2 2>/dev/null || which wget)"
 alias wgetnoconfig="\wget --config=/dev/null"
 alias wget2noconfig="\wget2 --no-config"
 alias xargs="\xargs -ri"
