@@ -1,12 +1,14 @@
 # vim: set syn=sh noet:
 
-mpvnoconfig="command mpv --no-config"
+os=$(uname -s)
+mpvnoconfig="mpv --no-config"
+mpv="$(which mpv)"
+mplayer="$(which mplayer)"
 alias mpvnoconfig="$mpvnoconfig"
-#mpvOptions='--geometry 0%:100% --ytdl-raw-options=sub-lang="en,eng,enUS,en-US,fr",write-sub=,abort-on-error='
-mpv="$(which mpv) --geometry 0%:100% --ytdl-raw-options=sub-lang=\"en,eng,enUS,en-US,fr\",write-sub=,abort-on-error="
+alias mpvh="mpv --profile=hid"
+alias mpvid="mpv --profile=identify"
 
 export mpv_Output_Perl_Script="'\$| = 1;s/\n/\r/g if \$_ =~ /AV: /;s/Saving state/\nSaving state/'"
-mpvOptionsForBackgroundPlaying="--quiet"
 
 FHD_Format="bestvideo[height<=?1080]+bestaudio[acodec=opus]/bestvideo[height<=?1080]+m4a/bestvideo+bestaudio/best"
 HD_Format="bestvideo[height<=?720]+bestaudio[acodec=opus]/bestvideo[height<=?720]+m4a/bestvideo+bestaudio/hd/best"
@@ -31,33 +33,78 @@ alias mpvplaylistSD='mpvplaylistFORMAT "$SD_Format"'
 alias mpvplaylistLD='mpvplaylistFORMAT "$LD_Format"'
 alias mpvplaylistVLD='mpvplaylistFORMAT "$VLD_Format"'
 
+alias mpvFrench="mpv --profile=french"
+alias mpvEnglish="mpv --profile=english"
+alias mpvGerman="mpv --alang=deu --slang=deu"
+alias mpvSpanish="mpv --alang=spa --slang=spa"
+
+function mpvOld {
+	which mpv $($youtube_dl -g "$@")
+}
+function mpvalt {
+	test $1 && command mpv --no-ytdl $($youtube_dl -gf best $@ | uniq)
+}
+function urlplayer {
+	mpv $($youtube_dl -gf best "$1")
+}
+function mpvInit {
+	if [ -c /dev/fb0 ]; then
+		if [ ! -w /dev/fb0 ]
+		then
+			\sudo chmod g+w /dev/fb0
+			if ! groups | \grep -wq video 
+			then
+				echo "=> INFO: Adding $USER in the video group and logging in to the new <video> group." 1>&2 
+				\sudo adduser $USER video
+				\sudo newgrp - video
+			fi
+		fi
+	else
+		echo "=> Function $FUNCNAME - ERROR: Framebuffer is not supported in this configuration." 1>&2
+		return 1
+	fi
+}
 function mpv {
-	which mpv >/dev/null && {
+	$mpv >/dev/null && {
 	if [ $os = Linux ]
 		then
-	#		for urlOrFile; do
-	#			echo $urlOrFile | egrep -q "(http|ftp)s?://" && $youtube_dl -qs $urlOrFile 2>&1 | grep --color=auto --color -A1 ^ERROR: && continue
-				if tty | egrep -q "/dev/pts/[0-9]|/dev/ttys[0-9]+"
-				then # Si on est dans une fenetre de terminal
-					$mpv "$@"
-				else # Si on est dans une console
-					echo "=> INFO: You are in a console terminal, therefore framebuffering will be used." >&2
-					if [ -c /dev/fb0 ]; then
-						if [ ! -w /dev/fb0 ]
-						then
-							\sudo chmod g+w /dev/fb0
-							groups | grep -wq video || { echo "=> INFO: Adding $USER in the video group and logging out." >&2 ; \sudo adduser $USER video;sleep 3; exit; }
-						fi
-						$(which mpv) -vo drm "$@"
-					else
-						echo "=> Function $FUNCNAME - ERROR: Framebuffer is not supported in this configuration." 1>&2
-						return 1
-					fi
-				fi
-	#		done
+			if tty | \egrep -q "/dev/(pts/|ttys)[0-9]+"
+			then # Si on est dans une fenetre de terminal
+				LANG=en_US $mpv "$@"
+			elif [ -c /dev/fb0 ]; then
+				echo "=> INFO: You are in a console terminal, therefore framebuffering will be used." 1>&2
+				LANG=en_US $mpv -vo drm "$@"
+			elif LANG=C tty | \grep "not a tty" 1>&2 ; then
+				return 1
+			else
+				echo "=> Function $FUNCNAME - ERROR: Framebuffer is not supported in this configuration." 1>&2
+				return 2
+			fi
 		elif [ $os = Darwin ]
 		then
-			$(which mpv) "$@"
+			LANG=en_US $mpv "$@"
+		fi
+	}
+}
+function mplayer {
+	$mplayer >/dev/null && {
+	if [ $os = Linux ]
+		then
+			if tty | \egrep -q "/dev/(pts/|ttys)[0-9]+"
+			then # Si on est dans une fenetre de terminal
+				LANG=en_US $mplayer "$@"
+			elif [ -c /dev/fb0 ]; then
+				echo "=> INFO: You are in a console terminal, therefore framebuffering will be used." 1>&2
+				LANG=en_US $mplayer -vo fbdev2 "$@"
+			elif LANG=C tty | \grep "not a tty" 1>&2 ; then
+				return 1
+			else
+				echo "=> Function $FUNCNAME - ERROR: Framebuffer is not supported in this configuration." 1>&2
+				return 2
+			fi | egrep "stream |dump|Track |VIDEO:|AUDIO:|VO:|AO:|A:"
+		elif [ $os = Darwin ]
+		then
+			LANG=en_US $mplayer "$@"
 		fi
 	}
 }
