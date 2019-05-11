@@ -187,54 +187,6 @@ function frameCount {
 		echo
 	done
 }
-function mpvFrench {
-#	sid=$($ffprobe "$video" 2>&1 | awk -F ':|\\(' "/Stream .*$language.*Subtitle:/"'{sid=$2;sid+=-1}END{print sid}'); test -z $sid || sid="--sid=$sid"
-	language=fra
-	which mpv >/dev/null && {
-		for video
-		do
-			[ -s "$video" ] || { echo "=> ERROR: The video <$video> does not exist or is an empty file." >&2 ; continue; }
-			mpv --alang=$language --slang=$language "$video"
-		done
-	}
-}
-
-function mpvEnglish {
-	language=eng
-	which mpv >/dev/null && {
-		for video
-		do
-			[ -s "$video" ] || { echo "=> ERROR: The video <$video> does not exist or is an empty file." >&2 ; continue; }
-			mpv --alang=$language --slang=$language "$video"
-		done
-	}
-}
-
-function mpvGerman {
-	language=deu
-	which mpv >/dev/null && {
-		for video
-		do
-			[ -s "$video" ] || { echo "=> ERROR: The video <$video> does not exist or is an empty file." >&2 ; continue; }
-			mpv --alang=$language --slang=$language "$video"
-		done
-	}
-}
-
-function mpvSpanish {
-	language=spa
-	which mpv >/dev/null && {
-		for video
-		do
-			[ -s "$video" ] || { echo "=> ERROR: The video <$video> does not exist or is an empty file." >&2 ; continue; }
-			mpv --alang=$language --slang=$language "$video"
-		done
-	}
-}
-
-function mpvOld {
-	which mpv $($youtube_dl -g "$@")
-}
 function to16_9 {
 	local extension
 	for video
@@ -288,9 +240,6 @@ function urlinfo {
 		echo "=> url = $url"
 		$ffprobe $($youtube_dl -gf best -- "$url")
 	done
-}
-function urlplayer {
-	mpv $($youtube_dl -gf best "$1")
 }
 function audioChannelsLayoutOfFile {
 	local file="$1"
@@ -1273,28 +1222,6 @@ function mkv2oga {
 		touch -r "$file" "${file/.mkv/.oga}"
 		sync
 	done
-}
-function mplayer {
-	local mplayer="command mplayer"
-	which mplayer >/dev/null 2>&1 && {
-		if tty | grep -q "/dev/pts/[0-9]"; then
-			$mplayer -idx -geometry 0%:100% "$@" 2> /dev/null | egrep "stream |dump|Track |VIDEO:|AUDIO:|VO:|AO:|A:"
-		else
-			if [ -c /dev/fb0 ]; then
-				if [ ! -w /dev/fb0 ]; then
-				groups | grep -wq video || \sudo adduser $USER video
-				\sudo chmod g+w /dev/fb0
-				fi
-				$mplayer -vo fbdev2 -idx "$@" 2> /dev/null | egrep "stream |dump|Track |VIDEO:|AUDIO:|VO:|AO:|A:"
-			else
-				echo "=> Function $FUNCNAME - ERROR: Framebuffer is not supported in this configuration." 1>&2
-				return 1
-			fi
-		fi
-	}
-}
-function mpvalt {
-	test $1 && command mpv --no-ytdl $($youtube_dl -gf best $@ | uniq)
 }
 
 set +x
