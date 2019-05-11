@@ -21,7 +21,7 @@ alias gitEditConfig='\git config --local -e'
 alias gitConf="\git config -l"
 alias gitConf-alias.ci="git config alias.ci '!f() { cd \${GIT_PREFIX:-.}; for file; do git commit \$file -m \"Updated \$file\"; done; }; f';git config alias.ci"
 alias gitCompareLocalRemote="\git fetch && \git diff origin"
-alias gitHTTP='\awk "/url .*https?/"{print\$NF} ./.git/config'
+alias gitHTTP='\git config -l | awk -F= /^remote.*\.url=http/{print\$2}'
 alias openGit_http_URL='open $(gitHTTP)'
 alias gitLocalUndelete="\git ls-files -d | grep . && \git ls-files -d | \xargs git checkout-index"
 alias gitlog="\git log --abbrev-commit"
