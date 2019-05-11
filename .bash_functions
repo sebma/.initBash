@@ -641,13 +641,15 @@ function getFiles {
 	}
 
 	local lastArg="$(eval echo \${$#})"
+	local baseUrl=$(echo $url | awk -F/ '{print$3}')
+	local wget="$(which wget2 2>/dev/null || which wget)"
 	local url=$lastArg
-	echo $url | \egrep "^(https?|ftp)://" || {
+
+	echo $url | egrep "^(https?|ftp)://" || {
 		echo "=> ERROR: This protocol is not supported by GNU Wget." >&2
 		return 2
 	}
-	local baseUrl=$(echo $url | awk -F/ '{print$3}')
-	local wget="$(which wget2 2>/dev/null || which wget)"
+
 #	time $wget --no-parent --continue --timestamping --random-wait --user-agent=Mozilla --content-disposition --convert-links --page-requisites --recursive --reject index.html --accept "$@"
 	set -x
 	time $wget --no-parent --continue --timestamping --random-wait --user-agent=Mozilla --content-disposition --convert-links --page-requisites --recursive --accept "$@"
