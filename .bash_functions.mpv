@@ -1,6 +1,7 @@
 # vim: set syn=sh noet:
 
-alias mpvnoconfig="mpv --no-config"
+mpvnoconfig="command mpv --no-config"
+alias mpvnoconfig="$mpvnoconfig"
 #mpvOptions='--geometry 0%:100% --ytdl-raw-options=sub-lang="en,eng,enUS,en-US,fr",write-sub=,abort-on-error='
 mpv="$(which mpv) --geometry 0%:100% --ytdl-raw-options=sub-lang=\"en,eng,enUS,en-US,fr\",write-sub=,abort-on-error="
 
