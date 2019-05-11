@@ -3,8 +3,8 @@ declare -A | grep -wq colors || source $initDir/.colors
 test "$debug" '>' 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 Source $initDir/.bash_functions.build
-Source $initDir/.AV_functions
-Source $initDir/.youtube_functions
+Source $initDir/.bash_functions.AV
+Source $initDir/.bash_functions.ytdl
 
 test $os = Linux  && export locate="command locate" openCommand="command xdg-open"
 test $os = Darwin && export locate="time -p \"command glocate\"" openCommand="command open"
