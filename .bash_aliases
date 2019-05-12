@@ -215,6 +215,7 @@ alias sortip="\sort -nt. -k1,1 -k2,2 -k3,3 -k4,4"
 alias speedtestSimple="time \speedtest --simple"
 alias sshStatusLocalForward="$(which ssh) -O check"
 alias sshStopLocalForward="$(which ssh) -O exit"
+alias startSSHAgent='\pgrep -lfu $USER ssh-agent || eval $(ssh-agent -s)'
 alias sudo="\sudo "
 alias swapUsage="\free -m | awk '/^Swap/{print 100*\$3/\$2}'"
 alias taillines='\tail -n $((LINES-2))'
