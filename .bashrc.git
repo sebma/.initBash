@@ -3,7 +3,8 @@ declare -A | grep -wq colors || source $initDir/.colors
 test "$debug" '>' 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 which -a git | \grep -q /usr || export GIT_EXEC_PATH=$HOME/libexec/git-core
-cd $initDir && git config alias.ci '!f() { for file; do git commit $file -m "Updated $file"; done; }; f';cd - >/dev/null
+
+cd $initDir && git config alias.ci '!f() { for file; do git commit -uno $file -m "Updated $file"; done; }; f';cd - >/dev/null
 git config --global user.email sebma@users.noreply.github.com
 git config --global user.name sebma
 test "$http_proxy" && git config --global http.proxy $http_proxy
@@ -19,7 +20,8 @@ git config --global alias.mvv "mv -v"
 
 alias gitEditConfig='\git config --local -e'
 alias gitConf="\git config -l"
-alias gitConf-alias.ci="git config alias.ci '!f() { cd \${GIT_PREFIX:-.}; for file; do git commit \$file -m \"Updated \$file\"; done; }; f';git config alias.ci"
+alias gitConf-alias.ci="git config alias.ci '!f() { cd \${GIT_PREFIX:-.}; for file; do git commit -uno \$file -m \"Updated \$file\"; done; }; f';git config alias.ci"
+alias gitConf-alias.cipart="git config alias.cipart '!f() { cd \${GIT_PREFIX:-.}; for file; do git commit -uno -p \$file -m \"Partially updated \$file\"; done; }; f';git config alias.cipart"
 alias gitCompareLocalRemote="\git fetch && \git diff origin"
 alias gitHTTP='\git config --get-all remote.origin.url | \grep http'
 alias gitUnIgnoreChanges="\git update-index --no-skip-worktree"
