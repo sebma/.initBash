@@ -1,51 +1,55 @@
 # vim: set syn=sh noet:
 
 os=$(uname -s)
-mpvnoconfig="mpv --no-config"
-mpv="$(which mpv)"
-mplayer="$(which mplayer)"
+[ $os = Linux ] && [ -c /dev/fb0 ] && tty | egrep -q "/dev/tty[0-9]+" && mpvOptions="--vo=drm" && mplayerOptions="--vo=fbdev2"
+
+export mpv_Output_Perl_Script="'\$| = 1;s/\n/\r/g if \$_ =~ /AV: /;s/Saving state/\nSaving state/'" # On l'export pour qu'elle soit accessible du processus fils
+
+mpv="$(which mpv) $mpvOptions"
+alias mpv="$mpv"
+mpvnoconfig="mpv --no-config $mpvOptions"
 alias mpvnoconfig="$mpvnoconfig"
+
+mplayer="$(which mplayer) $mplayerOptions"
+alias mplayer="$mplayer"
+mplayernoconfig="mplayer --noconfig=user $mplayerOptions"
+alias mplayernoconfig="$mplayernoconfig"
+
 alias mpvh="mpv --profile=hid"
 alias mpvid="mpv --profile=identify"
 
-export mpv_Output_Perl_Script="'\$| = 1;s/\n/\r/g if \$_ =~ /AV: /;s/Saving state/\nSaving state/'"
+alias mpvBEST='mpv --profile=best'
+alias mpvFHD='mpv  --profile=fhd'
+alias mpvHD='mpv   --profile=hd'
+alias mpvFSD='mpv  --profile=fsd'
+alias mpvSD='mpv   --profile=sd' 
+alias mpvLD='mpv   --profile=ld'
+alias mpvVLD='mpv  --profile=vld'
 
-FHD_Format="bestvideo[height<=?1080]+bestaudio[acodec=opus]/bestvideo[height<=?1080]+m4a/bestvideo+bestaudio/best"
-HD_Format="bestvideo[height<=?720]+bestaudio[acodec=opus]/bestvideo[height<=?720]+m4a/bestvideo+bestaudio/hd/best"
-FSD_Format="bestvideo[height<=?480]+bestaudio[acodec=opus]/bestvideo[height<=?480]+m4a/bestvideo+bestaudio/sd/best"
-SD_Format="bestvideo[height<=?360]+bestaudio[acodec=opus]/bestvideo[height<=?360]+m4a/bestvideo+bestaudio/sd/best"
-LD_Format="bestvideo[height<=?240]+bestaudio[acodec=opus]/bestvideo[height<=?240]+m4a/bestvideo+bestaudio/low/best"
-VLD_Format="bestvideo[height<=?144]+bestaudio[acodec=opus]/bestvideo[height<=?144]+m4a/bestvideo+bestaudio/low/best"
-
-alias mpvBEST='mpvFORMAT best'
-alias mpvFHD='mpvFORMAT "$FHD_Format"'
-alias mpvHD='mpvFORMAT "$HD_Format"'
-alias mpvFSD='mpvFORMAT "$FSD_Format"'
-alias mpvSD='mpvFORMAT "$SD_Format"'
-alias mpvLD='mpvFORMAT "$LD_Format"'
-alias mpvVLD='mpvFORMAT "$VLD_Format"'
-
-alias mpvplaylistBEST='mpvplaylistFORMAT best'
-alias mpvplaylistFHD='mpvplaylistFORMAT "$FHD_Format"'
-alias mpvplaylistHD='mpvplaylistFORMAT "$HD_Format"'
-alias mpvplaylistFSD='mpvplaylistFORMAT "$FSD_Format"'
-alias mpvplaylistSD='mpvplaylistFORMAT "$SD_Format"'
-alias mpvplaylistLD='mpvplaylistFORMAT "$LD_Format"'
-alias mpvplaylistVLD='mpvplaylistFORMAT "$VLD_Format"'
+alias mpvplaylistBEST='mpvplaylist --profile=best'
+alias mpvplaylistFHD='mpvplaylist --profile=fhd'
+alias mpvplaylistHD='mpvplaylist --profile=hd'
+alias mpvplaylistFSD='mpvplaylist --profile=fsd'
+alias mpvplaylistSD='mpvplaylist --profile=sd'
+alias mpvplaylistLD='mpvplaylist --profile=ld'
+alias mpvplaylistVLD='mpvplaylist --profile=vld'
 
 alias mpvFrench="mpv --profile=french"
 alias mpvEnglish="mpv --profile=english"
 alias mpvGerman="mpv --alang=deu --slang=deu"
 alias mpvSpanish="mpv --alang=spa --slang=spa"
 
+function cleanMPVStatusLine {
+	perl -pe $mpv_Output_Perl_Script
+}
 function mpvOld {
-	which mpv $($youtube_dl -g "$@")
+	$mpv $($youtube_dl -g "$@")
 }
 function mpvalt {
-	test $1 && command mpv --no-ytdl $($youtube_dl -gf best $@ | uniq)
+	test $1 && $mpv --no-ytdl $($youtube_dl -gf best $@ | uniq)
 }
 function urlplayer {
-	mpv $($youtube_dl -gf best "$1")
+	$mpv $($youtube_dl -gf best "$1")
 }
 function mpvInit {
 	if [ -c /dev/fb0 ]; then
@@ -63,50 +67,6 @@ function mpvInit {
 		echo "=> Function $FUNCNAME - ERROR: Framebuffer is not supported in this configuration." 1>&2
 		return 1
 	fi
-}
-function mpv {
-	$mpv >/dev/null && {
-	if [ $os = Linux ]
-		then
-			if tty | \egrep -q "/dev/(pts/|ttys)[0-9]+"
-			then # Si on est dans une fenetre de terminal
-				LANG=en_US $mpv "$@"
-			elif [ -c /dev/fb0 ]; then
-				echo "=> INFO: You are in a console terminal, therefore framebuffering will be used." 1>&2
-				LANG=en_US $mpv -vo drm "$@"
-			elif LANG=C tty | \grep "not a tty" 1>&2 ; then
-				return 1
-			else
-				echo "=> Function $FUNCNAME - ERROR: Framebuffer is not supported in this configuration." 1>&2
-				return 2
-			fi
-		elif [ $os = Darwin ]
-		then
-			LANG=en_US $mpv "$@"
-		fi
-	}
-}
-function mplayer {
-	$mplayer >/dev/null && {
-	if [ $os = Linux ]
-		then
-			if tty | \egrep -q "/dev/(pts/|ttys)[0-9]+"
-			then # Si on est dans une fenetre de terminal
-				LANG=en_US $mplayer "$@"
-			elif [ -c /dev/fb0 ]; then
-				echo "=> INFO: You are in a console terminal, therefore framebuffering will be used." 1>&2
-				LANG=en_US $mplayer -vo fbdev2 "$@"
-			elif LANG=C tty | \grep "not a tty" 1>&2 ; then
-				return 1
-			else
-				echo "=> Function $FUNCNAME - ERROR: Framebuffer is not supported in this configuration." 1>&2
-				return 2
-			fi | egrep "stream |dump|Track |VIDEO:|AUDIO:|VO:|AO:|A:"
-		elif [ $os = Darwin ]
-		then
-			LANG=en_US $mplayer "$@"
-		fi
-	}
 }
 function mpvFORMAT {
 	\rm nohup.out
@@ -132,14 +92,20 @@ function mpvlocal {
 function mpvplaylist {
 	\rm nohup.out
 	touch nohup.out
-	nohup $mpv --playlist "$@" &
+	local firstArg
+	local playlist
+	echo -- $1 | \grep -q -- "--" && firstArg="$1" && playlist="$2" && shift || playlist="$1"
+	shift
+	nohup $mpv "$firstArg" --playlist "$playlist" "$@" &
 	tail -f nohup.out | egrep -v "AV: "
 }
 function mpvplaylistFORMAT {
 	\rm nohup.out
 	touch nohup.out
-	local format="$1"
+	local format
+	local playlist
+	echo -- $1 | \grep -q -- "--" && format="$1" && playlist="$2" && shift || playlist="$1"
 	shift
-	nohup $mpv --ytdl-format "$format" --playlist "$@" &
+	nohup $mpv "$firstArg" --ytdl-format "$format" --playlist "$playlist" "$@" &
 	tail -f nohup.out | egrep -v "AV: "
 }
