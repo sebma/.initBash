@@ -79,8 +79,10 @@ export RSYNC_EXCLUSION=$(printf -- "--exclude \"%s\" " .git/ watch_later/ '*.swp
 if [ $os = Linux ] || [ $os = Darwin ]
 then
 	tty -s && echo
-	which ssh-agent >/dev/null 2>&1 && { pgrep -u $USER ssh-agent >/dev/null 2>&1 || eval `ssh-agent -s` >/dev/null; }
-	pgrep -lfu $USER ssh-agent 2>/dev/null
+	if which ssh-agent >/dev/null 2>&1; then
+		pgrep -u $USER ssh-agent >/dev/null 2>&1 || { tty -s && echo "=> Starting the ssh-agent for $USER ..." >&2; eval $(ssh-agent -s) >/dev/null; }
+		pgrep -lfu $USER ssh-agent 2>/dev/null
+	fi
 	
 	#Definition des parametres de proxy dans cpan
 	if test "$http_proxy"
