@@ -18,7 +18,8 @@ fi 2>/dev/null
 #done
 
 #For security reasons
-[ $os = Linux ] && [ $(hostname) != ssh ] && \pkill -efu $USER ssh-agent
+#[ $os = Linux ] && [ $(hostname) != ssh ] && \pkill -efu $USER ssh-agent
+[ $os = Linux ] && [ $(hostname) != ssh ] && [ -n "$SSH_AUTH_SOCK" ] && $(ssh-agent -k)
 
 set +x
 test "$debug" '>' 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
