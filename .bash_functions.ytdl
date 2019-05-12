@@ -237,6 +237,7 @@ function getRestrictedFilenamesFORMAT {
 			if [ -f "$fileName" ] && [ ! -w "$fileName" ]
 			then
 				echo "${colors[yellowOnBlue]}=> The file <$fileName> is already downloaded, skipping ...$normal" >&2
+				echo
 				let j++
 				continue
 			fi
