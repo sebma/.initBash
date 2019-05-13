@@ -6,6 +6,12 @@ wifiInterface="$(networksetup -listallhardwareports | awk '/Hardware Port: Wi-Fi
 #alias lpr="\lpr -P ppti-14-503-imp -o PageSize=A4 -o PageRegion=A4 -o Resolution=default -o InputSlot=Tray2 -o Duplex=DuplexNoTumble -o PreFilter=No"
 #alias lpr="\lpr -o PageSize=A4 -o PageRegion=A4 -o Resolution=default -o InputSlot=Tray2 -o Duplex=DuplexNoTumble -o PreFilter=No"
 #alias topflines='$(which find) . $prunePathsFindExpression -xdev -type f -size +10M -exec ls -lT {} \; 2>/dev/null | sort -nrk5 | column -t | head -n $(($LINES-4)) | awk '\''{total+=$5;print}END{print"=> total = "total" MiB"}'\'''
+
+alias airport="\/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport"
+alias firefoxDefrag='pgrep firefox || $(which find) ~/"Library/Application Support/Firefox" -name "*sqlite" -ls -exec sqlite3 {} vacuum \;'
+alias firefox="/Applications/Firefox.app/Contents/MacOS/firefox-bin"
+alias palemoon="/Applications/Palemoon.app/Contents/MacOS/palemoon"
+
 which pgrep >/dev/null 2>&1 || alias pgrep="\ps -fC"
 
 ggrep -V 2>/dev/null | \grep -wq GNU && alias grep="\ggrep --color" && alias Pgrep="grep -P"
@@ -16,28 +22,25 @@ alias rgrepFollowSymLinks='time grep -IR --exclude-dir=.git'
 alias zegrep="zgrep -E"
 
 alias addgroup="\dseditgroup -o create"
-alias airport="\/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport"
 alias groupadd=addgroup
 alias adduser="\dseditgroup -o edit -t user -a"
 alias useradd=adduser
+
 alias brewUnInstall='\ruby -e "$(\curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall)"'
 alias catFiles="\tail -n +1"
 alias cpuInfo="\sysctl machdep.cpu | egrep 'brand_string|count|size|VMX|SVM'"
 alias df="\df -Ph"
 alias dnsInfo="\scutil --dns"
-alias firefoxDefrag='pgrep firefox || $(which find) ~/"Library/Application Support/Firefox" -name "*sqlite" -ls -exec sqlite3 {} vacuum \;'
-alias firefox="/Applications/Firefox.app/Contents/MacOS/firefox-bin"
-alias palemoon="/Applications/Palemoon.app/Contents/MacOS/palemoon"
+
 command -v gdf >/dev/null && alias df="\gdf -PTh"
+which gcp >/dev/null 2>&1 && alias cp='\gcp -puv' || alias cp='\cp -pv'
+alias graphicsinfo="\system_profiler SPDisplaysDataType"
 alias hideFiles='defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app'
 alias hwinfo="\system_profiler SPHardwareDataType"
 #alias lshw="\system_profiler SPHardwareDataType SPSoftwareDataType SPParallelATADataType SPAudioDataType SPBluetoothDataType SPCameraDataType SPDiscBurningDataType SPEthernetDataType SPFibreChannelDataType SPFireWireDataType SPDisplaysDataType SPHardwareRAIDDataType SPNetworkLocationDataType SPManagedClientDataType SPMemoryDataType SPNVMeDataType SPNetworkDataType SPPCIDataType SPParallelSCSIDataType SPPowerDataType SPPrintersDataType SPSASDataType SPSerialATADataType SPSPIDataType SPStorageDataType SPThunderboltDataType SPUSBDataType SPWWANDataType SPAirPortDataType SPiBridgeDataType"
 alias lastme='last -t console | \grep $USER'
 alias lastmeToday='last -t console | \grep "$USER.*$(LC_TIME=C date +%b\ %_d)"'
 alias lshw='\system_profiler -detailLevel mini | sed "/^Printer Software:/,/^      *Library Extensions/d"'
-alias osinfo="\system_profiler SPSoftwareDataType;\system_profiler SPInstallHistoryDataType | \grep Install.macOS"
-alias powershell="\pwsh"
-alias graphicsinfo="\system_profiler SPDisplaysDataType"
 alias lsvga="\system_profiler SPDisplaysDataType"
 alias l="\ls -G"
 alias ldd="\otool -L"
@@ -45,6 +48,9 @@ alias ll="ls -blF -T"
 alias ls="ls -GF"
 alias lsusb="\system_profiler SPUSBDataType"
 alias more="\more -r"
+alias osinfo="\system_profiler SPSoftwareDataType;\system_profiler SPInstallHistoryDataType | \grep Install.macOS"
+alias pkgInstaller="\installer -pkg"
+alias powershell="\pwsh"
 alias rename="\rename -v"
 alias rsync="time \rsync -uth -P -z --exclude '*.swp'"
 alias scp="time \rsync -h --progress -u -zt --exclude '*.swp'"
@@ -64,8 +70,7 @@ alias wifiList="airport -s"
 alias wifiRestart='\networksetup -setairportpower $wifiInterface off;\networksetup -setairportpower $wifiInterface on'
 alias wifiSpeed="airport -I | awk '/lastTxRate/{print\$0\" MBit/s\"}'"
 alias xlock="\/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend"
-which gcp >/dev/null 2>&1 && alias cp='\gcp -puv' || alias cp='\cp -pv'
-alias pkgInstaller="\installer -pkg"
+alias ytdlUpdate="brew upgrade youtube-dl"
 
 if groups 2>/dev/null | \egrep -wq "sudo|admin"
 then
