@@ -70,6 +70,7 @@ alias wifiList="airport -s"
 alias wifiRestart='\networksetup -setairportpower $wifiInterface off;\networksetup -setairportpower $wifiInterface on'
 alias wifiSpeed="airport -I | awk '/lastTxRate/{print\$0\" MBit/s\"}'"
 alias xlock="\/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend"
+alias ytdlInstall="brew install youtube-dl"
 alias ytdlUpdate="brew upgrade youtube-dl"
 
 if groups 2>/dev/null | \egrep -wq "sudo|admin"
