@@ -9,11 +9,15 @@ test -r $initDir/.colors && source $initDir/.colors
 test $os = Linux  && export locate="command locate"
 test $os = Darwin && export locate="time -p command glocate"
 
-export LANG=C.UTF-8 # Pour eviter des soucis avec youtube-dl et certains caracteres bizarres
-youtube_dl="eval LANG=C.UTF-8 command youtube-dl" # i.e https://unix.stackexchange.com/questions/505733/
-ytdl="command youtube-dl"
-ytdlnoconfig="command youtube-dl --ignore-config"
+#youtube_dl="eval LANG=C.UTF-8 command youtube-dl" # i.e https://unix.stackexchange.com/questions/505733/ # eval A EVITER
+alias youtube-dl="LANG=C.UTF-8 command youtube-dl"
+alias ytdl="LANG=C.UTF-8 command youtube-dl"
+
+ytdlnoconfig="ytdl --ignore-config"
 alias ytdlnoconfig="$ytdlnoconfig"
+
+alias ytdlLastRelease="\git ls-remote --tags https://github.com/rg3/youtube-dl | awk -F/ '/refs\/tags.*[^}]$/{vers=\$NF}END{print vers}'"
+alias ytdlVersion="ytdl --version"
 
 function ytdlGetFormat {
 	test $# = 0 && {
@@ -34,7 +38,7 @@ function continueYoutube_Download {
 		format=$(echo $videoFile | awk -F__ '{print$(NF-1)}')
 		url=$(echo $videoFile | awk -F"__|[.]" '{print$(NF-2)}')
 		echo "=> url = <$url>"
-		time $youtube_dl -f "$format" -qs -- "$url" 2>&1 | \grep --color -A1 ^ERROR: && echo && continue
+		time youtube-dl -f "$format" -qs -- "$url" 2>&1 | \grep --color -A1 ^ERROR: && echo && continue
 		cd $(dirname $videoFile) && pwd
 		getRestrictedFilenamesFORMAT "$format" $url
 		cd - >/dev/null
@@ -53,7 +57,7 @@ function ytdlFormats {
 	do
 		echo >&2
 		echo "=> url = $url"
-		time $youtube_dl -F "$url" | grep -Pv "\[\w+\]" | grep -P "$filterFormats|\<url\>"
+		time youtube-dl -F "$url" | grep -Pv "\[\w+\]" | grep -P "$filterFormats|\<url\>"
 		echo >&2
 	done
 	trap - INT
@@ -69,9 +73,9 @@ function YTRenameFromFiles {
 		format=$(awk -F__ '{print$(NF-1)}' <<< $file)
 #		url="$2"
 #		test $# != 2 && echo "=> Usage: $FUNCNAME file youtube-URL" && return 1
-		newName="$($youtube_dl -f "$format" --get-filename -- $id)"
+		newName="$(youtube-dl -f "$format" --get-filename -- $id)"
 		test $newName || continue
-#		mp4tags -c "$($youtube_dl --get-description "$url")" "$file"
+#		mp4tags -c "$(youtube-dl --get-description "$url")" "$file"
 #		mp4tags -m "$url" "$file"
 		test "$(basename $file)" != "$newName" && mv -v "$file" "$(dirname $file)/$newName"
 	done
@@ -85,7 +89,7 @@ function updateYTMetadataFromFiles {
 		grep -q __ <<< $file || continue
 		id=$(awk -F"__|[.]" '{print$(NF-1)}' <<< $file)
 		format=$(awk -F__ '{print$(NF-1)}' <<< $file)
-		$youtube_dl -qs -- "http://www.youtube.com/watch?v=$id" 2>/dev/null && url="http://www.youtube.com/watch?v=$id"
+		youtube-dl -qs -- "http://www.youtube.com/watch?v=$id" 2>/dev/null && url="http://www.youtube.com/watch?v=$id"
 		chmod +w $file
 		[ $format = 22 ] && getRestrictedFilenamesHD $url || getRestrictedFilenamesSD $url
 	done
@@ -97,12 +101,12 @@ function YTRenameFromURLs {
 	for URL
 	do
 		echo "=> URL = $URL"
-#		format=$($youtube_dl --get-format $URL)
+#		format=$(youtube-dl --get-format $URL)
 		format=18
-		newName="$($youtube_dl -f "$format" --get-filename -- $URL)"
+		newName="$(youtube-dl -f "$format" --get-filename -- $URL)"
 		test $newName || { echo "=> ERROR : This URL contains no file to download." >&2;continue; }
 		test -s $newName && echo "=> File Already renamed to <$newName>." >&2 && continue
-		oldName="$($youtube_dl -f "$format" --get-filename -o "%(title)s.%(ext)s" -- $URL)"
+		oldName="$(youtube-dl -f "$format" --get-filename -o "%(title)s.%(ext)s" -- $URL)"
 		test -s $oldName || { echo "=> This URL has not been downloaded" >&2;continue; }
 		mv -v "$oldName" "$newName"
 	done
@@ -113,10 +117,10 @@ function addYoutubeTDescription {
 	local file="$1"
 	local url="$2"
 	test $# != 2 && echo "=> Usage: $FUNCNAME file youtube-URL" && return 1
-	$youtube_dl -qs -- "https://www.youtube.com/watch?v=$url" 2>/dev/null && url="https://www.youtube.com/watch?v=$url"
-	mp4tags -c "$($youtube_dl --get-description "$url")" "$file"
+	youtube-dl -qs -- "https://www.youtube.com/watch?v=$url" 2>/dev/null && url="https://www.youtube.com/watch?v=$url"
+	mp4tags -c "$(youtube-dl --get-description "$url")" "$file"
 	mp4tags -m "$url" "$file"
-#	artworkURL=$($youtube_dl --list-thumbnails "$url" | awk '/http/{print$NF}')
+#	artworkURL=$(youtube-dl --list-thumbnails "$url" | awk '/http/{print$NF}')
 #	wget -nv "$artworkURL"
 #	artworkFile=$(basename "$artworkURL")
 #	AtomicParsley "$file" --artwork "$artworkFile" --overWrite
@@ -135,7 +139,7 @@ function sizeOf {
 	}
 	for url in "$@"
 	do
-	size=$(curl -sI "$($youtube_dl -gf $format $url)" | awk 'BEGIN{IGNORECASE=1}/Content-?Length:/{print$2/2^20}')
+	size=$(curl -sI "$(youtube-dl -gf $format $url)" | awk 'BEGIN{IGNORECASE=1}/Content-?Length:/{print$2/2^20}')
 	total="$total+$size"
 	printf "%s %s Mo\n" $url $size
 	done
@@ -156,13 +160,13 @@ function ytget {
 		let i++
 		echo "=> Downloading url #$i/$# ..."
 		echo "=> url = $url"
-		$youtube_dl -f "$format" -qs -- "$url" 2>&1 | \grep --color -A1 ^ERROR: && echo && continue
+		youtube-dl -f "$format" -qs -- "$url" 2>&1 | \grep --color -A1 ^ERROR: && echo && continue
 		if ! echo $url | \egrep -wq "https?:"
 		then
-			if   $youtube_dl -e $youtubeURLPrefix$url	 >/dev/null 2>&1
+			if   youtube-dl -e $youtubeURLPrefix$url	 >/dev/null 2>&1
 			then
 				url=$youtubeURLPrefix$url
-			elif $youtube_dl -e $dailymotionURLPrefix$url >/dev/null 2>&1
+			elif youtube-dl -e $dailymotionURLPrefix$url >/dev/null 2>&1
 			then
 				url=$dailymotionURLPrefix$url
 			fi
@@ -178,7 +182,7 @@ function ytget {
 		fi
 
 		echo
-		fileName=$($youtube_dl -f $format --get-filename "$url" || $youtube_dl --get-filename "$url")
+		fileName=$(youtube-dl -f $format --get-filename "$url" || youtube-dl --get-filename "$url")
 		echo "=> fileName = <$fileName>"
 		echo
 		if [ -f "$fileName" ] && [ ! -w "$fileName" ]
@@ -187,7 +191,7 @@ function ytget {
 			echo
 			continue
 		fi
-		$youtube_dl -f $format "$url" || $youtube_dl "$url"
+		youtube-dl -f $format "$url" || youtube-dl "$url"
 		mp4tags -m "$url" "$fileName"
 		chmod -w "$fileName"
 		echo
@@ -220,7 +224,7 @@ function getRestrictedFilenamesFORMAT {
 		echo $siteVideoFormat | grep -q '[<>]' && siteVideoFormat=\"$siteVideoFormat\"
 
 		echo "=> Testing if $url still exists ..."
-		fileNames=$(set +x;time $youtube_dl -f "$siteVideoFormat" --get-filename -- "$url" 2>&1)
+		fileNames=$(set +x;time youtube-dl -f "$siteVideoFormat" --get-filename -- "$url" 2>&1)
 		echo $fileNames | \egrep --color -A1 ERROR: && echo && continue
 
 		local -i j=0
@@ -245,7 +249,7 @@ function getRestrictedFilenamesFORMAT {
 			echo "=> fileName to be downloaded = <$fileName>"
 			echo
 	
-			[ $extension = mp4 ] || [ $extension = m4a ] || [ $extension = mp3 ] && $youtube_dl -o "$fileName" -f "${formats[$j]}" "$url" --embed-thumbnail || $youtube_dl -o $fileName -f "${formats[$j]}" "$url" 2>&1 | { \egrep --color -A1 'ERROR:.*No space left on device' >&2 && echo && return 1; }
+			[ $extension = mp4 ] || [ $extension = m4a ] || [ $extension = mp3 ] && youtube-dl -o "$fileName" -f "${formats[$j]}" "$url" --embed-thumbnail || youtube-dl -o $fileName -f "${formats[$j]}" "$url" 2>&1 | { \egrep --color -A1 'ERROR:.*No space left on device' >&2 && echo && return 1; }
 			downloadOK=$?
 			if [ $downloadOK = 0 ] 
 			then
@@ -290,7 +294,7 @@ function ytdlSDFormats {
 	for url
 	do
 		echo "=> url = $url" 1>&2
-		format=$($youtube_dl -F $url | egrep -vw "only|hls-[0-9]+"  | egrep '(webm|mp4|flv) .*([0-9]+x[0-9]+)|(unknown)' | egrep -wv "22|hd|http-720" | sort -k 2,2 -k 3,3rn)
+		format=$(youtube-dl -F $url | egrep -vw "only|hls-[0-9]+"  | egrep '(webm|mp4|flv) .*([0-9]+x[0-9]+)|(unknown)' | egrep -wv "22|hd|http-720" | sort -k 2,2 -k 3,3rn)
 		echo "=> format :"   1>&2
 		echo "$format"
 	done
@@ -354,7 +358,7 @@ function getPlaylistsRestrictedFilenamesHD {
 			listOfUrls=$(hxwls 2>/dev/null "$playList" | awk -F '&' '/\<(watch|video)\>/{print$1}' | sort -u | tr "\n" " ")
 		else
 			urlPrefix=$(echo "$playList" | sed -r "s/https?:..//" | cut -d/ -f1)
-			listOfUrls=$($youtube_dl --ignore-errors --get-id "$playList" | sed "s|^|$urlPrefix|g" | tr "\n" " ")
+			listOfUrls=$(youtube-dl --ignore-errors --get-id "$playList" | sed "s|^|$urlPrefix|g" | tr "\n" " ")
 		fi
 
 		getRestrictedFilenamesHD $listOfUrls
@@ -372,7 +376,7 @@ function getPlaylistsRestrictedFilenamesSD {
 			test $? != 0 && return
 		else
 			urlPrefix=$(echo "$playList" | sed -r "s/https?:..//" | cut -d/ -f1)
-			listOfUrls=$($youtube_dl --ignore-errors --get-id "$playList" | sed "s|^|$urlPrefix|g" | tr "\n" " ")
+			listOfUrls=$(youtube-dl --ignore-errors --get-id "$playList" | sed "s|^|$urlPrefix|g" | tr "\n" " ")
 		fi
 
 		getRestrictedFilenamesSD $listOfUrls
@@ -390,13 +394,13 @@ function updateYoutubeDescription {
 		let i++
 		echo "=> Downloading url #$i/$# ..."
 		echo "=> url = $url"
-		$youtube_dl -f "$format" -qs -- $url 2>&1 | \grep --color -A1 ^ERROR: && echo && continue
+		youtube-dl -f "$format" -qs -- $url 2>&1 | \grep --color -A1 ^ERROR: && echo && continue
 		if ! echo $url | \egrep -wq "https?:"
 		then
-			if   $youtube_dl -e $youtubeURLPrefix$url	 >/dev/null 2>&1
+			if   youtube-dl -e $youtubeURLPrefix$url	 >/dev/null 2>&1
 			then
 				url=$youtubeURLPrefix$url
-			elif $youtube_dl -e $dailymotionURLPrefix$url >/dev/null 2>&1
+			elif youtube-dl -e $dailymotionURLPrefix$url >/dev/null 2>&1
 			then
 				url=$dailymotionURLPrefix$url
 			fi
@@ -413,13 +417,13 @@ function updateYoutubeDescription {
 
 		echo "=> url = $url"
 		echo
-		fileName=$($youtube_dl -f $format --get-filename "$url" || $youtube_dl --get-filename "$url")
+		fileName=$(youtube-dl -f $format --get-filename "$url" || youtube-dl --get-filename "$url")
 		echo "=> fileName = <$fileName>"
 		echo
 
 #		url=$1
 		local descFileName=$(mktemp)
-		$youtube_dl --get-description $url > $descFileName
+		youtube-dl --get-description $url > $descFileName
 		mp4tags -c "$(<$descFileName)" "$fileName" && \rm $descFileName	
 		mp4tags -m "$url" "$fileName" && chmod -w "$fileName" && echo "=> Done."
 		echo
@@ -434,11 +438,11 @@ function reget {
 	trap 'rc=130;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
 	local url=$1
 	local oldFile="$2"
-	local newFileName="$($youtube_dl -f 18 --get-filename $url || $youtube_dl --get-filename $url)"
+	local newFileName="$(youtube-dl -f 18 --get-filename $url || youtube-dl --get-filename $url)"
 	mv -v "$oldFile" "$newFileName"
 	head -n -1 "$newFileName" > "$newFileName.part"
 	rm "$newFileName"
-	$youtube_dl -f 18 "$url" || $youtube_dl $url
+	youtube-dl -f 18 "$url" || youtube-dl $url
 	mp4tags -m "$url" "$newFileName" && chmod -w "$newFileName" && echo "=> Done."
 	trap - INT
 }
