@@ -26,6 +26,7 @@ alias mpvFSD='mpv  --profile=fsd'
 alias mpvSD='mpv   --profile=sd' 
 alias mpvLD='mpv   --profile=ld'
 alias mpvVLD='mpv  --profile=vld'
+alias mpvFASTER='mpv --profile=for_slow_hardware'
 
 alias mpvplaylistBEST='mpvplaylist --profile=best'
 alias mpvplaylistFHD='mpvplaylist --profile=fhd'
