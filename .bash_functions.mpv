@@ -6,12 +6,12 @@ os=$(uname -s)
 export mpv_Output_Perl_Script="'\$| = 1;s/\n/\r/g if \$_ =~ /AV: /;s/Saving state/\nSaving state/'" # On l'export pour qu'elle soit accessible du processus fils
 
 mpv="$(which mpv) $mpvOptions"
-alias mpv="$mpv"
+alias mpv="LANG=en_US.utf8 $mpv"
 mpvnoconfig="mpv --no-config $mpvOptions"
 alias mpvnoconfig="$mpvnoconfig"
 
 mplayer="$(which mplayer) $mplayerOptions"
-alias mplayer="$mplayer"
+alias mplayer="LANG=en_US.utf8 $mplayer"
 mplayernoconfig="mplayer --noconfig=user $mplayerOptions"
 alias mplayernoconfig="$mplayernoconfig"
 
