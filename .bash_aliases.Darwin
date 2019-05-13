@@ -12,6 +12,7 @@ ggrep -V 2>/dev/null | \grep -wq GNU && alias grep="\ggrep --color" && alias Pgr
 
 alias egrep="grep -E"
 alias rgrep='time grep -Ir --exclude-dir=.git'
+alias rgrepFollowSymLinks='time grep -IR --exclude-dir=.git'
 alias zegrep="zgrep -E"
 
 alias addgroup="\dseditgroup -o create"
