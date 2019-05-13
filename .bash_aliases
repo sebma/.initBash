@@ -285,7 +285,8 @@ which cleartool >/dev/null 2>&1 && alias ct=cleartool
 which curl >/dev/null 2>&1 && alias curl="\curl -L" && alias curlnoconfig="\curl -q"
 which hexdump >/dev/null && alias hexdump="\hexdump -C" || alias hexdump="\od -ctx1"
 which lsb_release >/dev/null 2>&1 && alias lsb_release="\lsb_release -s"
-which vim >/dev/null && alias vim="LANG=$(locale -a 2>/dev/null | egrep -i '(fr_fr|en_us|en_uk).*utf' | sort -r | head -1) \vim" && alias vi=vim
+#which vim >/dev/null && alias vim="LANG=$(locale -a 2>/dev/null | egrep -i '(fr_fr|en_us|en_uk).*utf' | sort -r | head -1) \vim" && alias vi=vim
+which vim >/dev/null && alias vim="LANG=C.UTF-8 \vim" && alias vi=vim
 
 set +x
 test "$debug" '>' 0 && \echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
