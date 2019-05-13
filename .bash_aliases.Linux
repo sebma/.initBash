@@ -55,6 +55,7 @@ alias pkill='\pkill -efu $USER'
 alias quota="\quota -s"
 alias rename="\prename -v"
 alias rgrep='time grep -Ir --exclude-dir=.git'
+alias rgrepFollowSymLinks='time grep -IR --exclude-dir=.git'
 alias rmdir="\rmdir -v"
 alias rsync='time \rsync -uth -P -z --skip-compress=$RSYNC_SKIP_COMPRESS_LIST $RSYNC_EXCLUSION'
 alias scp='time \rsync -h --progress -u -zt --skip-compress=$RSYNC_SKIP_COMPRESS_LIST $RSYNC_EXCLUSION'
