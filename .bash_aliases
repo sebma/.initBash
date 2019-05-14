@@ -136,7 +136,7 @@ alias llh="ll -h"
 alias llha="ll -ha"
 alias ln="\ln -v"
 alias loadsshkeys='eval $(keychain --eval --agents ssh)'
-alias lpq="\lpq -a +2"
+alias lpq="\lpq -a +3"
 alias lpr2ppsheet="\lpr -o number-up=2"
 alias ls="ls -F"
 alias lsdvd="\lsdvd -avcs"
