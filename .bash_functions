@@ -9,6 +9,13 @@ Source $initDir/.bash_functions.ytdl
 test $os = Linux  && export locate="command locate" openCommand="command xdg-open"
 test $os = Darwin && export locate="time -p \"command glocate\"" openCommand="command open"
 
+function restart_conky {
+	for server
+	do
+		ssh $server "pgrep conky && killall -SIGUSR1 conky || conky -d"
+	done
+	\pgrep conky && \killall -SIGUSR1 conky || conky -d
+}
 function picMpixels {
 	for fileName
 	do
@@ -417,15 +424,20 @@ function jupyterToken {
 function xsetResolution {
 	local output=$(\xrandr | \awk  '/^.+ connected/{print$1}')
 	local oldResolution=$(\xrandr | \awk '/[0-9].*\*/{print$1}')
-	local newResolution=$1
+	local newResolution=
 
 	echo "=> Reset current resolution command :"
 	echo "\xrandr --output $output --mode $oldResolution"
-	if [ -z $newResolution ]
+	if [ $# = 0 ]
 	then
 		echo "=> Usage: $FUNCNAME XResxYRes"
+		echo
+		echo "=> Here are the possible resolutions :"
+		xrandr | awk '/^ +[0-9]+x[0-9]+/{printf$1" "}'
+		echo
 		return 1
 	else
+		newResolution=$1
 		if ! \xrandr | grep -wq $newResolution
 		then
 			echo "=> $FUNCNAME ERROR : The resolution <$newResolution> is not supported." >&2
