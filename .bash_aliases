@@ -158,6 +158,7 @@ alias myIP="time curl ipinfo.io/ip"
 alias mysed="\perl -pe"
 alias nautilus="\nautilus --no-desktop"
 alias no='yes n'
+alias nocomment="egrep -v '^(#|$)'"
 alias od="\od -ctx1"
 alias odp2pdf="\loimpress --headless --convert-to pdf"
 alias odt2docx="\lowriter --headless --convert-to docx"
