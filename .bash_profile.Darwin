@@ -43,7 +43,6 @@ fi
 
 #pgrep -qfu $USER XQuartz.app && tty -s && echo "=> MIT-MAGIC-COOKIE-1:" && xauth list | grep :$(echo $DISPLAY | awk -F '\\.|:' '{print$2}') && echo
 trap - INT
-export LC_ALL=$LANG
 
 set +x
 test "$debug" '>' 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
