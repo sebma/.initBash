@@ -6,15 +6,9 @@ test "$debug" '>' 1 && echo "=> LANG = $LANG"
 test "$debug" '>' 2 && localectl status
 test "$debug" '>' 3 && set -x
 
+export LC_{CTYPE,COLLATE,MESSAGES}=C.UTF-8
 test -z "$LANG" && export LANG=$(locale -a 2>/dev/null | awk 'BEGIN{IGNORECASE=1}/^(fr_FR|en_US|en_UK).utf8/{print$1;exit}')
-
-#for LC_variable in LC_CTYPE LC_COLLATE LC_MESSAGES;do eval $LC_variable=C.UTF-8;export $LC_variable;LANG=C locale -a 2>&1 | \grep "locale: Cannot set $LC_variable to default locale: No such file or directory" && export -n $LC_variable;done # cf. https://unix.stackexchange.com/a/519007/135038
-for LC_variable in LC_ADDRESS LC_IDENTIFICATION LC_MEASUREMENT LC_MONETARY LC_NAME LC_NUMERIC LC_PAPER LC_TELEPHONE LC_TIME
-do
-	eval export $LC_variable=$LANG
-done
-export LC_CTYPE=C.UTF-8 LC_COLLATE=C.UTF-8 LC_MESSAGES=C.UTF-8
-
+export LC_{ADDRESS,IDENTIFICATION,MEASUREMENT,MONETARY,NAME,NUMERIC,PAPER,TELEPHONE,TIME}=$LANG
 
 test "$debug" '>' 1 && echo "=> LANG = $LANG"
 test "$debug" '>' 2 && localectl status
