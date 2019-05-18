@@ -221,7 +221,7 @@ function getRestrictedFilenamesFORMAT {
 		*.facebook.com/*) siteVideoFormat=$(echo $initialSiteVideoFormat+m4a | \sed -E "s/^(\(?)\w+/\1bestvideo/g");; #Replace the first word after the opening parenthesis
 		*) siteVideoFormat=$initialSiteVideoFormat;;
 		esac
-		echo $siteVideoFormat | grep -q '[<>]' && siteVideoFormat=\"$siteVideoFormat\"
+#		echo $siteVideoFormat | grep -q '[<>]' && siteVideoFormat=\"$siteVideoFormat\" # Etait necessaire si la variable "youtube_dl" utilise "eval"
 
 		echo "=> Testing if $url still exists ..."
 		fileNames=$(set +x;time youtube-dl -f "$siteVideoFormat" --get-filename -- "$url" 2>&1)
