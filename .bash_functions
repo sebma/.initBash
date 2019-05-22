@@ -1030,12 +1030,8 @@ function setTimestamps {
 		touch -t $timestamp "$file"
 	done
 }
-function web2pdf {
-	local url="$1"
-	local pdfFile="$2"
-	wkhtmltopdf "$url" "$pdfFile"
-}
 function xpiInfo {
+	local xpiFile
 	for xpiFile
 	do
 		echo "=> xpiFile = $xpiFile"
@@ -1047,7 +1043,7 @@ function xpiInfo {
 			done | column -ts '='
 		elif unzip -t $xpiFile | \grep -wq manifest.json
 		then
-			unzip -q -p $xpiFile manifest.json | jq '{name:.name , , version:.version , description:.description , id:.applications.gecko.id}'
+			unzip -q -p $xpiFile manifest.json | jq '{name:.name , version:.version , description:.description , id:.applications.gecko.id}'
 		fi
 		echo
 	done
