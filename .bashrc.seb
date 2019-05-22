@@ -132,7 +132,10 @@ test -r $initDir/.bashrc.$os.local && Source $initDir/.bashrc.$os.local
 test -s /etc/debian_version && Source $initDir/.bashrc.Debian
 
 #my git configuration
-which git >/dev/null 2>&1 && test -f $initDir/.bashrc.git && Source $initDir/.bashrc.git
+if which git >/dev/null 2>&1; then
+	test -f $initDir/.bashrc.git && Source $initDir/.bashrc.git
+	test -f $initDir/.bash_aliases.git && Source $initDir/.bash_aliases.git
+fi
 
 test -f $initDir/.bashrc.gpu && Source $initDir/.bashrc.gpu
 
