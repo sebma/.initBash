@@ -10,7 +10,8 @@ alias gitConf="\git config -l"
 alias gitEditConfig='\git config --local -e'
 alias gitHTTP='\git config --get-all remote.origin.url | \grep http'
 alias gitLocalUndelete="\git ls-files -d | grep . && \git ls-files -d | \xargs git checkout-index"
-alias gitRemoteRepoLastRelease='\git ls-remote --tags | awk -F/ '\''END{print gensub(/\^\{\}/,"","",$NF)}'\'''
+alias gitRemoteRepoLastRelease='\git ls-remote --tags --sort="version:refname" | awk -F/ '\''END{print gensub(/\^\{\}/,"","",$NF)}'\'''
+alias gitLastRelease='\git describe --tags --abbrev=0'
 alias gitStatus="\git status -bs -uno"
 alias gitURL='\git config remote.origin.url'
 alias gitURLs='\git config -l | awk -F= /^remote.*\.url=/{print\$2}'
