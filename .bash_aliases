@@ -106,7 +106,7 @@ alias grepInHome="time \grep --exclude-dir=Audios --exclude-dir=Music --exclude-
 alias gtop="\watch -n1 gps"
 alias gunzip="\gunzip -Nv"
 alias gzcat="\gunzip -c"
-alias gzgrep="zgrep ."
+alias gzgrep="zgrep"
 alias gzip="\gzip -Nv"
 alias h5dump="\h5dump -n 1"
 alias halt="\halt && exit"
