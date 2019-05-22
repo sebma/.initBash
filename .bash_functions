@@ -1041,15 +1041,13 @@ function xpiInfo {
 		echo "=> xpiFile = $xpiFile"
 		if unzip -t $xpiFile | \grep -wq install.rdf
 		then
-			printf "em:id = "
-			unzip -q -p $xpiFile install.rdf | \egrep -m1 "em:id" | awk -F "<|>" '{print$3}'
-			printf "em:name = "
-			unzip -q -p $xpiFile install.rdf | \egrep -m1 "em:name" | awk -F "<|>" '{print$3}'
-			printf "em:version = "
-			unzip -q -p $xpiFile install.rdf | \egrep -m1 "em:version" | awk -F "<|>" '{print$3}'
+			for field in em:id em:name em:version em:description
+			do
+				unzip -q -p $xpiFile install.rdf | awk -F "<|>" /$field/'{if(!f)print$2"="$3;f=1}'
+			done | column -ts '='
 		elif unzip -t $xpiFile | \grep -wq manifest.json
 		then
-			unzip -q -p $xpiFile manifest.json | jq '{name:.name , short_name:.short_name , version:.version , description:.description , id:.applications.gecko.id}'
+			unzip -q -p $xpiFile manifest.json | jq '{name:.name , , version:.version , description:.description , id:.applications.gecko.id}'
 		fi
 		echo
 	done
