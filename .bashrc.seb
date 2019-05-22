@@ -14,6 +14,7 @@ set -o histexpand # Re-enable the history expansion disabled previously by my "e
 #test -n "$bashRCLoaded" && return
 bashRCLoaded=1
 export os=$(uname -s)
+quoteCHAR="'\''"
 
 function addpaths {
 	for path
@@ -35,8 +36,10 @@ function addmanpaths {
 	export MANPATH
 }
 
+#echo "=> BEFORE: PATH = $PATH"
 pathsList="/sbin /usr/local/sbin /usr/sbin /usr/local/go/bin /usr/local/miniconda2/bin /usr/local/miniconda3/bin /home/linuxbrew/.linuxbrew/bin $GOPATH/bin /opt/local/bin /usr/share/fslint/fslint $HOME/.opam/system/bin $HOME/perl5/bin $HOME/rvm/bin $HOME/homebrew/bin $HOME/local/sbin $HOME/local/bin $HOME/usr/bin $HOME/usr/local/bin $HOME/gnu/bin $HOME/.local/bin $HOME/shl $HOME/py $HOME/pl $HOME/bin $HOME/php $HOME/.linuxbrew/bin $HOME/miniconda2/bin $HOME/miniconda3/bin $HOME/myScripts/shl $HOME/myScripts/py $HOME/myScripts/pl"
 addpaths $pathsList
+#echo "=> AFTER: PATH = $PATH"
 
 manPathsList="/opt/ffmpeg/share/man $HOME/.local/share/man /usr/local/share/man /usr/share/man /usr/local/miniconda3/share/man /usr/local/miniconda2/share/man"
 addmanpaths $manPathsList
