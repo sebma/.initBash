@@ -1049,10 +1049,7 @@ function xpiInfo {
 			unzip -q -p $xpiFile install.rdf | \egrep -m1 "em:version" | awk -F "<|>" '{print$3}'
 		elif unzip -t $xpiFile | \grep -wq manifest.json
 		then
-			printf "name = "
-			unzip -q -p $xpiFile manifest.json | jq .name
-			printf "version = "
-			unzip -q -p $xpiFile manifest.json | jq .version
+			unzip -q -p $xpiFile manifest.json | jq '{name:.name , short_name:.short_name , version:.version , description:.description , id:.applications.gecko.id}'
 		fi
 		echo
 	done
