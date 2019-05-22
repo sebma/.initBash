@@ -18,24 +18,5 @@ git config --global alias.mvv "mv -v"
 [ $os = Linux  ] && git config --global credential.helper "cache --timeout=86400"
 [ $os = Darwin ] && git config --global credential.helper osxkeychain
 
-alias gitEditConfig='\git config --local -e'
-alias gitConf="\git config -l"
-alias gitConf-alias.ci="git config alias.ci '!f() { cd \${GIT_PREFIX:-.}; for file; do git commit -uno \$file -m \"Updated \$file\"; done; }; f';git config alias.ci"
-alias gitConf-alias.cipart="git config alias.cipart '!f() { cd \${GIT_PREFIX:-.}; for file; do git commit -uno -p \$file -m \"Partially updated \$file\"; done; }; f';git config alias.cipart"
-alias gitCompareLocalRemote="\git fetch && \git diff origin"
-alias gitHTTP='\git config --get-all remote.origin.url | \grep http'
-alias gitUnIgnoreChanges="\git update-index --no-skip-worktree"
-alias openGit_http_URL='open $(gitHTTP)'
-alias gitLocalUndelete="\git ls-files -d | grep . && \git ls-files -d | \xargs git checkout-index"
-alias gitlog="\git log --abbrev-commit"
-alias gitls="\git ls-files"
-alias gitshow="\git show --abbrev-commit"
-alias git-ls=gitls
-alias gitStatus="\git status -bs -uno"
-alias gitUpdate="\git config remote.origin.url | \awk '/github.com/{print\"=> Updating from <\"\$NF\"> ...\"}';\git pull"
-alias gitURL='\git config remote.origin.url'
-alias gitURLs='\git config -l | awk -F= /^remote.*\.url=/{print\$2}'
-alias updateGIT="\git pull"
-
 set +x
 test "$debug" '>' 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
