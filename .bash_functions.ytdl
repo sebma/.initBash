@@ -16,7 +16,7 @@ alias ytdl="LANG=C.UTF-8 command youtube-dl"
 ytdlnoconfig="ytdl --ignore-config"
 alias ytdlnoconfig="$ytdlnoconfig"
 
-alias ytdlLastRelease="\git ls-remote --tags https://github.com/rg3/youtube-dl | awk -F/ '/refs\/tags.*[^}]$/{vers=\$NF}END{print vers}'"
+alias ytdlLastRelease='\git ls-remote --tags https://github.com/rg3/youtube-dl | awk -F/ '\''END{print gensub(/\^\{\}/,"","",$NF)}'\'''
 alias ytdlVersion="ytdl --version"
 
 function ytdlGetFormat {
