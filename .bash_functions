@@ -373,37 +373,46 @@ function condaSearchThroughChannels {
 	done
 }
 function grepParagraph {
-	test $# '<' 3 && {
+	let $#'<'3 && {
 		echo "=> Usage : $FUNCNAME startRegExpPattern endRegExpPattern fileList" >&2
 		return 1
 	}
 	local startRegExpPattern
 	local endRegExpPattern
 	local fileListPattern="${@:3}"
+
 #	startRegExp=$1 endRegExp=$2 \sed -E -n "/$startRegExpPattern/,/$endRegExpPattern/p" $fileListPattern
 #	startRegExp=$1 endRegExp=$2 awk "/$startRegExpPattern/{p=1}p;/$endRegExpPattern/{p=0}" $fileListPattern
 	startRegExp=$1 endRegExp=$2 perl -ne 'print "$ARGV:$_" if /$ENV{startRegExp}/ ... (/$ENV{endRegExp}/ || eof)' $fileListPattern
 }
+function grepFunction {
+	let $#'<'2 && {
+		echo "=> Usage : $FUNCNAME startRegExpPattern fileList" >&2
+		return 1
+	}
+	shift
+	grepParagraph "function $1|${1}.*[(]" "^}" "$@"
+}
 function getPythonFunctions {
-	test $# != 0 && getFunctions "def " '^$' $@
+	test $# != 0 && grepParagraph "def " '^$' $@
 }
 function getPythonFunctionName {
 	local funcName=$1
 	shift
-	test $# != 0 && getFunctions "def $funcName " '^$' $@
+	test $# != 0 && grepParagraph "def $funcName " '^$' $@
 }
 function getShellFunctions {
-	test $# != 0 && getFunctions '(^|\s)\w+\(\)|\bfunction\b' '^}' $@
+	test $# != 0 && grepParagraph '(^|\s)\w+\(\)|\bfunction\b' '^}' $@
 }
 function getShellFunctionName {
 	local funcName=$1
 	shift
-	test $# != 0 && getFunctions "(^|\s)$funcName\s*\(\)|\bfunction\s$funcName" '^}' $@
+	test $# != 0 && grepParagraph "(^|\s)$funcName\s*\(\)|\bfunction\s$funcName" '^}' $@
 }
 function rtt {
 	local remote=$1
 	test -z $remote && {
-		echo "=> Usage: $FUNCNAME remote" >&2
+		echo "=> Usage: roundTripTime remote" >&2
 		return 1
 	}
 	local NBPackets=10
