@@ -249,7 +249,7 @@ function sizeOfRemoteFile {
         format=$1
         shift
     }
-    for url in "$@"
+    for url
     do
         size=$(curl -sI "$url" | awk 'BEGIN{IGNORECASE=1}/Content-?Length:/{print$2/2^20}')
         total="$total+$size"
@@ -381,7 +381,7 @@ function getFunctions {
 	}
 	shift 2
 	local fileListPattern="$@"
-#	sed -r -n "/$startRegExpPattern/,/$endRegExpPattern/p" $fileListPattern
+#	\sed -E -n "/$startRegExpPattern/,/$endRegExpPattern/p" $fileListPattern
 #	awk "/$startRegExpPattern/{p=1}p;/$endRegExpPattern/{p=0}" $fileListPattern
 	perl -ne "print if /$startRegExpPattern/ ... /$endRegExpPattern/" $fileListPattern
 }
