@@ -10,10 +10,14 @@ test $os = Linux  && export locate="command locate" openCommand="command xdg-ope
 test $os = Darwin && export locate="time -p \"command glocate\"" openCommand="command open"
 
 function locateBin {
-    locate "${@}" | \grep bin/
+	local regExp="$1"
+	shift
+    locate "bin/.*$regExp" "$@"
 }
 function locateFromHere {
-	locate "$@" | \grep "$PWD/"
+	local regExp="$1"
+	shift
+	locate "$PWD/.*$regExp" "$@"
 }
 function restart_conky {
 	for server
