@@ -11,6 +11,7 @@ scriptDir=$(cd $(dirname $BASH_SOURCE);pwd);test $HOME = / && export HOME=$scrip
 
 export initDir=$HOME/.initBash
 set | grep -q "^colors=" || source $initDir/.colors
+test $debug || debug=0
 test "$debug" '>' 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 function Source { test "$debug" '>' 0 && time source "$@" && echo || source "$@" ; }
 
