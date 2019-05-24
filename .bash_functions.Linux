@@ -10,12 +10,6 @@ function locate {
 	groups 2>/dev/null | \egrep -wq "sudo|admin" && locateOptions="-e" || locateOptions="--database $HOME/.local/lib/mlocate/mlocate.db -e"
 	echo "$@" | \grep -q "\-[a-z]*r" && $locate $locateOptions "$@" || $locate $locateOptions -i --regex "${@}"
 }
-function locateBin {
-	locate "${@}" | grep bin/
-}
-function locateFromHere {
-	locate "$@" | \grep $PWD/
-}
 function open {
 	[ $# = 0 ] && set -- .
 	for file
