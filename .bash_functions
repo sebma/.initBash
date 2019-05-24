@@ -9,6 +9,12 @@ Source $initDir/.bash_functions.ytdl
 test $os = Linux  && export locate="command locate" openCommand="command xdg-open"
 test $os = Darwin && export locate="time -p \"command glocate\"" openCommand="command open"
 
+function locateBin {
+    locate "${@}" | \grep bin/
+}
+function locateFromHere {
+	locate "$@" | \grep "$PWD/"
+}
 function restart_conky {
 	for server
 	do
