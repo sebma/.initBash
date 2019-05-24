@@ -3,6 +3,7 @@
 # for examples
 test -z "$initDir" && export initDir=$HOME/.initBash
 declare -A | grep -wq colors || source $initDir/.colors
+test $debug || debug=0
 test "$debug" '>' 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 function Source { test "$debug" '>' 0 && time source "$@" && echo || source "$@" ; }
 
