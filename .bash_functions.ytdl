@@ -5,7 +5,6 @@ test "$debug" '>' 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 
 \which youtube-dl >/dev/null || { echo "=> ERROR: <youtube-dl> is not installed,  type \"sudo -H $(which pip3) install -U youtube-dl\" to install it" >&2; return 1; }
 
-test -r $initDir/.colors && source $initDir/.colors
 test $os = Linux  && export locate="command locate"
 test $os = Darwin && export locate="time -p command glocate"
 
