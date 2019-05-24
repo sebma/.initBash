@@ -372,18 +372,17 @@ function condaSearchThroughChannels {
 		done
 	done
 }
-function getFunctions {
-	local startRegExpPattern=$1
-	local endRegExpPattern=$2
+function grepParagraph {
 	test $# '<' 3 && {
 		echo "=> Usage : $FUNCNAME startRegExpPattern endRegExpPattern fileList" >&2
 		return 1
 	}
-	shift 2
-	local fileListPattern="$@"
-#	\sed -E -n "/$startRegExpPattern/,/$endRegExpPattern/p" $fileListPattern
-#	awk "/$startRegExpPattern/{p=1}p;/$endRegExpPattern/{p=0}" $fileListPattern
-	perl -ne "print if /$startRegExpPattern/ ... /$endRegExpPattern/" $fileListPattern
+	local startRegExpPattern
+	local endRegExpPattern
+	local fileListPattern="${@:3}"
+#	startRegExp=$1 endRegExp=$2 \sed -E -n "/$startRegExpPattern/,/$endRegExpPattern/p" $fileListPattern
+#	startRegExp=$1 endRegExp=$2 awk "/$startRegExpPattern/{p=1}p;/$endRegExpPattern/{p=0}" $fileListPattern
+	startRegExp=$1 endRegExp=$2 perl -ne 'print "$ARGV:$_" if /$ENV{startRegExp}/ ... (/$ENV{endRegExp}/ || eof)' $fileListPattern
 }
 function getPythonFunctions {
 	test $# != 0 && getFunctions "def " '^$' $@
