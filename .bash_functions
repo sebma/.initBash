@@ -19,6 +19,11 @@ function locateFromHere {
 	shift
 	locate "$PWD/.*$regExp" "$@"
 }
+function locateFromHome {
+	local regExp="$1"
+	shift
+	locate "$HOME/.*$regExp" "$@"
+}
 function restart_conky {
 	for server
 	do
@@ -753,9 +758,12 @@ function createSshTunnel {
 	pgrep ssh.*-L
 }
 function aria2c {
+#	local options="$(echo "$@" | \sed -E "s/(^| )[^ -]+\b//g")" # Suppressing non options
+#	local urls="$(echo "$@" | \sed -E "s/(^| )-[^ ]+\b//g")" # Suppressing options
+#	for url in $urls
 	for url
 	do
-		command aria2c "$url"
+		command aria2c $options "$url"
 	done
 }
 function systemType {
