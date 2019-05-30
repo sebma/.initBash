@@ -1064,6 +1064,7 @@ function setTimestamps {
 }
 function xpiInfo {
 	local xpiFile
+	local xpiID
 	for xpiFile
 	do
 		echo "=> xpiFile = $xpiFile"
@@ -1073,27 +1074,39 @@ function xpiInfo {
 			do
 				unzip -q -p "$xpiFile" install.rdf | awk -F "<|>" /$field/'{if(!f)print$2"="$3;f=1}'
 			done | column -ts '='
+			xpiID=$(unzip -q -p "$xpiFile" install.rdf | awk -F "<|>" /em:id/'{if(!f)print$3;f=1}')
+			test "$xpiID" || for field in name id description version homepageURL
+            do
+                unzip -q -p "$xpiFile" install.rdf | grep -v "xml.version" | awk -F "<|>" /$field/'{if(!f)print$2"="$3;f=1}'
+            done | column -ts '='
 		elif unzip -t "$xpiFile" | \grep -wq manifest.json
 		then
 			unzip -q -p "$xpiFile" manifest.json | jq '{name:.name , id:.applications.gecko.id , description:.description , version:.version , url:.homepage_url}'
+			xpiID=$(unzip -q -p "$xpiFile" manifest.json | jq '.applications.gecko.id')
 		fi
 		echo
 	done
 }
 function xpiRename {
 	local xpiFile
+	local xpiID
 	for xpiFile
 	do
 		echo "=> xpiFile = $xpiFile"
 		if unzip -t "$xpiFile" | \grep -wq install.rdf
 		then
-			field=em:id
-			xpiID=$(unzip -q -p "$xpiFile" install.rdf | awk -F "<|>" /$field/'{if(!f)print$3;f=1}')
+			for field in em:id id
+			do
+				xpiID=$(unzip -q -p "$xpiFile" install.rdf | awk -F "<|>" /$field/'{if(!f)print$3;f=1}')
+				test "$xpiID" && break
+			done
 		elif unzip -t "$xpiFile" | \grep -wq manifest.json
 		then
 			xpiID=$(unzip -q -p "$xpiFile" manifest.json | jq '.applications.gecko.id')
 		fi
-		\mv -v $xpiFile "$(dirname $xpiFile)/$xpiID.xpi"
+		{ [ "$xpiID" = null ] || [ "$xpiID" = "" ]; } && echo "==> xpiID = $xpiID" && echo && continue
+		test "$xpiID.xpi" = "$(basename $xpiFile)" && echo "==> xpiID = $xpiID"
+		\mv -vi $xpiFile "$(dirname $xpiFile)/$xpiID.xpi"
 		echo
 	done
 }
