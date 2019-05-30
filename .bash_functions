@@ -9,6 +9,12 @@ Source $initDir/.bash_functions.ytdl
 test $os = Linux  && export locate="command locate" openCommand="command xdg-open"
 test $os = Darwin && export locate="time -p \"command glocate\"" openCommand="command open"
 
+function typeFunction {
+	for function
+	do
+		type $function
+	done | \sed 's/;$//' | \sed -zE 's/$\n\{/{/'
+}
 function locateBin {
 	local regExp="$1"
 	shift
