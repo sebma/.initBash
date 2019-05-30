@@ -1080,6 +1080,23 @@ function xpiInfo {
 		echo
 	done
 }
+function xpiRename {
+	local xpiFile
+	for xpiFile
+	do
+		echo "=> xpiFile = $xpiFile"
+		if unzip -t "$xpiFile" | \grep -wq install.rdf
+		then
+			field=em:id
+			xpiID=$(unzip -q -p "$xpiFile" install.rdf | awk -F "<|>" /$field/'{if(!f)print$3;f=1}')
+		elif unzip -t "$xpiFile" | \grep -wq manifest.json
+		then
+			xpiID=$(unzip -q -p "$xpiFile" manifest.json | jq '.applications.gecko.id')
+		fi
+		\mv -v $xpiFile "$(dirname $xpiFile)/$xpiID.xpi"
+		echo
+	done
+}
 function apkInfo {
 	for package
 	do
