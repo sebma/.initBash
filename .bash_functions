@@ -1082,7 +1082,7 @@ function xpiInfo {
 		elif unzip -t "$xpiFile" | \grep -wq manifest.json
 		then
 			unzip -q -p "$xpiFile" manifest.json | jq '{name:.name , id:.applications.gecko.id , description:.description , version:.version , url:.homepage_url}'
-			xpiID=$(unzip -q -p "$xpiFile" manifest.json | jq '.applications.gecko.id')
+			xpiID=$(unzip -q -p "$xpiFile" manifest.json | jq -r '.applications.gecko.id')
 		fi
 		echo
 	done
@@ -1102,7 +1102,7 @@ function xpiRename {
 			done
 		elif unzip -t "$xpiFile" | \grep -wq manifest.json
 		then
-			xpiID=$(unzip -q -p "$xpiFile" manifest.json | jq '.applications.gecko.id')
+			xpiID=$(unzip -q -p "$xpiFile" manifest.json | jq -r '.applications.gecko.id')
 		fi
 		{ [ "$xpiID" = null ] || [ "$xpiID" = "" ]; } && echo "==> xpiID = $xpiID" && echo && continue
 		test "$xpiID.xpi" = "$(basename $xpiFile)" && echo "==> xpiID = $xpiID"
