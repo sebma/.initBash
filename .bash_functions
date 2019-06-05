@@ -9,6 +9,427 @@ Source $initDir/.bash_functions.ytdl
 test $os = Linux  && export locate="command locate" openCommand="command xdg-open"
 test $os = Darwin && export locate="time -p \"command glocate\"" openCommand="command open"
 
+function jpgRotate {
+	test $# = 0 && {
+		echo "=> Usage: $FUNCNAME angle file1 file2 file3 ..." >&2
+		return 1
+	}
+
+	local angle=$1
+	shift
+	for pic
+	do
+		extension=${pic/*./}
+		newFile="${pic/.$extension/_ROTATED.$extension}"
+		echo "=> Losslessly rotating $pic by $angle degrees into $newFile ..." >&2
+		jpegtran -perfect -rotate $angle "$pic" > "$newFile"
+		touch -r "$pic" "$newFile"
+	done
+}
+function locateBin {
+	local regExp="$1"
+	shift
+    locate "bin/.*$regExp" "$@"
+}
+function locateFromHere {
+	local regExp="$1"
+	shift
+	locate "$PWD/.*$regExp" "$@"
+}
+function locateFromHome {
+	local regExp="$1"
+	shift
+	locate "$HOME/.*$regExp" "$@"
+}
+function restart_conky {
+	for server
+	do
+		ssh $server "pgrep conky && killall -SIGUSR1 conky || conky -d"
+	done
+	\pgrep conky && \killall -SIGUSR1 conky || conky -d
+}
+function picMpixels {
+	for fileName
+	do
+		LC_NUMERIC=C \perl -le "printf \"=> fileName = %s size = %.2f Mpix\n\", \"$fileName\", $(identify -format '%w*%h/10**6' $fileName)"
+	done | \column -t
+}
+function greplast {
+	grep "$@" | awk 'END{print}'
+}
+function piphelp {
+	pip help $1 | less
+}
+function sum {
+	awk "{print \$1}" | LC_ALL=C numfmt --from=iec | paste -sd+ | bc | numfmt --to=iec
+}
+function html2pdf {
+	test $# = 0 && {
+		echo "=> Usage: $FUNCNAME url_or_file1 url_or_file1 ..." >&2
+		return 1
+	}
+
+	local pdfFiles=""
+	for url_or_file
+	do
+		pdfFileName=$(basename $url_or_file | \sed -E "s/#.*//;s/$|\.[^.]+$/.pdf/")
+		pdfFiles+="$pdfFileName "
+		wkhtmltopdf --no-background --outline --header-line --footer-line --header-left [webpage] --footer-left "[isodate] [time]" --footer-right [page]/[toPage] "$url_or_file" "$pdfFileName"
+	done
+	open $pdfFiles
+}
+function castnowPlaylist {
+	test $# = 0 && {
+		echo "=> Usage: $FUNCNAME [index] playlistFile ..." >&2
+		return 1
+	}
+
+	local index=${1:-1}
+	test $# = 2 && shift
+	local playlist=$1
+	castnowURLs $(tail -n +$index $playlist)
+}
+function castnowURLs {
+	test $# = 0 && {
+		echo "=> Usage: $FUNCNAME [ytdl-format] url1 url2 ..." >&2
+		return 1
+	}
+
+	local format="mp4[height<=480]/mp4/best"
+	echo $1 | egrep -q "^(https?|s?ftps?)://" || { format="$1"; shift; }
+
+#	set -x
+	for url
+	do
+		youtube-dl --no-continue --ignore-config -f "$format" -o- -- "$url" | castnow --quiet -
+	done
+	set +x
+	echo
+}
+function awkCalc {
+	\awk "BEGIN{ print $* }"
+}
+function perlCalc {
+	\perl -le "print ${*/^/**}"
+}
+function pythonCalc {
+	\python -c "print(${*/^/**})"
+}
+function termtitle {
+	printf "\e]0;$*\a"
+}
+function updateDistrib {
+	local distrib=$(distribType)
+	case $distrib in
+		debian|ubuntu) sudo apt -V upgrade --download-only "$@" && sync && echo && sudo apt -V upgrade --yes "$@" && echo && sudo apt-get -V autoremove "$@" && sudo \updatedb; sync;;
+		*)	;;
+	esac
+}
+function asc2gpg {
+	for ascFile
+	do
+		\gpg -v -o "${ascFile/.asc/.gpg}" --dearmor "$ascFile"
+	done
+}
+function gpg2asc {
+	for gpgFile
+	do
+		\gpg -o - --enarmor "$gpgFile" | sed "s/ARMORED FILE/PUBLIC KEY BLOCK/" | tee "${gpgFile/.gpg/.asc}"
+	done
+}
+function gpgPrint {
+	for pubKey
+	do
+		echo $pubKey
+		printf -- "-%.s" $(seq ${#pubKey})
+		echo
+		\gpg $pubKey | awk '{printf$1"   "$2" "$3"\n""uid\t\t  ";$1=$2=$3="";print}'
+		echo
+	done
+}
+function odfInfo {
+	for document
+	do
+		\unzip -c $document meta.xml | tr -s " " "\n" | fmt
+	done
+}
+function img2pdfA4R {
+	local lastArg="${@: -1}"
+	local allArgsButLast="${@:1:$#-1}"
+	img2pdf --pagesize A4^T $allArgsButLast -o $lastArg
+}
+function img2pdfA4 {
+	local lastArg="${@: -1}"
+	local allArgsButLast="${@:1:$#-1}"
+	img2pdf --pagesize A4 $allArgsButLast -o $lastArg
+}
+function lvm_DM_Paths_2_LVM_Paths {
+	for dmPath
+	do
+		\lsblk -nf $dmPath | awk '{print"/dev/mapper/"$1}'
+	done
+}
+function lvm_Mount_Point_2_LVM_Paths {
+	local dmPath
+	for fs
+	do
+		dmPath=$(\df $fs | awk "$fs/"'{print$1}')
+		\lsblk -nf $dmPath | awk '{print"/dev/mapper/"$1}'
+	done
+}
+function lv_FS_Creation_Date {
+	sudo -v
+	for fs
+	do
+		sudo lvdisplay $(lvm_Mount_Point_2_LVM_Paths $fs)
+	done | egrep "LV Path|Creation"
+}
+function lv_Dev_Creation_Date {
+	sudo -v
+	for lv
+	do
+		sudo lvdisplay
+	done | egrep "LV Path|Creation"
+}
+function hide {
+	for file
+	do
+		mv $file .$file
+	done
+}
+function connect2SSID {
+	local ssid=$1
+	set -x
+	nmcli con status
+	time nmcli con up id $ssid
+	nmcli con status
+	time \curl -A "" ipinfo.io/ip || time \wget -qU "" -O- ipinfo.io/ip
+	set +x
+}
+function gdebiALL {
+	for package
+	do
+		sudo gdebi -n $package
+	done
+}
+function mountISO {
+	loopBackDevice=$(udisksctl loop-setup -r -f "$1" | awk -F "[ .]" '{print$(NF-1)}')
+	udisksctl mount -b $loopBackDevice
+}
+function umountISO {
+	loopBackDevice=$(sudo losetup -a | grep $1 | cut -d: -f1)
+	test -z $loopBackDevice && loopBackDevice=$1
+	udisksctl unmount -b $loopBackDevice
+	udisksctl loop-delete -b $loopBackDevice
+}
+function mkdircd {
+	\mkdir -pv $1
+	cd $1 && pwd -P
+}
+function addUsersInGroup {
+#	local lastArg="$(eval echo \${$#})"
+#	local lastArg="${@:$#}"
+	local lastArg="${@: -1}"
+	local allArgsButLast="${@:1:$#-1}"
+	for user in $allArgsButLast
+	do
+		sudo adduser $user $lastArg
+	done
+}
+function Echo {
+	local rc=$?
+	set +o histexpand # Turn off history expansion to be able easily use the exclamation mark in strings i.e https://stackoverflow.com/a/22130745/5649639
+	command echo "$@"
+	set -o histexpand
+	return $rc
+}
+function extractURLs {
+	local sed="command sed -E"
+	for file
+	do
+		xmllint --format "$file" > "$file".indented
+		\mv "$file".indented "$file"
+		$sed 's/^.*http/http/;s/[<"].*$//;/^\s*$/d;/http/!d' "$file"
+	done | sort -u
+}
+function bible {
+	local bible="command bible"
+	for verses
+	do
+		$bible $verses | sed -n "2,3p"
+		$bible -f $verses | cut -d: -f2
+	done
+}
+function wgetParallel {
+	for url
+	do
+		\wget -Nb "$url"
+	done
+}
+function sizeOfRemoteFile { 
+    trap 'rc=$?;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
+    local size
+    local total="0"
+    local format=18
+    echo $1 | \egrep -q "^https?://" || { 
+        format=$1
+        shift
+    }
+    for url
+    do
+        size=$(curl -sI "$url" | awk 'BEGIN{IGNORECASE=1}/Content-?Length:/{print$2/2^20}')
+        total="$total+$size"
+        printf "%s %s Mo\n" $url $size
+    done
+    test $# -gt 1 && { 
+        total=$(echo $total | \bc -l)
+        echo "=> total = $total Mo"
+    }
+    trap - INT
+}
+function getField {
+	test $# -ne 3 && {
+		echo "=> ERROR on Usage: $FUNCNAME separator1 separator2 fieldNumber" >&2
+		return 1
+	}
+	local sep1="$1"
+	local sep2="$2"
+	declare -i fieldNumber=$3
+	awk -F "${sep1}|$sep2" "{print\$$fieldNumber}"
+}
+function fileTypes {
+	local find="command find"
+	time for dir
+	do
+		$find $dir -xdev -ls | awk '{print substr($3,1,1)}' | sort -u
+	done
+}
+function lsgroup {
+	for group
+	do
+		printf "%s:" $group;awk -F: "/$group:/"'{gsub(","," ");print$NF}' /etc/group
+	done
+}
+function testURLs {
+	for url
+	do
+		\curl -o /dev/null -Lsw "%{http_code}\n" $url | \egrep -q "^(200|301)$" && echo OK || echo DOWN >&2
+	done
+}
+function testURLsFromFILE {
+	for file
+	do
+		while read line
+		do
+			url=$line
+			printf "=> [$file] : The url = <$url> is : "
+#			\curl -sLI -m 5 $url | \egrep -wq "HTTP[^ ]* 200" && echo ALIVE || echo DEAD
+			\curl -ksf -o /dev/null -m 5 $url && echo ALIVE || echo DEAD
+		done < $file
+	done
+}
+function sortInPlace {
+	local sort="command sort"
+	for file
+	do
+		$sort -uo "$file" "$file"
+	done
+}
+function pdfAutoRotate {
+	for file
+	do
+		output="${file/.pdf/-ROTATED.pdf}"
+		time \gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -dAutoRotatePages=/All -sOutputFile="$output" "$file"
+		echo
+		echo "=> $output"
+	done
+}
+function pdfSelect {
+	input=$1
+	pages=$2
+	output=$3
+	test $# != 3 && {
+		echo "=> Usage : $FUNCNAME <inputFile> <pageRanges> <outputFile>" >&2
+		return 1
+	}
+	time \pdfjam $input $pages -o $output
+	open $output
+}
+function pdfCompress {
+	for pdf
+	do
+		echo "=> Compressing $pdf ..."
+		time \pdftk $pdf output ${pdf/.pdf/__SMALLER.pdf} compress
+		echo
+		du -h ${pdf/.pdf/*.pdf}
+	done
+}
+function getURLTitle {
+	for url
+	do
+		\curl -Ls $url | awk -F'"' /og:title/'{print$4}'
+		echo $url
+	done
+}
+function h5ll {
+	local switch="$1"
+	echo $switch | \grep -q "^-" && shift 1 || switch=""
+	for file
+	do
+		\h5ls -r $switch $file
+	done | \egrep "Group|Attribute:|Dataset|Data:"
+}
+function latexBuild {
+	local outPutDIR=tmp
+	mkdir -pv $outPutDIR
+	for file
+	do
+		\texfot pdflatex --shell-escape --output-directory $outPutDIR "$file" && open $outPutDIR/${file/tex/pdf}
+	done
+}
+function condaSearchThroughChannels {
+	pythonChannelsList="conda-forge intel anaconda aaronzs"
+	for pkg
+	do
+		for ch in $pythonChannelsList
+		do
+			echo "=> Searching through conda channel <$ch> ..."
+			conda search -c $ch $pkg 2>/dev/null
+		done
+	done
+}
+function grepParagraph {
+	let $#'<'3 && {
+		echo "=> Usage : $FUNCNAME startRegExpPattern endRegExpPattern fileList" >&2
+		return 1
+	}
+	local startRegExpPattern
+	local endRegExpPattern
+	local fileListPattern="${@:3}"
+
+#	startRegExp=$1 endRegExp=$2 \sed -E -n "/$startRegExpPattern/,/$endRegExpPattern/p" $fileListPattern
+#	startRegExp=$1 endRegExp=$2 awk "/$startRegExpPattern/{p=1}p;/$endRegExpPattern/{p=0}" $fileListPattern
+	startRegExp=$1 endRegExp=$2 perl -ne 'print "$ARGV:$_" if /$ENV{startRegExp}/ ... (/$ENV{endRegExp}/ || eof)' $fileListPattern
+}
+function grepFunction {
+	let $#'<'2 && {
+		echo "=> Usage : $FUNCNAME startRegExpPattern fileList" >&2
+		return 1
+	}
+	shift
+	grepParagraph "function $1|${1}.*[(]" "^}" "$@"
+}
+function getPythonFunctions {
+	test $# != 0 && grepParagraph "def " '^$' $@
+}
+function getPythonFunctionName {
+	local funcName=$1
+	shift
+	test $# != 0 && grepParagraph "def $funcName " '^$' $@
+}
+function getShellFunctions {
+	test $# != 0 && grepParagraph '(^|\s)\w+\(\)|\bfunction\b' '^}' $@
+}
 function typeFunction {
 	for function
 	do
