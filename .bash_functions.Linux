@@ -6,6 +6,9 @@ test $os = Linux  && export locate="command locate" openCommand="command xdg-ope
 
 test -f /etc/debian_version && Source $initDir/.bash_functions.Debian # Si c'est un Linux de type Debian
 
+function umount {
+	command umount -vv "$@" || sudo $(which umount) -v "$@"
+}
 function locate {
 	groups 2>/dev/null | \egrep -wq "sudo|admin" && locateOptions="-e" || locateOptions="--database $HOME/.local/lib/mlocate/mlocate.db -e"
 	echo "$@" | \grep -q "\-[a-z]*r" && $locate $locateOptions "$@" || $locate $locateOptions -i --regex "${@}"
