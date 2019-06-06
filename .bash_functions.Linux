@@ -12,7 +12,7 @@ function umount {
 	test $dir_or_device && {
 		device=$(df $dir_or_device | LANG=C awk '!/Filesystem/{print$1}')
 		echo "=> Unmounting $device ..." >&2
-		command umount -vv "$@" || command umount.udisks "$@" || sudo $(which umount) -v "$@"
+		command umount -vv "$@" || command umount.udisks2 "$@"  || command umount.udisks "$@" || sudo $(which umount) -v "$@"
 		echo "=> df -h | grep $device :"
 		df -h | grep $device
 	}
