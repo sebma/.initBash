@@ -39,7 +39,7 @@ alias burnclone='\cdrecord -v -clone -raw driveropts=burnfree fs=14M speed=16 gr
 alias burniso='\cdrecord -v -dao driveropts=burnfree fs=14M speed=24 gracetime=10 -eject -overburn'
 alias cclive="\cclive -c"
 alias cdda_info="\icedax -gHJq -vtitles"
-alias cdrdao='\df | grep -q $CDR_DEVICE && umount -vv $CDR_DEVICE ; \cdrdao'
+alias cdrdao='\df | grep -q $CDR_DEVICE && umount $CDR_DEVICE ; \cdrdao'
 alias cget="\curl -O"
 alias checkMyPrinterConnection="\ping -c2 192.168.1.1"
 alias checkcer="\openssl x509 -noout -inform PEM -in"
@@ -236,7 +236,6 @@ alias topdlines='\du -xhd 1 2>/dev/null | sort -hr | head -$(($LINES-2))'
 alias traceroute="\traceroute -I"
 alias ulogerrors="egrep -iB4 -A1 'error|erreur|Err: [^0]'"
 alias umask="\umask -S"
-alias umount="\umount -vv"
 alias uncompress="\uncompress -v"
 alias uncpio="\cpio -idcmv <"
 alias unix2dos='\perl -pi -e "s/\n/\r\n/g"'
