@@ -23,6 +23,8 @@ alias ..="cd .."
 
 alias Cat='\highlight -O ansi --force'
 alias Cut='\cut -c 1-$COLUMNS'
+alias 2lower=tolower
+alias 2upper=toupper
 alias acp='\advcp -gpuv'
 alias amv='\advmv -gvi'
 alias audioInfo="which mplayer >/dev/null 2>&1 && \mplayer -identify -vo null -ao null -frames 0"
@@ -224,6 +226,8 @@ alias terminfo='echo "=> C est un terminal $(tput cols 2>/dev/null)x$(tput lines
 alias testLiveIso="\kvm -m 1G -cdrom"
 alias timestamp='\date +"%Y%m%d_%HH%M"'
 alias today="$(which find) . -type f -ctime -1"
+alias tolower="awk '{print tolower(\$0)}'"
+alias toupper="awk '{print toupper(\$0)}'"
 alias topd10="\du -xhd 1 2>/dev/null | sort -hr | head -$((10+1))"
 alias topd5="\du -xhd 1 2>/dev/null | sort -hr | head -$((5+1))"
 alias topd="\du -xhd 1 2>/dev/null | sort -hr | head -n"
