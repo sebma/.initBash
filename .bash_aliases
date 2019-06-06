@@ -118,6 +118,7 @@ alias html2xml="\xmllint --html --format --recover --xmlout"
 alias jpeg2pdf="\convert +density"
 alias jpeg2pdfA4="jpeg2pdf -page A4"
 alias jpeg2pdfA4R="jpeg2pdf -page 842x595"
+alias jpegRotate=jpgRotate
 alias integer="typeset -i"
 alias inxi="\inxi -c21"
 alias inxiSummary="\inxi -c21 -Admi -v4"
