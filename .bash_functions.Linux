@@ -11,10 +11,11 @@ function umount {
 	local device
 	test $dir_or_device && {
 		device=$(df $dir_or_device | LANG=C awk '!/Filesystem/{print$1}')
+		mountDIR=$(df $dir_or_device | LANG=C awk '!/Filesystem/{print$(NF)}')
 		echo "=> Unmounting $device ..." >&2
 		command umount -v "$@" || command umount.udisks2 "$@"  || command umount.udisks "$@" || sudo $(which umount) -v "$@"
-		echo "=> df -h | grep $device :"
-		df -h | grep $device
+		echo "=> ls $(dirname $mountDIR) :"
+		ls $(dirname $mountDIR)
 	}
 }
 function locate {
