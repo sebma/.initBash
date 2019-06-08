@@ -14,8 +14,8 @@ function umount {
 		mountDIR=$(df "$dir_or_device" | LANG=C awk '!/Filesystem/{$1=$2=$3=$4=$5=$6="";gsub("^ +","");print}')
 		echo "=> Unmounting $device ..." >&2
 		command umount -v "$@" || command umount.udisks2 "$@"  || command umount.udisks "$@" || sudo $(which umount) -v "$@"
-		echo "=> ls $(dirname $mountDIR) :"
-		ls $(dirname $mountDIR)
+		echo "=> ls $(dirname "$mountDIR") :"
+		ls $(dirname "$mountDIR")
 	}
 }
 function locate {
