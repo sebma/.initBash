@@ -248,8 +248,18 @@ function getRestrictedFilenamesFORMAT {
 			echo "=> fileName to be downloaded = <$fileName>"
 			echo
 	
-			[ $extension = mp4 ] || [ $extension = m4a ] || [ $extension = mp3 ] && time youtube-dl -o "$fileName" -f "${formats[$j]}" "$url" --embed-thumbnail || time youtube-dl -o $fileName -f "${formats[$j]}" "$url" 2>&1 | { \egrep --color -A1 'ERROR:.*No space left on device' >&2 && echo && return 1; }
-			downloadOK=$?
+			if [ $extension = mp4 ] || [ $extension = m4a ] || [ $extension = mp3 ]; then
+				time youtube-dl -o "$fileName" -f "${formats[$j]}" "$url" --embed-thumbnail
+				downloadOK=$?
+				test $downloadOK != 0 && time youtube-dl -o $fileName -f "${formats[$j]}" "$url" 2>&1 | {
+					egrep -A1 'ERROR:.*No space left on device' >&2
+					echo >&2
+					downloadOK=1
+					return 1;
+				}
+				downloadOK=$?
+			fi
+
 			if [ $downloadOK = 0 ] 
 			then
 				[ $extension = mp4 ] || [ $extension = m4a ] || [ $extension = mp3 ] && mp4tags -m "$url" "$fileName"
@@ -265,6 +275,7 @@ function getRestrictedFilenamesFORMAT {
 	sync
 	set +x
 	trap - INT
+	return $downloadOK
 }
 function getRestrictedFilenamesBEST {
 	getRestrictedFilenamesFORMAT "(best[ext=mp4]/best[ext=webm]/best[ext=flv])" $@ # because of the "eval" statement in the "youtube_dl" bash variable
