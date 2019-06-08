@@ -7,11 +7,11 @@ test $os = Linux  && export locate="command locate" openCommand="command xdg-ope
 test -f /etc/debian_version && Source $initDir/.bash_functions.Debian # Si c'est un Linux de type Debian
 
 function umount {
-	local dir_or_device=$1
+	local dir_or_device="$1"
 	local device
-	test $dir_or_device && {
-		device=$(df $dir_or_device | LANG=C awk '!/Filesystem/{print$1}')
-		mountDIR=$(df $dir_or_device | LANG=C awk '!/Filesystem/{print$(NF)}')
+	test "$dir_or_device" && {
+		device=$(df "$dir_or_device" | LANG=C awk '!/Filesystem/{print$1}')
+		mountDIR=$(df "$dir_or_device" | LANG=C awk '!/Filesystem/{$1=$2=$3=$4=$5=$6="";gsub("^ +","");print}')
 		echo "=> Unmounting $device ..." >&2
 		command umount -v "$@" || command umount.udisks2 "$@"  || command umount.udisks "$@" || sudo $(which umount) -v "$@"
 		echo "=> ls $(dirname $mountDIR) :"
