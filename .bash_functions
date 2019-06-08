@@ -19,7 +19,7 @@ function jpgRotate {
 	shift
 	for pic
 	do
-		extension=${pic/*./}
+		extension="${pic/*./}"
 		newFile="${pic/.$extension/_ROTATED.$extension}"
 		echo "=> Losslessly rotating $pic by $angle degrees into $newFile ..." >&2
 		jpegtran -perfect -rotate $angle "$pic" > "$newFile"
