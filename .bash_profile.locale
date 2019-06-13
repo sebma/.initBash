@@ -10,6 +10,7 @@ test -z "$LANG" && export LANG=$(locale -a 2>/dev/null | awk 'BEGIN{IGNORECASE=1
 export LC_{ADDRESS,IDENTIFICATION,MEASUREMENT,MONETARY,NAME,NUMERIC,PAPER,TELEPHONE,TIME}=$LANG
 export LC_{CTYPE,COLLATE,MESSAGES}=C.UTF-8
 export LC_TIME=$(locale -a 2>/dev/null | awk 'BEGIN{IGNORECASE=1}/^fr_FR.utf-?8/{print$1;exit}') # Heures et dates francaises
+export LANGUAGE=en:fr
 
 test "$debug" '>' 1 && echo "=> LANG = $LANG"
 test "$debug" '>' 2 && localectl status
