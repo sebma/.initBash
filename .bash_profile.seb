@@ -97,7 +97,7 @@ then
 	export GDM_LANG=$LANG
 
 	#my lpr configuration
-#	which lpr >/dev/null 2>&1 && test -f $initDir/.bash_profile.lpr && Source $initDir/.bash_profile.lpr
+	which lpr >/dev/null 2>&1 && test -f $initDir/.bash_profile.lpr && Source $initDir/.bash_profile.lpr
 fi
 
 case $os in
