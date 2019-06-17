@@ -1088,6 +1088,11 @@ function nbPages {
 	done | awk '/Pages:/{nbPages+=$NF;print}END{print "=> Total: " nbPages}'
 }
 function lprPageRange {
+	test $# -lt 2 && {
+		echo "=> Usage: $FUNCNAME pageRange pdf/psFile" >&2
+		return 1
+	}
+
 	pageRange=$1
 	shift
 	test $pageRange && echo $pageRange | grep -ivq "[A-Z]" && command lpr -o page-ranges=$pageRange $@ && lpq
@@ -1311,6 +1316,10 @@ function ldapUserFind {
 	fi
 }
 function pdfConcat {
+	test $# -lt 2 && {
+		echo "=> Usage : $FUNCNAME <file1.pdf> <file2.pdf> ... <outputFile.pdf>" >&2
+		return 1
+	}
 	test "$1" && {
 		local lastArg="$(eval echo \${$#})"
 		local allArgsButLast="${@:1:$#-1}"
