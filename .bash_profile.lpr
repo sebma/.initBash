@@ -3,7 +3,7 @@ declare -A | grep -wq colors || source $initDir/.colors
 test "$debug" '>' 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 [ "$debug" '>' 1 ] && time="eval time" || time=eval
-$time defaultPrinter="$(LANG=C lpstat -d 2>/dev/null | awk '/^system default destination:/{print$NF}')"
+$time defaultPrinter="$(LANG=C lpstat -p -d 2>/dev/null | awk '/^system default destination:/{print$NF;exit}')" #i.e. https://www.cups.org/doc/options.html#PRINTER
 if test $defaultPrinter
 then
 	lpoptions -o media=A4 -o fit-to-page -o Duplex=DuplexNoTumble -o sides=two-sided-long-edge -o page-border=single-thick -o prettyprint -o StapleLocation=UpperLeft
@@ -18,6 +18,11 @@ then
 else
 	$time defaultPrinter=$(LANG=C lpstat -a 2>/dev/null | grep -vi pdf | awk '/accepting/{print$1;exit}') || defaultPrinter=""
 	test $defaultPrinter && lpadmin -d $defaultPrinter
+fi
+
+if test $defaultPrinter && lpstat -d | grep -q 'no system default destination'
+then
+	lpoptions -d $defaultPrinter
 fi
 
 export defaultPrinter colorPrinter
