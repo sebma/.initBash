@@ -7,6 +7,7 @@ which -a git | \grep -q /usr || export GIT_EXEC_PATH=$HOME/libexec/git-core
 cd $initDir && git config alias.ci '!f() { for file; do git commit -uno $file -m "Updated $file"; done; }; f';cd - >/dev/null
 git config --global user.email sebma@users.noreply.github.com
 git config --global user.name sebma
+#git config --global push.default current # i.e https://stackoverflow.com/a/22933955/5649639
 test "$http_proxy" && git config --global http.proxy $http_proxy
 git config --global alias.co checkout
 git config --global alias.st "status -bs"
