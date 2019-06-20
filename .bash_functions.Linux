@@ -10,13 +10,23 @@ function umount {
 	local dir_or_device="$1"
 	local device
 	test "$dir_or_device" && {
-		device=$(df "$dir_or_device" | LANG=C awk '!/Filesystem/{print$1}')
-		mountDIR=$(df "$dir_or_device" | LANG=C awk '!/Filesystem/{$1=$2=$3=$4=$5=$6="";gsub("^ +","");print}')
+		device=$(LC_MESSAGES=C \df "$dir_or_device" | awk '!/Filesystem/{print$1}')
+		mountDIR=$(LC_MESSAGES=C \df "$dir_or_device" | awk '!/Filesystem/{$1=$2=$3=$4=$5="";gsub("^ +","");print}')
 		echo "=> Unmounting $device ..." >&2
 		command umount -v "$@" || command umount.udisks2 "$@"  || command umount.udisks "$@" || sudo $(which umount) -v "$@"
 		echo "=> ls $(dirname "$mountDIR") :"
 		ls $(dirname "$mountDIR")
 	}
+}
+function mountISO {
+	loopBackDevice=$(udisksctl loop-setup -r -f "$1" | awk -F "[ .]" '{print$(NF-1)}')
+	udisksctl mount -b $loopBackDevice
+}
+function umountISO {
+	loopBackDevice=$(sudo losetup -a | grep $1 | cut -d: -f1)
+	test -z $loopBackDevice && loopBackDevice=$1
+	udisksctl unmount -b $loopBackDevice
+	udisksctl loop-delete -b $loopBackDevice
 }
 function locate {
 	groups 2>/dev/null | \egrep -wq "sudo|admin" && locateOptions="-e" || locateOptions="--database $HOME/.local/lib/mlocate/mlocate.db -e"
