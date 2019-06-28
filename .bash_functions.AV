@@ -900,11 +900,16 @@ function m3uConcat {
 function videoSplit {
 	if [ $# != 2 ] && [ $# != 3 ]
 	then
-		echo "=> Usage: $FUNCNAME <filename> hh:mm:ss[.xxx] [ hh:mm:ss[.xxx] ]"
+		echo "=> Usage: $FUNCNAME <filename> hh:mm:ss[.xxx] [ hh:mm:ss[.xxx] ]" >&2
 		return 1
 	fi
 
 	fileName="$1"
+	test -r "$fileName" || {
+		echo "=> ERROR: <$fileName> cannot be read by $USER or does not exist." >&2
+		return 2
+	}
+
 	extension=${fileName/*./}
 	fileBaseName=${fileName%.???}
 	begin=$2
