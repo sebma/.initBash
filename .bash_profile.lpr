@@ -7,12 +7,14 @@ $time firstPrinter="$(LANG=C lpstat -p -d 2>/dev/null | awk '/^system default de
 if test $firstPrinter
 then
 	lpstat -d | grep -q 'no system default destination' && defaultPrinter=$firstPrinter && lpoptions -d $firstPrinter >/dev/null # Setup the "$firstPrinter" as the default printer
-	lpoptions -o media=A4 -o fit-to-page -o Duplex=DuplexNoTumble -o sides=two-sided-long-edge -o page-border=none -o prettyprint -o StapleLocation=UpperLeft
+#	lpoptions -o media=A4 -o fit-to-page -o Duplex=DuplexNoTumble -o sides=two-sided-long-edge -o page-border=none -o prettyprint -o StapleLocation=UpperLeft
+	lpoptions -o media=A4 -o fit-to-page -o Duplex=DuplexNoTumble -o sides=two-sided-long-edge -o page-border=none -o prettyprint
 
 	$time colorPrinter="$(LANG=C lpstat -a | awk 'BEGIN{IGNORECASE=1}/(color|couleur)/{print$1;exit}')"
 	if test $colorPrinter 
 	then
-		lpoptions -p $colorPrinter -o media=A4 -o fit-to-page -o Duplex=DuplexNoTumble -o sides=two-sided-long-edge -o page-border=none -o prettyprint -o StapleLocation=UpperLeft
+#		lpoptions -p $colorPrinter -o media=A4 -o fit-to-page -o Duplex=DuplexNoTumble -o sides=two-sided-long-edge -o page-border=none -o prettyprint -o StapleLocation=UpperLeft
+		lpoptions -p $colorPrinter -o media=A4 -o fit-to-page -o Duplex=DuplexNoTumble -o sides=two-sided-long-edge -o page-border=none -o prettyprint
 		alias lprColor='\lpr -P $colorPrinter'
 		alias a2psColor='\a2ps -P $colorPrinter'
 	fi
