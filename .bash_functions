@@ -1278,6 +1278,10 @@ function gitCloneHome {
 	test $# -ge 1 && gitCloneNonEmptyDir $@ $HOME
 }
 function tcpConnetTest {
+	test $# -lt 2 && {
+		echo "=> Usage : $FUNCNAME server/ip portNumber" >&2
+		return 1
+	}
 	if which netcat > /dev/null 2>&1
 	then
 		if test $http_proxy
