@@ -231,7 +231,7 @@ function getRestrictedFilenamesFORMAT {
 		for fileName in $fileNames
 		do
 			echo
-			echo "=> Downloading $url using the ${formats[$j]} format ..."
+			echo "=> Downloading $url using the <${formats[$j]}> format ..."
 			echo
 
 			extension="${fileName/*./}"
