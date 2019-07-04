@@ -21,11 +21,28 @@ audioDecode=( [libspeex]=$(which speexdec 2>/dev/null) [speex]=$(which speexdec 
 alias mp32wavstdout="\mpg123 --wav - "
 alias ogg2wavstdout="\oggdec --output=- "
 
+function videoRemoveMetaData {
+	local extension videoBaseName outputVideo
+	for video
+	do
+		extension="${video/*./}"
+		videoBaseName="${video%.???}"
+		outputVideo="${videoBaseName}-NoMetaData.$extension"
+		echo "=> Processing = $video ..." >&2
+		$ffmpeg -i "$video" -c:v:0 copy -c:a copy -map_metadata -1 "$outputVideo"
+		test $? = 0 && {
+			touch -r "$video" "$outputVideo"
+			sync
+			echo >&2
+			$ffprobe "$outputVideo"
+		}
+	done
+}
 function urlOfVideo {
 	local extension
 	for video
 	do
-		extension=${video/*./}
+		extension="${video/*./}"
 		case $extension in
 		mp4|m4a|m4b|m4v) tag=description;;
 		webm|mkv) tag=purl;;
