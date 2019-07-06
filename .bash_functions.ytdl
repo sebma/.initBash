@@ -377,6 +377,24 @@ function getPlaylistsRestrictedFilenamesHD {
 	done
 	trap - INT
 }
+function getPlaylistsRestrictedFilenamesFSD {
+	trap 'rc=130;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
+	for playList
+	do
+		echo "=> Treating playList : $playList ..." >&2
+		if echo $playList | \egrep -q "youtube|dailymotion|vevo|tonvid"
+		then
+			listOfUrls=$(hxwls 2>/dev/null "$playList" | awk -F '&' '/\<(watch|video)\>/{print$1}' | sort -u | tr "\n" " ")
+			test $? != 0 && return
+		else
+			urlPrefix=$(echo "$playList" | sed -r "s/https?:..//" | cut -d/ -f1)
+			listOfUrls=$(youtube-dl --ignore-errors --get-id "$playList" | sed "s|^|$urlPrefix|g" | tr "\n" " ")
+		fi
+
+		getRestrictedFilenamesFSD $listOfUrls
+	done
+	trap - INT
+}
 function getPlaylistsRestrictedFilenamesSD {
 	trap 'rc=130;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
 	for playList
