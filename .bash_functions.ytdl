@@ -260,6 +260,14 @@ function getRestrictedFilenamesFORMAT {
 					}
 					downloadOK=$?
 				}
+			else
+				time youtube-dl -o $fileName -f "${formats[$j]}" "$url" 2>&1 | {
+					egrep -A1 'ERROR:.*No space left on device' >&2
+					echo >&2
+					downloadOK=1
+					return 1
+				}
+				downloadOK=$?
 			fi
 
 			if [ $downloadOK = 0 ] 
