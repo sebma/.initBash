@@ -89,6 +89,7 @@ then
 	alias dosfsck="\dosfsck -r"
 	alias lvextend="\lvextend -r"
 	alias lvreduce="\lvreduce -r"
+	alias lvresize="\lvresize -r"
 	alias nmRestart="sudo service network-manager restart"
 	alias pgrep="\pgrep -lf"
 	alias pipInstall=pip2Install
