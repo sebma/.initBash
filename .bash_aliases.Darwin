@@ -31,6 +31,7 @@ alias catFiles="\tail -n +1"
 alias cpuInfo="\sysctl machdep.cpu | egrep 'brand_string|count|size|VMX|SVM'"
 alias df="\df -Ph"
 alias dnsInfo="\scutil --dns"
+alias findDeadLinks='command find . -xtype l -exec ls -G -l {} +'
 
 command -v gdf >/dev/null && alias df="\gdf -PTh"
 which gcp >/dev/null 2>&1 && alias cp='\gcp -puv' || alias cp='\cp -pv'
