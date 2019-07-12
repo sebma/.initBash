@@ -8,7 +8,7 @@ alias gitConf-alias.ci="git config alias.ci '!f() { cd \${GIT_PREFIX:-.}; for fi
 alias gitConf-alias.cipart="git config alias.cipart '!f() { cd \${GIT_PREFIX:-.}; for file; do git commit -uno -p \$file -m \"Partially updated \$file\"; done; }; f';git config alias.cipart"
 alias gitConf="\git config -l"
 alias gitEditConfig='\git config --local -e'
-alias gitHTTP='\git config --get-all remote.origin.url | \grep http || \git config --get-all remote.origin.url | \sed -E "s|:|/|;s|git@|https://|"'
+alias gitHTTP='\git config --get-all remote.origin.url | \grep http || \git config --get-all remote.origin.url | \sed "s|:|/|;s|git@|https://|"'
 alias gitLocalUndelete="\git ls-files -d | grep . && \git ls-files -d | \xargs git checkout-index"
 alias gitRemoteRepoLastRelease='\git ls-remote --tags --sort="version:refname" | awk -F/ '\''END{print gensub(/\^\{\}/,"","",$NF)}'\'''
 alias gitLastRelease='\git describe --tags --abbrev=0'
