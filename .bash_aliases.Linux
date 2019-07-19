@@ -71,16 +71,7 @@ alias topf5='$(which find) . $prunePathsFindExpression -xdev -type f -size +10M 
 #alias topf='$(which find) . $prunePathsFindExpression -xdev -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | column -t | head -n | awk '\''{total+=$5;print}END{print"=> total = "total" MiB"}'\'''
 alias wifimac="\ifconfig $wifiInterface | awk '/HWaddr/{print\$1\"\\t\"\$NF}'"
 alias wlanmac=wifimac
-alias ytdlUpdate="pip3 install -U youtube-dl || pip install -U youtube-dl"
-
-function topf {
-	$find . $prunePathsFindExpression -xdev -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | column -t | head -n "$1" | awk '{total+=$5;print}END{print"=> total = "total" MiB"}'
-}
-#alias topflines='$(which find) . $prunePathsFindExpression -xdev -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | column -t | head -n $(($LINES-4)) | awk '\''{total+=$5;print}END{print"=> total = "total" MiB"}'\'''
-function topflines {
-	$find "$@" $prunePathsFindExpression -xdev -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | column -t | head -n $(($LINES-4)) | awk '{total+=$5;print}END{if(total) print"=> total = "total" MiB"}'
-}
-
+alias ytdlInstall="pip3 install youtube-dl || pip install youtube-dl"
 
 if groups 2>/dev/null | \egrep -wq "sudo|admin"
 then
@@ -97,7 +88,7 @@ then
 	alias pip2Install="curl -s https://bootstrap.pypa.io/get-pip.py | sudo -H python2"
 	alias pip3Install="curl -s https://bootstrap.pypa.io/get-pip.py | sudo -H python3"
 	alias pipUpdate=pip2Update
-	alias pip2Update="\sudo -H $(which pip2) install -U pip || \sudo -H $(which pip) install -U pip"
+	alias pip2Update="\sudo -H $(which pip2) install -U pip || \sudo -H $(which pip) install U pip"
 	alias pip3Update="\sudo -H $(which pip3) install -U pip || \sudo -H $(which pip) install -U pip"
 	alias restart_nm="sudo service network-manager restart"
 	alias rtmpdumprd='\sudo iptables -t nat -A OUTPUT -p tcp --dport 1935 -m owner \! --uid-owner root -j REDIRECT'
@@ -108,7 +99,7 @@ then
 	alias updatedb="time sudo $(which updatedb 2>/dev/null)"
 	alias wifiList="which nmcli >/dev/null && nmcli dev wifi list || sudo iw dev $wifiInterface scan || sudo iwlist $wifiInterface scan"
 	alias youtube-dlUpdate='\sudo -H $(which pip3) install -U youtube-dl || \sudo -H $(which pip) install -U youtube-dl'
-	alias ytdlUpdate='\sudo -H $(which pip3) install -U youtube-dl || \sudo -H $(which pip) install -U youtube-dl'
+	alias ytdlInstall='\sudo -H $(which pip3) install youtube-dl || \sudo -H $(which pip) install youtube-dl'
 else
 	alias updatedb='time updatedb -l 0 -o ~/.local/lib/mlocate/mlocate.db --prunefs "rpc_pipefs afs binfmt_misc proc smbfs iso9660 ncpfs coda devpts ftpfs devfs mfs shfs sysfs cifs lustre tmpfs usbfs udf fuse.glusterfs fuse.sshfs curlftpfs"'
 fi
