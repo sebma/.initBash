@@ -87,7 +87,7 @@ function castnowPlaylist {
 	local index=${1:-1}
 	test $# = 2 && shift
 	local playlist=$1
-	castnowURLs $(tail -n +$index $playlist)
+	castnowURLs $(grep -v ^# $playlist | tail -n +$index)
 }
 function castnowURLs {
 	test $# = 0 && {
