@@ -1234,14 +1234,14 @@ function m4a2aac {
 		sync
 	done
 }
-function mkv2oga {
+function mkv2ogg {
 #	file="$1"
 #	shift
-#	time $ffmpeg -i "$file" -vn -acodec copy $@ "${file/.mkv/.oga}"
+#	time $ffmpeg -i "$file" -vn -acodec copy $@ "${file/.mkv/.ogg}"
 	for file
 	do
-		time $ffmpeg -i "$file" -vn -acodec copy "${file/.mkv/.oga}"
-		touch -r "$file" "${file/.mkv/.oga}"
+		time $ffmpeg -i "$file" -vn -acodec copy "${file/.mkv/.ogg}"
+		touch -r "$file" "${file/.mkv/.ogg}"
 		sync
 	done
 }
