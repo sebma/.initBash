@@ -265,7 +265,8 @@ alias wanip='time \curl -A "" ipinfo.io/ip || time wget -qU "" -O- ipinfo.io/ip'
 alias wanipOLD='time \dig +short myip.opendns.com @resolver1.opendns.com'
 alias wavemon="xterm -e wavemon &"
 alias web2pdf='wkhtmltopdf --no-background --outline --header-line --footer-line --header-left [webpage] --footer-left "[isodate] [time]" --footer-right [page]/[toPage]'
-alias wget="$(which wget2 2>/dev/null || which wget)"
+alias wget='$(which wget2 2>/dev/null || which wget)'
+alias wget1='$(which wget 2>/dev/null)'
 alias wgetnoconfig="\wget --config=/dev/null"
 alias wget2noconfig="\wget2 --no-config"
 alias xargs="\xargs -ri"
