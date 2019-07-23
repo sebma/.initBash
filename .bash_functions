@@ -6,12 +6,20 @@ Source $initDir/.bash_functions.build
 Source $initDir/.bash_functions.AV
 Source $initDir/.bash_functions.ytdl
 
+function listVideosFromRSSPodCastPlayList {
+	test $# = 1 && {
+		local rssURL="$1"
+		local wget="$(which wget2 2>/dev/null || which wget)"
+#		echo $(youtube-dl -g "$rssURL")
+		echo $(curl -s "$rssURL" | egrep -o "https?:[^ <>]*(mp4|webm)" | grep -v .google.com/ | uniq)
+	}
+}
 function getVideosFromRSSPodCastPlayList {
 	test $# = 1 && {
-		local url="$1"
+		local rssURL="$1"
 		local wget="$(which wget2 2>/dev/null || which wget)"
-#		$wget $(youtube-dl -g "$url")
-		$wget $(curl -s "$url" | egrep -o "https?:[^ <>]*(mp4|webm)" | grep -v .google.com/ | uniq)
+#		$wget $(youtube-dl -g "$rssURL")
+		$wget $(curl -s "$rssURL" | egrep -o "https?:[^ <>]*(mp4|webm)" | grep -v .google.com/ | uniq)
 	}
 }
 function jpgRotate {
