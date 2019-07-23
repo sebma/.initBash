@@ -45,7 +45,8 @@ alias mpvSpanish="mpv --alang=spa --slang=spa"
 function mpvRSSPodCastPlayList {
 	test $# = 1 && {
 		local url="$1"
-		mpv $(youtube-dl -g "$url")
+#		mpv $(youtube-dl -g "$url")
+		mpv $(curl -s "$url" | egrep -o "https?:[^ <>]*(mp4|webm)" | grep -v .google.com/ | uniq)
 	}
 }
 function cleanMPVStatusLine {
