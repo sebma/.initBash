@@ -61,8 +61,9 @@ function mac@ {
 	fi
 }
 function locate {
+	local locate="time -p \"command glocate\""
 	groups 2>/dev/null | \egrep -wq "sudo|admin" && locateOptions="-e" || locateOptions="--database $HOME/.local/lib/mlocate/mlocate.db -e"
-	echo "$@" | \grep -q "\-[a-z]*r" && time $(which glocate) $locateOptions "$@" || time $(which glocate) $locateOptions -ir "${@}"
+	echo "$@" | \grep -q "\-[a-z]*r" && time $locate $locateOptions "$@" || time $locate $locateOptions -ir "${@}"
 }
 function mount {
 	arg=$1
