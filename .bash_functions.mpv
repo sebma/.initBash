@@ -42,6 +42,12 @@ alias mpvEnglish="mpv --profile=english"
 alias mpvGerman="mpv --alang=deu --slang=deu"
 alias mpvSpanish="mpv --alang=spa --slang=spa"
 
+function mpvRSSPodCastPlayList {
+	test $# = 1 && {
+		local url="$1"
+		mpv $(youtube-dl -g "$url")
+	}
+}
 function cleanMPVStatusLine {
 	perl -pe $mpv_Output_Perl_Script
 }
