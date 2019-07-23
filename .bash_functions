@@ -6,9 +6,14 @@ Source $initDir/.bash_functions.build
 Source $initDir/.bash_functions.AV
 Source $initDir/.bash_functions.ytdl
 
-test $os = Linux  && export locate="command locate" openCommand="command xdg-open"
-test $os = Darwin && export locate="time -p \"command glocate\"" openCommand="command open"
-
+function getVideosFromRSSPodCastPlayList {
+	test $# = 1 && {
+		local url="$1"
+		local wget="$(which wget2 2>/dev/null || which wget)"
+#		$wget $(youtube-dl -g "$url")
+		$wget $(curl -s "$url" | egrep -o "https?:[^ <>]*(mp4|webm)" | grep -v .google.com/ | uniq)
+	}
+}
 function jpgRotate {
 	test $# = 0 && {
 		echo "=> Usage: $FUNCNAME angle file1 file2 file3 ..." >&2
@@ -425,21 +430,6 @@ function typeFunction {
 	do
 		type $function
 	done | \sed 's/;$//' | \sed -zE 's/$\n\{/{/'
-}
-function locateBin {
-	local regExp="$1"
-	shift
-    locate "bin/.*$regExp" "$@"
-}
-function locateFromHere {
-	local regExp="$1"
-	shift
-	locate "$PWD/.*$regExp" "$@"
-}
-function locateFromHome {
-	local regExp="$1"
-	shift
-	locate "$HOME/.*$regExp" "$@"
 }
 function restart_conky {
 	for server
