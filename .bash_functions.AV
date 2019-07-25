@@ -14,7 +14,7 @@ aac2m4aOptions="-bsf:a aac_adtstoasc"
 cdr_device=/dev/dvd
 
 [ $BASH_VERSINFO -ge 4 ] && declare -A audioExtension videoExtension audioDecode
-audioExtension=( [libspeex]=oga [speex]=oga [opus]=opus [vorbis]=ogg [aac]=m4a [mp3]=mp3 [mp2]=mp2 [ac3]=ac3 [wmav2]=wma [pcm_dvd]=wav [pcm_s16le]=wav )
+audioExtension=( [libspeex]=spx [speex]=spx [opus]=opus [vorbis]=ogg [aac]=m4a [mp3]=mp3 [mp2]=mp2 [ac3]=ac3 [wmav2]=wma [pcm_dvd]=wav [pcm_s16le]=wav )
 videoExtension=( [h264]=m4v [mpeg1video]=mpg [mpeg2video]=vob [mpeg4]=avi [flv1]=flv [wmv3]=wmv )
 audioDecode=( [libspeex]=$(which speexdec 2>/dev/null) [speex]=$(which speexdec 2>/dev/null) [opus]=$(which opusdec 2>/dev/null) [vorbis]=$(which oggdec 2>/dev/null) )
 
@@ -162,7 +162,7 @@ function audio2Video4YouTube {
 
 	local audio=$1
 	local picture=$2
-	local audioCodec=$(audioCodecOfFile $audio)
+	local audioCodec=$(audioCodecOfFile "$audio" 2>/dev/null)
 	local video4YouTubeFile
 	case $audioCodec in
 	aac)video4YouTubeFile="${audio%.*}__4YouTube.mp4"
@@ -258,20 +258,32 @@ function urlinfo {
 		$ffprobe $($youtube_dl -gf best -- "$url")
 	done
 }
-function audioChannelsLayoutOfFile {
-	local file="$1"
-	local layout=$($ffprobe "$file" -select_streams a:0 -show_entries stream=channel_layout -of default=noprint_wrappers=1:nokey=1 -v error)
-	echo $layout
+function audioChannelLayoutOfFile {
+	local audioChannelLayout
+	for file
+	do
+		audioChannelLayout=$($ffprobe "$file" -select_streams a:0 -show_entries stream=channel_audioChannelLayout -of default=noprint_wrappers=1:nokey=1 -v error)
+		printf "=> $file : audioChannelLayout = " >&2
+		echo $audioChannelLayout
+	done
 }
 function audioCodecOfFile {
-	local file="$1"
-	local codec=$($ffprobe "$file" -select_streams a:0 -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 -v error)
-	echo $codec
+	local audioCodec
+	for file
+	do
+		audioCodec=$($ffprobe "$file" -select_streams a:0 -show_entries stream=audioCodec_name -of default=noprint_wrappers=1:nokey=1 -v error)
+		printf "=> $file : audioCodec = " >&2
+		echo $audioCodec
+	done
 }
 function videoCodecOfFile {
-	local file="$1"
-	local codec=$($ffprobe "$file" -select_streams v:0 -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 -v error)
-	echo $codec
+	local videoCodec
+	for file
+	do
+		videoCodec=$($ffprobe "$file" -select_streams v:0 -show_entries stream=videoCodec_name -of default=noprint_wrappers=1:nokey=1 -v error)
+		printf "=> $file : videoCodec = " >&2
+		echo $videoCodec
+	done
 }
 function any2wavSTDOUT {
 for inputFile
@@ -572,7 +584,7 @@ function spx216kHzopus {
 		echo "==> outputFile = $outputFile"
 		if [ ! -s "$outputFile" ]
 		then
-			if [ $(audioChannelsLayoutOfFile "$inputFile") = stereo ]
+			if [ $(audioChannelLayoutOfFile "$inputFile" 2>/dev/null) = stereo ]
 			then
 				time speexdec -V "$inputFile" - | sox -t raw -V -b 16 -e signed -r 44.1k -c 2 - -t wav - channels 1 rate 16k norm | opusenc - "$outputFile"
 			else
@@ -990,12 +1002,12 @@ function vlcRecord {
 #function aacDir2mp3 { inp=aac; shopt -s globstar && time for f in **/*.$inp; do time avconv -i "$f" "${f/.$inp/.mp3}" && rm -v "$f"; done; }
 function aacDir2mp3 { shopt -s globstar && for f in **/*.aac; do /bin/mv -vi "$f" "${f/.aac/.m4a}"; done; time pacpl -v --eopts "-v" -r -k -t mp3 .; }
 function audioGet {
-	ls "$@" >/dev/null || return
-	declare -A audioExtension=( [libspeex]=oga [speex]=oga [opus]=opus [vorbis]=ogg [aac]=m4a [mp3]=mp3 [mp2]=mp2 [ac3]=ac3 [wmav2]=wma [pcm_dvd]=wav [pcm_s16le]=wav )
+#	ls "$@" >/dev/null || return
+#	declare -A audioExtension=( [libspeex]=spx [speex]=spx [opus]=opus [vorbis]=ogg [aac]=m4a [mp3]=mp3 [mp2]=mp2 [ac3]=ac3 [wmav2]=wma [pcm_dvd]=wav [pcm_s16le]=wav )
 	for file
 	do
 		extension=${file/*./}
-		audioCodec=$(audioCodecOfFile "$file")
+		audioCodec=$(audioCodecOfFile "$file" 2>/dev/null)
 		outputExtension=${audioExtension[$audioCodec]}
 		outputFileName=${file/.$extension/_AUDIO.$outputExtension}
 		outputFileName=$(echo $outputFileName | cut -d/ -f3-) # Remove the two leading directories from the path
