@@ -4,15 +4,27 @@ test "$debug" '>' 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 
 test -f /etc/debian_version && Source $initDir/.bash_functions.Debian # Si c'est un Linux de type Debian
 
-function ytdlUpdate {
+function ytdlUpdateFromGit {
 	typeset -r isAdmin=$(groups 2>/dev/null | \egrep -wq "sudo|adm|admin|root" && echo true || echo false)
+	local ytdlPackageURL=git+https://github.com/rg3/youtube-dl
 	local sudo=""
 	if $isAdmin
 	then
 		sudo="command sudo -H"
 	fi
 	local ytdlPythonVersion=$(youtube-dl -v 2>&1 | awk -F "[ .]" '/Python version/{printf$4"."$5}')
-	$sudo $(which pip$ytdlPythonVersion) install -U youtube-dl
+	$sudo $(which pip$ytdlPythonVersion) install -U $ytdlPackageURL
+}
+function ytdlUpdate {
+	typeset -r isAdmin=$(groups 2>/dev/null | \egrep -wq "sudo|adm|admin|root" && echo true || echo false)
+	local ytdlPackageURL=youtube-dl
+	local sudo=""
+	if $isAdmin
+	then
+		sudo="command sudo -H"
+	fi
+	local ytdlPythonVersion=$(youtube-dl -v 2>&1 | awk -F "[ .]" '/Python version/{printf$4"."$5}')
+	$sudo $(which pip$ytdlPythonVersion) install -U $ytdlPackageURL
 }
 function topf {
 	$find . $prunePathsFindExpression -xdev -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | column -t | head -n "$1" | awk '{total+=$5;print}END{print"=> total = "total" MiB"}'
