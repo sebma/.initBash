@@ -144,6 +144,7 @@ alias lpr2ppsheet="\lpr -o number-up=2"
 alias ls="ls -F"
 alias lsdvd="\lsdvd -avcs"
 alias lshw="\lshw -numeric -sanitize"
+alias lshwBUSINFO='lshw -businfo'
 alias lspci="\lspci -nn"
 alias lxterm="\lxterm -sb -fn 9x15"
 alias manen=enman
