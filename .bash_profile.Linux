@@ -1,7 +1,7 @@
 # vim: set syn=sh noet:
 declare -A | grep -wq colors || source $initDir/.colors
-test "$debug" '>' 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
-test "$debug" '>' 3 && set -x
+test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
+test "$debug" -gt 3 && set -x
 
 trap 'echo "=> Ignoring this step and continuing the script <$(basename $BASH_SOURCE)> ..." >&2' INT
 tty -s && echo "=> MIT-MAGIC-COOKIE-1:" && timeout 5 xauth list | grep :$(echo $DISPLAY | awk -F '\\.|:' '{print$2}') && echo
@@ -76,8 +76,8 @@ then
 	ip link show eth0 | awk '/ether/{print$(NF-2)}' >&2
 fi
 
-#function Time { [ "$debug" '>' 1 ] && eval time "$@" || eval "$@"; }
-[ "$debug" '>' 1 ] && time="eval time" || time=eval
+#function Time { [ "$debug" -gt 1 ] && eval time "$@" || eval "$@"; }
+[ "$debug" -gt 1 ] && time="eval time" || time=eval
 
 trap 'echo "=> Ignoring this step and continuing the script <$(basename $BASH_SOURCE)> ..." >&2' INT
 $time setxkbmap -option terminate:ctrl_alt_bksp
@@ -85,8 +85,8 @@ if which gsettings >/dev/null 2>&1 && [ $DISPLAY ]
 then
 	if $(which gsettings) help >/dev/null
 	then
-		[ "$debug" '>' 0 ] && echo "=> Setting 'gsettings' parameters ..."
-		[ "$debug" '>' 2 ] && set -x
+		[ "$debug" -gt 0 ] && echo "=> Setting 'gsettings' parameters ..."
+		[ "$debug" -gt 2 ] && set -x
 		$time gsettings get org.gnome.desktop.input-sources xkb-options 2>&1 | grep -q GLib-GIO-Message && export GIO_EXTRA_MODULES=/usr/lib/x86_64-linux-gnu/gio/modules/
 		$time profile=$(gsettings list-schemas | grep -q org.gnome.Terminal.ProfilesList && gsettings get org.gnome.Terminal.ProfilesList default)
 		$time profile=${profile:1:-1} # remove leading and trailing single quotes if any
@@ -94,8 +94,8 @@ then
 		$time gsettings set org.gnome.desktop.wm.preferences resize-with-right-button true 2>/dev/null
 		$time gsettings set org.gnome.desktop.wm.preferences mouse-button-modifier "\<Alt\>" 2>/dev/null
 		$time dconf write /org/gnome/desktop/input-sources/xkb-options "\[\'terminate:ctrl_alt_bksp\'\]" 2>/dev/null
-		[ "$debug" '<' 4 ] && set +x
-		[ "$debug" '>' 0 ] && echo "=> DONE."
+		[ "$debug" -lt 4 ] && set +x
+		[ "$debug" -gt 0 ] && echo "=> DONE."
 	fi
 fi
 trap - INT
@@ -109,4 +109,4 @@ which matlab >/dev/null 2>&1 && test -d "$HOME/.matlab" && export MATLAB=$(\ls -
 which git >/dev/null && git config --global credential.helper "cache --timeout=86400"
 
 set +x
-test "$debug" '>' 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
+test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
