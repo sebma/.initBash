@@ -1,6 +1,6 @@
 #!sh
 declare -A | grep -wq colors || source $initDir/.colors
-test "$debug" '>' 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
+test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 #alias processUsage="printf ' RSS\t       %%MEM %%CPU  COMMAND\n';\ps -e -o rssize,pmem,pcpu,args | sort -nr | cut -c-156 | head -500 | awk '{printf \"%9.3lf MiB %4.1f%% %4.1f%% %s\n\", \$1/1024, \$2,\$3,\$4}' | head"
 #alias ssh="\ssh -A -Y -C"
@@ -292,4 +292,4 @@ which lsb_release >/dev/null 2>&1 && alias lsb_release="\lsb_release -s"
 which vim >/dev/null && alias vim="LANG=C.UTF-8 \vim" && alias vi=vim
 
 set +x
-test "$debug" '>' 0 && \echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
+test "$debug" -gt 0 && \echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
