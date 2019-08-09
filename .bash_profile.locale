@@ -1,10 +1,10 @@
 # vim: set syn=sh noet:
 declare -A | grep -wq colors || source $initDir/.colors
-test "$debug" '>' 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
+test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-test "$debug" '>' 1 && localectl status
-test "$debug" '>' 2 && locale
-test "$debug" '>' 3 && set -x
+test "$debug" -gt 1 && localectl status
+test "$debug" -gt 2 && locale
+test "$debug" -gt 3 && set -x
 
 test -z "$LANG" && export LANG=$(locale -a 2>/dev/null | awk 'BEGIN{IGNORECASE=1}/^(fr_FR|en_US|en_UK).utf-?8/{print$1;exit}')
 export LC_{CTYPE,COLLATE,MESSAGES}=C.UTF-8
@@ -12,8 +12,8 @@ export LC_{ADDRESS,IDENTIFICATION,MEASUREMENT,MONETARY,NAME,NUMERIC,PAPER,TELEPH
 export LC_TIME=$(locale -a 2>/dev/null | awk 'BEGIN{IGNORECASE=1}/^fr_FR.utf-?8/{print$1;exit}') # Heures et dates francaises
 export LANGUAGE=en:C:fr # i.e https://unix.stackexchange.com/a/181867/135038
 
-test "$debug" '>' 1 && localectl status
-test "$debug" '>' 2 && locale
+test "$debug" -gt 1 && localectl status
+test "$debug" -gt 2 && locale
 
 set +x
-test "$debug" '>' 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
+test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
