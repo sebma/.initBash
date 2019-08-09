@@ -1,7 +1,7 @@
 # vim: set syn=sh noet:
 #set -x
 declare -A | grep -wq colors || source $initDir/.colors
-test "$debug" '>' 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
+test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 unalias which >/dev/null 2>&1
 if test -e ~/.cache; then
@@ -23,4 +23,4 @@ fi 2>/dev/null
 [ $os = Linux ] && [ $(hostname) != ssh ] && [ -n "$SSH_AUTH_SOCK" ] && $(ssh-agent -k)
 
 set +x
-test "$debug" '>' 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
+test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
