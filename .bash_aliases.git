@@ -1,6 +1,6 @@
 # vim: set syn=sh noet:
 declare -A | grep -wq colors || source $initDir/.colors
-test "$debug" '>' 0 && \echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
+test "$debug" -gt 0 && \echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 alias git-ls=gitls
 alias gitCompareLocalRemote="\git fetch && \git diff origin"
@@ -24,4 +24,4 @@ alias openGit_http_URL='open $(gitHTTP)'
 alias updateGIT="\git pull"
 
 set +x
-test "$debug" '>' 0 && \echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
+test "$debug" -gt 0 && \echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
