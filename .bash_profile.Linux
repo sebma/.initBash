@@ -108,5 +108,5 @@ fi
 which matlab >/dev/null 2>&1 && test -d "$HOME/.matlab" && export MATLAB=$(\ls -d "$HOME/.matlab/"* | head -1)
 which git >/dev/null && git config --global credential.helper "cache --timeout=86400"
 
-set +x
+test "$debug" -lt 3 && set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
