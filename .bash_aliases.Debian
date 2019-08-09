@@ -1,6 +1,6 @@
 # vim: set syn=sh noet:
 declare -A | grep -wq colors || source $initDir/.colors
-test "$debug" '>' 0 && \echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
+test "$debug" -gt 0 && \echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 #alias installSecurityUpdates="sudo apt install -V $(apt-get -s dist-upgrade | awk "/^Inst.*\/$codeName-security/"'{print$2}')"
 alias autoremove="sudo $(which apt-get 2>/dev/null) autoremove -V"
@@ -13,4 +13,4 @@ alias upgradable='$(which apt) list --upgradable'
 alias upgrade="sudo $(which apt 2>/dev/null) upgrade -V --download-only && sync && sudo $(which apt 2>/dev/null) upgrade -V --yes;sync"
 
 set +x
-test "$debug" '>' 0 && \echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
+test "$debug" -gt 0 && \echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
