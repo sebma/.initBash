@@ -1,8 +1,8 @@
 # vim: set syn=sh noet:
 declare -A | grep -wq colors || source $initDir/.colors
-test "$debug" '>' 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
+test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-[ "$debug" '>' 1 ] && time="eval time" || time=eval
+[ "$debug" -gt 1 ] && time="eval time" || time=eval
 $time firstPrinter="$(LANG=C lpstat -p -d 2>/dev/null | awk '/^system default destination:/{print$NF;exit}')" #i.e. https://www.cups.org/doc/options.html#PRINTER
 if test $firstPrinter
 then
@@ -29,4 +29,4 @@ export defaultPrinter colorPrinter
 #lpoptions -p $defaultPrinter/Duplex4PagesPerSheet -o media=A4 -o fit-to-page -o Duplex=DuplexNoTumble -o sides=two-sided-long-edge -o page-border=none -o number-up=4 -o page-border=none -o prettyprint
 
 set +x
-test "$debug" '>' 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
+test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
