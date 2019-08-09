@@ -1,6 +1,6 @@
 # vim: set syn=sh noet:
 declare -A | grep -wq colors || source $initDir/.colors
-test "$debug" '>' 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
+test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 Source $initDir/.bash_functions.build
 Source $initDir/.bash_functions.AV
@@ -402,7 +402,7 @@ function condaSearchThroughChannels {
 	done
 }
 function grepParagraph {
-	let $#'<'3 && {
+	let $# -lt 3 && {
 		echo "=> Usage : $FUNCNAME startRegExpPattern endRegExpPattern fileList" >&2
 		return 1
 	}
@@ -415,7 +415,7 @@ function grepParagraph {
 	startRegExp=$1 endRegExp=$2 perl -ne 'print "$ARGV:$_" if /$ENV{startRegExp}/ ... (/$ENV{endRegExp}/ || eof)' $fileListPattern
 }
 function grepFunction {
-	let $#'<'2 && {
+	let $# -lt 2 && {
 		echo "=> Usage : $FUNCNAME startRegExpPattern fileList" >&2
 		return 1
 	}
@@ -797,7 +797,7 @@ function condaSearchThroughChannels {
 	done
 }
 function grepParagraph {
-	let $#'<'3 && {
+	let $# -lt 3 && {
 		echo "=> Usage : $FUNCNAME startRegExpPattern endRegExpPattern fileList" >&2
 		return 1
 	}
@@ -810,7 +810,7 @@ function grepParagraph {
 	startRegExp=$1 endRegExp=$2 perl -ne 'print "$ARGV:$_" if /$ENV{startRegExp}/ ... (/$ENV{endRegExp}/ || eof)' $fileListPattern
 }
 function grepFunction {
-	let $#'<'2 && {
+	let $# -lt 2 && {
 		echo "=> Usage : $FUNCNAME startRegExpPattern fileList" >&2
 		return 1
 	}
@@ -1146,7 +1146,7 @@ function sshStartLocalForward {
 	fi
 }
 function createSshTunnel {
-	test $# '<' 3 && {
+	test $# -lt 3 && {
 		echo "=> Usage : $FUNCNAME <localPort> <remotePort> <remoteServer> <sshServer>"
 		echo "OR"
 		echo "=> Usage : $FUNCNAME <localPort> <remotePort> <sshServer>"
@@ -1160,7 +1160,7 @@ function createSshTunnel {
 	then
 		declare sshServer=$3
 		remoteServer=localhost
-	elif [ $# '>' 3 ]
+	elif [ $# -gt 3 ]
 	then
 		declare remoteServer=$3
 		declare sshServer=$4
@@ -1837,4 +1837,4 @@ function mysqlplus {
 }
 
 set +x
-test "$debug" '>' 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
+test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
