@@ -3,11 +3,11 @@ unalias which >/dev/null 2>&1
 test -z "$initDir" && export initDir=$HOME/.initBash
 
 declare -A | grep -wq colors || source $initDir/.colors
-function Debug { test "$debug" '>' 0 && echo "$bold${colors[blue]}$@$normal"; }
+function Debug { test "$debug" -gt 0 && echo "$bold${colors[blue]}$@$normal"; }
 Debug "=> Running $(basename ${BASH_SOURCE[0]}) ..."
 
-function Source { test "$debug" '>' 0 && time source "$@" && echo || source "$@" ; }
-test "$debug" '>' "2" && set -x
+function Source { test "$debug" -gt 0 && time source "$@" && echo || source "$@" ; }
+test "$debug" -gt "2" && set -x
 
 set -o histexpand # Re-enable the history expansion disabled previously by my "echo" alias
 
