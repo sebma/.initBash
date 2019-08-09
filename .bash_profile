@@ -30,5 +30,5 @@ if [ -d "$HOME/bin" ] ; then
     echo $PATH | grep -wq "$HOME/bin" || PATH="$HOME/bin:$PATH"
 fi
 
-set +x
+test "$debug" -lt 3 && set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
