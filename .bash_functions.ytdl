@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 declare -A | grep -wq colors || source $initDir/.colors
-test "$debug" '>' 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
+test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 #trap 'rc=130;set +x;echo "=> ${BASH_SOURCE[0]}: CTRL+C Interruption trapped.">&2;return $rc' INT
 
 \which youtube-dl >/dev/null || { echo "=> ERROR: <youtube-dl> is not installed,  type \"sudo -H $(which pip3) install -U youtube-dl\" to install it" >&2; return 1; }
@@ -487,4 +487,4 @@ function reget {
 
 trap - INT
 set +x
-test "$debug" '>' 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
+test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
