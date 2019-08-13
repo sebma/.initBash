@@ -1367,7 +1367,6 @@ function distribType {
 	fi
 	echo $distribType
 }
-distribType >/dev/null
 function distribPackageMgmt {
 	case $(distribType) in
 		debian|Debian) packageType="deb";;
@@ -1673,7 +1672,7 @@ else if(exponent==30)unit="G"
 #sub($7,sprintf("%10.3f%s",size,unit))
 sub(" *"$7,sprintf(" %10.3f%s",size,unit))
 print
-}' | \column -t
+	}' | \column -t
 	else
 		$find $dir $firstPredicate $args
 	fi
