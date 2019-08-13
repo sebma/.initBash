@@ -27,9 +27,6 @@ alias topf50='$(which find) . $prunePathsFindExpression -xdev -type f -size +10M
 alias topf5='$(which find) . $prunePathsFindExpression -xdev -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 |  column -t | head -5 | awk '\''{total+=$5;print}END{print"=> total = "total" MiB"}'\'''
 alias topf='$(which find) . $prunePathsFindExpression -xdev -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | column -t | head -n | awk '\''{total+=$5;print}END{print"=> total = "total" MiB"}'\'''
 #alias topflines='$(which find) . $prunePathsFindExpression -xdev -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | column -t | head -n $(($LINES-4)) | awk '\''{total+=$5;print}END{print"=> total = "total" MiB"}'\'''
-function topflines {
-	$(which find) "$@" $prunePathsFindExpression -xdev -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | column -t | head -n $(($LINES-4)) | awk '{total+=$5;print}END{if(total) print"=> total = "total" MiB"}'
-}
 function rebalance {
 	which btrfs-balancer && {
 		df /
@@ -78,6 +75,9 @@ function sailFishOSUprade {
 		echo "=> Usage: $FUNCNAME nextRelease" >&2
 		return 1
 	}
+}
+function topflines {
+	$(which find) "$@" $prunePathsFindExpression -xdev -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | column -t | head -n $(($LINES-4)) | awk '{total+=$5;print}END{if(total) print"=> total = "total" MiB"}'
 }
 
 set +x

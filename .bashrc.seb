@@ -16,15 +16,6 @@ bashRCLoaded=1
 export os=$(uname -s)
 quoteCHAR="'\''"
 
-function addpaths {
-	for path
-	do
-		test ! -d "$path" && continue
-		echo $PATH | grep -wq "$path" || PATH=$path:$PATH
-	done
-	export PATH
-}
-
 function addmanpaths {
 	for manpath
 	do
@@ -34,6 +25,14 @@ function addmanpaths {
 		}
 	done
 	export MANPATH
+}
+function addpaths {
+	for path
+	do
+		test ! -d "$path" && continue
+		echo $PATH | grep -wq "$path" || PATH=$path:$PATH
+	done
+	export PATH
 }
 
 #echo "=> BEFORE: PATH = $PATH"
