@@ -100,6 +100,8 @@ function castnowPlaylist {
 	local index=${1:-1}
 	test $# = 2 && shift
 	local playlist=$1
+	printf "=> Start playing playlist at: "
+	sed -n "${index}p" $playlist
 	castnowURLs $(grep -v ^# $playlist | tail -n +$index)
 }
 function castnowURLs {
@@ -485,6 +487,8 @@ function castnowPlaylist {
 	local index=${1:-1}
 	test $# = 2 && shift
 	local playlist=$1
+	printf "=> Start playing playlist at: "
+	sed -n "${index}p" $playlist
 	castnowURLs $(tail -n +$index $playlist)
 }
 function castnowURLs {
