@@ -2,34 +2,11 @@
 declare -A | grep -wq colors || source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-function dpkgExists {
-	test $1 && dpkg -l $1 | grep -q ^ii
-}
-function debEditDependencies {
-	test $# = 0 && {
-		echo "=> Usage: $FUNCNAME debianPackageFileName" >&2
-		return 1
-	}
-
-	local pkg=$1
-	local newPackage=${pkg/.deb/_NEW.deb}
-	local tmp=tmp
-	local dpkg_deb="command dpkg-deb"
-	$dpkg_deb -x $pkg $tmp/
-	$dpkg_deb --control $pkg $tmp/DEBIAN
-	$EDITOR $tmp/DEBIAN/control
-	dpkg -l gdebi | grep -q ^ii || sudo apt install -Vy gdebi
-	dpkg -l $pkg  | grep -q ^ii || $dpkg_deb -b $tmp/ $newPackage && echo "=> Installing \"$pkg\" and its dependencies ..." && sudo gdebi $newPackage
-	rm -fr $tmp/
-}
-function aptGet {
-	args=$@
-	firstArg=$1
-	case $firstArg in
-	install|purge) sudo command apt $args -V;;
-	download) command apt-get $args --print-uris && $(which apt-get) $args;;
-	*) command apt-get $args;;
-	esac
+function addKeys {
+	for key
+	do
+		sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys $key
+	done
 }
 function apt {
 	args=$@
@@ -39,12 +16,13 @@ function apt {
 	*) command apt $args;;
 	esac
 }
-function aptitude {
+function aptGet {
 	args=$@
 	firstArg=$1
 	case $firstArg in
-	install|reinstall|purge) sudo command aptitude $args -V;;
-	*) command aptitude $args;;
+	install|purge) sudo command apt $args -V;;
+	download) command apt-get $args --print-uris && $(which apt-get) $args;;
+	*) command apt-get $args;;
 	esac
 }
 function aptPrintURIS {
@@ -64,11 +42,30 @@ function apt_cache {
 		$apt_cache $@
 	fi
 }
-function addKeys {
-	for key
-	do
-		sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys $key
-	done
+function aptitude {
+	args=$@
+	firstArg=$1
+	case $firstArg in
+	install|reinstall|purge) sudo command aptitude $args -V;;
+	*) command aptitude $args;;
+	esac
+}
+function debEditDependencies {
+	test $# = 0 && {
+		echo "=> Usage: $FUNCNAME debianPackageFileName" >&2
+		return 1
+	}
+
+	local pkg=$1
+	local newPackage=${pkg/.deb/_NEW.deb}
+	local tmp=tmp
+	local dpkg_deb="command dpkg-deb"
+	$dpkg_deb -x $pkg $tmp/
+	$dpkg_deb --control $pkg $tmp/DEBIAN
+	$EDITOR $tmp/DEBIAN/control
+	dpkg -l gdebi | grep -q ^ii || sudo apt install -Vy gdebi
+	dpkg -l $pkg  | grep -q ^ii || $dpkg_deb -b $tmp/ $newPackage && echo "=> Installing \"$pkg\" and its dependencies ..." && sudo gdebi $newPackage
+	rm -fr $tmp/
 }
 function downgradePackages {
 	for package
@@ -76,6 +73,9 @@ function downgradePackages {
 		previousVersion=$(command apt-cache show $package | grep Version | sed -n '2p' | cut -d' ' -f2)
 		sudo command apt install -V $package=$previousVersion
 	done
+}
+function dpkgExists {
+	test $1 && dpkg -l $1 | grep -q ^ii
 }
 function fixAptKeys {
 	LANG=C apt-key list | awk -F"/| *" '/expired/{print"sudo apt-key del "$3}' | sh -x
@@ -97,6 +97,10 @@ function fixAptKeys {
 function move_Extra_Keys_To_Main_APT_KeyRing {
 	apt-key list 2>&1 >/dev/null | awk -F"[\`']" '/resource limit/{print "sudo apt-key add "$2"; sudo \\rm -vf "$2}' | sh -x
 }
+function reinstallOrignialPackages {
+	local packagesList=$@
+	test $# != 0 && sudo command apt install -V $(printf "%s/$(lsb_release -sc) " $packagesList)
+}
 function removePackages {
 	#echo "=> regexp = $regexp" >&2
 	local regexp=$1
@@ -109,10 +113,6 @@ function removePackages {
 function updateRepositoryKeys {
 	time sudo apt-get update 2>&1 >/dev/null | awk '/Release:.*not available: NO_PUBKEY/{print "sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys "$NF}' | sh -x
 	sudo apt-key update
-}
-function reinstallOrignialPackages {
-	local packagesList=$@
-	test $# != 0 && sudo command apt install -V $(printf "%s/$(lsb_release -sc) " $packagesList)
 }
 function website {
 	for pkg

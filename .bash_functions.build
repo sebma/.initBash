@@ -5,42 +5,87 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 test "$make" || which remake >/dev/null && export make="$(which remake)" || export make="$(which make)"
 test "$install" || { which checkinstall >/dev/null && export install="$(which checkinstall)" || export install="$make install";}
 
-function pipInstallFromDIR {
-	local dir=${1:-../$(basename $PWD)} # Set dir to current directory by default
-	local -r isAdmin=$(groups 2>/dev/null | egrep -wq "sudo|adm|admin|root" && echo true || echo false)
-	local sudo="command sudo"
+function buildSourceCode {
+	test $CC || export CC=$(echo $HOSTTYPE-$OSTYPE-gcc | sed "s/armv[^-]*-/arm-/")
+	local defaultBuildOptions=""
+	local returnCode=0
+	local project=$(basename $PWD)
+	configure $defaultBuildOptions "$@"
+	returnCode=$?
 
-	if $isAdmin
+	if [ $returnCode = 0 ] && ( [ -s Makefile ] || [ -s makefile ] || [ -s GNUmakefile ] )
 	then
-		set -x
-		$sudo -H pip install $dir
-	else
-		set -x
-		pip install --user $dir
-	fi
-	set +x
-}
-function make {
-	if [ -s Makefile ] || [ -s makefile ]
-	then
-		time CFLAGS="-g" $make -j$(nproc) $@
-	else
-		\mkdir ../bin 2>/dev/null
-		if which gcc >/dev/null 2>&1
+		if time -p $make
 		then
-			for file
-			do
-				echo gcc -ggdb $file.c -o ../bin/$file
-				command gcc -ggdb $file.c -o ../bin/$file
-			done
+			returnCode=$?
+			\mkdir -p $prefix
+			if test -w $prefix
+			then
+				$make install
+				returnCode=$?
+			else
+				sudo $install
+				returnCode=$?
+			fi
 		else
-			for file
-			do
-				echo cc -g $file.c -o ../bin/$file
-				command cc -g $file.c -o ../bin/$file
-			done
+			returnCode=$?
 		fi
+	else
+		returnCode=$?
+		printf "=> ERROR: The Makefile could not be generated therefore the building the <$project> source code has failed !\n=> Listing the files :\n$(ls -l)\n" >&2
 	fi
+
+	unset CC
+	echo "=> returnCode = $returnCode" >&2
+	[ $returnCode = 0 ] && set -x && sudo ldconfig
+	set +x
+	return $returnCode
+}
+function buildSourceCodeForAndroid {
+	local dest=arm-linux-androideabi
+	test $CC || export CC=$dest-gcc
+	local defaultBuildOptions="--prefix=$HOME/build/android --host=$dest --build=$MACHTYPE"
+	local returnCode=0
+	buildSourceCode $defaultBuildOptions "$@"
+	return $?
+}
+function buildSourceCodeForJolla {
+	local dest=arm-linux-gnueabihf
+	test $CC || export CC=$dest-gcc
+	local defaultBuildOptions="--prefix=$HOME/build/jolla --host=$dest"
+	local returnCode=0
+	buildSourceCode $defaultBuildOptions "$@"
+	return $?
+}
+function build_in_HOME {
+	test -s configure || time ./bootstrap.sh || time ./bootstrap || time ./autogen.sh
+	test -s Makefile || time ./configure --prefix=$HOME/gnu --sysconfdir=$HOME/gnu $@
+	test -s Makefile && time $make && $make install
+	test -s GNUmakefile && time $make && $make install
+}
+function build_in_usr {
+	test -s configure || time ./bootstrap.sh || time ./bootstrap || time ./autogen.sh
+	test -s Makefile || time ./configure --prefix=/usr --sysconfdir=/etc $@
+	test -s Makefile && time $make && sudo $make install
+	test -s GNUmakefile && time $make && sudo $make install
+}
+function build_in_usr_DEBIAN {
+	test -s configure || time ./bootstrap.sh || time ./bootstrap || time ./autogen.sh
+	test -s Makefile || time ./configure --prefix=/usr --sysconfdir=/etc $@
+	test -s Makefile && time $make && sudo $make install
+	test -s GNUmakefile && time $make && sudo checkinstall
+}
+function build_in_usr_local {
+	test -s configure || time ./bootstrap.sh || time ./bootstrap || time ./autogen.sh
+	test -s Makefile || time ./configure --prefix=/usr/local $@
+	test -s Makefile && time $make && sudo $make install
+	test -s GNUmakefile && time $make && sudo $make install
+}
+function build_in_usr_local_DEBIAN {
+	test -s configure || time ./bootstrap.sh || time ./bootstrap || time ./autogen.sh
+	test -s Makefile || time ./configure --prefix=/usr/local $@
+	test -s Makefile && time $make && sudo checkinstall
+	test -s GNUmakefile && time $make && sudo checkinstall
 }
 function configure {
 	test $CC || export CC=$(echo $HOSTTYPE-$OSTYPE-gcc | sed "s/armv[^-]*-/arm-/")
@@ -123,64 +168,12 @@ function configure {
 	echo "=> returnCode = $returnCode" >&2
 	return $returnCode
 }
-function buildSourceCode {
-	test $CC || export CC=$(echo $HOSTTYPE-$OSTYPE-gcc | sed "s/armv[^-]*-/arm-/")
-	local defaultBuildOptions=""
-	local returnCode=0
-	local project=$(basename $PWD)
-	configure $defaultBuildOptions "$@"
-	returnCode=$?
-
-	if [ $returnCode = 0 ] && ( [ -s Makefile ] || [ -s makefile ] || [ -s GNUmakefile ] )
-	then
-		if time -p $make
-		then
-			returnCode=$?
-			\mkdir -p $prefix
-			if test -w $prefix
-			then
-				$make install
-				returnCode=$?
-			else
-				sudo $install
-				returnCode=$?
-			fi
-		else
-			returnCode=$?
-		fi
-	else
-		returnCode=$?
-		printf "=> ERROR: The Makefile could not be generated therefore the building the <$project> source code has failed !\n=> Listing the files :\n$(ls -l)\n" >&2
-	fi
-
-	unset CC
-	echo "=> returnCode = $returnCode" >&2
-	[ $returnCode = 0 ] && set -x && sudo ldconfig
-	set +x
-	return $returnCode
-}
-function buildSourceCodeForAndroid {
-	local dest=arm-linux-androideabi
-	test $CC || export CC=$dest-gcc
-	local defaultBuildOptions="--prefix=$HOME/build/android --host=$dest --build=$MACHTYPE"
-	local returnCode=0
-	buildSourceCode $defaultBuildOptions "$@"
-	return $?
-}
 function configureForAndroid {
 	local dest=arm-linux-androideabi
 	test $CC || export CC=$dest-gcc
 	local defaultBuildOptions="--prefix=$HOME/build/android --host=$dest --build=$MACHTYPE"
 	local returnCode=0
 	configure $defaultBuildOptions "$@"
-	return $?
-}
-function buildSourceCodeForJolla {
-	local dest=arm-linux-gnueabihf
-	test $CC || export CC=$dest-gcc
-	local defaultBuildOptions="--prefix=$HOME/build/jolla --host=$dest"
-	local returnCode=0
-	buildSourceCode $defaultBuildOptions "$@"
 	return $?
 }
 function configureForJolla {
@@ -191,35 +184,42 @@ function configureForJolla {
 	configure $defaultBuildOptions "$@"
 	return $?
 }
-function build_in_HOME {
-	test -s configure || time ./bootstrap.sh || time ./bootstrap || time ./autogen.sh
-	test -s Makefile || time ./configure --prefix=$HOME/gnu --sysconfdir=$HOME/gnu $@
-	test -s Makefile && time $make && $make install
-	test -s GNUmakefile && time $make && $make install
+function make {
+	if [ -s Makefile ] || [ -s makefile ]
+	then
+		time CFLAGS="-g" $make -j$(nproc) $@
+	else
+		\mkdir ../bin 2>/dev/null
+		if which gcc >/dev/null 2>&1
+		then
+			for file
+			do
+				echo gcc -ggdb $file.c -o ../bin/$file
+				command gcc -ggdb $file.c -o ../bin/$file
+			done
+		else
+			for file
+			do
+				echo cc -g $file.c -o ../bin/$file
+				command cc -g $file.c -o ../bin/$file
+			done
+		fi
+	fi
 }
-function build_in_usr {
-	test -s configure || time ./bootstrap.sh || time ./bootstrap || time ./autogen.sh
-	test -s Makefile || time ./configure --prefix=/usr --sysconfdir=/etc $@
-	test -s Makefile && time $make && sudo $make install
-	test -s GNUmakefile && time $make && sudo $make install
-}
-function build_in_usr_DEBIAN {
-	test -s configure || time ./bootstrap.sh || time ./bootstrap || time ./autogen.sh
-	test -s Makefile || time ./configure --prefix=/usr --sysconfdir=/etc $@
-	test -s Makefile && time $make && sudo $make install
-	test -s GNUmakefile && time $make && sudo checkinstall
-}
-function build_in_usr_local {
-	test -s configure || time ./bootstrap.sh || time ./bootstrap || time ./autogen.sh
-	test -s Makefile || time ./configure --prefix=/usr/local $@
-	test -s Makefile && time $make && sudo $make install
-	test -s GNUmakefile && time $make && sudo $make install
-}
-function build_in_usr_local_DEBIAN {
-	test -s configure || time ./bootstrap.sh || time ./bootstrap || time ./autogen.sh
-	test -s Makefile || time ./configure --prefix=/usr/local $@
-	test -s Makefile && time $make && sudo checkinstall
-	test -s GNUmakefile && time $make && sudo checkinstall
+function pipInstallFromDIR {
+	local dir=${1:-../$(basename $PWD)} # Set dir to current directory by default
+	local -r isAdmin=$(groups 2>/dev/null | egrep -wq "sudo|adm|admin|root" && echo true || echo false)
+	local sudo="command sudo"
+
+	if $isAdmin
+	then
+		set -x
+		$sudo -H pip install $dir
+	else
+		set -x
+		pip install --user $dir
+	fi
+	set +x
 }
 
 set +x

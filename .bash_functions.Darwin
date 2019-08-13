@@ -1,5 +1,6 @@
 # vim: set syn=sh noet:
 
+#alias mac@="\networksetup -getmacaddress \$wifiInterface | awk '{print\$3}'"
 function applescript2app {
 	for file
 	do
@@ -39,6 +40,33 @@ function brewServicesStatus {
 	serviceList=$(echo $serviceList | tr " " "|")
 	\brew services list | \egrep "$serviceList" | \egrep "started|stopped"
 }
+function dmgInstall {
+	local sudo defaultDst
+	groups | \egrep -wq "admin|sudo" && { sudo=sudo;defaultDst=/; }	|| { sudo="";defaultDst="$HOME"; }
+	test "$debug" -gt 2 && set -x
+	for dmgFilePath
+	do
+		if \ls $dmgFilePath >/dev/null
+		then
+			mountDev=$(hdiutil mount $dmgFilePath | awk '/dev.disk.*Volumes/{print$1}')
+			mountDir="$($(which mount) | \grep $mountDev | awk '{$1=$2="";sub(" [(].*","");sub("^  ","");print}')"
+			test "$debug" = 1 && echo "=> mountDir = $mountDir"
+			if [ -d "$mountDir" ]
+			then
+				if \ls "${mountDir}/"*.pkg >/dev/null
+				then
+					$sudo installer -verboseR -pkg "${mountDir}/"*.pkg -target $defaultDst
+				else
+					$sudo \cp -pvr "${mountDir}/"*.app /Applications/
+				fi
+				sync
+				hdiutil unmount $mountDir
+			fi
+		fi
+	done
+	unset dmgFilePath
+	set +x
+}
 function lanip {
 	ethName=$1
 	if [ -n "$ethName" ]
@@ -49,7 +77,11 @@ function lanip {
 		\ip addr show | awk '{if(/(UP|UNKNOWN)/){interface=$1;found=1}else if(/DOWN/)found=0;if(found==1 && /inet /)print interface" "$2}'
 	fi | column -t
 }
-#alias mac@="\networksetup -getmacaddress \$wifiInterface | awk '{print\$3}'"
+function locate {
+	local locate="time -p \"command glocate\""
+	groups 2>/dev/null | \egrep -wq "sudo|admin" && locateOptions="-e" || locateOptions="--database $HOME/.local/lib/mlocate/mlocate.db -e"
+	echo "$@" | \grep -q "\-[a-z]*r" && time $locate $locateOptions "$@" || time $locate $locateOptions -ir "${@}"
+}
 function mac@ {
 	ethName=$1
 	if [ -n "$ethName" ]
@@ -59,11 +91,6 @@ function mac@ {
 	else
 		\ip addr show | awk '{if(/(UP|UNKNOWN)/){interface=$1;found=1}else if(/DOWN/)found=0;if(found==1 && /ether/)print interface" "$2}'
 	fi
-}
-function locate {
-	local locate="time -p \"command glocate\""
-	groups 2>/dev/null | \egrep -wq "sudo|admin" && locateOptions="-e" || locateOptions="--database $HOME/.local/lib/mlocate/mlocate.db -e"
-	echo "$@" | \grep -q "\-[a-z]*r" && time $locate $locateOptions "$@" || time $locate $locateOptions -ir "${@}"
 }
 function mount {
 	arg=$1
@@ -96,78 +123,6 @@ function netstat {
 		return 1;
 	fi
 }
-function pkill {
-	local firstArg=$1
-	test $firstArg && {
-		if echo $firstArg | \grep -q "\-[0-9]" 
-		then
-			shift
-			processName=$1
-			test -n "$processName" && $(which pkill) $firstArg -lfu $USER $@
-		else
-			processName=$1
-			test -n "$processName" && $(which pkill) -lfu $USER $@
-		fi
-	}
-}
-function status {
-	local serviceName="$1"
-	test $serviceName && sudo launchctl list | \egrep "$serviceName"
-}
-function start {
-	local serviceName=$1
-	test $serviceName && sudo launchctl load $macOSServiceDIR/$serviceName.plist && status $serviceName
-}
-function stop {
-	local serviceName=$1
-	test $serviceName && sudo launchctl unload $macOSServiceDIR/$serviceName.plist && status $serviceName
-}
-function restart {
-	test $1 && { stop $1; start $1; }
-}
-function route {
-	if echo $@ | \egrep -wq "add|flush|delete|change|get|monitor" ;then
-		$(which route) $@
-	else
-		$(which netstat) -f inet -r $@ | \egrep -v /32 | \egrep "default|0.0.0.0|S"
-	fi
-}
-function topflines {
-	$(which gfind) "$@" $prunePathsFindExpression -xdev -type f -size +10M -exec gls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | column -t | head -n $(($LINES-4)) | awk '{total+=$5;print}END{if(total) print"=> total = "total" MiB"}'
-}
-function dmgInstall {
-	local sudo defaultDst
-	groups | \egrep -wq "admin|sudo" && { sudo=sudo;defaultDst=/; }	|| { sudo="";defaultDst="$HOME"; }
-	test "$debug" -gt 2 && set -x
-	for dmgFilePath
-	do
-		if \ls $dmgFilePath >/dev/null
-		then
-			mountDev=$(hdiutil mount $dmgFilePath | awk '/dev.disk.*Volumes/{print$1}')
-			mountDir="$($(which mount) | \grep $mountDev | awk '{$1=$2="";sub(" [(].*","");sub("^  ","");print}')"
-			test "$debug" = 1 && echo "=> mountDir = $mountDir"
-			if [ -d "$mountDir" ]
-			then
-				if \ls "${mountDir}/"*.pkg >/dev/null
-				then
-					$sudo installer -verboseR -pkg "${mountDir}/"*.pkg -target $defaultDst
-				else
-					$sudo \cp -pvr "${mountDir}/"*.app /Applications/
-				fi
-				sync
-				hdiutil unmount $mountDir
-			fi
-		fi
-	done
-	unset dmgFilePath
-	set +x
-}
-function pkgList {
-	for pkg
-	do
-		lsbom $(pkgutil --bom "$pkg")
-	done
-}
 function pkgExpand {
 	for pkg
 	do
@@ -184,4 +139,48 @@ function pkgInstall {
 	done
 	set +x
 }
-
+function pkgList {
+	for pkg
+	do
+		lsbom $(pkgutil --bom "$pkg")
+	done
+}
+function pkill {
+	local firstArg=$1
+	test $firstArg && {
+		if echo $firstArg | \grep -q "\-[0-9]" 
+		then
+			shift
+			processName=$1
+			test -n "$processName" && $(which pkill) $firstArg -lfu $USER $@
+		else
+			processName=$1
+			test -n "$processName" && $(which pkill) -lfu $USER $@
+		fi
+	}
+}
+function restart {
+	test $1 && { stop $1; start $1; }
+}
+function route {
+	if echo $@ | \egrep -wq "add|flush|delete|change|get|monitor" ;then
+		$(which route) $@
+	else
+		$(which netstat) -f inet -r $@ | \egrep -v /32 | \egrep "default|0.0.0.0|S"
+	fi
+}
+function start {
+	local serviceName=$1
+	test $serviceName && sudo launchctl load $macOSServiceDIR/$serviceName.plist && status $serviceName
+}
+function status {
+	local serviceName="$1"
+	test $serviceName && sudo launchctl list | \egrep "$serviceName"
+}
+function stop {
+	local serviceName=$1
+	test $serviceName && sudo launchctl unload $macOSServiceDIR/$serviceName.plist && status $serviceName
+}
+function topflines {
+	$(which gfind) "$@" $prunePathsFindExpression -xdev -type f -size +10M -exec gls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | column -t | head -n $(($LINES-4)) | awk '{total+=$5;print}END{if(total) print"=> total = "total" MiB"}'
+}

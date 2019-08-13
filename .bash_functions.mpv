@@ -42,24 +42,14 @@ alias mpvEnglish="mpv --profile=english"
 alias mpvGerman="mpv --alang=deu --slang=deu"
 alias mpvSpanish="mpv --alang=spa --slang=spa"
 
-function mpvRSSPodCastPlayList {
-	test $# = 1 && {
-		local url="$1"
-#		mpv $(youtube-dl -g "$url")
-		mpv $(curl -s "$url" | egrep -o "https?:[^ <>]*(mp4|webm)" | grep -v .google.com/ | uniq)
-	}
-}
 function cleanMPVStatusLine {
 	perl -pe $mpv_Output_Perl_Script
 }
-function mpvOld {
-	$mpv $($youtube_dl -g "$@")
-}
-function mpvalt {
-	test $1 && $mpv --no-ytdl $($youtube_dl -gf best $@ | uniq)
-}
-function urlplayer {
-	$mpv $($youtube_dl -gf best "$1")
+function mpvFORMAT {
+	\rm nohup.out
+	touch nohup.out
+	nohup $mpv --ytdl-format "$@" &
+	tail -f nohup.out | egrep -v "AV: "
 }
 function mpvInit {
 	if [ -c /dev/fb0 ]; then
@@ -78,11 +68,18 @@ function mpvInit {
 		return 1
 	fi
 }
-function mpvFORMAT {
-	\rm nohup.out
-	touch nohup.out
-	nohup $mpv --ytdl-format "$@" &
-	tail -f nohup.out | egrep -v "AV: "
+function mpvOld {
+	$mpv $($youtube_dl -g "$@")
+}
+function mpvRSSPodCastPlayList {
+	test $# = 1 && {
+		local url="$1"
+#		mpv $(youtube-dl -g "$url")
+		mpv $(curl -s "$url" | egrep -o "https?:[^ <>]*(mp4|webm)" | grep -v .google.com/ | uniq)
+	}
+}
+function mpvalt {
+	test $1 && $mpv --no-ytdl $($youtube_dl -gf best $@ | uniq)
 }
 function mpvdirectly {
 	\rm nohup.out
@@ -118,4 +115,7 @@ function mpvplaylistFORMAT {
 	shift
 	nohup $mpv "$firstArg" --ytdl-format "$format" --playlist "$playlist" "$@" &
 	tail -f nohup.out | egrep -v "AV: "
+}
+function urlplayer {
+	$mpv $($youtube_dl -gf best "$1")
 }
