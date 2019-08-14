@@ -1550,10 +1550,10 @@ function sshStartLocalForward {
 	fi
 }
 function sum {
-	awk "{print \$1}" | LC_ALL=C numfmt --from=iec | paste -sd+ | bc | numfmt --to=iec
+	awk "{print \$1}" | LC_ALL=C numfmt --from=iec | paste -sd+ | bc | numfmt --to=iec-i --suffix=B
 }
 function sum {
-	awk "{print \$1}" | LC_ALL=C numfmt --from=iec | paste -sd+ | bc | numfmt --to=iec
+	awk "{print \$1}" | LC_ALL=C numfmt --from=iec | paste -sd+ | bc | numfmt --to=iec-i --suffix=B
 }
 function systemType {
 	local system
@@ -1640,7 +1640,7 @@ function timeprocess {
 }
 function totalSize {
 	local column=$1
-	awk "{print \$$column}" | LC_ALL=C numfmt --from=iec | paste -sd+ | bc | numfmt --to=iec
+	awk "{print \$$column}" | LC_ALL=C numfmt --from=iec | paste -sd+ | bc | numfmt --to=iec-i --suffix=B
 }
 function txt2pdf {
 	for file
