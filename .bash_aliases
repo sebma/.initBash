@@ -25,6 +25,8 @@ alias Cat='\highlight -O ansi --force'
 alias Cut='\cut -c 1-$COLUMNS'
 alias 2lower=tolower
 alias 2upper=toupper
+alias 2iec='numfmt --to=iec-i --suffix=B'
+alias 2si='numfmt  --to=si    --suffix=B'
 alias acp='\advcp -gpuv'
 alias amv='\advmv -gvi'
 alias audioInfo="which mplayer >/dev/null 2>&1 && \mplayer -identify -vo null -ao null -frames 0"
