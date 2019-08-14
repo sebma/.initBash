@@ -445,7 +445,7 @@ function audioChannelLayoutOfFile {
 	local audioChannelLayout
 	for file
 	do
-		audioChannelLayout=$($ffprobe "$file" -select_streams a:0 -show_entries stream=channel_audioChannelLayout -of default=noprint_wrappers=1:nokey=1 -v error)
+		audioChannelLayout=$($ffprobe "$file" -select_streams a:0 -show_entries stream=channel_layout -of default=noprint_wrappers=1:nokey=1 -v error)
 		printf "=> $file : audioChannelLayout = " >&2
 		echo $audioChannelLayout
 	done
@@ -454,7 +454,7 @@ function audioCodecOfFile {
 	local audioCodec
 	for file
 	do
-		audioCodec=$($ffprobe "$file" -select_streams a:0 -show_entries stream=audioCodec_name -of default=noprint_wrappers=1:nokey=1 -v error)
+		audioCodec=$($ffprobe "$file" -select_streams a:0 -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 -v error)
 		printf "=> $file : audioCodec = " >&2
 		echo $audioCodec
 	done
@@ -879,7 +879,7 @@ function videoCodecOfFile {
 	local videoCodec
 	for file
 	do
-		videoCodec=$($ffprobe "$file" -select_streams v:0 -show_entries stream=videoCodec_name -of default=noprint_wrappers=1:nokey=1 -v error)
+		videoCodec=$($ffprobe "$file" -select_streams v:0 -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 -v error)
 		printf "=> $file : videoCodec = " >&2
 		echo $videoCodec
 	done
