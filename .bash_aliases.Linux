@@ -65,10 +65,13 @@ alias sed="\sed -E" # La completion ssh ne fonctionne pas si l'alias est actif a
 alias poweroff="\systemctl poweroff && exit"
 alias reboot="\systemctl reboot && exit"
 alias suspend="\systemctl suspend && exit"
-alias topf10='$(which find) . $prunePathsFindExpression -xdev -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | column -t | head -10 | awk '\''{total+=$5;print}END{print"=> total = "total" MiB"}'\'''
-alias topf50='$(which find) . $prunePathsFindExpression -xdev -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | column -t | head -50 | awk '\''{total+=$5;print}END{print"=> total = "total" MiB"}'\'''
-alias topf5='$(which find) . $prunePathsFindExpression -xdev -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 |  column -t | head -5 | awk '\''{total+=$5;print}END{print"=> total = "total" MiB"}'\'''
 #alias topf='$(which find) . $prunePathsFindExpression -xdev -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | column -t | head -n | awk '\''{total+=$5;print}END{print"=> total = "total" MiB"}'\'''
+#alias topf10='$(which find) . $prunePathsFindExpression -xdev -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | column -t | head -10 | awk '\''{total+=$5;print}END{print"=> total = "total" MiB"}'\'''
+#alias topf50='$(which find) . $prunePathsFindExpression -xdev -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | column -t | head -50 | awk '\''{total+=$5;print}END{print"=> total = "total" MiB"}'\'''
+#alias topf5='$(which find) . $prunePathsFindExpression -xdev -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 |  column -t | head -5 | awk '\''{total+=$5;print}END{print"=> total = "total" MiB"}'\'''
+alias topf10='$(which find) . $prunePathsFindExpression -xdev -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | column -t | head -10 | numfmt --field 5 --from=iec --to=iec-i --suffix=B'
+alias topf50='$(which find) . $prunePathsFindExpression -xdev -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | column -t | head -50 | numfmt --field 5 --from=iec --to=iec-i --suffix=B'
+alias topf5='$(which find) . $prunePathsFindExpression -xdev -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 |  column -t | head -5  | numfmt --field 5 --from=iec --to=iec-i --suffix=B'
 alias wifimac="\ifconfig $wifiInterface | awk '/HWaddr/{print\$1\"\\t\"\$NF}'"
 alias wlanmac=wifimac
 alias ytdlInstall="pip3 install youtube-dl || pip install youtube-dl"
