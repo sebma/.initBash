@@ -47,10 +47,10 @@ function open {
 	done
 }
 function topf {
-	$find . $prunePathsFindExpression -xdev -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | column -t | head -n "$1" | awk '{total+=$5;print}END{print"=> total = "total" MiB"}'
+	$find . -xdev $prunePathsFindExpression -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | column -t | head -n "$1" | numfmt --field 5 --from=iec --to=iec-i --suffix=B
 }
 function topflines {
-	$find "$@" $prunePathsFindExpression -xdev -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | column -t | head -n $(($LINES-4)) | awk '{total+=$5;print}END{if(total) print"=> total = "total" MiB"}'
+	$find "$@" -xdev $prunePathsFindExpression -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | column -t | head -n $(($LINES-4)) | numfmt --field 5 --from=iec --to=iec-i --suffix=B
 }
 function umount {
 	local dir_or_device="$1"
