@@ -419,6 +419,9 @@ function ytdlGetFormat {
 		$ytdlnoconfig --get-filename -o "=> format_id = %(format_id)s" "$url"
 	done
 }
+function ytdlGetSize {
+	time ytdlnoconfig -j -f18 "$@" | jq .filesize | numfmt --to=iec-i --suffix=B
+}
 function ytdlSDFormats {
 	trap 'rc=130;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
 	local format=""
