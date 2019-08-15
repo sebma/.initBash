@@ -2,7 +2,7 @@
 
 #ANSI color codes
 [ $BASH_VERSINFO -ge 4 ] && export escapeChar=$'\e'     || export escapeChar=$'\033'
-[ $BASH_VERSINFO -ge 4 ] && export declare="declare -A" || export declare="declare"
+[ $BASH_VERSINFO -ge 4 ] && export declare="declare -Ag" || export declare="declare"
 
 if tty -s
 then
