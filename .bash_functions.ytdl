@@ -162,7 +162,7 @@ function getRestrictedFilenamesFHD {
 function getRestrictedFilenamesFORMAT {
 	trap 'rc=127;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
 	local initialSiteVideoFormat="$1"
-	local siteVideoFormat downloadOK extension fqdn
+	local siteVideoFormat downloadOK extension fqdn fileSizeOnFS remoteFileSize=0
 	shift
 	local -i i=0
 	for url
@@ -196,12 +196,17 @@ function getRestrictedFilenamesFORMAT {
 			chosenFormatID=$(echo "$fileName" | awk -F '__' '{print$2}')
 			fileName="${fileName/.$extension/__$fqdn.$extension}"
 	
-			if [ -f "$fileName" ] && [ ! -w "$fileName" ]
+			if [ -f "$fileName" ]
 			then
-				echo "${colors[yellowOnBlue]}=> The file <$fileName> is already downloaded, skipping ...$normal" >&2
-				echo
-				let j++
-				continue
+				fileSizeOnFS=$(stat -c %s "$fileName")
+				remoteFileSize=$(ytdlGetSize $chosenFormatID $url 2>/dev/null)
+				if [ ! -w "$fileName" ] || [ $fileSizeOnFS -ge $remoteFileSize ]
+				then
+					echo "${colors[yellowOnBlue]}=> The file <$fileName> is already downloaded, skipping ...$normal" >&2
+					echo
+					let j++
+					continue
+				fi
 			fi
 	
 			echo "=> fileName to be downloaded = <$fileName>"
