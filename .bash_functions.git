@@ -1,0 +1,13 @@
+# vim: set syn=sh noet:
+declare -A | grep -wq colors || source $initDir/.colors
+test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
+
+function gitClone {
+	local repoURL
+	test $# = 1 && {
+		git clone $repoURL && cd $(basename $repoURL)
+	}
+}
+
+set +x
+test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
