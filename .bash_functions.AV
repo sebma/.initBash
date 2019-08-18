@@ -767,7 +767,7 @@ function sizeofStream {
 	}
 	for url in "$@"
 	do
-		size=$(curl -sI "$($youtube_dl -gf best -- "$url")" | awk 'BEGIN{IGNORECASE=1}/Content-Length:/{print$2/2^20}')
+		size=$(curl -sI "$($youtube_dl -gf best -- "$url")" | \sed "s/\r//g" | awk 'BEGIN{IGNORECASE=1}/Content-Length:/{print$2/2^20}')
 		total="$total+$size"
 		printf "%s %s Mo\n" $url $size
 	done
@@ -936,14 +936,14 @@ function videoInfo {
 					test -z "$infos" && continue
 					title="$(echo "$infos" | sed -n 1p )"
 					directURLOfStream="$(echo "$infos" | sed -n 2p | sed "s/ /%20/g")"
-					size=$(\curl -sI "$directURLOfStream" | awk 'BEGIN{IGNORECASE=1;size=0}/Content-Length:/{if($2>0)size=$2}END{printf "%8.3f MiB\n",size/2^20}')
+					size=$(\curl -sI "$directURLOfStream" | \sed "s/\r//g" | awk 'BEGIN{IGNORECASE=1;size=0}/Content-Length:/{if($2>0)size=$2}END{printf "%8.3f MiB\n",size/2^20}')
 					echo "Title: $title"
 					echo "Size: $size"
 					command ffprobe $ffprobeOptions "$directURLOfStream" 2>&1
 				else
 					#direct stream
 					echo "=> This stream is direct stream"
-					size=$(\curl -sI "$urlOrFile" | awk 'BEGIN{IGNORECASE=1;size=0}/Content-Length:/{if($2>0)size=$2}END{printf "%8.3f MiB\n",size/2^20}')
+					size=$(\curl -sI "$urlOrFile" | \sed "s/\r//g" | awk 'BEGIN{IGNORECASE=1;size=0}/Content-Length:/{if($2>0)size=$2}END{printf "%8.3f MiB\n",size/2^20}')
 					echo "Size: $size"
 					$ffprobe "$urlOrFile"
 				fi
@@ -977,14 +977,14 @@ function videoInfoOLD {
 					test -z "$infos" && continue
 					title="$(echo "$infos" | sed -n 1p )"
 					directURLOfStream="$(echo "$infos" | sed -n 2p)"
-					size=$(\curl -sI "$directURLOfStream" | awk 'BEGIN{IGNORECASE=1;size=0}/Content-Length:/{if($2>0)size=$2}END{printf "%8.3f MiB\n",size/2^20}')
+					size=$(\curl -sI "$directURLOfStream" | \sed "s/\r//g" | awk 'BEGIN{IGNORECASE=1;size=0}/Content-Length:/{if($2>0)size=$2}END{printf "%8.3f MiB\n",size/2^20}')
 					echo "Title: $title"
 					echo "Size: $size"
 					command ffprobe $ffprobeOptions "$directURLOfStream" 2>&1
 				else
 					#direct stream
 					echo "=> This stream is direct stream"
-					size=$(\curl -sI "$urlOrFile" | awk 'BEGIN{IGNORECASE=1;size=0}/Content-Length:/{if($2>0)size=$2}END{printf "%8.3f MiB\n",size/2^20}')
+					size=$(\curl -sI "$urlOrFile" | \sed "s/\r//g" | awk 'BEGIN{IGNORECASE=1;size=0}/Content-Length:/{if($2>0)size=$2}END{printf "%8.3f MiB\n",size/2^20}')
 					echo "Size: $size"
 					$ffprobe "$urlOrFile"
 				fi
