@@ -3,7 +3,7 @@ declare -A | grep -wq colors || source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 function gitClone {
-	local repoURL
+	local repoURL=$1
 	test $# = 1 && {
 		git clone $repoURL && cd $(basename $repoURL)
 	}
