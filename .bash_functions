@@ -1445,7 +1445,7 @@ function sizeOfRemoteFile {
     }
     for url
     do
-        size=$(curl -sI "$url" | awk 'BEGIN{IGNORECASE=1}/Content-?Length:/{print$2/2^20}')
+        size=$(\curl -sI "$url" | \sed "s/\r//g" | awk 'BEGIN{IGNORECASE=1}/Content-?Length:/{print$2/2^20}')
         total="$total+$size"
         printf "%s %s Mo\n" $url $size
     done
@@ -1466,7 +1466,7 @@ function sizeOfRemoteFile {
     }
     for url
     do
-        size=$(curl -sI "$url" | awk 'BEGIN{IGNORECASE=1}/Content-?Length:/{print$2/2^20}')
+        size=$(\curl -sI "$url" | \sed "s/\r//g" | awk 'BEGIN{IGNORECASE=1}/Content-?Length:/{print$2/2^20}')
         total="$total+$size"
         printf "%s %s Mo\n" $url $size
     done
