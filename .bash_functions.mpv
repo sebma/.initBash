@@ -1,4 +1,6 @@
 # vim: set syn=sh noet:
+declare -A | grep -wq colors || source $initDir/.colors
+test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 os=$(uname -s)
 [ $os = Linux ] && [ -c /dev/fb0 ] && tty | egrep -q "/dev/tty[0-9]+" && mpvOptions="--vo=drm" && mplayerOptions="--vo=fbdev2"
@@ -119,3 +121,6 @@ function mpvplaylistFORMAT {
 function urlplayer {
 	$mpv $($youtube_dl -gf best "$1")
 }
+
+set +x
+test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
