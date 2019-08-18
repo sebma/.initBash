@@ -193,6 +193,7 @@ function getRestrictedFilenamesFORMAT {
 			echo
 
 			extension="${fileName/*./}"
+			chosenFormatID=$(echo "$fileName" | awk -F '__' '{print$2}')
 			fileName="${fileName/.$extension/__$fqdn.$extension}"
 	
 			if [ -f "$fileName" ] && [ ! -w "$fileName" ]
@@ -204,6 +205,8 @@ function getRestrictedFilenamesFORMAT {
 			fi
 	
 			echo "=> fileName to be downloaded = <$fileName>"
+			echo
+			echo "=> chosenFormatID = $chosenFormatID"
 			echo
 
 			if [ $extension = mp4 ] || [ $extension = m4a ] || [ $extension = mp3 ]; then
@@ -313,7 +316,7 @@ function sizeOf {
 	}
 	for url in "$@"
 	do
-	size=$(curl -sI "$(youtube-dl -gf $format $url)" | awk 'BEGIN{IGNORECASE=1}/Content-?Length:/{print$2/2^20}')
+	size=$(\curl -sI "$(youtube-dl -gf $format $url)" | \sed "s/\r//g" | awk 'BEGIN{IGNORECASE=1}/Content-?Length:/{print$2/2^20}')
 	total="$total+$size"
 	printf "%s %s Mo\n" $url $size
 	done
@@ -420,7 +423,13 @@ function ytdlGetFormat {
 	done
 }
 function ytdlGetSize {
-	time ytdlnoconfig -j -f18 "$@" | jq .filesize | numfmt --to=iec-i --suffix=B
+	local firstArg=$1 format=best size=0 url=""
+	test $# != 0 && {
+		echo $firstArg | egrep -q ^http || { format=$firstArg;shift; }
+		read size url <<< $(time ytdlnoconfig -j -f $format "$@" | jq -r .filesize,.url)
+		[ $size = null ] && size=$(\curl -sI "$url" | \sed "s/\r//g" | awk -F ": " 'BEGIN{IGNORECASE=1}/^Content-?Length/{printf$2}')
+		echo $size
+	}
 }
 function ytdlSDFormats {
 	trap 'rc=130;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
