@@ -168,7 +168,7 @@ function castnowPlaylist {
 	local playlist=$1
 	printf "=> Start playing playlist at: "
 	\sed -n "${index}p" $playlist
-	castnowURLs $(\grep -v ^# $playlist | tail -n +$index)
+	castnowURLs $(awk '{print$1}' $playlist | \grep -v ^# | tail -n +$index)
 }
 function castnowPlaylist {
 	test $# = 0 && {
@@ -181,7 +181,7 @@ function castnowPlaylist {
 	local playlist=$1
 	printf "=> Start playing playlist at: "
 	\sed -n "${index}p" $playlist
-	castnowURLs $(tail -n +$index $playlist)
+	castnowURLs $(awk '{print$1}' $playlist | tail -n +$index)
 }
 function castnowURLs {
 	test $# = 0 && {
