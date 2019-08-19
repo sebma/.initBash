@@ -101,11 +101,20 @@ function mpvlocal {
 function mpvplaylist {
 	\rm nohup.out
 	touch nohup.out
-	local firstArg
-	local playlist
-	echo -- $1 | \grep -q -- "--" && firstArg="$1" && playlist="$2" && shift || playlist="$1"
-	shift
-	nohup $mpv "$firstArg" --playlist "$playlist" "$@" &
+	local playListFile="$1" playlistStartIndex="" index=1
+	local format="mp4[height<=480]/mp4/best"
+	test $# = 1 && shift
+	test $# = 2 && playlistStartIndex="--playlist-start=$1" && playListFile="$2" && index=$(($1+1)) && shift 2
+	local playListType=${playListFile/*./}
+	if [ $playListType = url ] || [ $playListType = urls ]
+	then
+		\sed -n "${index}s/^[^#]*//;${index}p" "$playListFile"
+		awk '{print$1}' "$playListFile" > "${playListFile/.*/__no-title.urls}"
+		$mpv --ytdl-format "$format" $playlistStartIndex --playlist "${playListFile/.*/__no-title.urls}" -- "$@"
+		\rm "${playListFile/.*/__no-title.urls}"
+	else
+		$mpv --ytdl-format "$format" $playlistStartIndex --playlist "$playListFile" -- "$@"
+	fi
 	tail -f nohup.out | egrep -v "AV: "
 }
 function mpvplaylistFORMAT {
