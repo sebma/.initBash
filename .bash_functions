@@ -168,7 +168,7 @@ function castnowPlaylist {
 	local playlist=$1
 	printf "=> Start playing playlist at: "
 	sed -n "${index}p" $playlist
-	castnowURLs $(grep -v ^# $playlist | tail -n +$index)
+	castnowURLs $(\grep -v ^# $playlist | tail -n +$index)
 }
 function castnowPlaylist {
 	test $# = 0 && {
@@ -190,7 +190,7 @@ function castnowURLs {
 	}
 
 	local format="mp4[height<=480]/mp4/best"
-	echo $1 | egrep -q "^(https?|s?ftps?)://" || { format="$1"; shift; }
+	echo $1 | \egrep -q "^(https?|s?ftps?)://" || { format="$1"; shift; }
 
 #	set -x
 	for url
@@ -207,7 +207,7 @@ function castnowURLs {
 	}
 
 	local format="mp4[height<=480]/mp4/best"
-	echo $1 | egrep -q "^(https?|s?ftps?)://" || { format="$1"; shift; }
+	echo $1 | \egrep -q "^(https?|s?ftps?)://" || { format="$1"; shift; }
 
 #	set -x
 	for url
