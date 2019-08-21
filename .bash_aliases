@@ -132,6 +132,7 @@ alias keyFrames="command ffprobe -hide_banner -loglevel error -skip_frame nokey 
 alias killall="\killall -v"
 alias kshVersion="type ksh >/dev/null && strings $(which ksh) | grep Version | tail -2"
 alias lastfiles='$(which find) . -xdev -type f -mmin -2'
+alias lastloggin='\lastlog -u $USER'
 alias less="\less -ir"
 alias ll="ls -lF"
 alias lla="ll -a"
