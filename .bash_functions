@@ -13,13 +13,6 @@ function Echo {
 	set -o histexpand
 	return $rc
 }
-function Echo {
-	local rc=$?
-	set +o histexpand # Turn off history expansion to be able easily use the exclamation mark in strings i.e https://stackoverflow.com/a/22130745/5649639
-	command echo "$@"
-	set -o histexpand
-	return $rc
-}
 function Less {
 	for file
 	do
@@ -30,6 +23,12 @@ function More {
 	for file
 	do
 		\highlight -O ansi --force "$file" | more
+	done
+}
+function Most {
+	for file
+	do
+		\highlight -O ansi --force "$file" | most
 	done
 }
 function Nohup {
@@ -87,16 +86,6 @@ function addUsersInGroup {
 		sudo adduser $user $lastArg
 	done
 }
-function addUsersInGroup {
-#	local lastArg="$(eval echo \${$#})"
-#	local lastArg="${@:$#}"
-	local lastArg="${@: -1}"
-	local allArgsButLast="${@:1:$#-1}"
-	for user in $allArgsButLast
-	do
-		sudo adduser $user $lastArg
-	done
-}
 function apkInfo {
 	for package
 	do
@@ -123,15 +112,6 @@ function asc2gpg {
 		\gpg -v -o "${ascFile/.asc/.gpg}" --dearmor "$ascFile"
 	done
 }
-function asc2gpg {
-	for ascFile
-	do
-		\gpg -v -o "${ascFile/.asc/.gpg}" --dearmor "$ascFile"
-	done
-}
-function awkCalc {
-	\awk "BEGIN{ print $* }"
-}
 function awkCalc {
 	\awk "BEGIN{ print $* }"
 }
@@ -139,14 +119,6 @@ function baseName {
 	for arg
 	do
 		echo ${arg/*\//}
-	done
-}
-function bible {
-	local bible="command bible"
-	for verses
-	do
-		$bible $verses | sed -n "2,3p"
-		$bible -f $verses | cut -d: -f2
 	done
 }
 function bible {
@@ -169,36 +141,6 @@ function castnowPlaylist {
 	printf "=> Start playing playlist at: "
 	\sed -n "${index}p" $playlist
 	castnowURLs $(awk '{print$1}' $playlist | \grep -v ^# | tail -n +$index)
-}
-function castnowPlaylist {
-	test $# = 0 && {
-		echo "=> Usage: $FUNCNAME [index] playlistFile ..." >&2
-		return 1
-	}
-
-	local index=${1:-1}
-	test $# = 2 && shift
-	local playlist=$1
-	printf "=> Start playing playlist at: "
-	\sed -n "${index}p" $playlist
-	castnowURLs $(awk '{print$1}' $playlist | tail -n +$index)
-}
-function castnowURLs {
-	test $# = 0 && {
-		echo "=> Usage: $FUNCNAME [ytdl-format] url1 url2 ..." >&2
-		return 1
-	}
-
-	local format="mp4[height<=480]/mp4/best"
-	echo $1 | \egrep -q "^(https?|s?ftps?)://" || { format="$1"; shift; }
-
-#	set -x
-	for url
-	do
-		youtube-dl --no-continue --ignore-config -f "$format" -o- -- "$url" | castnow --quiet -
-	done
-	set +x
-	echo
 }
 function castnowURLs {
 	test $# = 0 && {
@@ -258,26 +200,6 @@ function condaSearchThroughChannels {
 			conda search -c $ch $pkg 2>/dev/null
 		done
 	done
-}
-function condaSearchThroughChannels {
-	pythonChannelsList="conda-forge intel anaconda aaronzs"
-	for pkg
-	do
-		for ch in $pythonChannelsList
-		do
-			echo "=> Searching through conda channel <$ch> ..."
-			conda search -c $ch $pkg 2>/dev/null
-		done
-	done
-}
-function connect2SSID {
-	local ssid=$1
-	set -x
-	nmcli con status
-	time nmcli con up id $ssid
-	nmcli con status
-	time \curl -A "" ipinfo.io/ip || time \wget -qU "" -O- ipinfo.io/ip
-	set +x
 }
 function connect2SSID {
 	local ssid=$1
@@ -401,22 +323,6 @@ function extractURLs {
 		$sed 's/^.*http/http/;s/[<"].*$//;/^\s*$/d;/http/!d' "$file"
 	done | sort -u
 }
-function extractURLs {
-	local sed="command sed -E"
-	for file
-	do
-		xmllint --format "$file" > "$file".indented
-		\mv "$file".indented "$file"
-		$sed 's/^.*http/http/;s/[<"].*$//;/^\s*$/d;/http/!d' "$file"
-	done | sort -u
-}
-function fileTypes {
-	local find="command find"
-	time for dir
-	do
-		$find $dir -xdev -ls | awk '{print substr($3,1,1)}' | sort -u
-	done
-}
 function fileTypes {
 	local find="command find"
 	time for dir
@@ -469,12 +375,6 @@ function gdebiALL {
 		sudo gdebi -n $package
 	done
 }
-function gdebiALL {
-	for package
-	do
-		sudo gdebi -n $package
-	done
-}
 function getBJC {
 	#bjcUrl=http://www.bibledejesuschrist.org/downloads/bjc_internet.pdf
 	bjcUrl=http://www.bibledejesuschrist.org/downloads/bjc.pdf
@@ -483,16 +383,6 @@ function getBJC {
 	echo "=> Downloading last BJC version ..."
 	wget $bjcUrl
 	\mv -v $bjcBaseName.$extension "${bjcBaseName}_$(date -d "$(stat -c %y $bjcBaseName.$extension)" +%Y%m%d_%HH%MM%S).$extension"
-}
-function getField {
-	test $# -ne 3 && {
-		echo "=> ERROR on Usage: $FUNCNAME separator1 separator2 fieldNumber" >&2
-		return 1
-	}
-	local sep1="$1"
-	local sep2="$2"
-	declare -i fieldNumber=$3
-	awk -F "${sep1}|$sep2" "{print\$$fieldNumber}"
 }
 function getField {
 	test $# -ne 3 && {
@@ -530,14 +420,6 @@ function getPythonFunctionName {
 	shift
 	test $# != 0 && grepParagraph "def $funcName " '^$' $@
 }
-function getPythonFunctionName {
-	local funcName=$1
-	shift
-	test $# != 0 && grepParagraph "def $funcName " '^$' $@
-}
-function getPythonFunctions {
-	test $# != 0 && grepParagraph "def " '^$' $@
-}
 function getPythonFunctions {
 	test $# != 0 && grepParagraph "def " '^$' $@
 }
@@ -548,16 +430,6 @@ function getShellFunctionName {
 }
 function getShellFunctions {
 	test $# != 0 && grepParagraph '(^|\s)\w+\(\)|\bfunction\b' '^}' $@
-}
-function getShellFunctions {
-	test $# != 0 && grepParagraph '(^|\s)\w+\(\)|\bfunction\b' '^}' $@
-}
-function getURLTitle {
-	for url
-	do
-		\curl -Ls $url | awk -F'"' /og:title/'{print$4}'
-		echo $url
-	done
 }
 function getURLTitle {
 	for url
@@ -607,12 +479,6 @@ function gpg2asc {
 		\gpg -o - --enarmor "$gpgFile" | sed "s/ARMORED FILE/PUBLIC KEY BLOCK/" | tee "${gpgFile/.gpg/.asc}"
 	done
 }
-function gpg2asc {
-	for gpgFile
-	do
-		\gpg -o - --enarmor "$gpgFile" | sed "s/ARMORED FILE/PUBLIC KEY BLOCK/" | tee "${gpgFile/.gpg/.asc}"
-	done
-}
 function gpgPrint {
 	for pubKey
 	do
@@ -622,24 +488,6 @@ function gpgPrint {
 		\gpg $pubKey | awk '{printf$1"   "$2" "$3"\n""uid\t\t  ";$1=$2=$3="";print}'
 		echo
 	done
-}
-function gpgPrint {
-	for pubKey
-	do
-		echo $pubKey
-		printf -- "-%.s" $(seq ${#pubKey})
-		echo
-		\gpg $pubKey | awk '{printf$1"   "$2" "$3"\n""uid\t\t  ";$1=$2=$3="";print}'
-		echo
-	done
-}
-function grepFunction {
-	let $# -lt 2 && {
-		echo "=> Usage : $FUNCNAME startRegExpPattern fileList" >&2
-		return 1
-	}
-	shift
-	grepParagraph "function $1|${1}.*[(]" "^}" "$@"
 }
 function grepFunction {
 	let $# -lt 2 && {
@@ -662,32 +510,8 @@ function grepParagraph {
 #	startRegExp=$1 endRegExp=$2 awk "/$startRegExpPattern/{p=1}p;/$endRegExpPattern/{p=0}" $fileListPattern
 	startRegExp=$1 endRegExp=$2 perl -ne 'print "$ARGV:$_" if /$ENV{startRegExp}/ ... (/$ENV{endRegExp}/ || eof)' $fileListPattern
 }
-function grepParagraph {
-	let $# -lt 3 && {
-		echo "=> Usage : $FUNCNAME startRegExpPattern endRegExpPattern fileList" >&2
-		return 1
-	}
-	local startRegExpPattern
-	local endRegExpPattern
-	local fileListPattern="${@:3}"
-
-#	startRegExp=$1 endRegExp=$2 \sed -E -n "/$startRegExpPattern/,/$endRegExpPattern/p" $fileListPattern
-#	startRegExp=$1 endRegExp=$2 awk "/$startRegExpPattern/{p=1}p;/$endRegExpPattern/{p=0}" $fileListPattern
-	startRegExp=$1 endRegExp=$2 perl -ne 'print "$ARGV:$_" if /$ENV{startRegExp}/ ... (/$ENV{endRegExp}/ || eof)' $fileListPattern
-}
 function greplast {
 	grep "$@" | awk 'END{print}'
-}
-function greplast {
-	grep "$@" | awk 'END{print}'
-}
-function h5ll {
-	local switch="$1"
-	echo $switch | \grep -q "^-" && shift 1 || switch=""
-	for file
-	do
-		\h5ls -r $switch $file
-	done | \egrep "Group|Attribute:|Dataset|Data:"
 }
 function h5ll {
 	local switch="$1"
@@ -702,27 +526,6 @@ function hide {
 	do
 		mv $file .$file
 	done
-}
-function hide {
-	for file
-	do
-		mv $file .$file
-	done
-}
-function html2pdf {
-	test $# = 0 && {
-		echo "=> Usage: $FUNCNAME url_or_file1 url_or_file1 ..." >&2
-		return 1
-	}
-
-	local pdfFiles=""
-	for url_or_file
-	do
-		pdfFileName=$(basename $url_or_file | \sed -E "s/#.*//;s/$|\.[^.]+$/.pdf/")
-		pdfFiles+="$pdfFileName "
-		wkhtmltopdf --no-background --outline --header-line --footer-line --header-left [webpage] --footer-left "[isodate] [time]" --footer-right [page]/[toPage] "$url_or_file" "$pdfFileName"
-	done
-	open $pdfFiles
 }
 function html2pdf {
 	test $# = 0 && {
@@ -763,16 +566,6 @@ function img2pdfA4 {
 	local lastArg="${@: -1}"
 	local allArgsButLast="${@:1:$#-1}"
 	img2pdf --pagesize A4 $allArgsButLast -o $lastArg
-}
-function img2pdfA4 {
-	local lastArg="${@: -1}"
-	local allArgsButLast="${@:1:$#-1}"
-	img2pdf --pagesize A4 $allArgsButLast -o $lastArg
-}
-function img2pdfA4R {
-	local lastArg="${@: -1}"
-	local allArgsButLast="${@:1:$#-1}"
-	img2pdf --pagesize A4^T $allArgsButLast -o $lastArg
 }
 function img2pdfA4R {
 	local lastArg="${@: -1}"
@@ -815,14 +608,6 @@ function jupyterToken {
 		\pgrep -f jupyter-notebook >/dev/null && token=$(awk -F '[=&]' '/token=/{token=$2}END{print token}' nohup.out)
 	fi
 	test -n "$token" && echo "=> token = $token"
-}
-function latexBuild {
-	local outPutDIR=tmp
-	mkdir -pv $outPutDIR
-	for file
-	do
-		\texfot pdflatex --shell-escape --output-directory $outPutDIR "$file" && open $outPutDIR/${file/tex/pdf}
-	done
 }
 function latexBuild {
 	local outPutDIR=tmp
@@ -916,20 +701,6 @@ function lv_Dev_Creation_Date {
 		sudo lvdisplay
 	done | egrep "LV Path|Creation"
 }
-function lv_Dev_Creation_Date {
-	sudo -v
-	for lv
-	do
-		sudo lvdisplay
-	done | egrep "LV Path|Creation"
-}
-function lv_FS_Creation_Date {
-	sudo -v
-	for fs
-	do
-		sudo lvdisplay $(lvm_Mount_Point_2_LVM_Paths $fs)
-	done | egrep "LV Path|Creation"
-}
 function lv_FS_Creation_Date {
 	sudo -v
 	for fs
@@ -940,20 +711,6 @@ function lv_FS_Creation_Date {
 function lvm_DM_Paths_2_LVM_Paths {
 	for dmPath
 	do
-		\lsblk -nf $dmPath | awk '{print"/dev/mapper/"$1}'
-	done
-}
-function lvm_DM_Paths_2_LVM_Paths {
-	for dmPath
-	do
-		\lsblk -nf $dmPath | awk '{print"/dev/mapper/"$1}'
-	done
-}
-function lvm_Mount_Point_2_LVM_Paths {
-	local dmPath
-	for fs
-	do
-		dmPath=$(\df $fs | awk "$fs/"'{print$1}')
 		\lsblk -nf $dmPath | awk '{print"/dev/mapper/"$1}'
 	done
 }
@@ -975,10 +732,6 @@ function memUsage {
 #		\ps -eo rss= | awk '/[0-9]/{total+=$1/1024}END{print "\tTotal= "total" MiB"}'
 		\free -m | awk '/Mem:/{total=$2}/buffers.cache:/{used=$3}END{printf "%5.2lf%%\n", 100*used/total}'
 	fi
-}
-function mkdircd {
-	\mkdir -pv $1
-	cd $1 && pwd -P
 }
 function mkdircd {
 	\mkdir -pv $1
@@ -1040,12 +793,6 @@ function odfInfo {
 		\unzip -c $document meta.xml | tr -s " " "\n" | fmt
 	done
 }
-function odfInfo {
-	for document
-	do
-		\unzip -c $document meta.xml | tr -s " " "\n" | fmt
-	done
-}
 function os {
 	case $os in
 		Darwin) sw_vers >/dev/null 2>&1 && echo $(sw_vers -productName) $(sw_vers -productVersion) || system_profiler SPSoftwareDataType || defaults read /System/Library/CoreServices/SystemVersion ProductVersion ;;
@@ -1060,24 +807,6 @@ function pdfAutoRotate {
 		time \gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -dAutoRotatePages=/All -sOutputFile="$output" "$file"
 		echo
 		echo "=> $output"
-	done
-}
-function pdfAutoRotate {
-	for file
-	do
-		output="${file/.pdf/-ROTATED.pdf}"
-		time \gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -dAutoRotatePages=/All -sOutputFile="$output" "$file"
-		echo
-		echo "=> $output"
-	done
-}
-function pdfCompress {
-	for pdf
-	do
-		echo "=> Compressing $pdf ..."
-		time \pdftk $pdf output ${pdf/.pdf/__SMALLER.pdf} compress
-		echo
-		du -h ${pdf/.pdf/*.pdf}
 	done
 }
 function pdfCompress {
@@ -1111,17 +840,6 @@ function pdfSelect {
 	time \pdfjam $input $pages -o $output
 	open $output
 }
-function pdfSelect {
-	input=$1
-	pages=$2
-	output=$3
-	test $# != 3 && {
-		echo "=> Usage : $FUNCNAME <inputFile> <pageRanges> <outputFile>" >&2
-		return 1
-	}
-	time \pdfjam $input $pages -o $output
-	open $output
-}
 function pem2cer {
 	for pemCertificate
 	do
@@ -1131,15 +849,6 @@ function pem2cer {
 }
 function perlCalc {
 	\perl -le "print ${*/^/**}"
-}
-function perlCalc {
-	\perl -le "print ${*/^/**}"
-}
-function picMpixels {
-	for fileName
-	do
-		LC_NUMERIC=C \perl -le "printf \"=> fileName = %s size = %.2f Mpix\n\", \"$fileName\", $(identify -format '%w*%h/10**6' $fileName)"
-	done | \column -t
 }
 function picMpixels {
 	for fileName
@@ -1214,9 +923,6 @@ function processUsage {
 	echo -e "$headers" >&2
 	# "tail -n +1" ignores the SIGPIPE
 	\ps -e -o $columns | sort -nr | cut -c-156 | head -500 | awk '!/COMMAND/{printf "%9.3lf MiB %4.1f%% %4.1f%% %5d %s\n", $1/1024,$2,$3,$4,$5}' | tail -n +1 | head -45
-}
-function pythonCalc {
-	\python -c "print(${*/^/**})"
 }
 function pythonCalc {
 	\python -c "print(${*/^/**})"
@@ -1382,13 +1088,6 @@ function restart_conky {
 	done
 	\pgrep conky && \killall -SIGUSR1 conky || conky -d
 }
-function restart_conky {
-	for server
-	do
-		ssh $server "pgrep conky && killall -SIGUSR1 conky || conky -d"
-	done
-	\pgrep conky && \killall -SIGUSR1 conky || conky -d
-}
 function rsyncIncludeOnly {
 	local destination="$(eval echo \$$#)"
 	local rsyncCommandSuffix="--include='*/' --exclude='*'"
@@ -1434,7 +1133,7 @@ function setTimestamps {
 		touch -t $timestamp "$file"
 	done
 }
-function sizeOfRemoteFile { 
+function sizeOfRemoteFile {
     trap 'rc=$?;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
     local size
     local total="0"
@@ -1454,34 +1153,6 @@ function sizeOfRemoteFile {
         echo "=> total = $total Mo"
     }
     trap - INT
-}
-function sizeOfRemoteFile { 
-    trap 'rc=$?;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
-    local size
-    local total="0"
-    local format=18
-    echo $1 | \egrep -q "^https?://" || { 
-        format=$1
-        shift
-    }
-    for url
-    do
-        size=$(\curl -sI "$url" | \sed "s/\r//g" | awk 'BEGIN{IGNORECASE=1}/Content-?Length:/{print$2/2^20}')
-        total="$total+$size"
-        printf "%s %s Mo\n" $url $size
-    done
-    test $# -gt 1 && { 
-        total=$(echo $total | \bc -l)
-        echo "=> total = $total Mo"
-    }
-    trap - INT
-}
-function sortInPlace {
-	local sort="command sort"
-	for file
-	do
-		$sort -uo "$file" "$file"
-	done
 }
 function sortInPlace {
 	local sort="command sort"
@@ -1540,9 +1211,6 @@ function sshStartLocalForward {
 function sum {
 	awk "{print \$1}" | LC_ALL=C numfmt --from=iec | paste -sd+ | bc | numfmt --to=iec-i --suffix=B
 }
-function sum {
-	awk "{print \$1}" | LC_ALL=C numfmt --from=iec | paste -sd+ | bc | numfmt --to=iec-i --suffix=B
-}
 function systemType {
 	local system
 	if which lsb_release >/dev/null
@@ -1582,31 +1250,10 @@ function tcpConnetTest {
 function termtitle {
 	printf "\e]0;$*\a"
 }
-function termtitle {
-	printf "\e]0;$*\a"
-}
 function testURLs {
 	for url
 	do
 		\curl -o /dev/null -Lsw "%{http_code}\n" $url | \egrep -q "^(200|301)$" && echo OK || echo DOWN >&2
-	done
-}
-function testURLs {
-	for url
-	do
-		\curl -o /dev/null -Lsw "%{http_code}\n" $url | \egrep -q "^(200|301)$" && echo OK || echo DOWN >&2
-	done
-}
-function testURLsFromFILE {
-	for file
-	do
-		while read line
-		do
-			url=$line
-			printf "=> [$file] : The url = <$url> is : "
-#			\curl -sLI -m 5 $url | \egrep -wq "HTTP[^ ]* 200" && echo ALIVE || echo DEAD
-			\curl -ksf -o /dev/null -m 5 $url && echo ALIVE || echo DEAD
-		done < $file
 	done
 }
 function testURLsFromFILE {
@@ -1664,13 +1311,6 @@ function updateDistrib {
 		*)	;;
 	esac
 }
-function updateDistrib {
-	local distrib=$(distribType)
-	case $distrib in
-		debian|ubuntu) sudo apt -V upgrade --download-only "$@" && sync && echo && sudo apt -V upgrade --yes "$@" && echo && sudo apt-get -V autoremove "$@" && sudo \updatedb; sync;;
-		*)	;;
-	esac
-}
 function updateYoutubeLUAForVLC {
 	local youtubeLuaURL=https://raw.githubusercontent.com/videolan/vlc/master/share/lua/playlist/youtube.lua
 	if groups 2>/dev/null | egrep -wq "sudo|admin"
@@ -1704,12 +1344,6 @@ function webgrep {
 	url=$1
 	shift
 	test $# -ge 1 && curl -s $url | egrep $@
-}
-function wgetParallel {
-	for url
-	do
-		\wget -Nb "$url"
-	done
 }
 function wgetParallel {
 	for url
