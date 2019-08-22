@@ -315,12 +315,15 @@ function env {
 	command env $@ | sort
 }
 function extractURLs {
-	local sed="command sed -E"
 	for file
 	do
-		xmllint --format "$file" > "$file".indented
-		\mv "$file".indented "$file"
-		$sed 's/^.*http/http/;s/[<"].*$//;/^\s*$/d;/http/!d' "$file"
+		\sed -E 's/^.*http/http/;s/[<"].*$//;/^\s*$/d;/http/!d' "$file"
+	done | sort -u
+}
+function extractURLs_Simplified  {
+	for file
+	do
+		\grep -oP '(www|http:|https:)+[^\s"]+[\w]' "$file" | uniq
 	done | sort -u
 }
 function fileTypes {
@@ -541,6 +544,14 @@ function html2pdf {
 		wkhtmltopdf --no-background --outline --header-line --footer-line --header-left [webpage] --footer-left "[isodate] [time]" --footer-right [page]/[toPage] "$url_or_file" "$pdfFileName"
 	done
 	open $pdfFiles
+}
+function htmlReIndent {
+	for file
+	do
+		xmllint --html --format "$file" 2>/dev/null > "${file/.*/.indented.html}"
+		[ $? != 0 ] && echo "=> WARNING: xmllint could not re-indent $file." >&2 && continue
+		\mv "${file/.*/.indented.html}".indented "$file"
+	done | sort -u
 }
 function httpLocalServer {
 #	local fqdn=$(host $(hostname) | awk '/address/{print$1}')
