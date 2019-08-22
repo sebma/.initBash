@@ -1751,6 +1751,7 @@ function wlanmac {
 	test "$wlanIF" && ip link show $wlanIF | awk '/link\/ether /{print$2}'
 }
 function xpiInfo {
+	type jq >/dev/null || return
 	local xpiFile
 	local xpiID
 	for xpiFile
@@ -1776,6 +1777,7 @@ function xpiInfo {
 	done
 }
 function xpiRename {
+	type jq >/dev/null || return
 	local xpiFile
 	local xpiID
 	for xpiFile
