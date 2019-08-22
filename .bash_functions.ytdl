@@ -162,7 +162,7 @@ function getRestrictedFilenamesFHD {
 function getRestrictedFilenamesFORMAT {
 	trap 'rc=127;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
 #	local translate="trans -b :en" # to translate any language to english
-	local translate=cat
+	local translate=cat # Translate through pipe disabled by default
 	local initialSiteVideoFormat="$1"
 	local siteVideoFormat downloadOK extension fqdn fileSizeOnFS remoteFileSize=0
 	shift
