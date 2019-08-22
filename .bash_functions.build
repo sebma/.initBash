@@ -29,7 +29,7 @@ function buildSourceCode {
 					echo "=> description :"
 					echo
 					alias gitHTTP_URL='\git config remote.origin.url | \sed -E "s|^git@|https://|;s|(\.\w+):|\1/|"'
-					\curl -qs $gitHTTP_URL | pup --charset utf8 "title text{}" | cut -d: -f2-
+					\curl -qs $(gitHTTP_URL) | pup --charset utf8 "title text{}" | cut -d: -f2-
 					echo
 
 					pkgname=$(basename -s .git $(git config --get remote.origin.url))
