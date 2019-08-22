@@ -2,8 +2,8 @@
 declare -A | grep -wq colors || source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-test "$make" || which remake >/dev/null && export make="$(which remake)" || export make="$(which make)"
-test "$install" || { which checkinstall >/dev/null && export install="$(which checkinstall)" || export install="$make install";}
+test "$make" || which remake >/dev/null && export make="$(which remake) -j$(nproc)" || export make="$(which make) -j$(nproc)"
+test "$install" || { which checkinstall >/dev/null && export install="$(which checkinstall)" || export install="make install";}
 
 function buildSourceCode {
 	test $CC || export CC=$(echo $HOSTTYPE-$OSTYPE-gcc | sed "s/armv[^-]*-/arm-/")
@@ -15,13 +15,13 @@ function buildSourceCode {
 
 	if [ $returnCode = 0 ] && ( [ -s Makefile ] || [ -s makefile ] || [ -s GNUmakefile ] )
 	then
-		if time -p $make
+		if make
 		then
 			returnCode=$?
 			\mkdir -p $prefix
 			if test -w $prefix
 			then
-				$make install
+				make install
 				returnCode=$?
 			else
 				sudo $install
@@ -116,7 +116,7 @@ function configure {
 	echo "=> pwd = $PWD"
 	echo "=> prefix = $prefix"
 	\grep -w url ./.git/config && which git >/dev/null 2>&1 && git pull
-	if [ -d cmake ]
+	if [ -f CMakeLists.txt ]
 	then
 		mkdir -p build
 		cd build
@@ -132,7 +132,6 @@ function configure {
 		fi
 		returnCode=$?
 		grep ":PATH=.*$prefix" CMakeCache.txt
-		cd -
 	else
 		if [ ! -s configure ]
 		then
@@ -187,7 +186,7 @@ function configureForJolla {
 function make {
 	if [ -s Makefile ] || [ -s makefile ]
 	then
-		time CFLAGS="-g" $make -j$(nproc) $@
+		time CFLAGS="-g" $make $@
 	else
 		\mkdir ../bin 2>/dev/null
 		if which gcc >/dev/null 2>&1
@@ -195,13 +194,13 @@ function make {
 			for file
 			do
 				echo gcc -ggdb $file.c -o ../bin/$file
-				command gcc -ggdb $file.c -o ../bin/$file
+				time command gcc -ggdb $file.c -o ../bin/$file
 			done
 		else
 			for file
 			do
 				echo cc -g $file.c -o ../bin/$file
-				command cc -g $file.c -o ../bin/$file
+				time command cc -g $file.c -o ../bin/$file
 			done
 		fi
 	fi
