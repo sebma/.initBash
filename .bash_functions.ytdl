@@ -199,7 +199,8 @@ function getRestrictedFilenamesFORMAT {
 			if [ -f "$fileName" ]
 			then
 				fileSizeOnFS=$(stat -c %s "$fileName")
-				remoteFileSize=$(ytdlGetSize $chosenFormatID $url 2>/dev/null)
+				time remoteFileSize=$(ytdlGetSize $chosenFormatID $url)
+				test $? != 0 && return
 				if [ ! -w "$fileName" ] || [ $fileSizeOnFS -ge $remoteFileSize ]
 				then
 					echo "${colors[yellowOnBlue]}=> The file <$fileName> is already downloaded, skipping ...$normal" >&2
@@ -428,11 +429,11 @@ function ytdlGetFormat {
 	done
 }
 function ytdlGetSize {
-	type jq >/dev/null || exit
+	type jq >/dev/null || { echo -1;return; }
 	local firstArg=$1 format=best size=0 url=""
 	test $# != 0 && {
 		echo $firstArg | egrep -q ^http || { format=$firstArg;shift; }
-		read size url <<< $(time ytdlnoconfig -j -f $format "$@" | jq -r .filesize,.url)
+		read size url <<< $(ytdlnoconfig -j -f $format "$@" | jq -r .filesize,.url)
 		[ $size = null ] && size=$(\curl -sI "$url" | \sed "s/\r//g" | awk -F ": " 'BEGIN{IGNORECASE=1}/^Content-?Length/{printf$2}')
 		echo $size
 	}
