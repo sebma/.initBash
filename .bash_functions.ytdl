@@ -428,6 +428,7 @@ function ytdlGetFormat {
 	done
 }
 function ytdlGetSize {
+	type jq >/dev/null || return
 	local firstArg=$1 format=best size=0 url=""
 	test $# != 0 && {
 		echo $firstArg | egrep -q ^http || { format=$firstArg;shift; }
