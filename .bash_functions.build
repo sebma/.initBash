@@ -18,18 +18,17 @@ function buildSourceCode {
 		if make
 		then
 			returnCode=$?
-			\mkdir -p $prefix
-			if test -w $prefix
+			if groups | \egrep -wq "sudo|adm|root"
 			then
-				make install
-				returnCode=$?
-			else
 				if which checkinstall >/dev/null
 				then
 					checkinstallFromGITRepo
 				else
 					sudo $make install
 				fi
+				returnCode=$?
+			else
+				make install
 				returnCode=$?
 			fi
 		else
@@ -121,12 +120,15 @@ function configure {
 		elif grep -wq GNU README* COPYING
 		then
 			prefix=$HOME/gnu
+			mkdir -p $prefix
 		else
 			prefix=$HOME/local
+			mkdir -p $prefix
 		fi
 	else
 		for arg in $@;do echo $arg | \grep -q -- --prefix= && prefix=${arg/*=/};done
 		prefix=$(echo $prefix | sed 's/~/$HOME/') #Configure ne supporte parfois pas les chemins contenant '~'
+		mkdir -p $prefix
 		shift
 	fi
 	configureArgs="--prefix=$prefix --exec-prefix=$prefix $defaultBuildOptions $@"
