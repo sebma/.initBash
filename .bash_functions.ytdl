@@ -200,7 +200,7 @@ function getRestrictedFilenamesFORMAT {
 			then
 				fileSizeOnFS=$(stat -c %s "$fileName")
 				time remoteFileSize=$(ytdlGetSize $chosenFormatID $url)
-				test $? != 0 && return
+				test $remoteFileSize = -1 && return 1
 				if [ ! -w "$fileName" ] || [ $fileSizeOnFS -ge $remoteFileSize ]
 				then
 					echo "${colors[yellowOnBlue]}=> The file <$fileName> is already downloaded, skipping ...$normal" >&2
