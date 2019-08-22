@@ -10,7 +10,7 @@ function buildSourceCode {
 	local defaultBuildOptions=""
 	local returnCode=0
 	local project=$(basename $PWD)
-	configure $defaultBuildOptions "$@"
+	[ -s Makefile ] || [ -s makefile ] || [ -s GNUmakefile ] || configure $defaultBuildOptions "$@"
 	returnCode=$?
 
 	if [ $returnCode = 0 ] && ( [ -s Makefile ] || [ -s makefile ] || [ -s GNUmakefile ] )
@@ -24,7 +24,20 @@ function buildSourceCode {
 				make install
 				returnCode=$?
 			else
-				sudo $install
+				if which checkinstall >/dev/null
+				then
+					echo "=> description :"
+					echo
+					alias gitHTTP_URL='\git config remote.origin.url | \sed -E "s|^git@|https://|;s|(\.\w+):|\1/|"'
+					\curl -qs $gitHTTP_URL | pup --charset utf8 "title text{}" | cut -d: -f2-
+					echo
+
+					pkgname=$(basename -s .git $(git config --get remote.origin.url))
+					pkgversion=$(\git describe --tags --abbrev=0 | \sed -E "s/^v|^[Vv]ersion//g")
+					sudo checkinstall --pkgname $pkgname --pkgversion $pkgversion
+				else
+					sudo $make install
+				fi
 				returnCode=$?
 			fi
 		else
