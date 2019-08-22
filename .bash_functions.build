@@ -26,15 +26,7 @@ function buildSourceCode {
 			else
 				if which checkinstall >/dev/null
 				then
-					echo "=> description :"
-					echo
-					alias gitHTTP_URL='\git config remote.origin.url | \sed -E "s|^git@|https://|;s|(\.\w+):|\1/|"'
-					\curl -qs $(gitHTTP_URL) | pup --charset utf8 "title text{}" | cut -d: -f2-
-					echo
-
-					pkgname=$(basename -s .git $(git config --get remote.origin.url))
-					pkgversion=$(\git describe --tags --abbrev=0 | \sed -E "s/^v|^[Vv]ersion//g")
-					sudo checkinstall --pkgname $pkgname --pkgversion $pkgversion
+					checkinstallFromGITRepo
 				else
 					sudo $make install
 				fi
@@ -53,6 +45,18 @@ function buildSourceCode {
 	[ $returnCode = 0 ] && set -x && sudo ldconfig
 	set +x
 	return $returnCode
+}
+function checkinstallFromGITRepo {
+	echo "=> description :"
+	echo
+	alias gitHTTP_URL='\git config remote.origin.url | \sed -E "s|^git@|https://|;s|(\.\w+):|\1/|"'
+	\curl -qs $(gitHTTP_URL) | pup --charset utf8 "title text{}" | cut -d: -f2-
+	echo
+
+	local pkgname=$(basename -s .git $(git config --get remote.origin.url))
+	local pkgversion=$(\git describe --tags --abbrev=0 | \sed -E "s/^v|^[Vv]ersion//g")
+	local pkgsource=$(gitHTTP_URL)
+	sudo checkinstall --pkgname $pkgname --pkgversion $pkgversion --pkgsource=$pkgsource
 }
 function buildSourceCodeForAndroid {
 	local dest=arm-linux-androideabi
