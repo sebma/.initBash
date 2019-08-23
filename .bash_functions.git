@@ -4,7 +4,8 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 
 function gitClone {
 	local repoURL=$1
-	test $# = 1 && git clone $repoURL && cd $(basename $repoURL)
+	local owner=""
+	test $# = 1 && owner=$(basename $(dirname $repoURL)) && mkdir $owner && cd $owner && git clone $repoURL && cd $(basename $repoURL)
 }
 
 set +x
