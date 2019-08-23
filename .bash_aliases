@@ -115,7 +115,6 @@ alias gzip="\gzip -Nv"
 alias h5dump="\h5dump -n 1"
 alias halt="\halt && exit"
 alias headlines='\head -n $((LINES-2))'
-alias html2text='\html2text -width $COLUMNS'
 alias html2xml="\xmllint --html --format --recover --xmlout"
 alias jpeg2pdf="\convert +density"
 alias jpeg2pdfA4="jpeg2pdf -page A4"
