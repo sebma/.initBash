@@ -437,8 +437,8 @@ function getShellFunctions {
 function getURLTitle {
 	for url
 	do
-		\curl -Ls $url | awk -F'"' /og:title/'{print$4}'
-		echo $url
+		printf "=> $url : " >&2
+		\curl -Ls $url | pup --charset utf8 'title text{}'| \recode html..latin9
 	done
 }
 function getVideosFromRSSPodCastPlayList {
