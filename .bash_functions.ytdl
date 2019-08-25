@@ -433,10 +433,11 @@ function ytdlGetFormat {
 }
 function ytdlGetSize {
 	type jq >/dev/null || { echo -1;return 1; }
+	local ytdlnoconfig="youtube-dl --ignore-config"
 	local firstArg=$1 format=best size=0 url=""
 	test $# != 0 && {
 		echo $firstArg | egrep -q ^http || { format=$firstArg;shift; }
-		read size url <<< $(ytdlnoconfig -j -f $format "$@" | jq -r .filesize,.url)
+		read size url <<< $($ytdlnoconfig -j -f $format "$@" | jq -r .filesize,.url)
 		[ $size = null ] && size=$(\curl -sI "$url" | \sed "s/\r//g" | awk -F ": " 'BEGIN{IGNORECASE=1}/^Content-?Length/{printf$2}')
 		echo $size
 	}
