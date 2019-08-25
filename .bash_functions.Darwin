@@ -15,7 +15,7 @@ function brew {
 	return $rc
 }
 function brewInstall {
-	if ! which brew >/dev/null 2>&1 
+	if ! which brew >/dev/null 2>&1
 	then
 		if groups | \egrep -wq "adm|admin|sudo"
 		then
@@ -115,9 +115,9 @@ function netstat {
 		esac
 	done
 	
-	if $wasInWhile 
+	if $wasInWhile
 	then
-		$(which netstat) $args 
+		$(which netstat) $args
 	else
 		echo "=> ERROR : There was a problem with the <getopts> builtin." >&2
 		return 1;
@@ -148,7 +148,7 @@ function pkgList {
 function pkill {
 	local firstArg=$1
 	test $firstArg && {
-		if echo $firstArg | \grep -q "\-[0-9]" 
+		if echo $firstArg | \grep -q "\-[0-9]"
 		then
 			shift
 			processName=$1
