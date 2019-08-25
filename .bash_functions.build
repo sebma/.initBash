@@ -157,7 +157,7 @@ function configure {
 #			test -s ./bootstrap.sh && time ./bootstrap.sh || { test -s ./bootstrap && time ./bootstrap || test -s ./autogen.sh && time ./autogen.sh; }
 			for autoconfProg in bootstrap.py bootstrap.sh bootstrap autogen.sh
 			do	
-				if test -x $autoconfProg 
+				if test -x $autoconfProg
 				then
 					set -x
 					time ./$autoconfProg $configureArgs || time ./$autoconfProg
