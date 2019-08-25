@@ -612,7 +612,7 @@ function mkvInfo {
 	do
 		echo "=> file = $file" >&2
 		echo >&2
-		time mkvinfo -s "$file" 
+		time mkvinfo -s "$file"
 		echo >&2
 	done | grep Track
 }
