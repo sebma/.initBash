@@ -34,7 +34,7 @@ function Most {
 function Nohup {
 	local firstArg=$1
 	local nohup="command nohup"
-	if [ $(type -t $firstArg) = function ] 
+	if [ $(type -t $firstArg) = function ]
 	then
 		shift && $nohup bash -c "$(declare -f $firstArg);$firstArg $*"
 	elif [ $(type -t $firstArg) = alias ]
@@ -48,7 +48,7 @@ function Nohup {
 function Sudo {
 	local firstArg=$1
 	local sudo="command sudo"
-	if [ $(type -t $firstArg) = function ] 
+	if [ $(type -t $firstArg) = function ]
 	then
 		shift && $sudo bash -c "$(declare -f $firstArg);$firstArg $*"
 	elif [ $(type -t $firstArg) = alias ]
@@ -759,7 +759,7 @@ function myUnlink {
 	done
 }
 function mysqlplus {
-	if test $TNS_ADMIN 
+	if test $TNS_ADMIN
 	then
 		echo "=> Connecting to database <$ORACLE_SID> as <$USER> ..."
 		sqlplus $USER $@
@@ -893,7 +893,7 @@ function pip {
 	then
 		if groups | egrep -wq "sudo|admin"
 		then
-			\sudo -H $(which $caller) $@ 
+			\sudo -H $(which $caller) $@
 		else
 			command $caller $@
 		fi
@@ -1149,7 +1149,7 @@ function sizeOfRemoteFile {
     local size
     local total="0"
     local format=18
-    echo $1 | \egrep -q "^https?://" || { 
+    echo $1 | \egrep -q "^https?://" || {
         format=$1
         shift
     }
@@ -1159,7 +1159,7 @@ function sizeOfRemoteFile {
         total="$total+$size"
         printf "%s %s Mo\n" $url $size
     done
-    test $# -gt 1 && { 
+    test $# -gt 1 && {
         total=$(echo $total | \bc -l)
         echo "=> total = $total Mo"
     }
@@ -1198,7 +1198,7 @@ function ssh {
 }
 function sshStartLocalForward {
 	local tunnelDef=$1
-	if test $tunnelDef 
+	if test $tunnelDef
 	then
 		if ! \pgrep -lf $tunnelDef | \grep -q "/ssh "
 		then
@@ -1241,7 +1241,7 @@ function tcpConnetTest {
 	then
 		if test $http_proxy
 		then
-			if which nc.openbsd > /dev/null 2>&1 
+			if which nc.openbsd > /dev/null 2>&1
 			then
 				time \nc.openbsd -x $proxyName:$proxyPort -v -z -w 5 $(echo $@ | tr ":" " ")
 			else
@@ -1367,7 +1367,7 @@ function whatPackageContainsExecutable {
 	then
 		findPackage="dpkg -S"; searchPackage="apt-file search";
 		$findPackage $(printf "bin/%s " "$@")
-	else 
+	else
 		for executable
 		do
 			case "$(distribPackageMgmt)" in
