@@ -164,7 +164,7 @@ function getRestrictedFilenamesFORMAT {
 #	local translate="trans -b :en" # to translate any language to english
 	local translate=cat # Translate through pipe disabled by default
 	local initialSiteVideoFormat="$1"
-	local siteVideoFormat downloadOK extension fqdn fileSizeOnFS remoteFileSize=0
+	local siteVideoFormat downloadOK=-1 extension fqdn fileSizeOnFS remoteFileSize=0
 	shift
 	local -i i=0
 	for url
