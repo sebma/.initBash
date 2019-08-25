@@ -85,7 +85,7 @@ function fixAptKeys {
 		echo
 		echo "=> Processing key: $key"
 		sudo apt-key del $key
-		sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys $key 
+		sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys $key
 	done
 
 	for keyFile in $(awk '/gpg: keyblock resource .*resource limit/{print gensub("\`|.:","","g",$4)" "}' /tmp/keymissing)
