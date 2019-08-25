@@ -25,7 +25,7 @@ alias mpvFHD='mpv  --profile=fhd'
 alias mpvHD='mpv   --profile=hd'
 alias mpvHQ='mpv   --profile=hq'
 alias mpvFSD='mpv  --profile=fsd'
-alias mpvSD='mpv   --profile=sd' 
+alias mpvSD='mpv   --profile=sd'
 alias mpvLD='mpv   --profile=ld'
 alias mpvVLD='mpv  --profile=vld'
 alias mpvFASTER='mpv --profile=for_slow_hardware'
@@ -58,9 +58,9 @@ function mpvInit {
 		if [ ! -w /dev/fb0 ]
 		then
 			\sudo chmod g+w /dev/fb0
-			if ! groups | \grep -wq video 
+			if ! groups | \grep -wq video
 			then
-				echo "=> INFO: Adding $USER in the video group and logging in to the new <video> group." 1>&2 
+				echo "=> INFO: Adding $USER in the video group and logging in to the new <video> group." 1>&2
 				\sudo adduser $USER video
 				\sudo newgrp - video
 			fi
