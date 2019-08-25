@@ -487,7 +487,7 @@ function avprobe {
 	for arg
 	do
 		echo "$arg" | egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $avprobe $avprobeOptions "$($youtube_dl -gf best -- "$arg")" || command avprobe $avprobeOptions -probesize 400M -analyzeduration 400M "$arg"
-#	done 2>&1 | cut -c 1-$COLUMNS
+#	done 2>&1 | cut -c 1-$(tput cols)
 	done
 }
 function cropdetect {
@@ -511,28 +511,28 @@ function ffprobeFlat {
 	for arg
 	do
 		echo "$arg" | egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $ffprobe $ffprobeOptions "$($youtube_dl -gf best -- "$arg")" || $ffprobe $ffprobeOptions "$arg"
-	done 2>&1 | cut -c 1-$COLUMNS
+	done 2>&1 | cut -c 1-$(tput cols)
 }
 function ffprobeIni {
 	local ffprobeOptions="-v error -show_format -show_streams -of ini"
 	for arg
 	do
 		echo "$arg" | egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $ffprobe $ffprobeOptions "$($youtube_dl -gf best -- "$arg")" || $ffprobe $ffprobeOptions "$arg"
-	done 2>&1 | cut -c 1-$COLUMNS
+	done 2>&1 | cut -c 1-$(tput cols)
 }
 function ffprobeJSON {
 	local ffprobeOptions="-v error -show_format -show_streams -of json"
 	for arg
 	do
 		echo "$arg" | egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $ffprobe $ffprobeOptions "$($youtube_dl -gf best -- "$arg")" || $ffprobe $ffprobeOptions "$arg"
-	done 2>&1 | cut -c 1-$COLUMNS
+	done 2>&1 | cut -c 1-$(tput cols)
 }
 function ffprobeXML {
 	local ffprobeOptions="-v error -show_format -show_streams -of xml"
 	for arg
 	do
 		echo "$arg" | egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $ffprobe $ffprobeOptions "$($youtube_dl -gf best -- "$arg")" || $ffprobe $ffprobeOptions "$arg"
-	done 2>&1 | cut -c 1-$COLUMNS
+	done 2>&1 | cut -c 1-$(tput cols)
 }
 function flac2spx {
 	typeset inputFile="$1"
@@ -918,7 +918,7 @@ function videoGet {
 	done
 }
 function videoInfo {
-	local columns=$COLUMNS
+	local columns=$(tput cols)
 #	local columns="" # To see more info than the width of the screen
 	local size=0
 	which ffprobe >/dev/null && {
@@ -959,7 +959,7 @@ function videoInfo {
 	}
 }
 function videoInfoOLD {
-	local columns=$COLUMNS
+	local columns=$(tput cols)
 #	local columns="" # To see more info than the width of the screen
 	local size=0
 	which ffprobe >/dev/null && {
