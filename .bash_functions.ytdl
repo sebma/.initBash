@@ -205,6 +205,7 @@ function getRestrictedFilenamesFORMAT {
 				test $? != 0 && return
 				if [ ! -w "$fileName" ] || [ $fileSizeOnFS -ge $remoteFileSize ]
 				then
+					echo
 					echo "${colors[yellowOnBlue]}=> The file <$fileName> is already downloaded, skipping ...$normal" >&2
 					echo
 					let j++
@@ -239,7 +240,7 @@ function getRestrictedFilenamesFORMAT {
 				downloadOK=$?
 			fi
 
-			if [ $downloadOK = 0 ] 
+			if [ $downloadOK = 0 ]
 			then
 				[ $extension = mp4 ] || [ $extension = m4a ] || [ $extension = mp3 ] && mp4tags -m "$url" "$fileName"
 				chmod -w "$fileName"
