@@ -232,6 +232,7 @@ alias taillines='\tail -n $((LINES-2))'
 alias tcpPorts="\netstat -ntl"
 alias terminfo='echo "=> C est un terminal $(tput cols 2>/dev/null)x$(tput lines 2>/dev/null)."'
 alias testLiveIso="\kvm -m 1G -cdrom"
+alias thunderbirdUnlock='\ps -C thunderbird >/dev/null || rm ~/.thunderbird/default/lock'
 alias timestamp='\date +"%Y%m%d_%HH%M"'
 alias today="$(which find) . -type f -ctime -1"
 alias tolower="awk '{print tolower(\$0)}'"
