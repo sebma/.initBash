@@ -201,15 +201,6 @@ function condaSearchThroughChannels {
 		done
 	done
 }
-function connect2SSID {
-	local ssid=$1
-	set -x
-	nmcli con status
-	time nmcli con up id $ssid
-	nmcli con status
-	time \curl -A "" ipinfo.io/ip || time \wget -qU "" -O- ipinfo.io/ip
-	set +x
-}
 function createSshTunnel {
 	test $# -lt 3 && {
 		echo "=> Usage : $FUNCNAME <localPort> <remotePort> <remoteServer> <sshServer>"
