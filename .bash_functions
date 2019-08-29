@@ -174,6 +174,16 @@ function cleanFirefoxLock {
 
 	pgrep -lf $firefoxProgramName || \rm -vf ~/.mozilla/firefox/*.default/lock ~/.mozilla/firefox/*.default/.parentlock
 }
+function numberSmallerEqual {
+	number1=$1
+	number2=$2
+	return perl -e "exit(! ( $number1 <= $number2 ) )"
+}
+function versionSmallerEqual {
+	number1=$1
+	number2=$2
+	return perl -Mversion -e "exit(! ( version->parse( $number1 ) <= version->parse( $number2 ) ) )"
+}
 function conda2Rename {
 	oldName=$1
 	newName=$2
