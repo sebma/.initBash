@@ -418,13 +418,7 @@ function ytdlFormats {
 
 	local filterFormats
 	echo $1 | egrep -q '(https?|s?ftps?):' || { filterFormats=$1;shift; }
-	for url
-	do
-		echo >&2
-		echo "=> url = $url"
-		time youtube-dl -F "$url" | grep -Pv "\[\w+\]" | grep -P "$filterFormats|\<url\>"
-		echo >&2
-	done
+	time youtube-dl -F "$@" | \grep -v '\[youtube\]' | grep -P "$filterFormats|\<url\>"
 	trap - INT
 }
 function ytdlGetFormat {
@@ -444,7 +438,10 @@ function ytdlGetSize {
 	type jq >/dev/null || { echo -1;return 1; }
 	local ytdlnoconfig="youtube-dl --ignore-config"
 	local firstArg=$1 format=best size=0 url=""
-	test $# != 0 && {
+	test $# = 0 && {
+		echo "=> Usage: $FUNCNAME [format=best] url" >&2
+		return 1
+	} || {
 		echo $firstArg | egrep -q ^http || { format=$firstArg;shift; }
 		read size url <<< $($ytdlnoconfig -j -f $format "$@" | jq -r .filesize,.url)
 		[ $size = null ] && size=$(\curl -sI "$url" | \sed "s/\r//g" | awk -F ": " 'BEGIN{IGNORECASE=1}/^Content-?Length/{printf$2}')
