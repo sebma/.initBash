@@ -17,6 +17,7 @@ alias ytdlnoconfig="$ytdlnoconfig"
 
 alias ytdlLastRelease='\git ls-remote --tags https://github.com/rg3/youtube-dl | awk -F/ '\''END{print gensub(/\^\{\}/,"","",$NF)}'\'''
 alias ytdlVersion="ytdl --version"
+alias ytdlGetFileName="\youtube-dl -f best --get-filename"
 
 function YTRenameFromFiles {
 	trap 'rc=130;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
