@@ -757,6 +757,17 @@ function opus2WebM4YouTube {
 	local picture=$2
 	time $ffmpeg -i "$audio" -loop 1 -framerate 1 -i "$picture" -shortest -speed max -c:a copy "${audio%.*}.webm"
 }
+function replaceAudioOfVideoFile {
+	test $# -ne 2 && {
+		echo "=> Usage: $FUNCNAME videoFile audioFile" >&2
+		return 1
+	}
+
+	local audioFile="$1"
+	local videoFile="$2"
+	local extension="${videoFile/*./}"
+	time $ffmpeg -i "$videoFile" -i "$audioFile" -map 0:v -map 1:a:0 -c copy -shortest "${videoFile/.*/}_NEW.$extension"
+}
 function sizeofStream {
 	local size
 	local total="0"
