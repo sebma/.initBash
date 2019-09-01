@@ -766,7 +766,7 @@ function replaceAudioOfVideoFile {
 	local videoFile="$1"
 	local audioFile="$2"
 	local extension="${videoFile/*./}"
-	time $ffmpeg -i "$videoFile" -i "$audioFile" -map 0:v -map 1:a:0 -c copy -shortest "${videoFile/.*/}_NEW.$extension"
+	time $ffmpeg -i "$videoFile" -i "$audioFile" -map 0:v:0 -map 1:a:0 -c copy -shortest "${videoFile/.*/}_NEW.$extension"
 }
 function sizeofStream {
 	local size
