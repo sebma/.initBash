@@ -17,7 +17,8 @@ alias ytdlnoconfig="$ytdlnoconfig"
 
 alias ytdlLastRelease='\git ls-remote --tags https://github.com/rg3/youtube-dl | awk -F/ '\''END{print gensub(/\^\{\}/,"","",$NF)}'\'''
 alias ytdlVersion="ytdl --version"
-alias ytdlGetFileName="\youtube-dl -f best --get-filename"
+alias ytdlGetFileName="\youtube-dl --get-filename"
+alias ytdlGetFormatID="\youtube-dl --get-filename -o '%(format_id)s'"
 
 function YTRenameFromFiles {
 	trap 'rc=130;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
@@ -112,7 +113,7 @@ function getPlaylistsRestrictedFilenamesFSD {
 			test $? != 0 && return
 		else
 			urlPrefix=$(echo "$playList" | sed -r "s/https?:..//" | cut -d/ -f1)
-			listOfUrls=$(youtube-dl --ignore-errors --get-id "$playList" | sed "s|^|$urlPrefix|g" | tr "\n" " ")
+			listOfUrls=$(youtube-dl --ignore-errors -j "$playList" | jq -r .webpage_url)
 		fi
 
 		getRestrictedFilenamesFSD $listOfUrls
@@ -129,7 +130,7 @@ function getPlaylistsRestrictedFilenamesHD {
 			listOfUrls=$(hxwls 2>/dev/null "$playList" | awk -F '&' '/\<(watch|video)\>/{print$1}' | sort -u | tr "\n" " ")
 		else
 			urlPrefix=$(echo "$playList" | sed -r "s/https?:..//" | cut -d/ -f1)
-			listOfUrls=$(youtube-dl --ignore-errors --get-id "$playList" | sed "s|^|$urlPrefix|g" | tr "\n" " ")
+			listOfUrls=$(youtube-dl --ignore-errors -j "$playList" | jq -r .webpage_url)
 		fi
 
 		getRestrictedFilenamesHD $listOfUrls
@@ -147,7 +148,7 @@ function getPlaylistsRestrictedFilenamesSD {
 			test $? != 0 && return
 		else
 			urlPrefix=$(echo "$playList" | sed -r "s/https?:..//" | cut -d/ -f1)
-			listOfUrls=$(youtube-dl --ignore-errors --get-id "$playList" | sed "s|^|$urlPrefix|g" | tr "\n" " ")
+			listOfUrls=$(youtube-dl --ignore-errors -j "$playList" | jq -r .webpage_url)
 		fi
 
 		getRestrictedFilenamesSD $listOfUrls
@@ -418,7 +419,7 @@ function ytdlFormats {
 	}
 
 	local filterFormats
-	echo $1 | egrep -q '(https?|s?ftps?):' || { filterFormats=$1;shift; }
+	echo $1 | \egrep -q '(https?|s?ftps?):' || { filterFormats=$1;shift; }
 	time youtube-dl -F "$@" | \grep -v '\[youtube\]' | grep -P "$filterFormats|\<url\>"
 	trap - INT
 }
