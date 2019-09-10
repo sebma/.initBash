@@ -444,7 +444,7 @@ function audioChannelLayoutOfFile {
 	local audioChannelLayout
 	for file
 	do
-		audioChannelLayout=$($ffprobe "$file" -select_streams a:0 -show_entries stream=channel_layout -of default=noprint_wrappers=1:nokey=1 -v error)
+		audioChannelLayout=$($ffprobe "$file" -select_streams a:0 -show_entries stream=channel_layout -of default=noprint_wrappers=1:nokey=1 -v warning)
 		printf "=> $file : audioChannelLayout = " >&2
 		echo $audioChannelLayout
 	done
@@ -453,7 +453,7 @@ function audioCodecOfFile {
 	local audioCodec
 	for file
 	do
-		audioCodec=$($ffprobe "$file" -select_streams a:0 -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 -v error)
+		audioCodec=$($ffprobe "$file" -select_streams a:0 -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 -v warning)
 		printf "=> $file : audioCodec = " >&2
 		echo $audioCodec
 	done
@@ -507,28 +507,28 @@ function ffprobe {
 	}
 }
 function ffprobe2Flat {
-	local ffprobeOptions="-v error -show_format -show_streams -of flat"
+	local ffprobeOptions="-v warning -show_format -show_streams -of flat"
 	for arg
 	do
 		echo "$arg" | egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $ffprobe $ffprobeOptions "$($youtube_dl -gf best -- "$arg")" || $ffprobe $ffprobeOptions "$arg"
 	done 2>&1 | cut -c 1-$(tput cols)
 }
 function ffprobe2Ini {
-	local ffprobeOptions="-v error -show_format -show_streams -of ini"
+	local ffprobeOptions="-v warning -show_format -show_streams -of ini"
 	for arg
 	do
 		echo "$arg" | egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $ffprobe $ffprobeOptions "$($youtube_dl -gf best -- "$arg")" || $ffprobe $ffprobeOptions "$arg"
 	done 2>&1 | cut -c 1-$(tput cols)
 }
 function ffprobe2JSON {
-	local ffprobeOptions="-v error -show_format -show_streams -of json"
+	local ffprobeOptions="-v warning -show_format -show_streams -of json"
 	for arg
 	do
 		echo "$arg" | egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $ffprobe $ffprobeOptions "$($youtube_dl -gf best -- "$arg")" || $ffprobe $ffprobeOptions "$arg"
 	done 2>&1 | cut -c 1-$(tput cols)
 }
 function ffprobe2XML {
-	local ffprobeOptions="-v error -show_format -show_streams -of xml"
+	local ffprobeOptions="-v warning -show_format -show_streams -of xml"
 	for arg
 	do
 		echo "$arg" | egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $ffprobe $ffprobeOptions "$($youtube_dl -gf best -- "$arg")" || $ffprobe $ffprobeOptions "$arg"
@@ -875,7 +875,7 @@ function urlOfVideo {
 		*) echo "=> The $extension is not supported yet." >&2 && continue;;
 		esac
 		echo "=> video = $video"
-		$ffprobe -v error -show_entries format_tags=$tag -of default=noprint_wrappers=1:nokey=1 "$video"
+		$ffprobe -v warning -show_entries format_tags=$tag -of default=noprint_wrappers=1:nokey=1 "$video"
 	done
 }
 function urlinfo {
@@ -889,9 +889,18 @@ function videoCodecOfFile {
 	local videoCodec
 	for file
 	do
-		videoCodec=$($ffprobe "$file" -select_streams v:0 -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 -v error)
+		videoCodec=$($ffprobe "$file" -select_streams v:0 -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 -v warning)
 		printf "=> $file : videoCodec = " >&2
 		echo $videoCodec
+	done
+}
+function containerOfFile {
+	local container
+	for file
+	do
+		container=$($ffprobe "$file" -show_entries format=format_name -of default=noprint_wrappers=1:nokey=1 -v warning)
+		printf "=> $file : container = " >&2
+		echo $container
 	done
 }
 function videoDelay {
