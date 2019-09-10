@@ -506,28 +506,28 @@ function ffprobe {
 		done 2>&1
 	}
 }
-function ffprobeFlat {
+function ffprobe2Flat {
 	local ffprobeOptions="-v error -show_format -show_streams -of flat"
 	for arg
 	do
 		echo "$arg" | egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $ffprobe $ffprobeOptions "$($youtube_dl -gf best -- "$arg")" || $ffprobe $ffprobeOptions "$arg"
 	done 2>&1 | cut -c 1-$(tput cols)
 }
-function ffprobeIni {
+function ffprobe2Ini {
 	local ffprobeOptions="-v error -show_format -show_streams -of ini"
 	for arg
 	do
 		echo "$arg" | egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $ffprobe $ffprobeOptions "$($youtube_dl -gf best -- "$arg")" || $ffprobe $ffprobeOptions "$arg"
 	done 2>&1 | cut -c 1-$(tput cols)
 }
-function ffprobeJSON {
+function ffprobe2JSON {
 	local ffprobeOptions="-v error -show_format -show_streams -of json"
 	for arg
 	do
 		echo "$arg" | egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $ffprobe $ffprobeOptions "$($youtube_dl -gf best -- "$arg")" || $ffprobe $ffprobeOptions "$arg"
 	done 2>&1 | cut -c 1-$(tput cols)
 }
-function ffprobeXML {
+function ffprobe2XML {
 	local ffprobeOptions="-v error -show_format -show_streams -of xml"
 	for arg
 	do
