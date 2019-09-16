@@ -135,6 +135,7 @@ alias kshVersion="type ksh >/dev/null && strings $(which ksh) | grep Version | t
 alias lastfiles='$(which find) . -xdev -type f -mmin -2'
 alias lastloggin='\lastlog -u $USER'
 alias less="\less -ir"
+alias l1="ls -1"
 alias ll="ls -lF"
 alias lla="ll -a"
 alias llah="ll -ah"
