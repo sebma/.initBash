@@ -9,6 +9,15 @@ function brewInstall {
 	which brew >/dev/null || return 1
 	brew update
 }
+function connect2SSID {
+	local ssid=$1
+	set -x
+	nmcli con status
+	time nmcli con up id $ssid
+	nmcli con status
+	time \curl -A "" ipinfo.io/ip || time \wget -qU "" -O- ipinfo.io/ip
+	set +x
+}
 function lanip {
 	ethName=$1
 	if [ -n "$ethName" ]
@@ -37,15 +46,6 @@ function mac@ {
 function mountISO {
 	loopBackDevice=$(udisksctl loop-setup -r -f "$1" | awk -F "[ .]" '{print$(NF-1)}')
 	udisksctl mount -b $loopBackDevice
-}
-function connect2SSID {
-	local ssid=$1
-	set -x
-	nmcli con status
-	time nmcli con up id $ssid
-	nmcli con status
-	time \curl -A "" ipinfo.io/ip || time \wget -qU "" -O- ipinfo.io/ip
-	set +x
 }
 function open {
 	local openCommand="command xdg-open"
@@ -78,6 +78,17 @@ function umountISO {
 	test -z $loopBackDevice && loopBackDevice=$1
 	udisksctl unmount -b $loopBackDevice
 	udisksctl loop-delete -b $loopBackDevice
+}
+function watchProcess {
+	local pidList=""
+	mkdir -p ~/log
+	test $# = 1 && while true
+	do
+		pidList=$(\pgrep -f "$1")
+		ppidList=$(\ps -o ppid= $pidList && echo)
+		test -n "$pidList" && ( \ps -fp $pidList && test -n "$ppidList" && echo "=> Showing the parent process :" && \ps h -fp $ppidList ) | tee -a ~/log/processSPY.log && break
+		sleep 0.01
+	done
 }
 function ytdlUpdate {
 	typeset -r isAdmin=$(groups 2>/dev/null | \egrep -wq "sudo|adm|admin|root" && echo true || echo false)
