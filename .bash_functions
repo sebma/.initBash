@@ -1343,15 +1343,6 @@ function updateYoutubePlaylistLUAForVLC {
 		\wget --content-disposition -NP ~/.local/share/vlc/lua/playlist/ $playlist_youtubeLuaURL
 	fi
 }
-function watchProcess {
-	local pidList=""
-	test $# = 1 && while true
-	do
-		pidList=$(\pgrep -f "$1")
-		test -n "$pidList" && ( \ps -fp $pidList && echo "=> Showing the parent process :" && \ps h -fp $(\ps -o ppid= $pidList && echo) ) | tee -a processSPY.log && break
-		sleep 0.01
-	done
-}
 function webgrep {
 	url=$1
 	shift
