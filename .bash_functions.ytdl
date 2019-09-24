@@ -444,7 +444,7 @@ function ytdlGetSize {
 		echo "=> Usage: $FUNCNAME [format=best] url" >&2
 		return 1
 	} || {
-		echo $firstArg | egrep -q ^http || { format=$firstArg;shift; }
+		echo $firstArg | \egrep -q ^http || { format=$firstArg;shift; }
 		read size url <<< $($ytdlnoconfig -j -f $format "$@" | jq -r .filesize,.url)
 		[ $size = null ] && size=$(\curl -sI "$url" | \sed "s/\r//g" | awk -F ": " 'BEGIN{IGNORECASE=1}/^Content-?Length/{printf$2}')
 		echo $size
