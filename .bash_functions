@@ -671,16 +671,25 @@ function lprPageRange {
 	shift
 	test $pageRange && echo $pageRange | grep -ivq "[A-Z]" && command lpr -o page-ranges=$pageRange $@ && lpq
 }
+function listPackageContents {
+	package=${1/:/}
+	case "$(distribPackageMgmt)" in
+		rpm) packageContents="rpm -ql";;
+		deb) packageContents="dpkg -L";;
+	esac
+	$packageContents $package
+}
 function lsbin {
 	for package
 	do
-		package=${package/:/}
-		case "$(distribPackageMgmt)" in
-			rpm) packageContents="rpm -ql";;
-			deb) packageContents="dpkg -L";;
-		esac
-		$packageContents $package
-	done | grep bin/ | sort -u
+		listPackageContents $package
+	done | sort -u | grep bin/
+}
+function lsdoc {
+	for package
+	do
+		listPackageContents $package
+	done | sort -u | egrep "(doc|man[0-9]?)/"
 }
 function lseth {
 	\lspci | awk '/Ethernet controller/{print$1}' | while read device
