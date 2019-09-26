@@ -113,7 +113,7 @@ function getPlaylistsRestrictedFilenamesFSD {
 			test $? != 0 && return
 		else
 			urlPrefix=$(echo "$playList" | sed -r "s/https?:..//" | cut -d/ -f1)
-			listOfUrls=$(youtube-dl --ignore-errors -j "$playList" | jq -r .webpage_url)
+			listOfUrls=$(ytdlGetPlayListURLs "$playList")
 		fi
 
 		getRestrictedFilenamesFSD $listOfUrls
@@ -130,7 +130,7 @@ function getPlaylistsRestrictedFilenamesHD {
 			listOfUrls=$(hxwls 2>/dev/null "$playList" | awk -F '&' '/\<(watch|video)\>/{print$1}' | sort -u | tr "\n" " ")
 		else
 			urlPrefix=$(echo "$playList" | sed -r "s/https?:..//" | cut -d/ -f1)
-			listOfUrls=$(youtube-dl --ignore-errors -j "$playList" | jq -r .webpage_url)
+			listOfUrls=$(ytdlGetPlayListURLs "$playList")
 		fi
 
 		getRestrictedFilenamesHD $listOfUrls
@@ -148,7 +148,7 @@ function getPlaylistsRestrictedFilenamesSD {
 			test $? != 0 && return
 		else
 			urlPrefix=$(echo "$playList" | sed -r "s/https?:..//" | cut -d/ -f1)
-			listOfUrls=$(youtube-dl --ignore-errors -j "$playList" | jq -r .webpage_url)
+			listOfUrls=$(ytdlGetPlayListURLs "$playList")
 		fi
 
 		getRestrictedFilenamesSD $listOfUrls
