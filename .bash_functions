@@ -1364,6 +1364,7 @@ function whatPackageContainsExecutable {
 		do
 			case "$(distribPackageMgmt)" in
 				rpm) findPackage="command rpm -qf"; searchPackage="command yum whatprovides";;
+				*) findPackage="command $(which whohas) 2>/dev/null";; # Search package across most common distributions
 			esac
 			if $findPackage $executable | sed "s|/||";then
 				:
