@@ -1357,21 +1357,21 @@ function wgetParallel {
 function whatPackageContainsExecutable {
 	if [ "$(distribPackageMgmt)" = deb ]
 	then
-		findPackage="dpkg -S"; searchPackage="apt-file search";
+		findPackage="command dpkg -S"; searchPackage="command apt-file search";
 		$findPackage $(printf "bin/%s " "$@")
 	else
 		for executable
 		do
 			case "$(distribPackageMgmt)" in
-				rpm) findPackage="rpm -qf"; searchPackage="yum whatprovides";;
+				rpm) findPackage="command rpm -qf"; searchPackage="command yum whatprovides";;
 			esac
-			if $findPackage command $executable | sed "s|/||";then
+			if $findPackage $executable | sed "s|/||";then
 				:
 			else
 				if which $executable >/dev/null 2>&1
 				then
-					echo "=> Using : $searchPackage command $executable ..." >&2
-					$searchPackage command $executable
+					echo "=> Using : $searchPackage $executable ..." >&2
+					$searchPackage $executable
 				else
 					echo "=> Using : $searchPackage bin/$executable ..." >&2
 					$searchPackage bin/$executable
