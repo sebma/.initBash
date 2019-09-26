@@ -436,6 +436,10 @@ function ytdlGetFormat {
 		$ytdlnoconfig --get-filename -o "=> format_id = %(format_id)s" "$url"
 	done
 }
+function ytdlGetPlayListURLs {
+	local playList="$1"
+	test "$playList" && youtube-dl --ignore-errors -j "$playList" | jq -r .webpage_url
+}
 function ytdlGetSize {
 	type jq >/dev/null || { echo -1;return 1; }
 	local ytdlnoconfig="youtube-dl --ignore-config"
