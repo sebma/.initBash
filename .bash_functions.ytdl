@@ -224,8 +224,7 @@ function getRestrictedFilenamesFORMAT {
 				time youtube-dl -o "$fileName" -f "${formats[$j]}" "$url" --embed-thumbnail
 				downloadOK=$?
 				test $downloadOK != 0 && {
-					time youtube-dl -o $fileName -f "${formats[$j]}" "$url" 2>&1 | {
-						egrep -A1 'ERROR:.*No space left on device' >&2
+					time youtube-dl -o $fileName -f "${formats[$j]}" "$url" 2>&1 | egrep -A1 'ERROR:.*No space left on device' >&2 && {
 						echo >&2
 						downloadOK=1
 						return 1
@@ -234,16 +233,14 @@ function getRestrictedFilenamesFORMAT {
 				}
 			elif [ $extension = m3u ] || [ $extension = m3u8 ]; then
 				read m3u_URL resolution <<< "$(youtube-dl --get-filename -o"%(resolution)s" -gf "${formats[$j]}" "$url")"
-				time youtube-dl -o $fileName "$m3u_URL" 2>&1 | {
-					egrep -A1 'ERROR:.*No space left on device' >&2
+				time youtube-dl -o $fileName "$m3u_URL" 2>&1 | egrep -A1 'ERROR:.*No space left on device' >&2 && {
 					echo >&2
 					downloadOK=1
 					return 1
 				}
 				downloadOK=$?
 			else
-				time youtube-dl -o $fileName -f "${formats[$j]}" "$url" 2>&1 | {
-					egrep -A1 'ERROR:.*No space left on device' >&2
+				time youtube-dl -o $fileName -f "${formats[$j]}" "$url" 2>&1 | egrep -A1 'ERROR:.*No space left on device' >&2 && {
 					echo >&2
 					downloadOK=1
 					return 1
