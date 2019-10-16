@@ -131,16 +131,19 @@ function bible {
 }
 function castnowPlaylist {
 	test $# = 0 && {
-		echo "=> Usage: $FUNCNAME [index] playlistFile ..." >&2
+		echo "=> Usage: $FUNCNAME [index] [format] playlistFile ..." >&2
 		return 1
 	}
 
-	local index=${1:-1}
-	test $# = 2 && shift
-	local playlist=$1
+	local index=1
+	local format="mp4[height<=480]/mp4/best"
+	local playlist
+	test $# = 1 && playlist=$1
+	test $# = 2 && format=$1 && playlist=$2
+	test $# = 3 && index=$1 && format=$2 && playlist=$3
 	printf "=> Start playing playlist at: "
 	\sed -n "${index}p" $playlist
-	castnowURLs $(awk '{print$1}' $playlist | \grep -v ^# | tail -n +$index)
+	castnowURLs $format $(awk '{print$1}' $playlist | \grep -v "^#" | tail -n +$index)
 }
 function castnowURLs {
 	test $# = 0 && {
