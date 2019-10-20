@@ -154,9 +154,9 @@ function castnowURLs {
 	local format="mp4[height<=480]/mp4/best"
 	echo $1 | \egrep -q "^(https?|s?ftps?)://" || { format="$1"; shift; }
 
-#	set -x
 	for url
 	do
+		echo "youtube-dl --no-continue --ignore-config -f $format -o- -- $url | castnow --quiet -"
 		youtube-dl --no-continue --ignore-config -f "$format" -o- -- "$url" | castnow --quiet -
 	done
 	set +x
