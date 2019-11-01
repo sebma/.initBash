@@ -41,6 +41,7 @@ alias burnclone='\cdrecord -v -clone -raw driveropts=burnfree fs=14M speed=16 gr
 alias burniso='\cdrecord -v -dao driveropts=burnfree fs=14M speed=24 gracetime=10 -eject -overburn'
 alias cclive="\cclive -c"
 alias cdda_info="\icedax -gHJq -vtitles"
+alias cdinfo='\cdrdao disk-info'
 alias cdrdao='\df | grep -q $CDR_DEVICE && umount $CDR_DEVICE ; \cdrdao'
 alias cget="\curl -O"
 alias checkMyPrinterConnection="\ping -c2 192.168.1.1"
@@ -76,14 +77,12 @@ alias dbus-reboot='\dbus-send --system --print-reply --dest="org.freedesktop.Con
 alias dbus-suspend='\dbus-send --system --print-reply --dest="org.freedesktop.UPower" /org/freedesktop/UPower org.freedesktop.UPower.Suspend'
 alias deborphan="\deborphan | sort"
 alias dig="\dig +search +short"
-alias diskinfo='\cdrdao disk-info'
 alias doc2pdf=" \lowriter --headless --convert-to pdf"
 alias docx2pdf="\lowriter --headless --convert-to pdf"
 alias dos2unix='\perl -pi -e "s/\r//g"'
 alias doublons='\fdupes -rnASd'
 alias driveinfo='\cdrecord -prcap'
 alias du="LANG=C \du -h"
-alias dvdinfo=diskinfo
 alias ejectcd='\eject $CDR_DEVICE'
 alias enman="\man -L en"
 alias erasecd='\cdrecord -v speed=12 blank=fast gracetime=10 -eject'
