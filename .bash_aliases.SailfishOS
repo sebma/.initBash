@@ -48,11 +48,11 @@ function rebalance {
 		sudo systemctl start aliendalvik.service
 	}
 }
-function sailFishOSUprade {
+function sailFishOSUpgrade {
 	test $1 && {
 		local currentRelease=$(version | awk '{print$2}')
 		local nextRelease=$1
-		local logFile=~/log/sailFishOSUprade_${currentRelease}_upto_$nextRelease.log
+		local logFile=~/log/sailFishOSUpgrade_${currentRelease}_upto_$nextRelease.log
 
 		mkdir -p ~/log
 		test $nextRelease = $currentRelease && {
