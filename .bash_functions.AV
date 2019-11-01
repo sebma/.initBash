@@ -493,7 +493,7 @@ function avprobe {
 function cropdetect {
 	ffmpeg -i "$1" -t 1 -vf cropdetect -f null - 2>&1 | awk '/crop/{line=$NF}END{print line}'
 }
-function dvdinfo {
+function videoDVDInfo {
 	cdr_device=/dev/dvd
 	longestTrack=$(\lsdvd -Oy | awk -F ':|,| ' '/longest_track/{print$(NF-1)}')
 	tccat -i $cdr_device -T $longestTrack,-1 2>/dev/null | $ffprobe - 2>&1
