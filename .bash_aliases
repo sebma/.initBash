@@ -83,6 +83,7 @@ alias dos2unix='\perl -pi -e "s/\r//g"'
 alias doublons='\fdupes -rnASd'
 alias driveinfo='\cdrecord -prcap'
 alias du="LANG=C \du -h"
+alias dvdinfo='\cdrecord -minfo'
 alias ejectcd='\eject $CDR_DEVICE'
 alias enman="\man -L en"
 alias erasecd='\cdrecord -v speed=12 blank=fast gracetime=10 -eject'
