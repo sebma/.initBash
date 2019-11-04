@@ -4,7 +4,7 @@ test "$debug" -gt 0 && \echo "=> Running $bold${colors[blue]}$(basename ${BASH_S
 
 #wifiInterface="$(which iwconfig >/dev/null 2>&1 && iwconfig 2>/dev/null | awk '/^[^ \t]/ { if ($1 ~ /^[0-9]+:/) { print $2 } else { print $1 } }' || ( which iw >/dev/null 2>&1 && iw dev | awk '/Interface/{lastInterface=$NF}END{print lastInterface}') )"
 #wifiInterface="$(iwconfig 2>/dev/null | awk '/^[^ \t]/ { if ($1 ~ /^[0-9]+:/) { print $2 } else { print $1 } }' | iw dev 2>/dev/null | awk '/Interface/{lastInterface=$NF}END{print lastInterface}')"
-wifiInterface=$(iwconfig 2>/dev/null | grep -v ESSID:off/any | awk '/ESSID/{print$1}' | sort -V | head -1)
+wifiInterface=$(iwconfig 2>/dev/null | grep -v ESSID:off/any | awk '/ESSID/{print$1}' | sort | head -1)
 
 #alias lpr="\lpr -P ppti-14-503-imp -o PageSize=A4 -o PageRegion=A4 -o Resolution=default -o InputSlot=Tray2 -o Duplex=DuplexNoTumble -o PreFilter=No"
 #alias lpr="\lpr -o PageSize=A4 -o PageRegion=A4 -o Resolution=default -o InputSlot=Tray2 -o Duplex=DuplexNoTumble -o PreFilter=No"
