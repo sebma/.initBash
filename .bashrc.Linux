@@ -2,7 +2,7 @@
 declare -A | grep -wq colors || source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-lspci | grep -qi VGA.*NVIDIA && test -r $initDir/.bashrc.cuda && Source $initDir/.bashrc.cuda
+which lspci >/dev/null && lspci | grep -qi VGA.*NVIDIA && test -r $initDir/.bashrc.cuda && Source $initDir/.bashrc.cuda
 
 set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
