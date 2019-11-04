@@ -7,8 +7,11 @@ prunePathsFindExpression=$(printf -- "-path %s -prune -o " $findExcludedPathList
 duExcludedPathList="./proc ./sys ./dev ./opt/alien"
 excludePathsDuExpression=$(printf -- "--exclude %s " $duExcludedPathList)
 
+unset -f dfc
 unalias version
+
 alias androidVersion="\grep version.release /opt/alien/system/build.prop"
+alias dfc='dfc -TWfc always | egrep -v "/opt/alien/data| /data"'
 alias getIMEI="ssu status | awk '/UID/{print\$NF}'"
 alias imei="ssu status | awk '/UID/{print\$NF}'"
 alias la='ls -A'
