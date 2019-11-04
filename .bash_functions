@@ -67,10 +67,10 @@ function Top {
 	then
 		$top
 	else
-		if [ $os = Linux ]
+		if   [ $osFamily = Linux ]
 		then
 			$top -d 1 $(printf -- "-p %d " $processPIDs) $@
-		elif [ $os = Darwin ]
+		elif [ $osFamily = Darwin ]
 		then
 			$top -i 1 $(printf -- "-pid %d " $processPIDs) $@
 		fi
@@ -300,17 +300,17 @@ function distribType {
 			*) distribType=unknown;;
 		esac
 	else
-		if   [ $os = Linux ]
+		if   [ $osFamily = Linux ]
 		then
 			distrib=$(awk -F"=" '/^ID=/{print$2}' /etc/os-release)
 			distribType=$(grep ID_LIKE /etc/os-release | cut -d= -f2 | cut -d'"' -f2 | cut -d" " -f1) #Pour les cas ou ID_LIKE est de la forme ID_LIKE="rhel fedora"
-		elif [ $os = Darwin ]
+		elif [ $osFamily = Darwin ]
 		then
 			distrib="$(sw_vers -productName)"
-			distribType=$os
+			distribType=$osFamily
 		else
 			distrib=unknown
-			distribType=$os
+			distribType=$osFamily
 		fi
 	fi
 	echo $distribType
@@ -952,8 +952,8 @@ function pythonCalc {
 	\python -c "print(${*/^/**})"
 }
 function reload_SHELL_Functions_And_Aliases {
-#	for script in ~/.${0}rc $initDir/.*functions $initDir/.*aliases $initDir/.*aliases.$os
-	for script in $initDir/.bashrc.$os $initDir/.*functions $initDir/.*functions.$os $initDir/.*aliases $initDir/.*aliases.$os
+#	for script in ~/.${0}rc $initDir/.*functions $initDir/.*aliases $initDir/.*aliases.$osFamily
+	for script in $initDir/.bashrc.$osFamily $initDir/.*functions $initDir/.*functions.$osFamily $initDir/.*aliases $initDir/.*aliases.$osFamily
 	do
 		source $script
 	done
