@@ -14,6 +14,7 @@ set -o histexpand # Re-enable the history expansion disabled previously by my "e
 #test -n "$bashRCLoaded" && return
 bashRCLoaded=1
 export os=$(uname -s)
+export osFamily=$(uname -s)
 quoteCHAR="'\''"
 
 function addmanpaths {
