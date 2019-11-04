@@ -1,6 +1,8 @@
 # vim: set syn=sh noet:
+declare -A | grep -wq colors || source $initDir/.colors
+test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-if [ $os = Linux ] && which lspci >/dev/null
+if [ $osFamily = Linux ] && which lspci >/dev/null
 then
 	if lspci | grep -qi nvidia
 	then
@@ -10,3 +12,6 @@ then
 		:
 	fi
 fi
+
+set +x
+test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
