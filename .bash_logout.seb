@@ -7,8 +7,10 @@ unalias which >/dev/null 2>&1
 if test -e ~/.cache; then
 #	\rm -vfr ~/.cache/*
 	# Deletes everything except the "fontconfig" cache also used by matplotlib
-	$(which find) ~/.cache/ -type d | \egrep -vw "(.cache/|fontconfig|matplotlib)" | \xargs rm -vfr
-	$(which find) ~/.cache/ -type f | \egrep -v "/(fontconfig|matplotlib)/" | \xargs rm -vf
+	if [ $(os) != sailfishos ]; then
+		$(which find) ~/.cache/ -type d | \egrep -vw "(.cache/|fontconfig|matplotlib)" | \xargs rm -vfr
+		$(which find) ~/.cache/ -type f | \egrep -v "/(fontconfig|matplotlib)/" | \xargs rm -vf
+	fi
 fi 2>/dev/null
 
 #defaultPrinter=$(lpstat -d | awk '{print$NF}')
