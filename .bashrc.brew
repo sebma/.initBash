@@ -1,3 +1,9 @@
 # vim: set syn=sh noet:
-[ $os = Linux  ] && alias upgradable="\brew outdated"
-[ $os = Darwin ] && alias upgradable="\brew outdated;yes N | \brew cu -aq;echo" && alias upgrade="\brew cu -aq"
+declare -A | grep -wq colors || source $initDir/.colors
+test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
+
+[ $osFamily = Linux  ] && alias upgradable="\brew outdated"
+[ $osFamily = Darwin ] && alias upgradable="\brew outdated;yes N | \brew cu -aq;echo" && alias upgrade="\brew cu -aq"
+
+set +x
+test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
