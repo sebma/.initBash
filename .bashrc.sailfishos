@@ -9,9 +9,9 @@ Debug "=> Running $(basename ${BASH_SOURCE[0]}) ..."
 function Source { test "$debug" -gt 0 && time source "$@" && echo || source "$@" ; }
 test "$debug" -gt "2" && set -x
 
-test "$hostname" && hostname=$(hostname) # Pour SailFishOS
-test "$system" && system=$(version | awk '{print $1" "$2" "$3}')
-test "$domain" && domain=local
+test "$hostname" || hostname=$(hostname) # Pour SailFishOS
+test "$system" || system=$(version | awk '{print $1" "$2" "$3}')
+test "$domain" || domain=local
 
 set +x
 tty -s && echo
