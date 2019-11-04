@@ -13,8 +13,8 @@ set -o histexpand # Re-enable the history expansion disabled previously by my "e
 
 #test -n "$bashRCLoaded" && return
 bashRCLoaded=1
-export os=$(uname -s)
 export osFamily=$(uname -s)
+[ $osFamily = Linux ] && export os=$(awk -F= '/^ID=/{print$2}' /etc/os-release)
 quoteCHAR="'\''"
 
 function addmanpaths {
@@ -50,12 +50,11 @@ which mpv >/dev/null 2>&1 && test -r $initDir/.bash_functions.mpv && Source $ini
 #Export de toutes les fonctions sauf celles dont le nom commence par "_"
 export -f $(declare -F | egrep -v " __?" | awk '{print$NF}')
 
-test -r $initDir/.colors && Source $initDir/.colors
 user=$(\id -un)
 hostname=$HOSTNAME
-alias os="awk -F= '/^ID=/{print\$2}' /etc/os-release"
-test -r $initDir/.bashrc.$(os) && Source $initDir/.bashrc.$(os) # Pour les OS derives de $osFamily
+test -r $initDir/.bashrc.$os && Source $initDir/.bashrc.$os # Pour les OS derives de $osFamily
 
+test -r $initDir/.colors && Source $initDir/.colors
 #PROMPT_COMMAND='echo -ne "\033]0;$USER : $hostname @ $domain / $system : $(date +"%A %d %B %Y %H:%M") $PWD\007"'
 PS1="$user : $blink${colors[red]}$hostname$normal @ $bold${colors[blue]}$domain / $italics${colors[green]}$system : $bold${colors[blue]}\w$normal
  "
