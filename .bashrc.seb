@@ -52,7 +52,7 @@ export -f $(declare -F | egrep -v " __?" | awk '{print$NF}')
 test -r $initDir/.colors && Source $initDir/.colors
 user=$(\id -un)
 hostname=$HOSTNAME
-alias os=$(awk -F= '/^ID=/{print$2}' /etc/os-release)
+alias os="awk -F= '/^ID=/{print\$2}' /etc/os-release"
 test -r $initDir/.bashrc.$(os) && Source $initDir/.bashrc.$(os) # Pour les OS derives de $os
 
 #PROMPT_COMMAND='echo -ne "\033]0;$USER : $hostname @ $domain / $system : $(date +"%A %d %B %Y %H:%M") $PWD\007"'
