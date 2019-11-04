@@ -339,7 +339,7 @@ function fileTypes {
 }
 function find {
 	local find="command find"
-	[ $os = Darwin ] && find=gfind
+	[ $osFamily = Darwin ] && find=gfind
 	dir=$1
 	if echo $dir | \grep -q "^-"
 	then
@@ -361,7 +361,7 @@ function find {
 }
 function findHumanReadable {
 	local find="command find"
-	[ $os = Darwin ] && find=gfind
+	[ $osFamily = Darwin ] && find=gfind
 	dir=$1
 	echo $dir | \grep -q "\-" && dir=. || shift
 	args="$@"
@@ -373,7 +373,7 @@ function findHumanReadable {
 	fi
 }
 function findLoops {
-	[ $os = Darwin ] && find=gfind || find="command find"
+	[ $osFamily = Darwin ] && find=gfind || find="command find"
 	time $find $@ -xdev -follow 2>&1 >/dev/null | egrep -w "loop|denied"
 }
 function gdebiALL {
@@ -1144,8 +1144,8 @@ function rtt {
 	local deadline
 	local ping="command ping"
 	local awk="command awk"
-	[ $os = Darwin ] && deadline="-t 5"
-	[ $os = Linux ]  && deadline="-w 5"
+	[ $osFamily = Darwin ] && deadline="-t 5"
+	[ $osFamily = Linux ]  && deadline="-w 5"
 	$ping -c $NBPackets $deadline -i $interval $remote | $awk -F/ '//{print}/min\/avg\/max\/\w+dev/{avg=$5}END{print "=> avg = "avg" ms"}'
 }
 function setTimestamps {
@@ -1339,8 +1339,8 @@ function updateYoutubeLUAForVLC {
 	local youtubeLuaURL=https://raw.githubusercontent.com/videolan/vlc/master/share/lua/playlist/youtube.lua
 	if groups 2>/dev/null | egrep -wq "sudo|admin"
 	then
-		test $os = Linux &&  \sudo \wget --content-disposition -NP /usr/lib/vlc/lua/playlist/ $youtubeLuaURL
-		test $os = Darwin && \sudo \wget --content-disposition -NP /Applications/VLC.app/Contents/MacOS/share/lua/playlist/ $youtubeLuaURL
+		test $osFamily = Linux &&  \sudo \wget --content-disposition -NP /usr/lib/vlc/lua/playlist/ $youtubeLuaURL
+		test $osFamily = Darwin && \sudo \wget --content-disposition -NP /Applications/VLC.app/Contents/MacOS/share/lua/playlist/ $youtubeLuaURL
 	else
 		\wget --content-disposition -NP ~/.local/share/vlc/lua/playlist/ $youtubeLuaURL
 	fi
@@ -1349,8 +1349,8 @@ function updateYoutubePlaylistLUAForVLC {
 	local playlist_youtubeLuaURL=https://dl.opendesktop.org/api/files/download/id/1473753829/149909-playlist_youtube.lua
 	if groups 2>/dev/null | egrep -wq "sudo|admin"
 	then
-		test $os = Linux &&  \sudo \wget --content-disposition -NP /usr/lib/vlc/lua/playlist/ $playlist_youtubeLuaURL
-		test $os = Darwin && \sudo \wget --content-disposition -NP /Applications/VLC.app/Contents/MacOS/share/lua/playlist/ $playlist_youtubeLuaURL
+		test $osFamily = Linux &&  \sudo \wget --content-disposition -NP /usr/lib/vlc/lua/playlist/ $playlist_youtubeLuaURL
+		test $osFamily = Darwin && \sudo \wget --content-disposition -NP /Applications/VLC.app/Contents/MacOS/share/lua/playlist/ $playlist_youtubeLuaURL
 	else
 		\wget --content-disposition -NP ~/.local/share/vlc/lua/playlist/ $playlist_youtubeLuaURL
 	fi
