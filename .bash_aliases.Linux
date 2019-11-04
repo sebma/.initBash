@@ -50,8 +50,8 @@ alias mmcInfo="tail -vn +1 /sys/class/block/mmcblk0/device/driver/mmc*/uevent"
 alias nmStatus="\service network-manager status"
 alias northBridge="\lspci -nnvs 0:0.0 | egrep '^00:|Kernel|Subsystem'"
 alias southBridge="\lspci | awk '/ISA bridge/{print \"lspci -nnvs \" \$1}' | sh | egrep '^00:|Kernel|Subsystem'"
-#alias os="\lsb_release -sd"
 alias odtinfo=odfInfo
+alias os="awk -F= '/^ID=/{print\$2}' /etc/os-release"
 alias pip_pypy="\pypy -m pip"
 alias pip_pypy3="\pypy3 -m pip"
 alias Pgrep="grep -P"
@@ -75,6 +75,7 @@ alias suspend="\systemctl suspend && exit"
 alias topf10='$(which find) . -xdev $prunePathsFindExpression -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | head -10 | numfmt --field 5 --from=iec --to=iec-i --suffix=B | column -t'
 alias topf50='$(which find) . -xdev $prunePathsFindExpression -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | head -50 | numfmt --field 5 --from=iec --to=iec-i --suffix=B | column -t'
 alias topf5='$(which find) . -xdev $prunePathsFindExpression -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 |  head -5  | numfmt --field 5 --from=iec --to=iec-i --suffix=B | column -t'
+alias version="\lsb_release -sd"
 alias wifimac="\ifconfig $wifiInterface | awk '/HWaddr/{print\$1\"\\t\"\$NF}'"
 alias wlanmac=wifimac
 alias ytdlInstall="pip3 install youtube-dl || pip install youtube-dl"
