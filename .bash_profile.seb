@@ -4,11 +4,12 @@ test -z "$initDir" && export initDir=$HOME/.initBash
 declare -A | grep -wq colors || source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-export os=$(uname -s)
 export osFamily=$(uname -s)
 
 function Source { test "$debug" -gt 0 && time source "$@" && echo || source "$@" ; }
 export bashProfileLoaded=1
+
+[ $osFamily = Linux ] && export os=$(awk -F= '/^ID=/{print$2}' /etc/os-release)
 
 initDir=$(basename $initDir) #Pour creer des liens symboliques relatifs a $HOME
 cd $HOME
