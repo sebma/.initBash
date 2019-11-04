@@ -1,6 +1,6 @@
 # vim: set syn=sh noet:
 
-if [ $os = Linux ]
+if [ $os = Linux ] && which lspci >/dev/null
 then
 	if lspci | grep -qi nvidia
 	then
