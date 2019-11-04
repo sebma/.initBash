@@ -24,6 +24,14 @@ test "$wifiInterface" && alias restartWifi="which nmcli >/dev/null && \nmcli nm 
 test "$wifiInterface" && alias wifiRestart=restartWifi
 set +x
 
+which lspci >/dev/null && {
+	alias lspci="\lspci -nn"
+	alias lsgpu="\lspci -nns \$(\lspci | awk '/Display|VGA/{print\$1}')"
+	alias northBridge="\lspci -nnvs 0:0.0 | egrep '^00:|Kernel|Subsystem'"
+	alias southBridge="\lspci | awk '/ISA bridge/{print \"lspci -nnvs \" \$1}' | sh | egrep '^00:|Kernel|Subsystem'"
+	alias lsvga=lsgpu
+}
+
 alias brewUnInstall='\ruby -e "$(\curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/uninstall)"'
 alias catFiles="\tail -vn +1"
 alias connect2MyHiddenWifi="set -x;nmcli con status;time nmcli con up id sebWlan && wanip;nmcli con status;set +x"
@@ -43,13 +51,9 @@ alias ll="ls -blF --time-style=+'%Y-%m-%d %T'"
 alias llk="ll --block-size=K"
 alias llm="ll --block-size=M"
 alias ls="ls --color -F"
-alias lsgpu="\lspci -nns \$(\lspci | awk '/Display|VGA/{print\$1}')"
-alias lsvga=lsgpu
 alias mmcSize="awk '/[0-9]/{print FILENAME\": \"\$1/(2*1024^2)\" GiB\"}' /sys/class/block/mmcblk?/size"
 alias mmcInfo="tail -vn +1 /sys/class/block/mmcblk0/device/driver/mmc*/uevent"
 alias nmStatus="\service network-manager status"
-alias northBridge="\lspci -nnvs 0:0.0 | egrep '^00:|Kernel|Subsystem'"
-alias southBridge="\lspci | awk '/ISA bridge/{print \"lspci -nnvs \" \$1}' | sh | egrep '^00:|Kernel|Subsystem'"
 alias odtinfo=odfInfo
 alias os="awk -F= '/^ID=/{print\$2}' /etc/os-release"
 alias osVersion=version
