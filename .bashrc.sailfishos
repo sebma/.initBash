@@ -10,7 +10,6 @@ function Source { test "$debug" -gt 0 && time source "$@" && echo || source "$@"
 test "$debug" -gt "2" && set -x
 
 test "$hostname" && hostname=$(hostname) # Pour SailFishOS
-test "$os" && os=$(awk -F= '/^ID=/{print$2}' /etc/os-release)
 test "$system" && system=$(version | awk '{print $1" "$2" "$3}')
 test "$domain" && domain=local
 
