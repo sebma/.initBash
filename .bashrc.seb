@@ -54,7 +54,7 @@ test -r $initDir/.colors && Source $initDir/.colors
 user=$(\id -un)
 hostname=$HOSTNAME
 alias os="awk -F= '/^ID=/{print\$2}' /etc/os-release"
-test -r $initDir/.bashrc.$(os) && Source $initDir/.bashrc.$(os) # Pour les OS derives de $os
+test -r $initDir/.bashrc.$(os) && Source $initDir/.bashrc.$(os) # Pour les OS derives de $osFamily
 
 #PROMPT_COMMAND='echo -ne "\033]0;$USER : $hostname @ $domain / $system : $(date +"%A %d %B %Y %H:%M") $PWD\007"'
 PS1="$user : $blink${colors[red]}$hostname$normal @ $bold${colors[blue]}$domain / $italics${colors[green]}$system : $bold${colors[blue]}\w$normal
@@ -131,8 +131,8 @@ fi
 
 which brew >/dev/null 2>&1 && Source $initDir/.bashrc.brew
 test -r $initDir/.bashrc.conda && Source $initDir/.bashrc.conda
-test -r $initDir/.bashrc.$os && Source $initDir/.bashrc.$os
-test -r $initDir/.bashrc.$os.local && Source $initDir/.bashrc.$os.local
+test -r $initDir/.bashrc.$osFamily && Source $initDir/.bashrc.$osFamily
+#test -r $initDir/.bashrc.$osFamily.local && Source $initDir/.bashrc.$osFamily.local
 test -s /etc/debian_version && Source $initDir/.bashrc.Debian
 
 #my git configuration
@@ -146,8 +146,8 @@ test -f $initDir/.bashrc.gpu && Source $initDir/.bashrc.gpu
 
 #Definitions de mes alias
 test -r $initDir/.bash_aliases && Source $initDir/.bash_aliases
-test -r $initDir/.bash_aliases.$os && Source $initDir/.bash_aliases.$os #Pour Darwin ou Linux
-test -r $initDir/.bash_functions.$os && Source $initDir/.bash_functions.$os #Pour Darwin ou Linux
+test -r $initDir/.bash_aliases.$osFamily && Source $initDir/.bash_aliases.$osFamily #Pour Darwin ou Linux
+test -r $initDir/.bash_functions.$osFamily && Source $initDir/.bash_functions.$osFamily #Pour Darwin ou Linux
 case $OSTYPE in
 	linux-gnueabihf) grep -q ID=sailfishos /etc/os-release &&  test -r $initDir/.bash_aliases.sailfishos && Source $initDir/.bash_aliases.sailfishos;;
 	linux-gnueabi) resize; test -r $initDir/.bash_aliases.android && Source $initDir/.bash_aliases.android; which busybox >/dev/null && test -r $initDir/.bash_aliases.busybox && Source $initDir/.bash_aliases.busybox;;
