@@ -5,6 +5,7 @@ declare -A | grep -wq colors || source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 export os=$(uname -s)
+export osFamily=$(uname -s)
 
 function Source { test "$debug" -gt 0 && time source "$@" && echo || source "$@" ; }
 export bashProfileLoaded=1
@@ -100,7 +101,7 @@ then
 	which lpr >/dev/null 2>&1 && test -f $initDir/.bash_profile.lpr && Source $initDir/.bash_profile.lpr
 fi
 
-case $os in
+case $osFamily in
 Darwin)
 	test -r $initDir/.bash_profile.Darwin && Source $initDir/.bash_profile.Darwin
 	;;
