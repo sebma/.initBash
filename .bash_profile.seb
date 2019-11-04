@@ -77,7 +77,7 @@ export RSYNC_SKIP_COMPRESS_LIST="7z/aac/avi/bz2/deb/flv/gz/iso/jpeg/jpg/mkv/mov/
 export RSYNC_EXCLUSION=$(printf -- "--exclude \"%s\" " .git/ watch_later/ '*.swp' '*.part')
 #FIN DE DEFINITION DES VARIABLES
 
-if [ $os = Linux ] || [ $os = Darwin ]
+if [ $osFamily = Linux ] || [ $osFamily = Darwin ]
 then
 	tty -s && echo
 	if which ssh-agent >/dev/null 2>&1; then
