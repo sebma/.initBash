@@ -17,7 +17,7 @@ alias model='ssu status | awk -F "[ )]" /model/'\''{print$(NF-4)" "$(NF-1)}'\'''
 #groups | egrep -wq "admin|sudo" && alias pipInstall="curl -fsSL https://bootstrap.pypa.io/get-pip.py | sudo -H python"  || alias pipInstall="curl -fsSL https://bootstrap.pypa.io/get-pip.py | python"
 #groups | egrep -wq "admin|sudo" && alias pip3Install="curl -fsSL https://bootstrap.pypa.io/get-pip.py | sudo -H python3" || alias pip3Install="curl -fsSL https://bootstrap.pypa.io/get-pip.py | python3"
 alias os="awk -F= '/^ID=/{print\$2}' /etc/os-release"
-alias osVersion=\version
+alias osVersion="\version"
 groups | egrep -wq "admin|sudo" && alias pipInstall="sudo -H easy_install pip"  || alias pipInstall="easy_install --user pip"
 groups | egrep -wq "admin|sudo" && alias pipInstall="sudo -H easy_install3 pip" || alias pipInstall="easy_install3 --user pip"
 alias refresh="time sudo pkcon refresh"
