@@ -66,11 +66,14 @@ function umount {
 	local device
 	test "$dir_or_device" && {
 		device=$(LC_MESSAGES=C \df "$dir_or_device" | awk '!/Filesystem/{print$1}')
-		mountDIR=$(LC_MESSAGES=C \df "$dir_or_device" | awk '!/Filesystem/{$1=$2=$3=$4=$5="";gsub("^ +","");print}')
+		mountDIR="$(LC_MESSAGES=C \df "$dir_or_device" | awk '!/Filesystem/{$1=$2=$3=$4=$5="";gsub("^ +","");print}')"
+		fsType=$(mount | awk "/$(basename "$mountDIR")/"'{print$5}')
 		echo "=> Unmounting $device ..." >&2
-		command umount -v "$@" || command umount.udisks2 "$@"  || command umount.udisks "$@" || sudo $(which umount) -v "$@"
-		echo "=> ls $(dirname "$mountDIR") :"
-		ls $(dirname "$mountDIR")
+		case $fsType in
+			fuse.sshfs) fusermount -u "$mountDIR";;
+			*) command umount -v "$@" || command umount.udisks2 "$@"  || command umount.udisks "$@" || { sudo -k;sudo $(which umount) -v "$@"; } ;;
+		esac
+		[ $(echo "$mountDIR" | cut -d/ -f1) = /mnt ] || [ $(echo "$mountDIR" | cut -d/ -f1) = /media  ] && echo "=> ls $(dirname "$mountDIR") :" && ls $(dirname "$mountDIR")
 	}
 }
 function umountISO {
