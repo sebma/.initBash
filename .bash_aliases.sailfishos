@@ -8,7 +8,7 @@ duExcludedPathList="./proc ./sys ./dev ./opt/alien"
 excludePathsDuExpression=$(printf -- "--exclude %s " $duExcludedPathList)
 
 unset -f dfc
-unalias version
+alias version >/dev/null 2>&1 || unalias version
 
 alias androidVersion="\grep version.release /opt/alien/system/build.prop"
 which advcp >/dev/null || { alias acp="rsync -ogpuv -lH"; alias amv="rsync -ogpuv -lH --remove-source-files"; }
