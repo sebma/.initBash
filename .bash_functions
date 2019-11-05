@@ -299,11 +299,20 @@ function distribType {
 			Mer |Redhat|Fedora) distribType="redhat";;
 			*) distribType=unknown;;
 		esac
-	else
+	fi
+	if [ $distribType = unknown ]
+	then
 		if   [ $osFamily = Linux ]
 		then
 			distrib=$(awk -F"=" '/^ID=/{print$2}' /etc/os-release)
 			distribType=$(grep ID_LIKE /etc/os-release | cut -d= -f2 | cut -d'"' -f2 | cut -d" " -f1) #Pour les cas ou ID_LIKE est de la forme ID_LIKE="rhel fedora"
+			if [ -z "$distribType" ]
+			then
+				case $distrib in
+					sailfishos|rhel|fedora) distribType="redhat";;
+					*) distribType=unknown;;
+				esac
+			fi
 		elif [ $osFamily = Darwin ]
 		then
 			distrib="$(sw_vers -productName)"
