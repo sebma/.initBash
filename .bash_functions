@@ -1028,7 +1028,7 @@ function renameFileInsideZIP {
 	command 7za $zipFile $oldName $newName
 }
 function rename_APK {
-	type aapt || return
+	type aapt >/dev/null || return
 	for package
 	do
 		echo "=> package = $package"
