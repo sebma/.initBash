@@ -284,7 +284,7 @@ function dirName {
 function distribPackageMgmt {
 	case $(distribType) in
 		debian|Debian) packageType="deb";;
-		redhat|Redhat|sailfishos) packageType="rpm";;
+		redhat|Redhat) packageType="rpm";;
 		*) packageType=unknown;;
 	esac
 	echo $packageType
