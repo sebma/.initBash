@@ -1355,7 +1355,7 @@ function updateYoutubeLUAForVLC {
 	fi
 }
 function updateYoutubePlaylistLUAForVLC {
-	local playlist_youtubeLuaURL=https://dl.opendesktop.org/api/files/download/id/1473753829/149909-playlist_youtube.lua
+	local playlist_youtubeLuaURL=https://gist.github.com/seraku24/db42e0e418b2252f2136d2d7f1656be5/raw/3b403b281a37565d5ff2b21ef3645e971fac7c77/149909-playlist_youtube-vlc3patch.lua
 	if groups 2>/dev/null | egrep -wq "sudo|admin"
 	then
 		test $osFamily = Linux &&  \sudo wget --content-disposition -NP /usr/lib/vlc/lua/playlist/ $playlist_youtubeLuaURL
