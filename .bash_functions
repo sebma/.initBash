@@ -1348,20 +1348,20 @@ function updateYoutubeLUAForVLC {
 	local youtubeLuaURL=https://raw.githubusercontent.com/videolan/vlc/master/share/lua/playlist/youtube.lua
 	if groups 2>/dev/null | egrep -wq "sudo|admin"
 	then
-		test $osFamily = Linux &&  \sudo \wget --content-disposition -NP /usr/lib/vlc/lua/playlist/ $youtubeLuaURL
-		test $osFamily = Darwin && \sudo \wget --content-disposition -NP /Applications/VLC.app/Contents/MacOS/share/lua/playlist/ $youtubeLuaURL
+		test $osFamily = Linux &&  \sudo wget --content-disposition -NP /usr/lib/vlc/lua/playlist/ $youtubeLuaURL
+		test $osFamily = Darwin && \sudo wget --content-disposition -NP /Applications/VLC.app/Contents/MacOS/share/lua/playlist/ $youtubeLuaURL
 	else
-		\wget --content-disposition -NP ~/.local/share/vlc/lua/playlist/ $youtubeLuaURL
+		wget --content-disposition -NP ~/.local/share/vlc/lua/playlist/ $youtubeLuaURL
 	fi
 }
 function updateYoutubePlaylistLUAForVLC {
 	local playlist_youtubeLuaURL=https://dl.opendesktop.org/api/files/download/id/1473753829/149909-playlist_youtube.lua
 	if groups 2>/dev/null | egrep -wq "sudo|admin"
 	then
-		test $osFamily = Linux &&  \sudo \wget --content-disposition -NP /usr/lib/vlc/lua/playlist/ $playlist_youtubeLuaURL
-		test $osFamily = Darwin && \sudo \wget --content-disposition -NP /Applications/VLC.app/Contents/MacOS/share/lua/playlist/ $playlist_youtubeLuaURL
+		test $osFamily = Linux &&  \sudo wget --content-disposition -NP /usr/lib/vlc/lua/playlist/ $playlist_youtubeLuaURL
+		test $osFamily = Darwin && \sudo wget --content-disposition -NP /Applications/VLC.app/Contents/MacOS/share/lua/playlist/ $playlist_youtubeLuaURL
 	else
-		\wget --content-disposition -NP ~/.local/share/vlc/lua/playlist/ $playlist_youtubeLuaURL
+		wget --content-disposition -NP ~/.local/share/vlc/lua/playlist/ $playlist_youtubeLuaURL
 	fi
 }
 function webgrep {
