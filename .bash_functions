@@ -1380,11 +1380,14 @@ function whatPackageContainsExecutable {
 	then
 		findPackage="command dpkg -S"; searchPackage="command apt-file search";
 		$findPackage $(printf "bin/%s " "$@")
+	elif [ "$(distribPackageMgmt)" = rpm ]
+	then
+		findPackage="command rpm -qf"; searchPackage="command yum whatprovides";
+		$findPackage $(printf "%s " $(which "$@"))
 	else
 		for executable
 		do
 			case "$(distribPackageMgmt)" in
-				rpm) findPackage="command rpm -qf"; searchPackage="command yum whatprovides";;
 				*) findPackage="command $(which whohas) 2>/dev/null";; # Search package across most common distributions
 			esac
 			if $findPackage $executable | sed "s|/||";then
@@ -1392,8 +1395,8 @@ function whatPackageContainsExecutable {
 			else
 				if which $executable >/dev/null 2>&1
 				then
-					echo "=> Using : $searchPackage $executable ..." >&2
-					$searchPackage $executable
+					echo "=> Using : $searchPackage $(which executable) ..." >&2
+					$searchPackage $(which executable)
 				else
 					echo "=> Using : $searchPackage bin/$executable ..." >&2
 					$searchPackage bin/$executable
