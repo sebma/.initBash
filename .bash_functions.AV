@@ -1,4 +1,4 @@
-# vim: set syn=sh noet:
+# vim: set syn=bash noet:
 set +x
 declare -A | grep -wq colors || source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
@@ -771,22 +771,26 @@ function replaceAudioOfVideoFile {
 	local extension="${videoFile/*./}"
 	time $ffmpeg -i "$videoFile" -i "$audioFile" -map 0:v:0 -map 1:a:0 -c copy -shortest "${videoFile/.*/}_NEW.$extension"
 }
-function sizeofStream {
+function sizeOfStream {
+	trap 'rc=130;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
+
 	local size
-	local total="0"
-	local format=fmt18_360p
-	echo $1 | grep -q ^http || {
-	format=$1
-	shift
+	local totalExpr="0"
+	local format=18
+	echo $1 | \grep -q ^http || {
+		format=$1
+		shift
 	}
-	for url in "$@"
+	for url
 	do
-		size=$(curl -sI "$(youtube-dl -gf best -- "$url")" | \sed "s/\r//g" | awk 'BEGIN{IGNORECASE=1}/Content-Length:/{print$2/2^20}')
-		total="$total+$size"
-		printf "%s %s Mo\n" $url $size
+		size=$(curl -sI "$(youtube-dl -gf $format -- "$url")" | \sed "s/\r//g" | awk 'BEGIN{IGNORECASE=1}/Content-Length:/{print$2/2^20}')
+		totalExpr="$totalExpr+$size"
+		echo "$url $size Mo"
 	done
-	total=$(echo $total | \bc -l)
+	total=$(perl -e "printf $totalExpr")
 	echo "=> total = $total Mo"
+
+	trap - INT
 }
 function spx216kHzopus {
 	typeset inputFile="$1"
