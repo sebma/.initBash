@@ -19,15 +19,15 @@ test -f $initDir/.bash_profile.seb && Source $initDir/.bash_profile.seb
 
 # if running bash
 if [ -n "$BASH_VERSION" ]; then
-    # include .bashrc if it exists
-    if [ -f "$initDir/.bashrc" ]; then
+	# include .bashrc if it exists
+	if [ -f "$initDir/.bashrc" ]; then
 		Source "$initDir/.bashrc"
-    fi
+	fi
 fi
 
 # set PATH so it includes user's private bin if it exists
 if [ -d "$HOME/bin" ] ; then
-    echo $PATH | grep -wq "$HOME/bin" || PATH="$HOME/bin:$PATH"
+	echo $PATH | grep -wq "$HOME/bin" || PATH="$HOME/bin:$PATH"
 fi
 
 test "$debug" -lt 3 && set +x
