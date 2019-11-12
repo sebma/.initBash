@@ -5,7 +5,7 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 # when leaving the console clear the screen to increase privacy
 
 if [ "$SHLVL" = 1 ]; then
-    [ -x /usr/bin/clear_console ] && /usr/bin/clear_console -q
+	[ -x /usr/bin/clear_console ] && /usr/bin/clear_console -q
 fi
 
 test -f $initDir/.bash_logout.seb && Source $initDir/.bash_logout.seb
