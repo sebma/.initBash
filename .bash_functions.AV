@@ -978,8 +978,7 @@ function videoInfo {
 				$ffprobe "$urlOrFile" || $ffprobe $ffprobeOptions "$urlOrFile"
 			fi
 			echo
-		done
-#		done 2>&1 | \egrep -vi "^ +(:|comment|description +: [^/]+$)" | uniq | egrep -iw "^$|description.*:/|PURL.*:/|stream|local|urlOrFile|kb/s|Input|Size:|Title:|Duration:|Stream|Chapter|Invalid|error|bad| no such file|^\[.* not"
+		done 2>&1 | \egrep -vi "^ +(:|comment|description +: [^/]+$)" | uniq | egrep -iw "^$|description.*:/|PURL.*:/|stream|local|urlOrFile|kb/s|Input|Size:|Title:|Duration:|Stream|Chapter|Invalid|error|bad| no such file|^\[.* not"
 	}
 }
 function videoInfoOLD {
