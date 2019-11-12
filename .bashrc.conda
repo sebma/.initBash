@@ -8,7 +8,7 @@ export NO_AT_BRIDGE=1
 
 for condaPath in /usr/local/miniconda3 /usr/local/miniconda2
 do
-		test -x $condaPath/bin/conda && export CONDA_HOME=$condaPath && break
+	test -x $condaPath/bin/conda && export CONDA_HOME=$condaPath && break
 done
 
 test -n "$CONDA_HOME" && echo $PATH | grep -wq $CONDA_HOME || export PATH=$CONDA_HOME/bin${PATH:+:${PATH}}
