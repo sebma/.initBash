@@ -1,4 +1,4 @@
-# vim: set syn=sh noet:
+# vim: set syn=bash noet:
 declare -A | grep -wq colors || source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
@@ -19,7 +19,7 @@ function connect2SSID {
 	set +x
 }
 function lanip {
-	ethName=$1
+	local ethName=$1
 	if [ -n "$ethName" ]
 	then
 		printf "$ethName: "
