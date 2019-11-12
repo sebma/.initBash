@@ -64,7 +64,7 @@ esac
 #Si le proxy est joignable
 if [ $domain != localhost ] && nc -v -z -w 4 $proxyName $proxyPort >/dev/null 2>&1
 then
-    test -z $http_proxy && export http_proxy=http://proxy:$proxyPort
+	test -z $http_proxy && export http_proxy=http://proxy:$proxyPort
 fi
 
 if test -n "$http_proxy"; then
