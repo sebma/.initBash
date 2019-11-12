@@ -43,6 +43,10 @@ alias mpvEnglish="mpv --profile=english"
 alias mpvGerman="mpv --alang=deu --slang=deu"
 alias mpvSpanish="mpv --alang=spa --slang=spa"
 
+#youtube_dl="eval LANG=C.UTF-8 command youtube-dl" # i.e https://unix.stackexchange.com/questions/505733/ # eval A EVITER
+alias youtube-dl="LANG=C.UTF-8 command youtube-dl"
+alias ytdl="LANG=C.UTF-8 command youtube-dl"
+
 function cleanMPVStatusLine {
 	perl -pe $mpv_Output_Perl_Script
 }
@@ -70,7 +74,7 @@ function mpvInit {
 	fi
 }
 function mpvOld {
-	$mpv $($youtube_dl -g "$@")
+	$mpv $(youtube-dl -g "$@")
 }
 function mpvRSSPodCastPlayList {
 	test $# = 1 && {
@@ -80,7 +84,7 @@ function mpvRSSPodCastPlayList {
 	}
 }
 function mpvalt {
-	test $1 && $mpv --no-ytdl $($youtube_dl -gf best $@ | uniq)
+	test $1 && $mpv --no-ytdl $(youtube-dl -gf best $@ | uniq)
 }
 function mpvdirectly {
 	\rm nohup.out
@@ -127,7 +131,7 @@ function mpvplaylistFORMAT {
 	tail -f nohup.out | egrep -v "AV: "
 }
 function urlplayer {
-	$mpv $($youtube_dl -gf best "$1")
+	$mpv $(youtube-dl -gf best "$1")
 }
 
 set +x
