@@ -1,4 +1,4 @@
-# vim: set syn=sh noet:
+# vim: set syn=bash noet:
 declare -A | grep -wq colors || source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
@@ -658,7 +658,7 @@ function listVideosFromRSSPodCastPlayList {
 function locateBin {
 	local regExp="$1"
 	shift
-    locate "bin/.*$regExp" "$@"
+	locate "bin/.*$regExp" "$@"
 }
 function locateFromHere {
 	local regExp="$1"
@@ -1167,25 +1167,25 @@ function setTimestamps {
 	done
 }
 function sizeOfRemoteFile {
-    trap 'rc=$?;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
-    local size
-    local total="0"
-    local format=18
-    echo $1 | \egrep -q "^https?://" || {
-        format=$1
-        shift
-    }
-    for url
-    do
-        size=$(\curl -sI "$url" | \sed "s/\r//g" | awk 'BEGIN{IGNORECASE=1}/Content-?Length:/{print$2/2^20}')
-        total="$total+$size"
-        printf "%s %s Mo\n" $url $size
-    done
-    test $# -gt 1 && {
-        total=$(echo $total | \bc -l)
-        echo "=> total = $total Mo"
-    }
-    trap - INT
+	trap 'rc=$?;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
+
+	local size
+	local totalExpr="0"
+	local format=18
+	echo $1 | \grep -q ^http || {
+		format=$1
+		shift
+	}
+	for url
+	do
+		size=$(\curl -sI "$url" | \sed "s/\r//g" | awk 'BEGIN{IGNORECASE=1}/Content-?Length:/{print$2/2^20}')
+		totalExpr="$totalExpr+$size"
+		echo "$url $size Mo"
+	done
+	total=$(perl -e "printf $totalExpr")
+	echo "=> total = $total Mo"
+ 
+	trap - INT
 }
 function sortInPlace {
 	local sort="command sort"
@@ -1427,9 +1427,9 @@ function xpiInfo {
 			done | column -ts '='
 			xpiID=$(unzip -q -p "$xpiFile" install.rdf | awk -F "<|>" /em:id/'{if(!f)print$3;f=1}')
 			test "$xpiID" || for field in name id description version homepageURL
-            do
-                unzip -q -p "$xpiFile" install.rdf | grep -v "xml.version" | awk -F "<|>" /$field/'{if(!f)print$2"="$3;f=1}'
-            done | column -ts '='
+			do
+				unzip -q -p "$xpiFile" install.rdf | grep -v "xml.version" | awk -F "<|>" /$field/'{if(!f)print$2"="$3;f=1}'
+			done | column -ts '='
 		elif unzip -t "$xpiFile" | \grep -wq manifest.json
 		then
 			unzip -q -p "$xpiFile" manifest.json | jq '{name:.name , id:.applications.gecko.id , description:.description , version:.version , url:.homepage_url}'
