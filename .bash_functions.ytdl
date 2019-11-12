@@ -1,6 +1,8 @@
-#!/usr/bin/env bash
+# vim: set syn=bash noet:
+set +x
 declare -A | grep -wq colors || source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
+
 #trap 'rc=130;set +x;echo "=> ${BASH_SOURCE[0]}: CTRL+C Interruption trapped.">&2;return $rc' INT
 
 \which youtube-dl >/dev/null || { echo "=> ERROR: <youtube-dl> is not installed,  type \"sudo -H $(which pip3) install -U youtube-dl\" to install it" >&2; return 1; }
@@ -325,22 +327,21 @@ function reget {
 function sizeOf {
 	trap 'rc=130;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
 	local size
-	local total="0"
+	local totalExpr="0"
 	local format=18
-	echo $1 | \egrep -q "^https?:" || {
+	echo $1 | \grep -q ^http || {
 		format=$1
-	shift
+		shift
 	}
-	for url in "$@"
+	for url
 	do
-	size=$(\curl -sI "$(youtube-dl -gf $format $url)" | \sed "s/\r//g" | awk 'BEGIN{IGNORECASE=1}/Content-?Length:/{print$2/2^20}')
-	total="$total+$size"
-	printf "%s %s Mo\n" $url $size
+		size=$(\curl -sI "$(youtube-dl -gf $format $url)" | \sed "s/\r//g" | awk 'BEGIN{IGNORECASE=1}/Content-?Length:/{print$2/2^20}')
+		totalExpr="$totalExpr+$size"
+		echo "$url $size Mo"
 	done
-	test $# -gt 1 && {
-		total=$(echo $total | \bc -l)
-		echo "=> total = $total Mo"
-	}
+	total=$(perl -e "printf $totalExpr")
+	echo "=> total = $total Mo"
+
 	trap - INT
 }
 function updateYTMetadataFromFiles {
