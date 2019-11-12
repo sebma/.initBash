@@ -1,4 +1,4 @@
-# vim: set syn=sh noet:
+# vim: set syn=bash noet:
 declare -A | grep -wq colors || source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
@@ -9,20 +9,20 @@ function addKeys {
 	done
 }
 function apt {
-	args=$@
-	firstArg=$1
+	local args=$@
+	local firstArg=$1
 	case $firstArg in
-	install|purge) sudo command apt $args -V;;
+		install|purge) sudo command apt $args -V;;
 	*) command apt $args;;
 	esac
 }
 function aptGet {
-	args=$@
-	firstArg=$1
+	local args=$@
+	local firstArg=$1
 	case $firstArg in
-	install|purge) sudo command apt $args -V;;
-	download) command apt-get $args --print-uris && $(which apt-get) $args;;
-	*) command apt-get $args;;
+		install|purge) sudo command apt $args -V;;
+		download) command apt-get $args --print-uris && $(which apt-get) $args;;
+		*) command apt-get $args;;
 	esac
 }
 function aptPrintURIS {
