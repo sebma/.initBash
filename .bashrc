@@ -9,12 +9,12 @@ function Source { test "$debug" -gt 0 && time source "$@" && echo || source "$@"
 
 #test -z "$bashProfileLoaded" && Source .profile
 if [ -n "$BASH_VERSION" ]; then
-    # include .bashrc if it exists
-    if [ -f "/etc/skel/.bashrc" ]; then
+	# include .bashrc if it exists
+	if [ -f "/etc/skel/.bashrc" ]; then
 		test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}/etc/skel/.bashrc$normal ..."
 		Source /etc/skel/.bashrc
 		test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}/etc/skel/.bashrc$normal"
-    fi
+	fi
 fi
 
 tty -s && test -f $initDir/.bashrc.seb && Source $initDir/.bashrc.seb #Pour que "scp/rsync" fonctionnent meme si il y a des commandes "echo"
