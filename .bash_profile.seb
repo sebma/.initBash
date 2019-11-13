@@ -102,17 +102,11 @@ then
 	which lpr >/dev/null 2>&1 && test -f $initDir/.bash_profile.lpr && Source $initDir/.bash_profile.lpr
 fi
 
-case $osFamily in
-Darwin)
-	test -r $initDir/.bash_profile.Darwin && Source $initDir/.bash_profile.Darwin
-	;;
-Linux)
-	test -r $initDir/.bash_profile.Linux && Source $initDir/.bash_profile.Linux
-	;;
-*)
+test -r $initDir/.bash_profile.$osFamily && Source $initDir/.bash_profile.$osFamily
+
+if [ $osFamily != Darwin ] && [ $osFamily != Linux ]; then
 	which lsb_release >/dev/null 2>&1 && export system="$(lsb_release -sd | awk -F '"' '{print$(NF-1)}')" || export system=$(echo $HOSTTYPE-$OSTYPE | sed "s/arm[^-]*-/arm-/")
-	;;
-esac
+fi
 
 which matlab >/dev/null 2>&1 && test -r $initDir/.bash_profile.matlab && Source $initDir/.bash_profile.matlab
 brew=$(\ls ~/.linuxbrew/bin/brew /home/linuxbrew/.linuxbrew/bin/brew 2>/dev/null | head -1)
