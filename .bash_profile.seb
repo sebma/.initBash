@@ -82,7 +82,9 @@ if [ $osFamily = Linux ] || [ $osFamily = Darwin ]
 then
 	tty -s && echo
 	if which ssh-agent >/dev/null 2>&1; then
-		pgrep -u $USER ssh-agent >/dev/null 2>&1 || { tty -s && echo "=> Starting the ssh-agent for $USER ..." >&2; eval $(ssh-agent -s) >/dev/null; }
+		if ! env | grep -q SSH_CLIENT; then # Si on est PAS a l autre bout d une connection ssh
+			pgrep -u $USER ssh-agent >/dev/null 2>&1 || { tty -s && echo "=> Starting the ssh-agent for $USER ..." >&2; eval $(ssh-agent -s) >/dev/null; }
+		fi
 		pgrep -lfu $USER ssh-agent 2>/dev/null
 	fi
 	
