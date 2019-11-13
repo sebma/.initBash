@@ -146,9 +146,9 @@ test -f $initDir/.bashrc.gpu && Source $initDir/.bashrc.gpu
 #Definitions de mes alias
 test -r $initDir/.bash_aliases && Source $initDir/.bash_aliases
 test -r $initDir/.bash_aliases.$osFamily && Source $initDir/.bash_aliases.$osFamily #Pour Darwin ou Linux
+test -r $initDir/.bash_aliases.$os && Source $initDir/.bash_aliases.$os #Pour sailfishos
 test -r $initDir/.bash_functions.$osFamily && Source $initDir/.bash_functions.$osFamily #Pour Darwin ou Linux
 case $OSTYPE in
-	linux-gnueabihf) grep -q ID=sailfishos /etc/os-release &&  test -r $initDir/.bash_aliases.sailfishos && Source $initDir/.bash_aliases.sailfishos;;
 	linux-gnueabi) resize; test -r $initDir/.bash_aliases.android && Source $initDir/.bash_aliases.android; which busybox >/dev/null && test -r $initDir/.bash_aliases.busybox && Source $initDir/.bash_aliases.busybox;;
 esac
 
