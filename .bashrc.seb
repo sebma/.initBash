@@ -103,8 +103,10 @@ which ssh-add >/dev/null && {
 	if ! ssh-add -l 2>/dev/null | grep -q "$UPMC_ID"
 	then
 		if test -s ~/.ssh/.$UPMC_ID; then
-			tty -s && echo "=> Starting ssh-add from <$(basename $BASH_SOURCE)> ..." 
-			ssh-add ~/.ssh/.$UPMC_ID >/dev/null
+			if ! env | grep -q SSH_CLIENT; then # Si on est PAS a l autre bout d une connection ssh
+				tty -s && echo "=> Loading my ssh key from <$(basename $BASH_SOURCE)> ..."
+				ssh-add ~/.ssh/.$UPMC_ID >/dev/null
+			fi
 		fi
 	fi
 	trap - INT
