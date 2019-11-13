@@ -1376,12 +1376,11 @@ function wgetParallel {
 	done
 }
 function whatPackageContainsExecutable {
-	if [ "$(distribPackageMgmt)" = deb ]
-	then
+	set -- "${@/:/}" # suppress trailing ":" in all arguments
+	if [ "$(distribPackageMgmt)" = deb ]; then
 		findPackage="command dpkg -S"; searchPackage="command apt-file search";
 		$findPackage $(printf "bin/%s " "$@")
-	elif [ "$(distribPackageMgmt)" = rpm ]
-	then
+	elif [ "$(distribPackageMgmt)" = rpm ]; then
 		findPackage="command rpm -qf"; searchPackage="command yum whatprovides";
 		$findPackage $(printf "%s " $(which "$@"))
 	else
@@ -1403,7 +1402,7 @@ function whatPackageContainsExecutable {
 				fi
 			fi
 		done
-	fi
+	fi | \egrep "(libexec|bin)/"
 }
 function whereisIP {
 	which curl >/dev/null && \curl -A "" ipinfo.io/$1 || \wget -qO- -U "" ipinfo.io/$1
