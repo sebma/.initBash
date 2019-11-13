@@ -115,18 +115,15 @@ function wifiCapabilities {
 		exit 1
 	}
 
-	if which iw >/dev/null; then
-		echo "=> Wifi physical device capabilities :"
-		iw phy $physicalDevice info
-	else
-		which iwlist >/dev/null && {
-			iwlist $wiFiDevice bitrate || sudo iwlist $wiFiDevice bitrate
-			iwlist $wiFiDevice encryption || sudo iwlist $wiFiDevice encryption
-			iwlist $wiFiDevice frequency
-			iwlist $wiFiDevice event
-			iwlist $wiFiDevice retry
-		}
-	fi
+	which iw >/dev/null && echo "=> Wifi physical device capabilities :" && iw phy $physicalDevice info
+	which iwlist >/dev/null && {
+		echo "========================================================================"
+		iwlist $wiFiDevice bitrate || sudo iwlist $wiFiDevice bitrate
+		iwlist $wiFiDevice encryption || sudo iwlist $wiFiDevice encryption
+		iwlist $wiFiDevice frequency
+		iwlist $wiFiDevice event
+		iwlist $wiFiDevice retry
+	}
 }
 function wifiInfos {
 	export LANG=C
@@ -162,16 +159,17 @@ function wifiInfos {
 
 		echo "=> Connected network link status :"
 		iw dev $wiFiDevice link || sudo iw dev $wiFiDevice link
-	else
-		which iwlist >/dev/null && {
-			iwlist $wiFiDevice bitrate || sudo iwlist $wiFiDevice bitrate
-			iwlist $wiFiDevice encryption || sudo iwlist $wiFiDevice encryption
-			iwlist $wiFiDevice frequency
-			iwlist $wiFiDevice event
-			iwlist $wiFiDevice retry
-			iwlist $wiFiDevice scan | more
-		}
 	fi
+
+	which iwlist >/dev/null && {
+		echo "========================================================================"
+		iwlist $wiFiDevice bitrate || sudo iwlist $wiFiDevice bitrate
+		iwlist $wiFiDevice encryption || sudo iwlist $wiFiDevice encryption
+		iwlist $wiFiDevice frequency
+		iwlist $wiFiDevice event
+		iwlist $wiFiDevice retry
+		iwlist $wiFiDevice scan | more
+	}
 }
 function ytdlUpdate {
 	typeset -r isAdmin=$(groups 2>/dev/null | \egrep -wq "sudo|adm|admin|root" && echo true || echo false)
