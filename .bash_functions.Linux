@@ -4,6 +4,13 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 
 test -f /etc/debian_version && Source $initDir/.bash_functions.Debian # Si c'est un Linux de type Debian
 
+function batteryINFO {
+	set -x
+	acpi -bi
+	inxi -Bxxx
+	upower -i $(upower -e | grep BAT)
+	set +x
+}
 function brewInstall {
 	which brew >/dev/null 2>&1 || sh -c "$(\curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
 	which brew >/dev/null || return 1
