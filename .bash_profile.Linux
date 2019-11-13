@@ -14,7 +14,11 @@ export cacheLinkName=.cache && export myCacheRootDir=/tmp/$USER && cd $HOME
 if [ ! -L $cacheLinkName ] 
 then
 	mkdir -p $myCacheRootDir/ 
-	test -d $cacheLinkName && { mv $cacheLinkName $myCacheRootDir/;true; } || mkdir -p $myCacheRootDir/$cacheLinkName/
+	test -d $cacheLinkName && (
+		trap 'echo "=> Ignoring this step and continuing the script <$(basename $BASH_SOURCE)> ..." >&2' INT
+		mv $cacheLinkName $myCacheRootDir/;true;
+		trap - INT
+	) || mkdir -p $myCacheRootDir/$cacheLinkName/
 	\ln -vs $myCacheRootDir/$cacheLinkName $cacheLinkName
 else
 	#Si le lien symbolique existe mais qu'il ne pointe sur rien alors on cree la cible du lien symbolique
