@@ -134,7 +134,7 @@ which brew >/dev/null 2>&1 && Source $initDir/.bashrc.brew
 test -r $initDir/.bashrc.conda && Source $initDir/.bashrc.conda
 test -r $initDir/.bashrc.$osFamily && Source $initDir/.bashrc.$osFamily
 #test -r $initDir/.bashrc.$osFamily.local && Source $initDir/.bashrc.$osFamily.local
-test -s /etc/debian_version && Source $initDir/.bashrc.Debian
+test -r $initDir/.bashrc.$osID_LIKE && Source $initDir/.bashrc.$osID_LIKE # Si c'est un Linux de type Debian ou Redhat
 
 #my git configuration
 if which git >/dev/null 2>&1; then
