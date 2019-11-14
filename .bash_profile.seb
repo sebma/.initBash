@@ -9,7 +9,7 @@ export osFamily=$(uname -s)
 function Source { test "$debug" -gt 0 && time source "$@" && echo || source "$@" ; }
 export bashProfileLoaded=1
 
-[ $osFamily = Linux ] && export os=$(source /etc/os-release && echo $ID) osID_LIKE=$(source /etc/os-release && echo $ID_LIKE)
+[ $osFamily = Linux ] && export osID=$(source /etc/os-release && echo $ID) osID_LIKE=$(source /etc/os-release && echo $ID_LIKE)
 
 initDir=$(basename $initDir) #Pour creer des liens symboliques relatifs a $HOME
 cd $HOME

@@ -14,7 +14,7 @@ set -o histexpand # Re-enable the history expansion disabled previously by my "e
 #test -n "$bashRCLoaded" && return
 bashRCLoaded=1
 export osFamily=$(uname -s)
-[ $osFamily = Linux ] && export os=$(source /etc/os-release && echo $ID) osID_LIKE=$(source /etc/os-release && echo $ID_LIKE)
+[ $osFamily = Linux ] && export osID=$(source /etc/os-release && echo $ID) osID_LIKE=$(source /etc/os-release && echo $ID_LIKE)
 quoteCHAR="'\''"
 
 function addmanpaths {
@@ -52,7 +52,7 @@ export -f $(declare -F | egrep -v " __?" | awk '{print$NF}')
 
 user=$(\id -un)
 hostname=$HOSTNAME
-test -r $initDir/.bashrc.$os && Source $initDir/.bashrc.$os # Pour les OS derives de $osFamily
+test -r $initDir/.bashrc.$osID && Source $initDir/.bashrc.$osID # Pour les OS derives de $osFamily
 
 test -r $initDir/.colors && Source $initDir/.colors
 #PROMPT_COMMAND='echo -ne "\033]0;$USER : $hostname @ $domain / $system : $(date +"%A %d %B %Y %H:%M") $PWD\007"'
@@ -148,7 +148,7 @@ test -f $initDir/.bashrc.gpu && Source $initDir/.bashrc.gpu
 #Definitions de mes alias
 test -r $initDir/.bash_aliases && Source $initDir/.bash_aliases
 test -r $initDir/.bash_aliases.$osFamily && Source $initDir/.bash_aliases.$osFamily #Pour Darwin ou Linux
-test -r $initDir/.bash_aliases.$os && Source $initDir/.bash_aliases.$os #Pour sailfishos
+test -r $initDir/.bash_aliases.$osID && Source $initDir/.bash_aliases.$osID #Pour sailfishos
 test -r $initDir/.bash_functions.$osFamily && Source $initDir/.bash_functions.$osFamily #Pour Darwin ou Linux
 case $OSTYPE in
 	linux-gnueabi) resize; test -r $initDir/.bash_aliases.android && Source $initDir/.bash_aliases.android; which busybox >/dev/null && test -r $initDir/.bash_aliases.busybox && Source $initDir/.bash_aliases.busybox;;
