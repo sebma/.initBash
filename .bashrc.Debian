@@ -1,9 +1,0 @@
-# vim: set syn=sh noet:
-declare -A | grep -wq colors || source $initDir/.colors
-test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
-
-[ $(\lsb_release -si) = Ubuntu ] && export codeName=$(\lsb_release -sc)
-[ $(\lsb_release -si) = Debian ] && export codeName=$(awk -F"[()]" '/VERSION=/{print$(NF-1)}' /etc/os-release)
-
-set +x
-test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
