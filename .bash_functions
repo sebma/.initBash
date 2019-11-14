@@ -170,9 +170,9 @@ function cer2pem {
 	done
 }
 function cleanFirefoxLock {
-	case $(lsb_release -si) in
-		Debian) firefoxProgramName=iceweasel;;
-		Ubuntu) firefoxProgramName=firefox;;
+	case $osID in
+		debian) firefoxProgramName=iceweasel;;
+		ubuntu) firefoxProgramName=firefox;;
 	esac
 
 	pgrep -lf $firefoxProgramName || \rm -vf ~/.mozilla/firefox/*.default/lock ~/.mozilla/firefox/*.default/.parentlock
@@ -283,8 +283,8 @@ function dirName {
 }
 function distribPackageMgmt {
 	case $(distribType) in
-		debian|Debian) packageType="deb";;
-		redhat|Redhat) packageType="rpm";;
+		debian) packageType="deb";;
+		redhat) packageType="rpm";;
 		*) packageType=unknown;;
 	esac
 	echo $packageType
@@ -295,8 +295,8 @@ function distribType {
 	then
 		distrib=$(\lsb_release -si)
 		case $distrib in
-			Ubuntu|Debian) distribType="debian";;
-			Mer |Redhat|Fedora) distribType="redhat";;
+			Ubuntu|Debian) distribType=debian;;
+			Mer |Redhat|Fedora) distribType=redhat;;
 			*) distribType=unknown;;
 		esac
 	fi
@@ -304,12 +304,12 @@ function distribType {
 	then
 		if   [ $osFamily = Linux ]
 		then
-			distrib=$(awk -F"=" '/^ID=/{print$2}' /etc/os-release)
-			distribType=$(grep ID_LIKE /etc/os-release | cut -d= -f2 | cut -d'"' -f2 | cut -d" " -f1) #Pour les cas ou ID_LIKE est de la forme ID_LIKE="rhel fedora"
+			distrib=$(source /etc/os-release;echo $ID)
+			distribType=$(source /etc/os-release && echo $ID_LIKE | cut -d'"' -f2 | cut -d" " -f1) #Pour les cas ou ID_LIKE est de la forme ID_LIKE="rhel fedora"
 			if [ -z "$distribType" ]
 			then
 				case $distrib in
-					sailfishos|rhel|fedora) distribType="redhat";;
+					sailfishos|rhel|fedora|centos) distribType=redhat;;
 					*) distribType=unknown;;
 				esac
 			fi
