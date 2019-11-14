@@ -290,7 +290,8 @@ function distribPackageMgmt {
 	echo $packageType
 }
 function distribType {
-	distribType=unknown
+	local distrib=unknown
+	local distribType=unknown
 	if which lsb_release >/dev/null 2>&1
 	then
 		distrib=$(\lsb_release -si)
@@ -597,10 +598,10 @@ function img2pdfA4R {
 	img2pdf --pagesize A4^T $allArgsButLast -o $lastArg
 }
 function installDate {
-	local system=$(systemType)
-	case $system in
-		Debian|Ubuntu) \ls -lact --full-time /etc | awk 'END {print $6,substr($7,1,8)}' ;;
-		Mer|Redhat) \rpm -q basesystem --qf '%{installtime:date}\n' ;;
+	local distribType=$(distribType)
+	case $distribType in
+		debian|ubuntu) \ls -lact --full-time /etc | awk 'END {print $6,substr($7,1,8)}' ;;
+		mer|redhat) \rpm -q basesystem --qf '%{installtime:date}\n' ;;
 		darwin15*) \ls -lactL -T /etc | awk 'END {print $6,$7,$8}' ;;
 		*)	;;
 	esac
