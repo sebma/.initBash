@@ -828,8 +828,17 @@ function odfInfo {
 }
 function os {
 	case $osFamily in
-		Darwin) sw_vers >/dev/null 2>&1 && echo $(sw_vers -productName) $(sw_vers -productVersion) || system_profiler SPSoftwareDataType || defaults read /System/Library/CoreServices/SystemVersion ProductVersion ;;
-		Linux) \lsb_release -scd | tr "\n" " ";echo 2>/dev/null || awk -F'[="]' '/PRETTY_NAME/{printf$(NF-1)" "}/VERSION_CODENAME/{codeName=$2}END{if(codeName)print codeName;else print""}' /etc/os-release || sed -n 's/\\[nl]//g;1p' /etc/issue ;;
+		Darwin)
+			sw_vers >/dev/null 2>&1 && echo $(sw_vers -productName) $(sw_vers -productVersion) || system_profiler SPSoftwareDataType || defaults read /System/Library/CoreServices/SystemVersion ProductVersion ;;
+		Linux)
+			if [ -s /etc/os-release ]; then
+				( source /etc/os-release; echo $PRETTY_NAME )
+			elif which lsb_release >/dev/null 2>&1; then
+				\lsb_release -scd | tr "\n" " ";echo
+			else
+				\sed -n 's/\\[nl]//g;1p' /etc/issue
+			fi
+			;;
 		*) ;;
 	esac
 }
