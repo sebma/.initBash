@@ -2,12 +2,8 @@
 declare -A | grep -wq colors || source $initDir/.colors
 test "$debug" -gt 0 && \echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-if which iw >/dev/null; then
-	wifiDevice=$(iw dev | \sed -n "1s/#//;1p")
-	wifiInterface=$(iw dev | awk '/Interface/{lastInterface=$NF}END{print lastInterface}')
-elif which iwconfig >/dev/null; then
-	wifiInterface="$(iwconfig 2>/dev/null | awk '/^[^ \t]/ { if ($1 ~ /^[0-9]+:/) { lastInterface=$2 } else { lastInterface=$1 } }END{print lastInterface}')"
-fi
+wifiInterface=$(iw dev 2>/dev/null | awk '/Interface/{lastInterface=$NF}END{print lastInterface}')
+test "$wifiInterface" || wifiInterface="$(iwconfig 2>/dev/null | awk '/^[^ \t]/ { if ($1 ~ /^[0-9]+:/) { lastInterface=$2 } else { lastInterface=$1 } }END{print lastInterface}')"
 
 #alias lpr="\lpr -P ppti-14-503-imp -o PageSize=A4 -o PageRegion=A4 -o Resolution=default -o InputSlot=Tray2 -o Duplex=DuplexNoTumble -o PreFilter=No"
 #alias lpr="\lpr -o PageSize=A4 -o PageRegion=A4 -o Resolution=default -o InputSlot=Tray2 -o Duplex=DuplexNoTumble -o PreFilter=No"
