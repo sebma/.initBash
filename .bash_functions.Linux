@@ -104,7 +104,7 @@ function wifiCapabilities {
 	if [ $(uname -s) = Darwin ]
 	then
 		echo "=> Darwin/macOS operating systems are not supported yet." >&2
-		exit 1
+		return 1
 	fi
 
 	if which iw >/dev/null 
@@ -117,7 +117,7 @@ function wifiCapabilities {
 
 	[ "$wiFiDevice" ] || {
 		echo "=> ERROR : Could not find any wireless network card." >&2
-		exit 1
+		return 1
 	}
 
 	which iw >/dev/null && echo "=> Wifi physical device capabilities :" && iw phy $physicalDevice info
@@ -136,7 +136,7 @@ function wifiInfos {
 	if [ $(uname -s) = Darwin ]
 	then
 		echo "=> Darwin/macOS operating systems are not supported yet." >&2
-		exit 1
+		return 1
 	fi
 
 	if which iw >/dev/null 
@@ -149,7 +149,7 @@ function wifiInfos {
 
 	[ "$wiFiDevice" ] || {
 		echo "=> ERROR : Could not find any wireless network card." >&2
-		exit 1
+		return 1
 	}
 
 	if which iw >/dev/null; then
