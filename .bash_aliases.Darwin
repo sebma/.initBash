@@ -3,6 +3,7 @@ declare -A | \grep -wq colors || source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 wifiInterface="$(networksetup -listallhardwareports | awk '/Hardware Port: Wi-Fi/{getline; print $2}')"
+#alias mac@="\networksetup -getmacaddress \$wifiInterface | awk '{print\$3}'"
 #alias lpr="\lpr -P ppti-14-503-imp -o PageSize=A4 -o PageRegion=A4 -o Resolution=default -o InputSlot=Tray2 -o Duplex=DuplexNoTumble -o PreFilter=No"
 #alias lpr="\lpr -o PageSize=A4 -o PageRegion=A4 -o Resolution=default -o InputSlot=Tray2 -o Duplex=DuplexNoTumble -o PreFilter=No"
 #alias topflines='$(which find) . $prunePathsFindExpression -xdev -type f -size +10M -exec ls -lT {} \; 2>/dev/null | sort -nrk5 | column -t | head -n $(($LINES-4)) | awk '\''{total+=$5;print}END{print"=> total = "total" MiB"}'\'''
