@@ -1,6 +1,5 @@
 # vim: set syn=bash noet:
 
-#alias mac@="\networksetup -getmacaddress \$wifiInterface | awk '{print\$3}'"
 function applescript2app {
 	for file
 	do
