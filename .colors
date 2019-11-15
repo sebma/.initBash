@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+# vim: set ft=bash noet:
 
 #ANSI color codes
 [ $BASH_VERSINFO -ge 4 ] && export escapeChar=$'\e'     || export escapeChar=$'\033'
