@@ -1,4 +1,4 @@
-# vim: set syn=bash noet:
+# vim: set ft=bash noet:
 unalias which >/dev/null 2>&1
 test -z "$initDir" && export initDir=$HOME/.initBash
 
