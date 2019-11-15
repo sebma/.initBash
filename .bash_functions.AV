@@ -1,4 +1,4 @@
-# vim: set syn=bash noet:
+# vim: set ft=bash noet:
 set +x
 declare -A | grep -wq colors || source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
@@ -28,7 +28,7 @@ alias addCover2mp4=addThumbnail2mp4
 
 #function aacDir2mp3 { inp=aac; shopt -s globstar && time for f in **/*.$inp; do time avconv -i "$f" "${f/.$inp/.mp3}" && rm -v "$f"; done; }
 function _16kwav16k2opus {
-	typeset inputFile="$1"
+	local inputFile="$1"
 	if [ -s "$inputFile" ]
 	then
 #		title=$(mp3info -p %t "$inputFile")
