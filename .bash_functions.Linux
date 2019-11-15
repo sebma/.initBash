@@ -100,27 +100,24 @@ function watchProcess {
 }
 function wifiCapabilities {
 	export LANG=C
-	local physicalDevice=$(iw dev | \sed -n "1s/#//;1p")
+	local physicalDevice wiFiDevice
 	if [ $(uname -s) = Darwin ]
 	then
 		echo "=> Darwin/macOS operating systems are not supported yet." >&2
 		return 1
 	fi
 
-	if which iw >/dev/null 
-	then
-		wiFiDevice=$(iw dev | awk '/Interface/{lastInterface=$NF}END{print lastInterface}')
-	elif which iwconfig >/dev/null 
-	then
-		wiFiDevice="$(iwconfig 2>/dev/null | awk '/^[^ \t]/ { if ($1 ~ /^[0-9]+:/) { lastInterface=$2 } else { lastInterface=$1 } }END{print lastInterface}')"
-	fi
+	wiFiDevice=$(iw dev 2>/dev/null | awk '/Interface/{lastInterface=$NF}END{print lastInterface}')
+	test "$wiFiDevice" || wiFiDevice="$(iwconfig 2>/dev/null | awk '/^[^ \t]/ { if ($1 ~ /^[0-9]+:/) { lastInterface=$2 } else { lastInterface=$1 } }END{print lastInterface}')"
 
 	[ "$wiFiDevice" ] || {
 		echo "=> ERROR : Could not find any wireless network card." >&2
 		return 1
 	}
 
-	which iw >/dev/null && echo "=> Wifi physical device capabilities :" && iw phy $physicalDevice info
+	physicalDevice=$(iw dev 2>/dev/null | \sed -n "1s/#//;1p")
+	test "$physicalDevice" && echo "=> Wifi physical device capabilities :" && iw phy $physicalDevice info
+
 	which iwlist >/dev/null && {
 		echo "========================================================================"
 		iwlist $wiFiDevice bitrate || sudo iwlist $wiFiDevice bitrate
@@ -132,20 +129,15 @@ function wifiCapabilities {
 }
 function wifiInfos {
 	export LANG=C
-	local physicalDevice=$(iw dev | \sed -n "1s/#//;1p")
+	local physicalDevice wiFiDevice
 	if [ $(uname -s) = Darwin ]
 	then
 		echo "=> Darwin/macOS operating systems are not supported yet." >&2
 		return 1
 	fi
 
-	if which iw >/dev/null 
-	then
-		wiFiDevice=$(iw dev | awk '/Interface/{lastInterface=$NF}END{print lastInterface}')
-	elif which iwconfig >/dev/null 
-	then
-		wiFiDevice="$(iwconfig 2>/dev/null | awk '/^[^ \t]/ { if ($1 ~ /^[0-9]+:/) { lastInterface=$2 } else { lastInterface=$1 } }END{print lastInterface}')"
-	fi
+	wiFiDevice=$(iw dev 2>/dev/null | awk '/Interface/{lastInterface=$NF}END{print lastInterface}')
+	test "$wiFiDevice" || wiFiDevice="$(iwconfig 2>/dev/null | awk '/^[^ \t]/ { if ($1 ~ /^[0-9]+:/) { lastInterface=$2 } else { lastInterface=$1 } }END{print lastInterface}')"
 
 	[ "$wiFiDevice" ] || {
 		echo "=> ERROR : Could not find any wireless network card." >&2
@@ -153,6 +145,7 @@ function wifiInfos {
 	}
 
 	if which iw >/dev/null; then
+		physicalDevice=$(iw dev | \sed -n "1s/#//;1p")
 		echo "=> Wifi physical device capabilities :"
 		iw phy $physicalDevice info
 
