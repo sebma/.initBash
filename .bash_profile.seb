@@ -1,4 +1,4 @@
-# vim: set syn=sh noet:
+# vim: set ft=sh noet:
 [ $BASH_VERSINFO = 3 ] && [ -x ~/usr/local/bin/bash ] && exec ~/usr/local/bin/bash -l
 test -z "$initDir" && export initDir=$HOME/.initBash
 declare -A | grep -wq colors || source $initDir/.colors
