@@ -42,7 +42,7 @@ alias dnsInfo="\nmcli | sed -n '/^DNS /,+3p'"
 alias findDeadLinks='command find . -xtype l -exec ls --color -l {} +'
 alias firefoxDefrag='pgrep firefox || time $(which find) ~/.mozilla/firefox/ -name "*sqlite" -ls -exec sqlite3 -echo {} vacuum \;'
 alias l="ls --color"
-alias lastme='last $USER | \grep $USER'
+alias lastme='last -w $USER | \grep $USER'
 alias lastmeToday='last $USER | \grep "$USER.*$(LC_TIME=C date +%b\ %_d)"'
 alias ll="ls -blF --time-style=+'%Y-%m-%d %T'"
 alias llk="ll --block-size=K"
