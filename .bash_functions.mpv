@@ -2,18 +2,18 @@
 declare -A | grep -wq colors || source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-[ $osFamily = Linux ] && [ -c /dev/fb0 ] && tty | egrep -q "/dev/tty[0-9]+" && mpvOptions="--vo=drm" && mplayerOptions="--vo=fbdev2"
+[ $osFamily = Linux ] && [ -c /dev/fb0 ] && tty | egrep -q "/dev/tty[0-9]+" && mpvDefaultOptions="--vo=drm" && mplayerDefaultOptions="--vo=fbdev2"
 
 export mpv_Output_Perl_Script="'\$| = 1;s/\n/\r/g if \$_ =~ /AV: /;s/Saving state/\nSaving state/'" # On l'export pour qu'elle soit accessible du processus fils
 
-mpv="$(which mpv) $mpvOptions"
-alias mpv="LANG=en_US.utf8 $mpv"
-mpvnoconfig="mpv --no-config $mpvOptions"
+mpv="$(which mpv)"
+alias mpv="LANG=en_US.utf8 $mpv $mpvDefaultOptions"
+mpvnoconfig="mpv --no-config"
 alias mpvnoconfig="$mpvnoconfig"
 
-mplayer="$(which mplayer) $mplayerOptions"
-alias mplayer="LANG=en_US.utf8 $mplayer"
-mplayernoconfig="mplayer --noconfig=user $mplayerOptions"
+mplayer="$(which mplayer)"
+alias mplayer="LANG=en_US.utf8 $mplayer $mplayerDefaultOptions"
+mplayernoconfig="mplayer --noconfig=user"
 alias mplayernoconfig="$mplayernoconfig"
 
 alias mpvh="mpv --profile=hid"
@@ -49,6 +49,23 @@ alias ytdl="LANG=C.UTF-8 command youtube-dl"
 
 function cleanMPVStatusLine {
 	perl -pe $mpv_Output_Perl_Script
+}
+function mpv2 {
+	local mpv="$(which mpv)"
+	local mpvOptions="$mpvDefaultOptions"
+	local ytdl_format
+	for url
+	do
+		domain=$(echo "$url" | sed "s/https?:..//" | awk -F. '{print$(NF-1)}')
+		case $domain in
+			dailymotion)
+				ytdl_format=$(ytdlnoconfig -F "$url" | awk '/^hls/{last=$1}END{print last}')
+				mpvOptions="--ytdl-format=$ytdl_format $mpvOptions"
+			;;
+			*) ;;
+		esac
+		LANG=en_US.utf8 $mpv "$mpvOptions" "$url"
+	done
 }
 function mpvFORMAT {
 	\rm nohup.out
