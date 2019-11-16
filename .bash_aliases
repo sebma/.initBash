@@ -80,7 +80,7 @@ alias deborphan="\deborphan | sort"
 alias dig="\dig +search +short"
 alias doc2pdf=" \lowriter --headless --convert-to pdf"
 alias docx2pdf="\lowriter --headless --convert-to pdf"
-alias dos2unix='\perl -pi -e "s/\r//g"'
+alias dos2unix='perlSed "s/\r//g"'
 alias doublons='\fdupes -rnASd'
 alias driveinfo='\cdrecord -prcap'
 alias du="LANG=C \du -h"
@@ -248,7 +248,7 @@ alias ulogerrors="egrep -iB4 -A1 'error|erreur|Err: [^0]'"
 alias umask="\umask -S"
 alias uncompress="\uncompress -v"
 alias uncpio="\cpio -idcmv <"
-alias unix2dos='\perl -pi -e "s/\n/\r\n/g"'
+alias unix2dos='perlSed "s/\n/\r\n/g"'
 alias unjar='$(which unjar) 2>/dev/null || \unzip'
 alias unjar="\unzip"
 alias untar='$(which untar) 2>/dev/null || \tar -xvf'
