@@ -69,9 +69,14 @@ function topflines {
 function umount {
 	local dir_or_device="$1"
 	local device mountDIR fsType=unknown
+	mountDIR="$(LC_MESSAGES=C $(which df) "$dir_or_device" 2>/dev/null | awk '!/Filesystem/{$1=$2=$3=$4=$5="";gsub("^ +","");print}')"
+	if [ ! -d "$dir_or_device" ] || [ "$mountDIR" = / ]
+	then
+		echo "=> $FUNCNAME : ERROR : $dir_or_device is not mounted." >&2
+		return 1
+	fi
 	test "$dir_or_device" && {
-		device=$(LC_MESSAGES=C \df "$dir_or_device" | awk '!/Filesystem/{print$1}')
-		mountDIR="$(LC_MESSAGES=C \df "$dir_or_device" | awk '!/Filesystem/{$1=$2=$3=$4=$5="";gsub("^ +","");print}')"
+		device=$(LC_MESSAGES=C $(which df) "$dir_or_device" | awk '!/Filesystem/{print$1}')
 		fsType=$(mount | awk "/$(basename "$mountDIR")/"'{print$5}')
 		echo "=> Unmounting $device ..." >&2
 		case $fsType in
