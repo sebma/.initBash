@@ -72,7 +72,7 @@ function umount {
 	
 	if [ "$dir_or_device" == /dev ]
 	then
-		:
+		fsType=$(blkid -o value -s TYPE "$dir_or_device")
 	else
 		if ! mount | grep -q "$dir_or_device"
 		then
