@@ -76,7 +76,8 @@ function umount {
 		echo "=> Unmounting $device ..." >&2
 		case $fsType in
 			fuse.sshfs) fusermount -u "$mountDIR";;
-			*) command umount -v "$@" || command umount.udisks2 "$@"  || command umount.udisks "$@" || { sudo -k;sudo $(which umount) -v "$@"; } ;;
+			fuseblk) command umount.udisks2 "$@"  || command umount.udisks "$@" || udisksctl unmount -b $device || udisksctl unmount -b $device -f || { sudo -k;sudo $(which umount) -v "$@"; } ;;
+			*) command umount -v "$@" || command umount.udisks2 "$@"  || command umount.udisks "$@" || udisksctl unmount -b $device || udisksctl unmount -b $device -f || { sudo -k;sudo $(which umount) -v "$@"; } ;;
 		esac
 		[ $(echo "$mountDIR" | cut -d/ -f-2) = /mnt ] || [ $(echo "$mountDIR" | cut -d/ -f-2) = /media  ] && echo "=> ls $(dirname "$mountDIR") :" && ls $(dirname "$mountDIR")
 	}
