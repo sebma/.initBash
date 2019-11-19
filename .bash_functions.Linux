@@ -78,7 +78,7 @@ function umount {
 			fuse.sshfs) fusermount -u "$mountDIR";;
 			*) command umount -v "$@" || command umount.udisks2 "$@"  || command umount.udisks "$@" || { sudo -k;sudo $(which umount) -v "$@"; } ;;
 		esac
-		[ $(echo "$mountDIR" | cut -d/ -f1) = /mnt ] || [ $(echo "$mountDIR" | cut -d/ -f1) = /media  ] && echo "=> ls $(dirname "$mountDIR") :" && ls $(dirname "$mountDIR")
+		[ $(echo "$mountDIR" | cut -d/ -f-2) = /mnt ] || [ $(echo "$mountDIR" | cut -d/ -f-2) = /media  ] && echo "=> ls $(dirname "$mountDIR") :" && ls $(dirname "$mountDIR")
 	}
 }
 function umountISO {
