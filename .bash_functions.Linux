@@ -68,7 +68,7 @@ function topflines {
 }
 function umount {
 	local dir_or_device="$1"
-	local device
+	local device mountDIR fsType=unknown
 	test "$dir_or_device" && {
 		device=$(LC_MESSAGES=C \df "$dir_or_device" | awk '!/Filesystem/{print$1}')
 		mountDIR="$(LC_MESSAGES=C \df "$dir_or_device" | awk '!/Filesystem/{$1=$2=$3=$4=$5="";gsub("^ +","");print}')"
