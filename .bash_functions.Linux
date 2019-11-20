@@ -70,28 +70,26 @@ function umount {
 	local dir_or_device="$1"
 	local device mountDIR fsType=unknown
 
+	dir_or_device="${dir_or_device%/}" # Remove last trailing "/"
+	if ! mount | grep -q "$dir_or_device"
+	then
+		echo "=> $FUNCNAME : ERROR : $dir_or_device is not mounted." >&2
+		return 1
+	fi
+
 	if [ "$dir_or_device" == /dev ]
 	then
 		fsType=$(blkid -o value -s TYPE "$dir_or_device")
 	else
-		dir_or_device="${dir_or_device%/}"
-		if ! mount | grep -q "$dir_or_device"
-		then
-			echo "=> $FUNCNAME : ERROR : $dir_or_device is not mounted." >&2
-			return 1
-		fi
+		:
 	fi
 
 	mountDIR="$(LC_MESSAGES=C $(which df) "$dir_or_device" 2>/dev/null | awk '!/Filesystem/{$1=$2=$3=$4=$5="";gsub("^ +","");print}')"
-	if [ ! -d "$dir_or_device" ] || [ "$mountDIR" = / ]
-	then
-		echo "=> $FUNCNAME : ERROR : $dir_or_device is not mounted." >&2
-		return 2
-	fi
 
 	test "$dir_or_device" && {
 		device=$(LC_MESSAGES=C $(which df) "$dir_or_device" | awk '!/Filesystem/{print$1}')
 		fsType=$(mount | awk "/$(basename "$mountDIR")/"'{print$5}')
+		set -- ${@%/}  # Remove last trailing "/" from all arguments
 		echo "=> Unmounting $device ..." >&2
 		case $fsType in
 			fuse.sshfs) fusermount -u "$mountDIR";;
