@@ -89,12 +89,16 @@ function umount {
 	then
 		device="$dir_or_device"
 		mountDIR="$(LC_MESSAGES=C $df "$dir_or_device" 2>/dev/null | awk '!/Filesystem/{$1=$2=$3=$4=$5="";gsub("^ +","");print}')"
+	elif echo "$dir_or_device" | \grep -q ":"
+	then
+		device="$dir_or_device"
+		mountDIR="$(LC_MESSAGES=C $df 2>/dev/null | \grep "$dir_or_device" | awk '!/Filesystem/{$1=$2=$3=$4=$5="";gsub("^ +","");print}')"
 	else
 		device=$(LC_MESSAGES=C $df "$dir_or_device" | awk '!/Filesystem/{print$1}')
 		mountDIR="$dir_or_device"
 	fi
 
-	fsType=$(LC_MESSAGES=C $df $device | awk '!/Filesystem/{print$2}')
+	fsType=$(LC_MESSAGES=C $df -T | grep "$device" | awk '!/Filesystem/{print$2}')
 	[ $(blkid $device | wc -c) != 0 ] && fsType=$(blkid $device -o value -s TYPE) # If $device is in /etc/blkid.tab
 
 	echo "=> Unmounting $device ..." >&2
@@ -106,6 +110,7 @@ function umount {
 	esac
 	mountDIR_ROOT="$(echo "$mountDIR" | cut -d/ -f-2)"
 	[ "$mountDIR_ROOT" = /mnt ] || [ "$mountDIR_ROOT" = /media  ] && echo "=> ls $(dirname "$mountDIR") :" && ls $(dirname "$mountDIR")
+	set +x
 }
 function umountISO {
 	loopBackDevice=$(sudo losetup -a | grep $1 | cut -d: -f1)
