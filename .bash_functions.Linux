@@ -108,9 +108,11 @@ function umount {
 		unknown) echo "=> $FUNCNAME : ERROR : This filesystem is of an <unknown> type." >&2; return 3;;
 		*) command umount -v "$@" || command umount.udisks2 "$@"  || command umount.udisks "$@" || udisksctl unmount -b $device || udisksctl unmount -b $device -f || { sudo -k;sudo $(which umount) -v "$@"; } ;;
 	esac
+	rcCode=$?
 	mountDIR_ROOT="$(echo "$mountDIR" | cut -d/ -f-2)"
 	[ "$mountDIR_ROOT" = /mnt ] || [ "$mountDIR_ROOT" = /media  ] && echo "=> ls $(dirname "$mountDIR") :" && ls $(dirname "$mountDIR")
 	set +x
+	return $rcCode
 }
 function umountISO {
 	loopBackDevice=$(sudo losetup -a | grep $1 | cut -d: -f1)
