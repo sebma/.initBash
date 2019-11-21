@@ -67,37 +67,45 @@ function topflines {
 	$find "$@" -xdev $prunePathsFindExpression -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | head -n $(($LINES-4)) | numfmt --field 5 --from=iec --to=iec-i --suffix=B | column -t
 }
 function umount {
+	set -- ${@%/}  # Remove trailing "/" from all arguments
 	local dir_or_device="$1"
-	local device mountDIR fsType=unknown
+	local device mountDIR mountDIR_ROOT fsType=unknown
+	local df=$(which df)
 
-	dir_or_device="${dir_or_device%/}" # Remove last trailing "/"
-	if ! mount | grep -q "$dir_or_device"
+	if [ $# == 0 ]
 	then
-		echo "=> $FUNCNAME : ERROR : $dir_or_device is not mounted." >&2
+		echo "=> Usage: $FUNCNAME dir_or_device1" >&2
 		return 1
 	fi
 
-	if [ "$dir_or_device" == /dev ]
+	if ! mount | \grep -q "$dir_or_device"
 	then
-		fsType=$(blkid -o value -s TYPE "$dir_or_device")
-	else
-		:
+		echo "=> $FUNCNAME : ERROR : $dir_or_device is not mounted." >&2
+		return 2
 	fi
 
-	mountDIR="$(LC_MESSAGES=C $(which df) "$dir_or_device" 2>/dev/null | awk '!/Filesystem/{$1=$2=$3=$4=$5="";gsub("^ +","");print}')"
 
-	test "$dir_or_device" && {
-		device=$(LC_MESSAGES=C $(which df) "$dir_or_device" | awk '!/Filesystem/{print$1}')
-		fsType=$(mount | awk "/$(basename "$mountDIR")/"'{print$5}')
-		set -- ${@%/}  # Remove last trailing "/" from all arguments
-		echo "=> Unmounting $device ..." >&2
-		case $fsType in
-			fuse.sshfs) fusermount -u "$mountDIR";;
-			fuseblk) command umount.udisks2 "$@"  || command umount.udisks "$@" || udisksctl unmount -b $device || udisksctl unmount -b $device -f || { sudo -k;sudo $(which umount) -v "$@"; } ;;
-			*) command umount -v "$@" || command umount.udisks2 "$@"  || command umount.udisks "$@" || udisksctl unmount -b $device || udisksctl unmount -b $device -f || { sudo -k;sudo $(which umount) -v "$@"; } ;;
-		esac
-		[ $(echo "$mountDIR" | cut -d/ -f-2) = /mnt ] || [ $(echo "$mountDIR" | cut -d/ -f-2) = /media  ] && echo "=> ls $(dirname "$mountDIR") :" && ls $(dirname "$mountDIR")
-	}
+	if [ "$dir_or_device" = /dev ]
+	then
+		device="$dir_or_device"
+		mountDIR="$(LC_MESSAGES=C $df "$dir_or_device" 2>/dev/null | awk '!/Filesystem/{$1=$2=$3=$4=$5="";gsub("^ +","");print}')"
+	else
+		device=$(LC_MESSAGES=C $df "$dir_or_device" | awk '!/Filesystem/{print$1}')
+		mountDIR="$dir_or_device"
+	fi
+
+	fsType=$(LC_MESSAGES=C $df $device | awk '!/Filesystem/{print$2}')
+	[ $(blkid $device | wc -c) != 0 ] && fsType=$(blkid $device -o value -s TYPE) # If $device is in /etc/blkid.tab
+
+	echo "=> Unmounting $device ..." >&2
+	case $fsType in
+		fuse.sshfs) fusermount -u "$mountDIR";;
+		fuseblk|exfat) command umount.udisks2 "$@"  || command umount.udisks "$@" || udisksctl unmount -b $device || udisksctl unmount -b $device -f || { sudo -k;sudo $(which umount) -v "$@"; } ;;
+		unknown) echo "=> $FUNCNAME : ERROR : This filesystem is of an <unknown> type." >&2; return 3;;
+		*) command umount -v "$@" || command umount.udisks2 "$@"  || command umount.udisks "$@" || udisksctl unmount -b $device || udisksctl unmount -b $device -f || { sudo -k;sudo $(which umount) -v "$@"; } ;;
+	esac
+	mountDIR_ROOT="$(echo "$mountDIR" | cut -d/ -f-2)"
+	[ "$mountDIR_ROOT" = /mnt ] || [ "$mountDIR_ROOT" = /media  ] && echo "=> ls $(dirname "$mountDIR") :" && ls $(dirname "$mountDIR")
 }
 function umountISO {
 	loopBackDevice=$(sudo losetup -a | grep $1 | cut -d: -f1)
