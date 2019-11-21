@@ -29,11 +29,11 @@ alias refresh2="time sudo zypper refresh"
 alias rgrep='time grep -r'
 alias smsGrep='sqlite3 ~/.local/share/commhistory/commhistory.db "select Freetext from Events where type=2;" | grep'
 alias smsSearch=smsGrep
-alias topd10="\du -xms * .??* 2>/dev/null | sort -nr | head"
-alias topd5="\du  -xms * .??* 2>/dev/null | sort -nr | head -5"
-alias topd5="\du  -xms * .??* 2>/dev/null | sort -nr | head -50"
-alias topd="\du   -xms * .??* 2>/dev/null | sort -nr | head -n"
-alias topdlines='\du -xms * .??* 2>/dev/null | sort -nr | head -$(($LINES-2))'
+alias topd10="\du -xms */ .??*/ 2>/dev/null | sort -nr | head"
+alias topd5="\du  -xms */ .??*/ 2>/dev/null | sort -nr | head -5"
+alias topd5="\du  -xms */ .??*/ 2>/dev/null | sort -nr | head -50"
+alias topd="\du   -xms */ .??*/ 2>/dev/null | sort -nr | head -n"
+alias topdlines='\du -xms */ .??*/ 2>/dev/null | sort -nr | head -$(($LINES-2))'
 
 alias topf10='$(which find) . $prunePathsFindExpression -xdev -type f -size +10240k -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | column -t | head -10 | awk '\''{total+=$5;print}END{print"=> total = "total" MiB"}'\'''
 alias topf50='$(which find) . $prunePathsFindExpression -xdev -type f -size +10240k -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | column -t | head -50 | awk '\''{total+=$5;print}END{print"=> total = "total" MiB"}'\'''
