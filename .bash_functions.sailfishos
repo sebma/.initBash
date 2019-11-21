@@ -1,0 +1,65 @@
+# vim: set ft=bash noet:
+
+declare -A | grep -wq colors || source $initDir/.colors
+test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
+
+
+unalias df
+function df {
+	$(which df) -PTh "$@" | columns -t | grep ^Filesystem
+	$(which df) -PTh "$@" | columns -t | sort -u | sort -k7 | grep -v ^Filesystem
+}
+function rebalance {
+	which btrfs-balancer && {
+		df /
+		echo
+		sudo systemctl stop aliendalvik.service 
+		for i in $(seq 5)
+		do
+			printf "=> Balancing #%2d\n" $i
+			sudo btrfs-balancer allocation
+			echo
+			time sudo btrfs-balancer balance || break
+			echo
+			sync
+			sleep 3
+			sudo btrfs-balancer allocation
+		done
+		echo
+		df /
+		sudo systemctl start aliendalvik.service
+	}
+}
+function sailFishOSUpgrade {
+	test $1 && {
+		local currentRelease=$(version | awk '{print$2}')
+		local nextRelease=$1
+		local logFile=~/log/sailFishOSUpgrade_${currentRelease}_upto_$nextRelease.log
+
+		mkdir -p ~/log
+		if [ $nextRelease = $currentRelease ]; then
+			echo "=> The current release is already $currentRelease." >&2
+			return 2
+		else
+			echo "=> Disabling the openrepos repositories ..." >&2
+			ssu repos | awk '/openrepos/{print $2}' | \xargs -rtl ssu disablerepo
+			echo "=> DONE." >&2
+			set -x
+			ssu status
+			ssu release
+			version --dup
+			version --verify
+		fi 2>&1 | tee -a $logFile
+		set +x
+		return 0
+	} || {
+		echo "=> Usage: $FUNCNAME nextRelease" >&2
+		return 1
+	}
+}
+function topflines {
+	$(which find) "$@" $prunePathsFindExpression -xdev -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | column -t | head -n $(($LINES-4)) | awk '{total+=$5;print}END{if(total) print"=> total = "total" MiB"}'
+}
+
+set +x
+test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
