@@ -152,7 +152,12 @@ test -r $initDir/.bash_aliases.$osID && Source $initDir/.bash_aliases.$osID #Pou
 test -r $initDir/.bash_functions.$osFamily && Source $initDir/.bash_functions.$osFamily #Pour Darwin ou Linux
 test -r $initDir/.bash_functions.$osID && Source $initDir/.bash_functions.$osID #Pour sailfishos ou autre
 case $OSTYPE in
-	linux-gnueabi) resize; test -r $initDir/.bash_aliases.android && Source $initDir/.bash_aliases.android; which busybox >/dev/null && test -r $initDir/.bash_aliases.busybox && Source $initDir/.bash_aliases.busybox;;
+	linux-gnueabi)
+		resize
+		test -r $initDir/.bash_aliases.android && Source $initDir/.bash_aliases.android
+		which busybox >/dev/null && test -r $initDir/.bash_aliases.busybox && Source $initDir/.bash_aliases.busybox
+		which toybox >/dev/null && test -r $initDir/.bash_aliases.toybox && Source $initDir/.bash_aliases.toybox
+		;;
 esac
 
 set +x
