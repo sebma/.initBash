@@ -31,7 +31,6 @@ alias smsGrep='sqlite3 ~/.local/share/commhistory/commhistory.db "select Freetex
 alias smsSearch=smsGrep
 alias topd10="\du -xms */ .??*/ 2>/dev/null | sort -nr | head"
 alias topd5="\du  -xms */ .??*/ 2>/dev/null | sort -nr | head -5"
-alias topd5="\du  -xms */ .??*/ 2>/dev/null | sort -nr | head -50"
 alias topd="\du   -xms */ .??*/ 2>/dev/null | sort -nr | head -n"
 alias topdlines='\du -xms */ .??*/ 2>/dev/null | sort -nr | head -$(($LINES-2))'
 
