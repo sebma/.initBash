@@ -134,7 +134,7 @@ function watchProcess {
 function wifiCapabilities {
 	export LANG=C
 	local physicalDevice wiFiDevice
-	if [ $(uname -s) = Darwin ]
+	if [ $osFamily = Darwin ]
 	then
 		echo "=> Darwin/macOS operating systems are not supported yet." >&2
 		return 1
@@ -163,7 +163,7 @@ function wifiCapabilities {
 function wifiInfos {
 	export LANG=C
 	local physicalDevice wiFiDevice
-	if [ $(uname -s) = Darwin ]
+	if [ $osFamily = Darwin ]
 	then
 		echo "=> Darwin/macOS operating systems are not supported yet." >&2
 		return 1
