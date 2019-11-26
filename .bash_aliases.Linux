@@ -82,6 +82,7 @@ alias topf5='$(which find) . -xdev $prunePathsFindExpression -type f -size +10M 
 alias version="\lsb_release -sd"
 alias wifimac="\ifconfig $wifiInterface | awk '/HWaddr/{print\$1\"\\t\"\$NF}'"
 alias wlanmac=wifimac
+alias xdg-dirs='ls $HOME/.config/user-dirs.dirs && grep ^XDG $HOME/.config/user-dirs.dirs'
 alias ytdlInstall="pip3 install youtube-dl || pip install youtube-dl"
 
 if groups 2>/dev/null | \egrep -wq "sudo|admin"
