@@ -463,21 +463,6 @@ function getVideosFromRSSPodCastPlayList {
 		$wget $(curl -s "$rssURL" | egrep -o "https?:[^ <>]*(mp4|webm)" | grep -v .google.com/ | uniq)
 	}
 }
-function gitCloneHome {
-	test $# -ge 1 && gitCloneNonEmptyDir $@ $HOME
-}
-function gitCloneNonEmptyDir {
-	local url="$1"
-	local dir="$2"
-	test $dir || dir=.
-	test $url && {
-		git init "$dir"
-		git remote | grep -q origin || git remote add origin "$url"
-		git fetch
-		git pull origin master
-		git branch --set-upstream-to=origin/master master
-	}
-}
 function gitUpdateAllLocalRepos {
 	local dir=""
 	command gfind ~ -type d -name .git | while read dir
