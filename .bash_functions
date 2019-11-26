@@ -569,6 +569,7 @@ function htmlReIndent {
 }
 function httpLocalServer {
 #	local fqdn=$(host $(hostname) | awk '/address/{print$1}')
+#	local fqdn=$(\dig +short -x $(\dig +short $(hostname)))
 	local fqdn=localhost
 	test $1 && port=$1 || port=1234
 	test $port -lt 1024 && {
