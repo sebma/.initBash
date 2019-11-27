@@ -60,11 +60,11 @@ function open {
 		$openCommand "$file" 2>&1 | \egrep -v "MBuntu-Y-For-Unity"
 	done
 }
-function processENV {
+function processENV_Variables {
 	local processName=$1
 	local -i pid=0
 	pid=$(\pgrep -f $processName)
-	[ $pid != 0 ] && tr '\0' '\n' < /proc/$pid/environ | sort -u
+	[ $pid != 0 ] && tr '\0' '\n' < /proc/$pid/environ | egrep -v "^hidden=" | grep -P "^[^\s%]+=" | sort -u
 }
 function topf {
 	$find . -xdev $prunePathsFindExpression -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | head -n "$1" | numfmt --field 5 --from=iec --to=iec-i --suffix=B | column -t
