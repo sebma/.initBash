@@ -13,7 +13,8 @@ set -o histexpand # Re-enable the history expansion disabled previously by my "e
 
 #test -n "$bashRCLoaded" && return
 bashRCLoaded=1
-export osFamily=$(uname -s)
+grep -w android /system/build.prop && export osFamily=Android || export osFamily=$(uname -s)
+
 [ $osFamily = Linux ] && export osID=$(source /etc/os-release && echo $ID) osID_LIKE=$(source /etc/os-release && echo $ID_LIKE)
 quoteCHAR="'\''"
 
@@ -147,14 +148,13 @@ test -f $initDir/.bashrc.gpu && Source $initDir/.bashrc.gpu
 
 #Definitions de mes alias
 test -r $initDir/.bash_aliases && Source $initDir/.bash_aliases
-test -r $initDir/.bash_aliases.$osFamily && Source $initDir/.bash_aliases.$osFamily #Pour Darwin ou Linux
+test -r $initDir/.bash_aliases.$osFamily && Source $initDir/.bash_aliases.$osFamily #Pour Darwin ou Linux ou Android
 test -r $initDir/.bash_aliases.$osID && Source $initDir/.bash_aliases.$osID #Pour sailfishos ou autre
 test -r $initDir/.bash_functions.$osFamily && Source $initDir/.bash_functions.$osFamily #Pour Darwin ou Linux
 test -r $initDir/.bash_functions.$osID && Source $initDir/.bash_functions.$osID #Pour sailfishos ou autre
 case $OSTYPE in
 	linux-gnueabi)
 		resize
-		test -r $initDir/.bash_aliases.android && Source $initDir/.bash_aliases.android
 		which busybox >/dev/null && test -r $initDir/.bash_aliases.busybox && Source $initDir/.bash_aliases.busybox
 		which toybox >/dev/null && test -r $initDir/.bash_aliases.toybox && Source $initDir/.bash_aliases.toybox
 		;;
