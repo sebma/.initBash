@@ -177,16 +177,6 @@ function cleanFirefoxLock {
 
 	pgrep -lf $firefoxProgramName || \rm -vf ~/.mozilla/firefox/*.default/lock ~/.mozilla/firefox/*.default/.parentlock
 }
-function numberSmallerEqual {
-	number1=$1
-	number2=$2
-	return perl -e "exit(! ( $number1 <= $number2 ) )"
-}
-function versionSmallerEqual {
-	number1=$1
-	number2=$2
-	return perl -Mversion -e "exit(! ( version->parse( $number1 ) <= version->parse( $number2 ) ) )"
-}
 function conda2Rename {
 	oldName=$1
 	newName=$2
@@ -385,6 +375,9 @@ function findHumanReadable {
 function findLoops {
 	[ $osFamily = Darwin ] && find=gfind || find="command find"
 	time $find $@ -xdev -follow 2>&1 >/dev/null | egrep -w "loop|denied"
+}
+function functionDefinition {
+	type "$@" | grep -v 'is a function$' | sed 's/(;| )$//;s/    /\t/g' | sed -z 's/$\n\{/ {/g'
 }
 function gdebiALL {
 	for package
@@ -782,6 +775,11 @@ function nbPages {
 		printf "$file:Pages: "
 		pdfinfo $file | awk '/Pages:/{print$NF}'
 	done | awk '/Pages:/{nbPages+=$NF;print}END{print "=> Total: " nbPages}'
+}
+function numberSmallerEqual {
+	number1=$1
+	number2=$2
+	return perl -e "exit(! ( $number1 <= $number2 ) )"
 }
 function odf2 {
 	formats="pdf|doc|docx|odt|odp|ods|ppt|pptx|xls|xlsx"
@@ -1321,12 +1319,6 @@ function txt2ps {
 		\enscript -B "$file" -o "${file/.*/.ps}"
 	done
 }
-function typeFunction {
-	for function
-	do
-		type $function
-	done | \sed 's/;$//' | \sed -zE 's/$\n\{/{/'
-}
 function umountISO {
 	loopBackDevice=$(sudo losetup -a | grep $1 | cut -d: -f1)
 	test -z $loopBackDevice && loopBackDevice=$1
@@ -1359,6 +1351,11 @@ function updateYoutubePlaylistLUAForVLC {
 	else
 		wget --content-disposition -NP ~/.local/share/vlc/lua/playlist/ $playlist_youtubeLuaURL
 	fi
+}
+function versionSmallerEqual {
+	number1=$1
+	number2=$2
+	return perl -Mversion -e "exit(! ( version->parse( $number1 ) <= version->parse( $number2 ) ) )"
 }
 function webgrep {
 	url=$1
