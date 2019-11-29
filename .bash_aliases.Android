@@ -5,7 +5,8 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 find="command find"
 
 unalias ps
-alias androidVersion="getprop | egrep 'ro.build.version.release|ro.build.version.sdk'"
+alias androidVersion='echo "=> Android Version :$(getprop ro.build.version.release)"'
+alias androidSDK='echo "=> Android SDK :$(getprop ro.build.version.sdk)"'
 alias grep="grep --color"
 alias egrep="grep -E"
 unalias less
