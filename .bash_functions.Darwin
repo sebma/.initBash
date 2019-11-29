@@ -144,20 +144,6 @@ function pkgList {
 		lsbom $(pkgutil --bom "$pkg")
 	done
 }
-function pkill {
-	local firstArg=$1
-	test $firstArg && {
-		if echo $firstArg | \grep -q "\-[0-9]"
-		then
-			shift
-			processName=$1
-			test -n "$processName" && $(which pkill) $firstArg -lfu $USER $@
-		else
-			processName=$1
-			test -n "$processName" && $(which pkill) -lfu $USER $@
-		fi
-	}
-}
 function restart {
 	test $1 && { stop $1; start $1; }
 }
