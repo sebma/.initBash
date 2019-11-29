@@ -934,6 +934,24 @@ function piphelp {
 function piphelp {
 	pip help $1 | less
 }
+function pkill {
+	local firstArg=$1
+	local pkill=$(which pkill)
+	if [ $# != 0 ]; then
+		firstArg=$1
+		if echo $firstArg | \grep -q -- "-[0-9]"
+		then
+			shift
+			processName=$1
+			test -n "$processName" && $pkill $firstArg -lfu $USER $@
+		else
+			processName=$1
+			test -n "$processName" && $pkill -lfu $USER $@
+		fi
+	else
+		$pkill
+	fi
+}
 function printrv {
 	lp -o page-set=odd -o outputorder=reverse $1
 	echo "=> Press enter once you have flipped the pages in the printer ..."
