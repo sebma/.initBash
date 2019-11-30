@@ -547,21 +547,29 @@ function htmlReIndent {
 }
 function httpLocalServer {
 #	local fqdn=$(host $(hostname) | awk '/address/{print$1}')
-#	local fqdn=$(\dig +short -x $(\dig +short $(hostname)))
+#	local fqdn=$(\dig +short -x $(\dig +search +short $(hostname)))
 	local fqdn=localhost
-	test $1 && port=$1 || port=1234
-	test $port -lt 1024 && {
+	local ip=$(\dig -x +search +short $(hostname))
+	local -i port=1234
+	local python=/usr/bin/python
+
+	case $1 in
+		-h|-help|--h|--help) echo "=> Usage: $FUNCNAME [portNumber|1234]" >&2; return 1 ;;
+	esac
+
+	test $1 && port=$1
+	if [ $port -lt 1024 ] && [ $UID != 0 ]; then
 		echo "=> ERROR: Only root can bind to a tcp port lower than 1024." >&2
-		return 1
-	}
+		return 2
+	fi
 
 	local oldPort=$(\ps -fu $USER | \grep -v awk | awk '/SimpleHTTPServer/{print$NF}')
-	command ps -fu $USER | \grep -v grep | \grep -q SimpleHTTPServer && echo "=> SimpleHTTPServer is already running on http://$fqdn:$oldPort/" || {
+	\ps -fu $USER | \grep -v grep | \grep -q SimpleHTTPServer && echo "=> SimpleHTTPServer is already running on http://$fqdn:$oldPort/" || {
 		logfilePrefix=SimpleHTTPServer_$(date +%Y%m%d)
 		mkdir -p ~/log
-		nohup python -m SimpleHTTPServer $port >~/log/${logfilePrefix}.log 2>&1 &
+		nohup $python -m SimpleHTTPServer $port >~/log/${logfilePrefix}.log 2>&1 &
 		test $? = 0 && {
-			echo "=> SimpleHTTPServer started on http://$fqdn:$port/" >&2
+			echo "=> SimpleHTTPServer started on http://$ip:$port/" >&2
 			echo "=> logFile = ~/log/${logfilePrefix}.log" >&2
 		}
 	}
