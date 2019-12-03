@@ -14,7 +14,7 @@ set -o histexpand # Re-enable the history expansion disabled previously by my "e
 #test -n "$bashRCLoaded" && return
 bashRCLoaded=1
 
-getprop 2>/dev/null | grep -q ro.build.version.release && export osFamily=Android || export osFamily=$(uname -s)
+echo $OSTYPE | grep -q android && export osFamily=Android || export osFamily=$(uname -s)
 [ $osFamily = Linux ] && export osID=$(source /etc/os-release && echo $ID) osID_LIKE=$(source /etc/os-release && echo $ID_LIKE)
 quoteCHAR="'\''"
 
