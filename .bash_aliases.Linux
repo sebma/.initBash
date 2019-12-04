@@ -108,7 +108,7 @@ then
 	alias testLiveUSB_UEFI="sudo -b \kvm -m 1G -bios /usr/share/qemu/OVMF.fd -hda"
 	alias update-mime-database="\sudo \rm -vf /usr/share/mime/packages/kde.xml;time sudo \update-mime-database /usr/share/mime"
 	alias updatedb="time sudo $(which updatedb 2>/dev/null)"
-	test "$wifiInterface" && alias wifiList="which nmcli >/dev/null && \nmcli dev wifi list || sudo iw dev $wifiInterface scan | egrep 'SSID' || sudo iwlist $wifiInterface scan | egrep 'SSID'"
+	test "$wifiInterface" && alias wifiList="{ which nmcli >/dev/null && \nmcli dev wifi list || sudo iw dev $wifiInterface scan | egrep 'SSID' || sudo iwlist $wifiInterface scan | egrep 'SSID'; }"
 	alias youtube-dlUpdate='\sudo -H $(which pip3) install -U youtube-dl || \sudo -H $(which pip) install -U youtube-dl'
 	alias ytdlInstall='\sudo -H $(which pip3) install youtube-dl || \sudo -H $(which pip) install youtube-dl'
 else
