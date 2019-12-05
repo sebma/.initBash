@@ -47,6 +47,7 @@ alias cdda_info="\icedax -gHJq -vtitles"
 alias cdinfo='\cdrdao disk-info'
 alias cdrdao='\df | grep -q $CDR_DEVICE && umount $CDR_DEVICE ; \cdrdao'
 alias cget="\curl -O"
+alias cegrep="cgrep -E"
 alias checkMyPrinterConnection="\ping -c2 192.168.1.1"
 alias checkcer="\openssl x509 -noout -inform PEM -in"
 alias checkcertif="\openssl verify -verbose"
@@ -279,6 +280,7 @@ alias wanip='time \curl -A "" ipinfo.io/ip || time wget -qU "" -O- ipinfo.io/ip'
 alias wanipOLD='time \dig +short myip.opendns.com @resolver1.opendns.com'
 alias wavemon="xterm -e wavemon &"
 alias web2pdf='wkhtmltopdf --no-background --outline --header-line --footer-line --header-left [webpage] --footer-left "[isodate] [time]" --footer-right [page]/[toPage]'
+alias wegrep="wgrep -E"
 alias wget='$(which wget2 2>/dev/null || which wget)'
 alias wget1='$(which wget 2>/dev/null)'
 alias wgetnoconfig="\wget --config=/dev/null"
