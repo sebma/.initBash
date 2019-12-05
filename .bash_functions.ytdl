@@ -109,6 +109,9 @@ function getPlaylistsRestrictedFilenamesFSD {
 	for playList
 	do
 		echo "=> Treating playList : $playList ..." >&2
+		playListTitle=$(\youtube-dl --ignore-config --ignore-errors --playlist-items 1 -j $playList | jq -r '.playlist_title')
+		playListTitle="${playListTitle// /_}"
+		mkdir -pv $playListTitle && cd $playListTitle
 		if echo $playList | \egrep -q "youtube|dailymotion|vevo|tonvid"
 		then
 			listOfUrls=$(hxwls 2>/dev/null "$playList" | awk -F '&' '/\<(watch|video)\>/{print$1}' | sort -u | tr "\n" " ")
@@ -119,6 +122,7 @@ function getPlaylistsRestrictedFilenamesFSD {
 		fi
 
 		getRestrictedFilenamesFSD $listOfUrls
+		cd - >/dev/null
 	done
 	trap - INT
 }
@@ -127,6 +131,9 @@ function getPlaylistsRestrictedFilenamesHD {
 	for playList
 	do
 		echo "=> Treating playList : $playList ..." >&2
+		playListTitle=$(\youtube-dl --ignore-config --ignore-errors --playlist-items 1 -j $playList | jq -r '.playlist_title')
+		playListTitle="${playListTitle// /_}"
+		mkdir -pv $playListTitle && cd $playListTitle
 		if echo $playList | \egrep -q "youtube|dailymotion|vevo|tonvid"
 		then
 			listOfUrls=$(hxwls 2>/dev/null "$playList" | awk -F '&' '/\<(watch|video)\>/{print$1}' | sort -u | tr "\n" " ")
@@ -136,6 +143,7 @@ function getPlaylistsRestrictedFilenamesHD {
 		fi
 
 		getRestrictedFilenamesHD $listOfUrls
+		cd - >/dev/null
 	done
 	trap - INT
 }
@@ -144,6 +152,9 @@ function getPlaylistsRestrictedFilenamesSD {
 	for playList
 	do
 		echo "=> Treating playList : $playList ..." >&2
+		playListTitle=$(\youtube-dl --ignore-config --ignore-errors --playlist-items 1 -j $playList | jq -r '.playlist_title')
+		playListTitle="${playListTitle// /_}"
+		mkdir -pv $playListTitle && cd $playListTitle
 		if echo $playList | \egrep -q "youtube|dailymotion|vevo|tonvid"
 		then
 			listOfUrls=$(hxwls 2>/dev/null "$playList" | awk -F '&' '/\<(watch|video)\>/{print$1}' | sort -u | tr "\n" " ")
@@ -154,6 +165,7 @@ function getPlaylistsRestrictedFilenamesSD {
 		fi
 
 		getRestrictedFilenamesSD $listOfUrls
+		cd - >/dev/null
 	done
 	trap - INT
 }
