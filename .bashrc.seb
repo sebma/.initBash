@@ -131,8 +131,10 @@ then
 	echo "=> The cups admin console is http://localhost:631/admin"
 fi
 
-which brew >/dev/null 2>&1 && Source $initDir/.bashrc.brew
-test -r $initDir/.bashrc.conda && Source $initDir/.bashrc.conda
+which brew >/dev/null 2>&1 && test -r $initDir/.bashrc.brew && Source $initDir/.bashrc.brew
+which conda >/dev/null 2>&1 && test -r $initDir/.bashrc.conda && Source $initDir/.bashrc.conda
+which adb >/dev/null 2>&1 && test -r $initDir/.bash_aliases.adb && Source $initDir/.bash_aliases.adb
+
 test -r $initDir/.bashrc.$osFamily && Source $initDir/.bashrc.$osFamily
 #test -r $initDir/.bashrc.$osFamily.local && Source $initDir/.bashrc.$osFamily.local
 test -r $initDir/.bashrc.$osID_LIKE && Source $initDir/.bashrc.$osID_LIKE # Si c'est un Linux de type Debian ou Redhat
