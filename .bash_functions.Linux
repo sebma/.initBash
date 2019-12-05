@@ -208,6 +208,21 @@ function wifiInfos {
 		iwlist $wiFiDevice scan | more
 	}
 }
+function wifiList {
+	local wifiInterface=$(iw dev 2>/dev/null | awk '/Interface/{lastInterface=$NF}END{print lastInterface}')
+	test "$wifiInterface" || wifiInterface="$(iwconfig 2>/dev/null | awk '/^[^ \t]/ { if ($1 ~ /^[0-9]+:/) { lastInterface=$2 } else { lastInterface=$1 } }END{print lastInterface}')"
+
+	if test "$wifiInterface"; then
+		if which nmcli >/dev/null; then
+			\nmcli dev wifi list | \grep 'SSID' >&2 # Print nmcli headers
+			\nmcli dev wifi list | grep -v 'SSID' 
+		elif which iw >/dev/null; then
+			sudo iw dev $wifiInterface scan | \grep SSID
+		elif which iwlist >/dev/null; then
+			sudo iwlist $wifiInterface scan | \grep SSID
+		fi
+	fi
+}
 function ytdlUpdate {
 	typeset -r isAdmin=$(groups 2>/dev/null | \egrep -wq "sudo|adm|admin|root" && echo true || echo false)
 	local ytdlPackageURL=youtube-dl
