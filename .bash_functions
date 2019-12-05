@@ -169,6 +169,28 @@ function cer2pem {
 		ls -l "${cerCertificate/.pem/.cer}"
 	done
 }
+function cgrep {
+	local allArgsButLast="${@:1:$#-1}"
+	local lastArg="${@: -1}"
+	local url="$lastArg"
+	if [ $# == 0 ]
+	then
+		echo "=> Usage: $FUNCNAME [grepOptions] regexp url"
+		return 1
+	fi
+	\curl -Ls "$url" | grep $allArgsButLast
+}
+function wgrep {
+	local allArgsButLast="${@:1:$#-1}"
+	local lastArg="${@: -1}"
+	local url="$lastArg"
+	if [ $# == 0 ]
+	then
+		echo "=> Usage: $FUNCNAME [grepOptions] regexp url"
+		return 1
+	fi
+	\wget -qO- "$url" | grep $allArgsButLast
+}
 function cleanFirefoxLock {
 	case $osID in
 		debian) firefoxProgramName=iceweasel;;
