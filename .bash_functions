@@ -180,17 +180,6 @@ function cgrep {
 	fi
 	\curl -Ls "$url" | grep $allArgsButLast
 }
-function wgrep {
-	local allArgsButLast="${@:1:$#-1}"
-	local lastArg="${@: -1}"
-	local url="$lastArg"
-	if [ $# == 0 ]
-	then
-		echo "=> Usage: $FUNCNAME [grepOptions] regexp url"
-		return 1
-	fi
-	\wget -qO- "$url" | grep $allArgsButLast
-}
 function cleanFirefoxLock {
 	case $osID in
 		debian) firefoxProgramName=iceweasel;;
@@ -415,6 +404,16 @@ function getBJC {
 	echo "=> Downloading last BJC version ..."
 	wget $bjcUrl
 	\mv -v $bjcBaseName.$extension "${bjcBaseName}_$(date -d "$(stat -c %y $bjcBaseName.$extension)" +%Y%m%d_%HH%MM%S).$extension"
+}
+function getCodeName {
+	if [ $# != 2 ];then
+		echo "=> Usage: $FUNCNAME brand model"
+		return 1
+	fi
+	local brand=$1
+	local model=$2
+	local codeNameJSONDataBaseURL=https://github.com/jaredrummler/AndroidDeviceNames/raw/master/json/manufacturers
+	\curl -Ls $codeNameJSONDataBaseURL/$brand.json | jq -r --arg model $model '.devices[] | select( .model | contains($model) ).codename'
 }
 function getField {
 	test $# -ne 3 && {
@@ -1416,7 +1415,22 @@ function versionSmallerEqual {
 function webgrep {
 	url=$1
 	shift
+	test $# -le 1 && {
+		echo "=> Usage: $FUNCNAME url [grepOptions] regexp"
+		return 1
+	}
 	test $# -ge 1 && curl -s $url | egrep $@
+}
+function wgrep {
+	local allArgsButLast="${@:1:$#-1}"
+	local lastArg="${@: -1}"
+	local url="$lastArg"
+	if [ $# == 0 ]
+	then
+		echo "=> Usage: $FUNCNAME [grepOptions] regexp url"
+		return 1
+	fi
+	\wget -qO- "$url" | grep $allArgsButLast
 }
 function wgetParallel {
 	for url
