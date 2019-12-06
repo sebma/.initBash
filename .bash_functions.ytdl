@@ -122,7 +122,7 @@ function getFullURLsFromIDs {
 		youtube) prefix=$youtubeURLPrefix;;
 		dailymotion) prefix=$dailymotionURLPrefix;;
 		vimeo) prefix=$vimeoURLPrefix;;
-		*) prefix=unknown_service;echo "=> ERROR : The service <$service> is not known, therefore the prefix is : <$prefix>.">&2;echo $prefix;return 2;;
+		*) prefix="unknown_service";echo "=> ERROR : The service <$service> is not known, therefore the prefix is : <$prefix>.">&2;echo $prefix;return 2;;
 	esac
 
 	set -- "${@/#/$prefix}" # Add $prefix to all arguments
@@ -130,6 +130,7 @@ function getFullURLsFromIDs {
 }
 function getPlaylistsRestrictedFilenamesFSD {
 	trap 'rc=130;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
+	local playList playListTitle="not_yet_known" listOfUrls="not_yet_known" fqdn="not_yet_known" service="not_yet_known"
 	for playList
 	do
 		echo "=> Treating playList : $playList ..." >&2
@@ -141,8 +142,9 @@ function getPlaylistsRestrictedFilenamesFSD {
 			listOfUrls=$(hxwls 2>/dev/null "$playList" | awk -F '&' '/\<(watch|video)\>/{print$1}' | sort -u | tr "\n" " ")
 			test $? != 0 && return
 		else
-			urlPrefix=$(echo "$playList" | sed -r "s/https?:..//" | cut -d/ -f1)
-			listOfUrls=$(ytdlGetPlayListURLs "$playList")
+			fqdn=$(echo "$playList" | sed "s|https?://||" | cut -d/ -f1)
+			service=$(echo $fqdn | awk -F. '{print$(NF-1)}')
+			listOfUrls=$(time getPlayListURLsFromIDs $(ytdlGetPlayListIDFromURL $playList))
 		fi
 
 		getRestrictedFilenamesFSD $listOfUrls
@@ -152,6 +154,7 @@ function getPlaylistsRestrictedFilenamesFSD {
 }
 function getPlaylistsRestrictedFilenamesHD {
 	trap 'rc=130;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
+	local playList playListTitle="not_yet_known" listOfUrls="not_yet_known" fqdn="not_yet_known" service="not_yet_known"
 	for playList
 	do
 		echo "=> Treating playList : $playList ..." >&2
@@ -162,8 +165,9 @@ function getPlaylistsRestrictedFilenamesHD {
 		then
 			listOfUrls=$(hxwls 2>/dev/null "$playList" | awk -F '&' '/\<(watch|video)\>/{print$1}' | sort -u | tr "\n" " ")
 		else
-			urlPrefix=$(echo "$playList" | sed -r "s/https?:..//" | cut -d/ -f1)
-			listOfUrls=$(ytdlGetPlayListURLs "$playList")
+			fqdn=$(echo "$playList" | sed "s|https?://||" | cut -d/ -f1)
+			service=$(echo $fqdn | awk -F. '{print$(NF-1)}')
+			listOfUrls=$(time getPlayListURLsFromIDs $(ytdlGetPlayListIDFromURL $playList))
 		fi
 
 		getRestrictedFilenamesHD $listOfUrls
@@ -173,6 +177,7 @@ function getPlaylistsRestrictedFilenamesHD {
 }
 function getPlaylistsRestrictedFilenamesSD {
 	trap 'rc=130;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
+	local playList playListTitle="not_yet_known" listOfUrls="not_yet_known" fqdn="not_yet_known" service="not_yet_known"
 	for playList
 	do
 		echo "=> Treating playList : $playList ..." >&2
@@ -184,8 +189,9 @@ function getPlaylistsRestrictedFilenamesSD {
 			listOfUrls=$(hxwls 2>/dev/null "$playList" | awk -F '&' '/\<(watch|video)\>/{print$1}' | sort -u | tr "\n" " ")
 			test $? != 0 && return
 		else
-			urlPrefix=$(echo "$playList" | sed -r "s/https?:..//" | cut -d/ -f1)
-			listOfUrls=$(ytdlGetPlayListURLs "$playList")
+			fqdn=$(echo "$playList" | sed "s|https?://||" | cut -d/ -f1)
+			service=$(echo $fqdn | awk -F. '{print$(NF-1)}')
+			listOfUrls=$(time getPlayListURLsFromIDs $(ytdlGetPlayListIDFromURL $playList))
 		fi
 
 		getRestrictedFilenamesSD $listOfUrls
@@ -204,7 +210,7 @@ function getRestrictedFilenamesFORMAT {
 #	local translate="trans -b :en" # to translate any language to english
 	local translate=cat # Translate through pipe disabled by default
 	local initialSiteVideoFormat="$1"
-	local siteVideoFormat downloadOK=-1 extension fqdn fileSizeOnFS remoteFileSize=0
+	local siteVideoFormat="not_yet_known" downloadOK=-1 extension="not_yet_known" fqdn="not_yet_known" service="not_yet_known" fileSizeOnFS=0 remoteFileSize=0
 	shift
 	local -i i=0
 	for url
@@ -215,6 +221,7 @@ function getRestrictedFilenamesFORMAT {
 		echo "=> url = $url"
 		echo $url | \egrep -wq "https?:" || url=https://www.youtube.com/watch?v=$url #Only youtube short urls are handled by "youtube-dl"
 		fqdn=$(echo $url | awk -F "[./]" '{gsub("www.","");print$3"_"$4}')
+		service=$(echo $fqdn | awk -F_ '{print$(NF-1)}')
 
 		case $url in
 		*.facebook.com/*) siteVideoFormat=$(echo $initialSiteVideoFormat+m4a | \sed -E "s/^(\(?)\w+/\1bestvideo/g");; #Replace the first word after the opening parenthesis
@@ -470,9 +477,17 @@ function ytdlGetFormat {
 		$ytdlnoconfig --get-filename -o "=> format_id = %(format_id)s" "$url"
 	done
 }
-function ytdlGetPlayListURLs {
-	local playList="$1"
-	test "$playList" && youtube-dl --ignore-errors -j "$playList" | jq -r .webpage_url
+function ytdlGetPlayListIDFromURL {
+	local playListURL="$1"
+	local fqdn=$(echo "$playListURL" | sed "s|https?://||" | cut -d/ -f1)
+	local service=$(echo $fqdn | awk -F. '{print$(NF-1)}')
+	echo $service
+	test "$playListURL" && $ytdlnoconfig  --ignore-errors --flat-playlist -j "$playListURL" | jq -r .id
+}
+function getPlayListURLsFromIDs {
+	local service="$1"
+	shift
+	getFullURLsFromIDs "$service" $@
 }
 function ytdlGetSize {
 	type jq >/dev/null || { echo -1;return 1; }
