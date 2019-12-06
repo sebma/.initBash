@@ -125,8 +125,8 @@ function getFullURLsFromIDs {
 		*) prefix=unknown_service;echo "=> ERROR : The service <$service> is not known, therefore the prefix is : <$prefix>.">&2;echo $prefix;return 2;;
 	esac
 
-#	set -- "${@/:/}" # Add $prefix to all arguments
-	echo "$@" | \sed "s,^\| , $prefix,g;s/^ //"
+	set -- "${@/#/$prefix}" # Add $prefix to all arguments
+	echo "$@"
 }
 function getPlaylistsRestrictedFilenamesFSD {
 	trap 'rc=130;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
