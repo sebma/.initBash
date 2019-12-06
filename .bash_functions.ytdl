@@ -104,12 +104,36 @@ function getAliveURLsFromFile {
 	echo $listOfUrls
 	trap - INT
 }
+function getFullURLsFromIDs {
+	local youtubeURLPrefix=https://www.youtube.com/watch?v=
+	local dailymotionURLPrefix=https://www.dailymotion.com/video/
+	local vimeoURLPrefix=https://vimeo.com/
+	local prefix="not_yet_known"
+
+	[ $# -le 1 ] && {
+		echo "=> Usage : $FUNCNAME youtube|dailymotion|vimeo|... ID1 [ID2] [ID3] ..." >&2
+		return 1
+	}
+
+	local service=$1
+	shift
+
+	case $service in
+		youtube) prefix=$youtubeURLPrefix;;
+		dailymotion) prefix=$dailymotionURLPrefix;;
+		vimeo) prefix=$vimeoURLPrefix;;
+		*) prefix=unknown_service;echo "=> ERROR : The service <$service> is not known, therefore the prefix is : <$prefix>.">&2;echo $prefix;return 2;;
+	esac
+
+#	set -- "${@/:/}" # Add $prefix to all arguments
+	echo "$@" | \sed "s,^\| , $prefix,g;s/^ //"
+}
 function getPlaylistsRestrictedFilenamesFSD {
 	trap 'rc=130;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
 	for playList
 	do
 		echo "=> Treating playList : $playList ..." >&2
-		playListTitle=$(\youtube-dl --ignore-config --ignore-errors --playlist-items 1 -j $playList | jq -r '.playlist_title')
+		playListTitle=$(\youtube-dl --ignore-config --ignore-errors --flat-playlist -J $playList | jq -r '.title')
 		playListTitle="${playListTitle// /_}"
 		mkdir -pv $playListTitle && cd $playListTitle
 		if echo $playList | \egrep -q "youtube|dailymotion|vevo|tonvid"
@@ -131,7 +155,7 @@ function getPlaylistsRestrictedFilenamesHD {
 	for playList
 	do
 		echo "=> Treating playList : $playList ..." >&2
-		playListTitle=$(\youtube-dl --ignore-config --ignore-errors --playlist-items 1 -j $playList | jq -r '.playlist_title')
+		playListTitle=$(\youtube-dl --ignore-config --ignore-errors --flat-playlist -J $playList | jq -r '.title')
 		playListTitle="${playListTitle// /_}"
 		mkdir -pv $playListTitle && cd $playListTitle
 		if echo $playList | \egrep -q "youtube|dailymotion|vevo|tonvid"
@@ -152,7 +176,7 @@ function getPlaylistsRestrictedFilenamesSD {
 	for playList
 	do
 		echo "=> Treating playList : $playList ..." >&2
-		playListTitle=$(\youtube-dl --ignore-config --ignore-errors --playlist-items 1 -j $playList | jq -r '.playlist_title')
+		playListTitle=$(\youtube-dl --ignore-config --ignore-errors --flat-playlist -J $playList | jq -r '.title')
 		playListTitle="${playListTitle// /_}"
 		mkdir -pv $playListTitle && cd $playListTitle
 		if echo $playList | \egrep -q "youtube|dailymotion|vevo|tonvid"
