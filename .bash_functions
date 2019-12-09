@@ -87,6 +87,8 @@ function addUsersInGroup {
 	done
 }
 function apkInfo {
+	type aapt >/dev/null || return
+	local apkFullInfo="$(which aapt) dump badging"
 	for package
 	do
 		echo "=> package = $package"
@@ -94,8 +96,31 @@ function apkInfo {
 			echo "==> ERROR : The file $package does not exist." >&2; continue
 		}
 
-		aapt dump badging "$package" | awk -F"'" '/^package:/{print$(NF-1)}/application:|^package:/{print$2}/[s]dkVersion:/'
+		$apkFullInfo "$package" | awk -F"'" '/^package:/{print$(NF-1)}/application:|^package:/{print$2}/[s]dkVersion:/'
 	done
+}
+function apkRename {
+	type aapt >/dev/null || return
+	local apkFullInfo="$(which aapt) dump badging"
+	for package
+	do
+		echo "=> package = $package"
+		[ -f "$package" ] || {
+			echo "==> ERROR : The package $package does not exist." >&2; continue
+		}
+
+		packagePath=$(dirname "$package")
+		set -o pipefail
+		packageID=$($apkFullInfo "$package" | awk -F"'" '/^package:/{print$2}') || continue
+		set +o pipefail
+		packageVersion=$($apkFullInfo "$package" | awk -F"'" '/^package:/{print$6}' | cut -d' ' -f1)
+		packageNewFileName="$packagePath/$packageID-$packageVersion.apk"
+		[ "$package" = $packageNewFileName ] || mv -v "$package" $packageNewFileName
+	done
+}
+function apkRename_All_APKs {
+	type aapt || return
+	ls *.apk >/dev/null && apkRename *.apk
 }
 function aria2c {
 #	local options="$(echo "$@" | \sed -E "s/(^| )[^ -]+\b//g")" # Suppressing non options
@@ -1075,45 +1100,6 @@ function renameFileInsideZIP {
 	local newName=$2
 #	command printf "@ $oldName\n@=$newName\n" | command zipnote -w $zipFile #necessite zip > v3.1beta
 	command 7za $zipFile $oldName $newName
-}
-function rename_APK {
-	type aapt >/dev/null || return
-	for package
-	do
-		echo "=> package = $package"
-		[ -f "$package" ] || {
-			echo "==> ERROR : The package $package does not exist." >&2; continue
-		}
-
-		packagePath=$(dirname "$package")
-		set -o pipefail
-		packageID=$(aapt dump badging "$package" | awk -F"'" '/^package:/{print$2}') || continue
-		set +o pipefail
-		packageVersion=$(aapt dump badging "$package" | awk -F"'" '/^package:/{print$6}' | cut -d' ' -f1)
-		packageNewFileName="$packagePath/$packageID-$packageVersion.apk"
-		[ "$package" = $packageNewFileName ] || mv -v "$package" $packageNewFileName
-	done
-}
-function rename_All_APKs {
-	type aapt || return
-	for package in $(\ls *.apk)
-	do
-		echo "=> package = $package"
-		[ -f "$package" ] || {
-			echo "==> ERROR : The package $package does not exist." >&2; continue
-		}
-
-		if echo $package | egrep -q "^[^\.]+\.apk"
-		then
-			packagePath=$(dirname $package)
-			set -o pipefail
-			packageID=$(aapt dump badging "$package" | awk -F"'" '/^package:/{print$2}') || continue
-			set +o pipefail
-			packageVersion=$(aapt dump badging "$package" | awk -F"'" '/^package:/{print$6}' | cut -d' ' -f1)
-			packageNewFileName="$packagePath/$packageID-$packageVersion.apk"
-			[ "$package" = $packageNewFileName ] || mv -v "$package" $packageNewFileName
-		fi
-	done
 }
 function resetRESOLUTION {
 	\xrandr | awk '{if(/\<connected/)output=$1;if(/\*/){print"xrandr --output "output" --mode "$1;exit}}' | sh -x
