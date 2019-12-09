@@ -94,7 +94,7 @@ function apkInfo {
 			echo "==> ERROR : The file $package does not exist." >&2; continue
 		}
 
-		aapt dump badging "$package" | awk -F"'" '/^package:/{print$(NF-1)}/application:|^package:/{print$2}/[Ss]dkVersion:/'
+		aapt dump badging "$package" | awk -F"'" '/^package:/{print$(NF-1)}/application:|^package:/{print$2}/[s]dkVersion:/'
 	done
 }
 function aria2c {
@@ -407,7 +407,7 @@ function getBJC {
 }
 function getCodeName {
 	if [ $# != 2 ];then
-		echo "=> Usage: $FUNCNAME brand model"
+		echo "=> Usage: $FUNCNAME brand model" >&2
 		return 1
 	fi
 	local brand=$1
