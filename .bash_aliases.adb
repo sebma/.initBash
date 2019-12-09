@@ -3,8 +3,9 @@ declare -A | grep -wq colors || source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 which adb >/dev/null 2>&1 && {
-typeset adb=$(which adb)
-typeset dos2unix="$(which tr) -d '\r'"
+export adb=$(which adb)
+export dos2unix="$(which tr) -d '\r'"
+alias adbFindPackage="$adb shell pm list packages -f -i"
 alias adbGetAndroidVersion="$adb shell getprop ro.build.version.release | $dos2unix"
 alias adbGetArch="$adb shell getprop ro.product.cpu.abi | $dos2unix"
 alias adbGetBatteryLevel="$adb shell dumpsys battery | grep level | $dos2unix"
