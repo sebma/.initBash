@@ -15,9 +15,9 @@ alias adbGetCodeName="$adb shell getprop ro.product.device | $dos2unix"
 alias adbGetManufacturer="$adb shell getprop ro.product.manufacturer | $dos2unix"
 alias adbGetModel="$adb shell getprop ro.product.model | $dos2unix"
 
-export androidDeviceNetworkInterface=$($adb shell getprop wifi.interface | $dos2unix)
+alias adbGetNetworkInterface="$adb shell getprop wifi.interface | $dos2unix"
+export androidDeviceNetworkInterface=$(adbGetNetworkInterface)
 if [ -n "$androidDeviceNetworkInterface" ];then
-	alias adbGetNetworkInterface='echo $androidDeviceNetworkInterface'
 	alias adbGetNetworkIP="$adb shell ip -o addr show $androidDeviceNetworkInterface | awk -F ' *|/' '/inet /{print\$4}' | $dos2unix"
 fi
 
@@ -43,7 +43,7 @@ function adbSetADBTcpPort {
 
 	if $adb shell getprop | \egrep -q "service.adb.tcp.port.*[0-9]+";then
 		local currentADBTcpPortNum=$($adb shell getprop service.adb.tcp.port)
-		echo "[ $FUNCNAME ] => INFO : The service.adb.tcp.port> is already set to $currentADBTcpPortNum" >&2
+		echo "[ $FUNCNAME ] => INFO : The <service.adb.tcp.port> parameter is already set to $currentADBTcpPortNum." >&2
 		return 4
 	fi
 
