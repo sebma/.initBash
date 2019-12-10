@@ -435,10 +435,18 @@ function getCodeName {
 		echo "=> Usage: $FUNCNAME brand model" >&2
 		return 1
 	fi
+
 	local brand=$1
 	local model=$2
+	local curl="$(which curl) -sL"
 	local codeNameJSONDataBaseURL=https://github.com/jaredrummler/AndroidDeviceNames/raw/master/json/manufacturers
-	\curl -Ls $codeNameJSONDataBaseURL/$brand.json | jq -r --arg model $model '.devices[] | select( .model | contains($model) ).codename'
+
+	if $curl -I $codeNameJSONDataBaseURL/$brand.json | \grep "Not Found";then
+		echo "[$FUNCNAME] => ERROR : The page $codeNameJSONDataBaseURL/$brand.json was not found." >&2
+		return 2 
+	fi
+
+	$curl $codeNameJSONDataBaseURL/$brand.json | jq -r --arg model $model '.devices[] | select( .model | contains($model) ).codename'
 }
 function getField {
 	test $# -ne 3 && {
