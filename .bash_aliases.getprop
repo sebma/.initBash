@@ -5,7 +5,7 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 getprop | grep -q ro.build.version.release && {
 export getprop="$(which getprop)"
 export setprop="$(which setprop)"
-alias findPackages="$getprop pm list packages -f -i"
+alias findPackages="pm list packages -f -i"
 alias getADBTcpPort="$getprop service.adb.tcp.port"
 alias getAndroidVersion="$getprop ro.build.version.release"
 alias getArch="$getprop ro.product.cpu.abi"
