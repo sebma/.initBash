@@ -2,7 +2,6 @@
 declare -A | grep -wq colors || source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-which adb >/dev/null 2>&1 && {
 export adb=$(which adb)
 export dos2unix="$(which tr) -d '\r'"
 alias adb_getprop="$adb shell getprop"
@@ -24,7 +23,42 @@ fi
 
 alias adbGetSDK="$adb shell getprop ro.build.version.sdk | $dos2unix"
 alias adbGetSerial="$adb shell getprop ro.serialno | $dos2unix"
-alias adbSetADBTcpPort="$adb shell setprop service.adb.tcp.port"
+function adbSetADBTcpPort {
+	local defaultADBTcpPort=5555
+	local port=0
+	local adb=$(which adb)
+	local dos2unix="$(which tr) -d '\r'"
+	case $1 in
+		-h|-help|--h|--help) echo "=> Usage: $FUNCNAME [portNumber|$defaultADBTcpPort]" >&2; return 1 ;;
+		[0-9]) port=$1;;
+		"") port=$defaultADBTcpPort;;
+		*) echo "[ $FUNCNAME ] => ERROR Usage: $FUNCNAME [portNumber|$defaultADBTcpPort]" >&2; return 2 ;;
+	esac
+
+	$adb devices | grep -w offline && echo "[ $FUNCNAME ] => INFO : You need to unplug your USB cord." >&2 && return 3
+	$adb shell echo >/dev/null || return
+
+	local androidDeviceNetworkInterface=$($adb shell getprop wifi.interface | $dos2unix)
+	local adbGetNetworkIP=$($adb shell ip -o addr show $androidDeviceNetworkInterface | awk -F ' *|/' '/inet /{print$4}' | $dos2unix)
+
+	if $adb shell getprop | \egrep -q "service.adb.tcp.port.*[0-9]+";then
+		local currentADBTcpPortNum=$($adb shell getprop service.adb.tcp.port)
+		echo "[ $FUNCNAME ] => INFO : The service.adb.tcp.port> is already set to $currentADBTcpPortNum" >&2
+		return 4
+	fi
+
+	set +x
+	$adb tcpip $port
+	sleep 1
+	$adb connect $adbGetNetworkIP:$port | grep -w connected && echo "[ $FUNCNAME ] => INFO : You can now unplugg the USB cord and run your <adb shell> commands." >&2
+	sleep 2
+	if $adb devices | grep -w offline || $adb shell echo 2>&1 | grep 'more than one';then
+		echo "[ $FUNCNAME ] => INFO : You need to unplug your USB cord." >&2
+		return 5
+	fi
+	$adb shell echo >/dev/null || echo "[ $FUNCNAME ] => INFO : If the <adbd> service could not restart automatically, you need to re-enable <USB Debugging> on the android device manually." >&2
+	set +x
 }
+
 set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
