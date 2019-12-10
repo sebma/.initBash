@@ -17,7 +17,7 @@ alias getModel="$getprop getprop ro.product.model"
 typeset androidDeviceNetworkInterface=$($getprop getprop wifi.interface)
 if [ -n "$androidDeviceNetworkInterface" ];then
 	alias getNetworkInterface="echo $androidDeviceNetworkInterface"
-	alias getNetworkIP="$getprop ip -o addr show $androidDeviceNetworkInterface | awk -F ' *|/' '/inet /{print\$4}'"
+	type awk >/dev/null && alias getNetworkIP="$getprop ip -o addr show $androidDeviceNetworkInterface | awk -F ' *|/' '/inet /{print\$4}'"
 fi
 
 alias getSDK="$getprop getprop ro.build.version.sdk"
