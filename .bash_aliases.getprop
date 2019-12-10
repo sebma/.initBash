@@ -2,7 +2,7 @@
 declare -A | grep -wq colors || source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-which getprop >/dev/null 2>&1 && {
+getprop | grep -q ro.build.version.release && {
 export getprop="$(which getprop)"
 export setprop="$(which setprop)"
 alias findPackages="$getprop pm list packages -f -i"
@@ -14,10 +14,10 @@ alias getBrand="$getprop getprop ro.product.brand"
 alias getCodeName="$getprop getprop ro.product.device"
 alias getManufacturer="$getprop getprop ro.product.manufacturer"
 alias getModel="$getprop getprop ro.product.model"
-typeset androidDeviceNetworkInterface=$($getprop getprop wifi.interface)
+export androidDeviceNetworkInterface=$($getprop getprop wifi.interface | grep -v wifi.interface 2>/dev/null)
 if [ -n "$androidDeviceNetworkInterface" ];then
-	alias getNetworkInterface="echo $androidDeviceNetworkInterface"
-	type awk >/dev/null && alias getNetworkIP="$getprop ip -o addr show $androidDeviceNetworkInterface | awk -F ' *|/' '/inet /{print\$4}'"
+	alias getNetworkInterface='echo $androidDeviceNetworkInterface'
+	type awk >/dev/null && alias getNetworkIP="ip -o addr show $androidDeviceNetworkInterface | awk -F ' *|/' '/inet /{print\$4}'"
 fi
 
 alias getSDK="$getprop getprop ro.build.version.sdk"
