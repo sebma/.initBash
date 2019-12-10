@@ -7,6 +7,7 @@ export adb=$(which adb)
 export dos2unix="$(which tr) -d '\r'"
 alias adb_getprop="$adb shell getprop"
 alias adbFindPackages="$adb shell pm list packages -f -i"
+alias adbGetADBTcpPort="$adb shell getprop service.adb.tcp.port"
 alias adbGetAndroidVersion="$adb shell getprop ro.build.version.release | $dos2unix"
 alias adbGetArch="$adb shell getprop ro.product.cpu.abi | $dos2unix"
 alias adbGetBatteryLevel="$adb shell dumpsys battery | grep level | $dos2unix"
@@ -23,6 +24,7 @@ fi
 
 alias adbGetSDK="$adb shell getprop ro.build.version.sdk | $dos2unix"
 alias adbGetSerial="$adb shell getprop ro.serialno | $dos2unix"
+alias adbSetADBTcpPort="$adb shell setprop service.adb.tcp.port"
 }
 set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
