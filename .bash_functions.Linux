@@ -227,12 +227,17 @@ function ytdlUpdate {
 	typeset -r isAdmin=$(groups 2>/dev/null | \egrep -wq "sudo|adm|admin|root" && echo true || echo false)
 	local ytdlPackageURL=youtube-dl
 	local sudo=""
+
 	if $isAdmin
 	then
 		sudo="command sudo -H"
 	fi
+
 	local ytdlPythonVersion=$(youtube-dl -v 2>&1 | awk -F "[ .]" '/Python version/{printf$4"."$5}')
-	$sudo $(which pip$ytdlPythonVersion) install -U $ytdlPackageURL
+	local ytdlLastRelease=$(\git ls-remote --tags https://github.com/rg3/youtube-dl | awk -F/ 'END{print gensub(/\^\{\}/,"","",$NF)}')
+	local ytdlCurrentRelease=$(youtube-dl --version)
+
+	[ $ytdlLastRelease = $ytdlCurrentRelease ] && echo "[$FUNCNAME] => INFO : You already have the latest release, which is $ytdlLastRelease." >&2 || $sudo $(which pip$ytdlPythonVersion) install -U $ytdlPackageURL
 }
 function ytdlUpdateFromGit {
 	typeset -r isAdmin=$(groups 2>/dev/null | \egrep -wq "sudo|adm|admin|root" && echo true || echo false)
