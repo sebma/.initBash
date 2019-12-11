@@ -17,7 +17,7 @@ alias adbGetManufacturer="$adb shell getprop ro.product.manufacturer | $dos2unix
 alias adbGetModel="$adb shell getprop ro.product.model | $dos2unix"
 
 alias adbGetNetworkInterface="$adb shell getprop wifi.interface | $dos2unix"
-export androidDeviceNetworkInterface=$(adbGetNetworkInterface)
+$adb shell echo >/dev/null 2>&1 && export androidDeviceNetworkInterface=$(adbGetNetworkInterface)
 if [ -n "$androidDeviceNetworkInterface" ];then
 	alias adbGetNetworkIP="$adb shell ip -o addr show $androidDeviceNetworkInterface | awk -F ' *|/' '/inet /{print\$4}' | $dos2unix"
 fi
