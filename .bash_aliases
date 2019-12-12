@@ -31,6 +31,7 @@ alias 2si='numfmt  --to=si    --suffix=B'
 alias acp='\advcp -gpuv'
 alias amv='\advmv -gvi'
 alias any2dos="\perlSed 's/\R/\r\n/g'"
+alias any2man="\pandoc -t man"
 alias any2unix="\perlSed 's/\R/\n/'"
 alias audioInfo="which mplayer >/dev/null 2>&1 && \mplayer -identify -vo null -ao null -frames 0"
 alias bc="\bc -l"
