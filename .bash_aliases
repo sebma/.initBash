@@ -161,6 +161,7 @@ alias lshw="\lshw -numeric -sanitize"
 alias lshwBUSINFO='lshw -businfo'
 alias lxterm="\lxterm -sb -fn 9x15"
 alias manen=enman
+alias manfile="\man -l"
 alias manfr=frman
 alias mkdir="\mkdir -pv"
 alias mountfreebox="mount | \grep -wq freebox-server || curlftpfs 'freebox@freebox-server.local/Disque dur' /mnt/freebox/ ; mount | \grep -w freebox-server"
