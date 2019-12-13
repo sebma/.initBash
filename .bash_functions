@@ -116,7 +116,7 @@ function apkRename {
 		set +o pipefail
 		packageVersion=$($apkFullInfo "$package" | awk -F"'" '/^package:/{print$6}' | cut -d' ' -f1)
 		packageNewFileName="$packagePath/$packageID-$packageVersion.apk"
-		[ "$package" = $packageNewFileName ] || mv -v "$package" $packageNewFileName
+		[ "$package" = $packageNewFileName ] || \mv -vi "$package" $packageNewFileName
 	done
 }
 function apkRename_All_APKs {
