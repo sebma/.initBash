@@ -88,7 +88,7 @@ function addUsersInGroup {
 }
 function apkInfo {
 	type aapt >/dev/null || return
-	local apkFullInfo="$(which aapt) dump badging"
+	local apkFullInfo="$(which aapt aapt2 | tail -1) dump badging"
 	for package
 	do
 		echo "=> package = $package"
@@ -96,12 +96,13 @@ function apkInfo {
 			echo "==> ERROR : The file $package does not exist." >&2; continue
 		}
 
-		$apkFullInfo "$package" | egrep "package:|[sS]dkVersion:|application-label:"
-	done
+		$apkFullInfo "$package"
+		echo
+	done | egrep "^$|package|[s]dkVersion:|application-label:|native-code:"
 }
 function apkRename {
 	type aapt >/dev/null || return
-	local apkFullInfo="$(which aapt) dump badging"
+	local apkFullInfo="$(which aapt aapt2 | tail -1) dump badging"
 	for package
 	do
 		echo "=> package = $package"
