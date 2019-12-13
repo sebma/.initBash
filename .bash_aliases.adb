@@ -4,7 +4,8 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 
 export adb=$(which adb)
 export dos2unix="$(which tr) -d '\r'"
-alias adb_getprop="$adb shell getpro | $dos2unix"
+alias adb_getprop="$adb shell getprop"
+alias adb_getprop_grep="$adb shell getprop | $dos2unix | grep -P"
 alias adbCpuInfo="$adb shell cat /proc/cpuinf | $dos2unix"
 alias adbMemInfo="$adb shell cat /proc/meminf | $dos2unix"
 alias adbBuildInfo="$adb shell cat /system/build.pro | $dos2unix"
@@ -27,7 +28,8 @@ if [ -n "$androidWlanInterface" ];then
 	alias adbGetWlanMAC="$adb shell cat /sys/class/net/${androidWlanInterface/:*/}/addres | $dos2unix"
 fi
 
-alias adbGetProp="$adb shell getpro | $dos2unix"
+alias adbGetProp="$adb shell getprop"
+alias adbGetPropGrep="$adb shell getprop | $dos2unix | grep -P"
 alias adbGetSDK="$adb shell getprop ro.build.version.sdk | $dos2unix"
 alias adbGetSerial="$adb shell getprop ro.serialno | $dos2unix"
 function adbSetADBTcpPort {
