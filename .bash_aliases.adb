@@ -16,7 +16,7 @@ alias adbGetBatteryLevel="$adb shell dumpsys battery | grep level | $dos2unix"
 alias adbGetBrand="$adb shell getprop ro.product.brand | $dos2unix"
 alias adbGetCodeName="$adb shell getprop ro.product.device | $dos2unix"
 alias adbGetExtSDCardMountPoint="$adb shell mount | awk '/emulated|sdcard0/{next}/(Removable|storage)\//{if(\$2==\"on\")print\$3;else print\$2} | $dos2unix"
-alias adbGetIMEI="{ $adb shell getprop persist.radio.device.imei | \grep [0-9] || $adb shell dumpsys iphonesubinfo | awk '/Device/{print\$NF}' | \grep [0-9] || $adb shell getprop | awk '/persist.sys.fota_deviceid.*35/{print\$NF}'; } | $dos2unix"
+alias adbGetIMEI="{ $adb shell getprop persist.radio.device.imei | \grep [0-9] || ( $adb shell dumpsys iphonesubinfo;$adb shell dumpsys iphonesubinfo2 2>/dev/null ) | awk '/Device/{print\$NF}' | \grep [0-9] || $adb shell getprop | awk '/persist.sys.fota_deviceid.*35/{print\$NF}'; } | $dos2unix"
 alias adbGetManufacturer="$adb shell getprop ro.product.manufacturer | $dos2unix"
 alias adbGetModel="$adb shell getprop ro.product.model | $dos2unix"
 
