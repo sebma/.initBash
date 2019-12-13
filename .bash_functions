@@ -96,7 +96,7 @@ function apkInfo {
 			echo "==> ERROR : The file $package does not exist." >&2; continue
 		}
 
-		$apkFullInfo "$package" | awk -F"'" '/^package:/{print$(NF-1)}/application:|^package:/{print$2}/[s]dkVersion:/'
+		$apkFullInfo "$package" | egrep "package:|[sS]dkVersion:|application-label:"
 	done
 }
 function apkRename {
