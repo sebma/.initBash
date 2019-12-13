@@ -42,9 +42,10 @@ function adbSetADBTcpPort {
 	local androidDeviceNetworkInterface=$($adb shell getprop wifi.interface | $dos2unix)
 	local adbGetNetworkIP=$($adb shell ip -o addr show $androidDeviceNetworkInterface | awk -F ' *|/' '/inet /{print$4}' | $dos2unix)
 
-	if $adb shell getprop | \egrep -q "service.adb.tcp.port.*[0-9]+";then
-		local currentADBTcpPortNum=$($adb shell getprop service.adb.tcp.port)
+	local currentADBTcpPortNum=$($adb shell getprop service.adb.tcp.port)
+	if echo $currentADBTcpPortNum | \egrep -q "[0-9]+";then
 		echo "[ $FUNCNAME ] => INFO : The <service.adb.tcp.port> parameter is already set to $currentADBTcpPortNum." >&2
+		set -x;$adb tcpip $currentADBTcpPortNum;set +x
 		return 4
 	fi
 
