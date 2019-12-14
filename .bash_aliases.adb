@@ -17,7 +17,6 @@ alias adbGetBatteryLevel="$adb shell dumpsys battery | grep level | $dos2unix"
 alias adbGetBrand="$adb shell getprop ro.product.brand | $dos2unix"
 alias adbGetCodeName="$adb shell getprop ro.product.device | $dos2unix"
 alias adbGetExtSDCardMountPoint="$adb shell mount | awk '/emulated|sdcard0/{next}/(Removable|storage)\//{if(\$2==\"on\")print\$3;else print\$2} | $dos2unix"
-alias adbGetIMEI="{ $adb shell getprop persist.radio.device.imei | \grep [0-9] || ( $adb shell dumpsys iphonesubinfo;$adb shell dumpsys iphonesubinfo2 2>/dev/null ) | awk '/Device/{print\$NF}' | \grep [0-9] || $adb shell getprop | awk '/persist.sys.fota_deviceid.*35/{print\$NF}'; } | $dos2unix"
 alias adbGetManufacturer="$adb shell getprop ro.product.manufacturer | $dos2unix"
 alias adbGetModel="$adb shell getprop ro.product.model | $dos2unix"
 
@@ -32,6 +31,23 @@ alias adbGetProp="$adb shell getprop"
 alias adbGetPropGrep="$adb shell getprop | $dos2unix | grep -P"
 alias adbGetSDK="$adb shell getprop ro.build.version.sdk | $dos2unix"
 alias adbGetSerial="$adb shell getprop ro.serialno | $dos2unix"
+function adbGetIMEI {
+	local imeiLength=15
+	local IMEI1=$(printf "%0${imeiLength}d" 0)
+	local IMEI2=$IMEI1
+	true && {
+		if IMEI1=$($adb shell getprop persist.sys.fota_deviceid1); echo $IMEI1 | \egrep "^[0-9]{$imeiLength}"; then
+			IMEI2=$($adb shell getprop persist.sys.fota_deviceid2 | sed 's/^,//')
+		elif IMEI1=$($adb shell service call iphonesubinfo 1 | awk -F"'" 'NR>1{gsub(/\./,"",$2);imei=imei$2}END{print imei}'); echo $IMEI1 | \egrep "^[0-9]{$imeiLength}"; then
+			IMEI2=$($adb shell service call iphonesubinfo 3 | awk -F"'" 'NR>1{gsub(/\./,"",$2);imei=imei$2}END{print imei}')
+		elif IMEI1=$($adb shell dumpsys iphonesubinfo | awk '/Device/{print$NF}'); echo $IMEI1 | \egrep "^[0-9]{$imeiLength}"; then
+			IMEI2=$($adb shell dumpsys iphonesubinfo2 2>/dev/null | awk '/Device/{print$NF}' )
+		elif IMEI1=$($adb shell getprop persist.radio.device.imei); echo $IMEI1 | \egrep "^[0-9]{$imeiLength}"; then
+			:
+		fi
+		echo $IMEI2
+	} | $dos2unix
+}
 function adbSetADBTcpPort {
 	local defaultADBTcpPort=5555
 	local port=0
