@@ -35,18 +35,21 @@ function adbGetIMEI {
 	local imeiLength=15
 	local IMEI1=$(printf "%0${imeiLength}d" 0)
 	local IMEI2=$IMEI1
-	true && {
-		if IMEI1=$($adb shell getprop persist.sys.fota_deviceid1); echo $IMEI1 | \egrep "^[0-9]{$imeiLength}"; then
-			IMEI2=$($adb shell getprop persist.sys.fota_deviceid2 | sed 's/^,//')
-		elif IMEI1=$($adb shell service call iphonesubinfo 1 | awk -F"'" 'NR>1{gsub(/\./,"",$2);imei=imei$2}END{print imei}'); echo $IMEI1 | \egrep "^[0-9]{$imeiLength}"; then
-			IMEI2=$($adb shell service call iphonesubinfo 3 | awk -F"'" 'NR>1{gsub(/\./,"",$2);imei=imei$2}END{print imei}')
-		elif IMEI1=$($adb shell dumpsys iphonesubinfo | awk '/Device/{print$NF}'); echo $IMEI1 | \egrep "^[0-9]{$imeiLength}"; then
-			IMEI2=$($adb shell dumpsys iphonesubinfo2 2>/dev/null | awk '/Device/{print$NF}' )
-		elif IMEI1=$($adb shell getprop persist.radio.device.imei); echo $IMEI1 | \egrep "^[0-9]{$imeiLength}"; then
-			:
-		fi
-		echo $IMEI2
-	} | $dos2unix
+
+	if IMEI1=$($adb shell getprop persist.sys.fota_deviceid1); echo $IMEI1 | \egrep -q "^[0-9]{$imeiLength}"; then
+		IMEI2=$($adb shell getprop persist.sys.fota_deviceid2 | sed 's/^,//')
+	elif IMEI1=$($adb shell service call iphonesubinfo 1 | awk -F"'" 'NR>1{gsub(/\./,"",$2);imei=imei$2}END{print imei}'); echo $IMEI1 | \egrep -q "^[0-9]{$imeiLength}"; then
+		IMEI2=$($adb shell service call iphonesubinfo 3 | awk -F"'" 'NR>1{gsub(/\./,"",$2);imei=imei$2}END{print imei}')
+	elif IMEI1=$($adb shell dumpsys iphonesubinfo | awk '/Device/{print$NF}'); echo $IMEI1 | \egrep -q "^[0-9]{$imeiLength}"; then
+		IMEI2=$($adb shell dumpsys iphonesubinfo2 2>/dev/null | awk '/Device/{print$NF}' )
+	elif IMEI1=$($adb shell getprop persist.radio.device.imei); echo $IMEI1 | \egrep -q "^[0-9]{$imeiLength}"; then
+		:
+	fi
+
+	IMEI1=$(echo $IMEI1 | $dos2unix)
+	echo $IMEI1
+	IMEI2=$(echo $IMEI2 | $dos2unix)
+	echo $IMEI2
 }
 function adbSetADBTcpPort {
 	local defaultADBTcpPort=5555
