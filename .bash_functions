@@ -414,7 +414,7 @@ function findLoops {
 	time $find $@ -xdev -follow 2>&1 >/dev/null | egrep -w "loop|denied"
 }
 function functionDefinition {
-	type "$@" | grep -v 'is a function$' | sed 's/(;| )$//;s/    /\t/g' | sed -z 's/$\n\{/ {/g'
+	type "$@" | \grep -v 'is a function$' | sed 's/(;| )$//;s/    /\t/g'
 }
 function gdebiALL {
 	for package
