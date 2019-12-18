@@ -609,7 +609,7 @@ function httpLocalServer {
 	local python=/usr/bin/python
 
 	case $1 in
-		-h|-help|--h|--help) echo "=> Usage: $FUNCNAME [portNumber|1234]" >&2; return 1 ;;
+		-h|-help|--h|--help) echo "=> Usage: $FUNCNAME [portNumber|$port]" >&2; return 1 ;;
 	esac
 
 	test $1 && port=$1
