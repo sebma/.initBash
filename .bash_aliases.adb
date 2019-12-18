@@ -9,6 +9,7 @@ alias adb_getprop_grep="$adb shell getprop | $dos2unix | grep -P"
 alias adbCpuInfo="$adb shell cat /proc/cpuinf | $dos2unix"
 alias adbMemInfo="$adb shell cat /proc/meminf | $dos2unix"
 alias adbBuildInfo="$adb shell cat /system/build.pro | $dos2unix"
+alias adbEnableAPP="$adb shell pm enable"
 alias adbFindPackages="$adb shell pm list package"
 alias adbGetADBTcpPort="$adb shell getprop service.adb.tcp.por | $dos2unix"
 alias adbGetAndroidVersion="$adb shell getprop ro.build.version.release | $dos2unix"
@@ -31,6 +32,22 @@ alias adbGetProp="$adb shell getprop"
 alias adbGetPropGrep="$adb shell getprop | $dos2unix | grep -P"
 alias adbGetSDK="$adb shell getprop ro.build.version.sdk | $dos2unix"
 alias adbGetSerial="$adb shell getprop ro.serialno | $dos2unix"
+function adbDisableAPPs {
+	for package
+	do
+		echo "=> Disabling <$package> #$remainingPackages/$machingPackagesNumber remaining packages to process ..."
+		$adb shell pm disable $package || $adb shell pm disable-until-used $package || $adb shell pm disable-user $package
+		let remainingPackages--
+	done | $dos2unix
+}
+function adbHideAPPs {
+	for package
+	do
+		echo "=> Hiding <$package> #$remainingPackages/$machingPackagesNumber remaining packages to process ..."
+		$adb shell pm hide $package || $adb shell pm disable-until-used $package || $adb shell pm disable-user $package
+		let remainingPackages--
+	done | $dos2unix
+}
 function adbGetIMEI {
 	local imeiLength=15
 	local IMEI1=$(printf "%0${imeiLength}d" 0)
