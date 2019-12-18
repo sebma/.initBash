@@ -9,7 +9,7 @@ alias adb_getprop_grep="$adb shell getprop | $dos2unix | grep -P"
 alias adbCpuInfo="$adb shell cat /proc/cpuinf | $dos2unix"
 alias adbMemInfo="$adb shell cat /proc/meminf | $dos2unix"
 alias adbBuildInfo="$adb shell cat /system/build.pro | $dos2unix"
-alias adbEnableAPP="$adb shell pm enable"
+alias adbEnablePackage="$adb shell pm enable"
 alias adbFindPackages="$adb shell pm list packages"
 alias adbGetADBTcpPort="$adb shell getprop service.adb.tcp.por | $dos2unix"
 alias adbGetAndroidVersion="$adb shell getprop ro.build.version.release | $dos2unix"
@@ -32,19 +32,13 @@ alias adbGetProp="$adb shell getprop"
 alias adbGetPropGrep="$adb shell getprop | $dos2unix | grep -P"
 alias adbGetSDK="$adb shell getprop ro.build.version.sdk | $dos2unix"
 alias adbGetSerial="$adb shell getprop ro.serialno | $dos2unix"
-function adbDisableAPPs {
+function adbDisablePackages {
 	for package
 	do
 		echo "=> Disabling <$package> #$remainingPackages/$machingPackagesNumber remaining packages to process ..."
+		set -x
 		$adb shell pm disable $package || $adb shell pm disable-until-used $package || $adb shell pm disable-user $package
-		let remainingPackages--
-	done | $dos2unix
-}
-function adbHideAPPs {
-	for package
-	do
-		echo "=> Hiding <$package> #$remainingPackages/$machingPackagesNumber remaining packages to process ..."
-		$adb shell pm hide $package || $adb shell pm disable-until-used $package || $adb shell pm disable-user $package
+		set +x
 		let remainingPackages--
 	done | $dos2unix
 }
@@ -67,6 +61,26 @@ function adbGetIMEI {
 	echo $IMEI1
 	IMEI2=$(echo $IMEI2 | $dos2unix)
 	echo $IMEI2
+}
+function adbHidePackages {
+	for package
+	do
+		echo "=> Hiding <$package> #$remainingPackages/$machingPackagesNumber remaining packages to process ..."
+		$adb shell pm hide $package || $adb shell pm disable-until-used $package || $adb shell pm disable-user $package
+		let remainingPackages--
+	done | $dos2unix
+}
+function adbPackageStatus {
+	for package
+	do
+		echo "=> Checking <$package> #$remainingPackages/$machingPackagesNumber remaining packages to process ..."
+		if $adb shell pm list packages -e | \egrep -q "$package"; then
+			echo "==> $package is ENABLED"
+		else
+			echo "==> $package is NOT ENABLED"
+		fi
+		let remainingPackages--
+	done | $dos2unix
 }
 function adbSetADBTcpPort {
 	local defaultADBTcpPort=5555
