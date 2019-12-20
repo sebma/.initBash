@@ -1321,7 +1321,7 @@ function tcpConnetTest {
 #		local remoteSSHServer=$(echo $@ | awk '{sub("^(-[[:alnum:]_]+ ?)+","");sub("[[:alnum:]_]+@","");print$1}')
 		local remoteSSHServer=$1
 		local remotePort=$2
-		time command bash -c ": < /dev/tcp/$remoteSSHServer/$remotePort"
+		time command bash -c ": < /dev/tcp/$remoteSSHServer/$remotePort" && echo "$0: connect: connection succeeded"
 	fi
 }
 function termtitle {
