@@ -135,6 +135,7 @@ alias integer="typeset -i"
 alias inxi="\inxi -c21 -z"
 alias inxiSummary="inxi -Fm -v3"
 alias ip@=lanip
+alias is32or64bits='\getconf LONG_BIT'
 alias jpg2pdf=jpeg2pdf
 alias jpg2pdfA4=jpeg2pdfA4
 alias jpg2pdfA4R=jpeg2pdfA4R
