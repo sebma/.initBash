@@ -236,7 +236,7 @@ function ytdlUpdate {
 
 	local youtube_dl=$(which youtube-dl)
 	if [ "$youtube_dl" ];then
-		local ytdlLastRelease=$(pip install youtube-dl==whatever 2>&1 | awk '/ERROR: Could not find a version/{gsub(")","");print$NF}')
+		local ytdlLastRelease=$($(which pip) install youtube-dl==whatever 2>&1 | awk '/ERROR: Could not find a version/{gsub(")","");print$NF}')
 		local ytdlPythonVersion=$($youtube_dl -v 2>&1 | awk -F "[ .]" '/Python version/{printf$4"."$5}')
 		local ytdlCurrentRelease=$($youtube_dl --version)
 
