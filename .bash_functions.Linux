@@ -236,7 +236,7 @@ function ytdlUpdate {
 
 	local youtube_dl=$(which youtube-dl)
 	if [ "$youtube_dl" ];then
-		local ytdlLastRelease=$(\git ls-remote --tags $ytdlGitURL | awk -F/ 'END{print gensub(/\^\{\}/,"","",$NF)}')
+		local ytdlLastRelease=$(pip install youtube-dl==whatever 2>&1 | awk '/ERROR: Could not find a version/{gsub(")","");print$NF}')
 		local ytdlPythonVersion=$($youtube_dl -v 2>&1 | awk -F "[ .]" '/Python version/{printf$4"."$5}')
 		local ytdlCurrentRelease=$($youtube_dl --version)
 
@@ -255,8 +255,16 @@ function ytdlUpdateFromGit {
 		sudo="command sudo -H"
 	fi
 
-	local ytdlPythonVersion=$(youtube-dl -v 2>&1 | awk -F "[ .]" '/Python version/{printf$4"."$5}')
-	$sudo $(which pip$ytdlPythonVersion) install -U git+$ytdlGitURL
+	local youtube_dl=$(which youtube-dl)
+	if [ "$youtube_dl" ];then
+		local ytdlLastRelease=$(\git ls-remote --tags $ytdlGitURL | awk -F/ 'END{print gensub(/\^\{\}/,"","",$NF)}')
+		local ytdlPythonVersion=$($youtube_dl -v 2>&1 | awk -F "[ .]" '/Python version/{printf$4"."$5}')
+		local ytdlCurrentRelease=$($youtube_dl --version)
+
+		[ $ytdlLastRelease = $ytdlCurrentRelease ] && echo "[$FUNCNAME] => INFO : You already have the latest release, which is $ytdlLastRelease." >&2 || $sudo $(which pip$ytdlPythonVersion) install -U youtube-dl
+	else
+		$sudo $(which pip) install -U git+$ytdlGitURL
+	fi
 }
 
 set +x
