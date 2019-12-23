@@ -193,7 +193,7 @@ function wifiInfos {
 		iw dev $wiFiDevice station dump
 
 		echo "=> Wifi networks list :"
-		which nmcli && nmcli dev wifi list || iw dev $wiFiDevice scan || sudo iw dev $wiFiDevice scan
+		which nmcli >/dev/null && nmcli dev wifi list || iw dev $wiFiDevice scan || sudo iw dev $wiFiDevice scan
 
 		echo "=> Connected network link status :"
 		iw dev $wiFiDevice link || sudo iw dev $wiFiDevice link
