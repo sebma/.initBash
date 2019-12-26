@@ -355,16 +355,28 @@ function distribType {
 function env {
 	command env $@ | sort
 }
-function extractURLs {
+function extractURLsFromFiles {
 	for file
 	do
 		\sed -E 's/^.*http/http/;s/[<"].*$//;/^\s*$/d;/http/!d' "$file"
 	done | sort -u
 }
-function extractURLs_Simplified  {
+function extractURLsFromFiles_Simplified  {
 	for file
 	do
 		\grep -oP '(www|http:|https:)+[^\s"]+[\w]' "$file" | uniq
+	done | sort -u
+}
+function extractURLsFromURLs {
+	for url
+	do
+		\curl -Ls "$url" | \sed -E 's/^.*http/http/;s/[<"].*$//;/^\s*$/d;/http/!d'
+	done | sort -u
+}
+function extractURLsFromURLs_Simplified  {
+	for url
+	do
+		\curl -Ls "$url" | \grep -oP '(www|http:|https:)+[^\s"]+[\w]' | uniq
 	done | sort -u
 }
 function fileTypes {
