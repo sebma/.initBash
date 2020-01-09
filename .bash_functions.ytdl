@@ -461,7 +461,7 @@ function ytdlFormats {
 
 	local filterFormats
 	echo $1 | \egrep -q '(https?|s?ftps?):' || { filterFormats=$1;shift; }
-	time youtube-dl -F "$@" | \grep -v '\[youtube\]' | egrep "$filterFormats|\<url\>"
+	time youtube-dl -F "$@" | \grep -Pv ': Downloading' | egrep "$filterFormats|\<url\>"
 	trap - INT
 }
 function ytdlGetFormat {
