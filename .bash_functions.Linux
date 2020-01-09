@@ -16,6 +16,11 @@ function brewInstall {
 }
 function connect2SSID {
 	local ssid=$1
+	test -z "$ssid" && {
+		echo "=> Please chose a network among these :" >&2
+		nmcli con
+		return 1
+	}
 	set -x
 	nmcli con status
 	time nmcli con up id $ssid
