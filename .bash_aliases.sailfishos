@@ -17,7 +17,7 @@ unset -f dfc
 alias dfc='dfc -TWfc always | egrep -v "/opt/alien/data| /data"'
 alias getIMEI="ssu status | awk '/UID/{print\$NF}'"
 alias imei="ssu status | awk '/UID/{print\$NF}'"
-alias keyboardRestart='systemctl --user restart maliit-server;systemctl --user status  maliit-server | egrep " - |Active:"'
+alias keyboardRestart='systemctl --user restart maliit-server.service;systemctl --user status maliit-server.service | egrep " - |Active:"'
 alias la='ls -A'
 alias notesGrep='sqlite3 ~/.local/share/jolla-notes/QML/OfflineStorage/Databases/8b63c31a7656301b3f7bcbbfef8a2b6f.sqlite "select body from notes;" | grep'
 alias notesSearch=notesGrep
@@ -31,7 +31,7 @@ alias refresh2="time sudo zypper refresh"
 alias rgrep='time grep -r'
 alias smsGrep='sqlite3 ~/.local/share/commhistory/commhistory.db "select Freetext from Events where type=2;" | grep'
 alias smsSearch=smsGrep
-alias timedRestart='systemctl --user restart timed-qt5;systemctl --user status  timed-qt5 | egrep " - |Active:"'
+alias timedRestart='systemctl --user restart timed-qt5.service;systemctl --user status timed-qt5.service | egrep " - |Active:"'
 alias topd10="topd 10"
 alias topd5="topd 5"
 alias topd="toybox du -xhd 2 2>/dev/null | sort -nr | head -n"
