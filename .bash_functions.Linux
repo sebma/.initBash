@@ -22,9 +22,9 @@ function connect2SSID {
 		return 1
 	}
 	set -x
-	nmcli con status
+	nmcli con status 2>/dev/null || nmcli con show --active
 	time nmcli con up id $ssid
-	nmcli con status
+	nmcli con status 2>/dev/null || nmcli con show --active
 	time \curl -A "" ipinfo.io/ip || time \wget -qU "" -O- ipinfo.io/ip
 	set +x
 }
