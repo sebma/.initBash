@@ -28,6 +28,12 @@ function connect2SSID {
 	time \curl -A "" ipinfo.io/ip || time \wget -qU "" -O- ipinfo.io/ip
 	set +x
 }
+function df {
+	local df=$(which df)
+	local dfOptions="-PTh"
+	LANG=C $df $dfOptions | \grep "^Filesystem" 1>&2
+	LANG=C $df $dfOptions $@
+}
 function lanip {
 	local ethName=$1
 	if [ -n "$ethName" ]
