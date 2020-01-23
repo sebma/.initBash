@@ -94,7 +94,7 @@ then
 		$time gsettings get org.gnome.desktop.input-sources xkb-options 2>&1 | grep -q GLib-GIO-Message && export GIO_EXTRA_MODULES=/usr/lib/x86_64-linux-gnu/gio/modules/
 		$time profile=$(gsettings list-schemas | grep -q org.gnome.Terminal.ProfilesList && gsettings get org.gnome.Terminal.ProfilesList default)
 		$time profile=${profile:1:-1} # remove leading and trailing single quotes if any
-		$time test $profile && gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$profile/ login-shell true
+		$time test $profile && $time gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$profile/ login-shell true
 		$time gsettings set org.gnome.desktop.wm.preferences resize-with-right-button true 2>/dev/null
 		$time gsettings set org.gnome.desktop.wm.preferences mouse-button-modifier "\<Alt\>" 2>/dev/null
 		$time dconf write /org/gnome/desktop/input-sources/xkb-options "\[\'terminate:ctrl_alt_bksp\'\]" 2>/dev/null
