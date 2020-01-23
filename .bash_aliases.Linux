@@ -34,7 +34,6 @@ alias catFiles="\tail -vn +1"
 alias connect2MyHiddenWifi="connect2SSID sebWlan"
 alias connect2eduroam="connect2SSID eduroam"
 alias cp='\cp --preserve=timestamps -uv'
-alias df="\df -PTh"
 #alias dnsInfo="\nmcli | sed -n '/^DNS /,+3p'"
 alias dnsInfo="\nmcli dev list | awk -F ':| *' '/DNS/{print\$NF}'"
 #which ccze >/dev/null 2>&1 && alias ccze="\ccze -A" && alias dmesg="\ccze -A < /var/log/dmesg"
