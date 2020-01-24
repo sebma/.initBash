@@ -1414,6 +1414,16 @@ function updateYoutubePlaylistLUAForVLC {
 		wget --content-disposition -NP ~/.local/share/vlc/lua/playlist/ $playlist_youtubeLuaURL
 	fi
 }
+function usletter2A4 {
+	input="$1"
+	output="${input/.pdf/--A4.pdf}"
+	test $# != 1 && {
+		echo "=> Usage : $FUNCNAME <inputFile>" >&2
+		return 1
+	}
+	time \pdfjam -o "$output" --paper a4paper "$input"
+	open "$output"
+}
 function versionSmallerEqual {
 	number1=$1
 	number2=$2
