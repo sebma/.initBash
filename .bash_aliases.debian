@@ -4,7 +4,7 @@ declare -A | grep -wq colors || source $initDir/.colors
 test "$debug" -gt 0 && \echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 #alias installSecurityUpdates="sudo apt install -V $(apt-get -s dist-upgrade | awk "/^Inst.*\/$codeName-security/"'{print$2}')"
-alias autoremove="sudo $(which apt-get 2>/dev/null) autoremove -V"
+alias autoremove="sudo $(which apt 2>/dev/null) autoremove -V || sudo $(which apt-get 2>/dev/null) autoremove -V"
 alias debinfo="\dpkg -I"
 alias full-upgrade="sudo $(which apt 2>/dev/null) full-upgrade -V --download-only && sync && sudo $(which apt 2>/dev/null) full-upgrade -V --yes;sync"
 alias installSecurityUpdates="\apt list --upgradable 2>/dev/null | awk -F/ '/security/{packages=packages\" \"\$1}END{if(packages){commandLine=\"sudo apt install -V -y\"packages;print commandLine >\"/dev/stderr\";print commandLine;}}' | sh"
