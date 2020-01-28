@@ -1459,7 +1459,11 @@ function whatPackageContainsExecutable {
 	set -- "${@/:/}" # suppress trailing ":" in all arguments
 	if [ "$(distribPackageMgmt)" = deb ]; then
 		findPackage="command dpkg -S"; searchPackage="command apt-file search";
-		$findPackage $(printf "bin/%s " "$@")
+		if echo "$@" | \grep -q ^/;then
+			$findPackage $(printf "%s " "$@")
+		else
+			$findPackage $(printf "bin/%s " "$@")
+		fi
 	elif [ "$(distribPackageMgmt)" = rpm ]; then
 		findPackage="command rpm -qf"; searchPackage="command yum whatprovides";
 		$findPackage $(printf "%s " $(which "$@"))
