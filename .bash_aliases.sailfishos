@@ -13,6 +13,7 @@ alias version >/dev/null 2>&1 && unalias version
 alias androidVersion='echo "=> Android Version :$(getprop ro.build.version.release)"'
 alias androidSDK='echo "=> Android SDK :$(getprop ro.build.version.sdk)"'
 which advcp >/dev/null || { alias acp="rsync -ogpu -lH"; alias amv="rsync -ogpu -lH --remove-source-files"; }
+alias cupsRestart='sudo systemctl restart cups.service;systemctl status cups.service'
 unset -f dfc
 alias dfc='dfc -TWfc always | egrep -v "/opt/alien/data| /data"'
 alias getIMEI="ssu status | awk '/UID/{print\$NF}'"
