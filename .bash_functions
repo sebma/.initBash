@@ -1466,7 +1466,11 @@ function whatPackageContainsExecutable {
 		fi
 	elif [ "$(distribPackageMgmt)" = rpm ]; then
 		findPackage="command rpm -qf"; searchPackage="command yum whatprovides";
-		$findPackage $(printf "%s " $(which "$@"))
+		if echo "$@" | \grep -q ^/;then
+			$findPackage $(printf "%s " "$@")
+		else
+			$findPackage $(printf "%s " $(which "$@"))
+		fi
 	else
 		for executable
 		do
