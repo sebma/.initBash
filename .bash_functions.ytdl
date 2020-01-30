@@ -14,7 +14,7 @@ test $osFamily = Darwin && export locate="time -p command glocate"
 alias youtube-dl="LANG=C.UTF-8 command youtube-dl"
 alias ytdl="LANG=C.UTF-8 command youtube-dl"
 
-ytdlnoconfig="ytdl --ignore-config"
+ytdlnoconfig="youtube-dl --ignore-config"
 alias ytdlnoconfig="$ytdlnoconfig"
 
 alias ytdlLastRelease='\git ls-remote --tags https://github.com/rg3/youtube-dl | awk -F/ '\''END{print gensub(/\^\{\}/,"","",$NF)}'\'''
