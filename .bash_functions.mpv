@@ -30,14 +30,14 @@ alias mpvLD='mpv   --profile=ld'
 alias mpvVLD='mpv  --profile=vld'
 alias mpvFASTER='mpv --profile=for_slow_hardware'
 
-alias mpvplaylistBEST='mpvplaylist --profile=best'
-alias mpvplaylistFHD='mpvplaylist --profile=fhd'
-alias mpvplaylistHD='mpvplaylist --profile=hd'
-alias mpvplaylistHQ='mpvplaylist --profile=hq'
-alias mpvplaylistFSD='mpvplaylist --profile=fsd'
-alias mpvplaylistSD='mpvplaylist --profile=sd'
-alias mpvplaylistLD='mpvplaylist --profile=ld'
-alias mpvplaylistVLD='mpvplaylist --profile=vld'
+alias mpvPlaylistFileBEST='mpvPlaylistFile --profile=best'
+alias mpvPlaylistFileFHD='mpvPlaylistFile --profile=fhd'
+alias mpvPlaylistFileHD='mpvPlaylistFile --profile=hd'
+alias mpvPlaylistFileHQ='mpvPlaylistFile --profile=hq'
+alias mpvPlaylistFileFSD='mpvPlaylistFile --profile=fsd'
+alias mpvPlaylistFileSD='mpvPlaylistFile --profile=sd'
+alias mpvPlaylistFileLD='mpvPlaylistFile --profile=ld'
+alias mpvPlaylistFileVLD='mpvPlaylistFile --profile=vld'
 
 alias mpvFrench="mpv --profile=french"
 alias mpvEnglish="mpv --profile=english"
@@ -119,7 +119,7 @@ function mpvlive {
 function mpvlocal {
 	mpvdirectly "$@"
 }
-function mpvplaylist {
+function mpvPlaylistFile {
 	\rm nohup.out
 	touch nohup.out
 	local playListFile="$1" playlistStartIndex="" index=1
@@ -138,7 +138,7 @@ function mpvplaylist {
 	fi
 	tail -f nohup.out | egrep -v "AV: "
 }
-function mpvplaylistFORMAT {
+function mpvPlaylistFileFORMAT {
 	\rm nohup.out
 	touch nohup.out
 	local format
