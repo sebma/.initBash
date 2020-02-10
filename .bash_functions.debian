@@ -4,6 +4,7 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 
 export apt=$(which apt)
 
+trap 'rc=130;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
 function addKeys {
 	for key
 	do
@@ -76,7 +77,9 @@ function downgradePackages {
 		previousVersion=$(command apt-cache show $package | grep Version | sed -n '2p' | cut -d' ' -f2)
 		packageList="$packageList $package=$previousVersion"
 	done
+set -x
 	sudo $apt install -V $packageList
+set +x
 }
 function downgradeTo {
 	distribCodename=$1
@@ -173,5 +176,6 @@ function website {
 	done
 }
 
+trap - INT
 set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
