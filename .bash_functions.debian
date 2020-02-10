@@ -2,6 +2,8 @@
 declare -A | grep -wq colors || source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
+declare apt=$(which apt)
+
 function addKeys {
 	for key
 	do
@@ -9,20 +11,20 @@ function addKeys {
 	done
 }
 function apt {
-	local args=$@
+	local args=("$@")
 	local firstArg=$1
 	case $firstArg in
-		install|purge) sudo command apt $args -V;;
-	*) command apt $args;;
+		install|purge) sudo $apt "${args[@]}" -V;;
+	*) command apt "${args[@]}";;
 	esac
 }
 function aptGet {
-	local args=$@
+	local args=("$@")
 	local firstArg=$1
 	case $firstArg in
-		install|purge) sudo command apt $args -V;;
-		download) command apt-get $args --print-uris && $(which apt-get) $args;;
-		*) command apt-get $args;;
+		install|purge) sudo $apt "${args[@]}" -V;;
+		download) command apt-get "${args[@]}" --print-uris && $(which apt-get) "${args[@]}";;
+		*) command apt-get "${args[@]}";;
 	esac
 }
 function aptPrintURIS {
@@ -43,11 +45,11 @@ function apt_cache {
 	fi
 }
 function aptitude {
-	args=$@
+	local args=("$@")
 	firstArg=$1
 	case $firstArg in
-	install|reinstall|purge) sudo command aptitude $args -V;;
-	*) command aptitude $args;;
+		install|reinstall|purge|remove) sudo $(which aptitude) "${args[@]}" -V;;
+		*) command aptitude "${args[@]}";;
 	esac
 }
 function debEditDependencies {
@@ -71,8 +73,55 @@ function downgradePackages {
 	for package
 	do
 		previousVersion=$(command apt-cache show $package | grep Version | sed -n '2p' | cut -d' ' -f2)
-		sudo command apt install -V $package=$previousVersion
+		sudo $apt install -V $package=$previousVersion
 	done
+}
+function downgradeTo {
+	distribCodename=$1
+	case $distribCodename in
+		"-h"|"")
+			echo "=> ERROR: Usage: $FUNCNAME [ <distribCodename> ] | downgrade current" >&2
+			return -1
+		;;
+		"current")
+			distribCodename=$(lsb_release -sc)
+		;;
+		*) #Ajouter une commande pour tester si le nom donne existe
+		;;
+	esac
+	echo "=> distribCodename = $distribCodename"
+	sudo sed -i".$(date +%Y%m%d)" "s/$(lsb_release -sc)/$distribCodename/" /etc/apt/sources.list
+	if test -s /etc/apt/preferences.d/99-downgrade
+	then
+		time sudo $apt update
+		sudo $apt dist-upgrade -V
+	else
+		echo "=> ERROR: The file </etc/apt/preferences.d/99-downgrade> does not exist, generating it ..." >&2 && {
+			cat <<-EOF
+			Package: *
+			Pin: release a=$distribCodename
+			Pin-Priority: 1001
+
+			Package: *
+			Pin: release a=$distribCodename-updates
+			Pin-Priority: 1001
+
+			Package: *
+			Pin: release a=$distribCodename-security
+			Pin-Priority: 1001
+
+			Package: *
+			Pin: release a=$distribCodename-backports
+			Pin-Priority: 1001
+
+			Package: *
+			Pin: release a=$distribCodename-proposed
+			Pin-Priority: -1
+EOF
+		} | sudo tee /etc/apt/preferences.d/99-downgrade
+		echo "=> Please re-run the <downgrade> function." >&2
+		return 1
+	fi
 }
 function dpkgExists {
 	test $1 && dpkg -l $1 | grep -q ^ii
@@ -99,7 +148,7 @@ function move_Extra_Keys_To_Main_APT_KeyRing {
 }
 function reinstallOrignialPackages {
 	local packagesList=$@
-	test $# != 0 && sudo command apt install -V $(printf "%s/$(lsb_release -sc) " $packagesList)
+	test $# != 0 && sudo $apt install -V $(printf "%s/$(lsb_release -sc) " $packagesList)
 }
 function removePackages {
 	#echo "=> regexp = $regexp" >&2
