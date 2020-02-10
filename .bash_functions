@@ -1063,53 +1063,6 @@ function reload_SHELL_Functions_And_Aliases {
 	done
 }
 function renameExtension { test $# = 2 && shopt -s globstar && for f in **/*.$1; do /bin/mv -vi "$f" "${f/.$1/.$2}"; done; }
-function downgradeTo {
-	distribCodename=$1
-	case $distribCodename in
-		"-h"|"")
-			echo "=> ERROR: Usage: $FUNCNAME [ <distribCodename> ] | downgrade current" >&2
-			return -1
-		;;
-		"current")
-			distribCodename=$(lsb_release -sc)
-		;;
-		*) #Ajouter une commande pour tester si le nom donne existe
-		;;
-	esac
-	echo "=> distribCodename = $distribCodename"
-	sudo sed -i".$(date +%Y%m%d)" "s/$(lsb_release -sc)/$distribCodename/" /etc/apt/sources.list
-	if test -s /etc/apt/preferences.d/99-downgrade
-	then
-		time sudo command apt update
-		sudo command apt dist-upgrade -V
-	else
-		echo "=> ERROR: The file </etc/apt/preferences.d/99-downgrade> does not exist, generating it ..." >&2 && {
-			cat <<-EOF
-			Package: *
-			Pin: release a=$distribCodename
-			Pin-Priority: 1001
-
-			Package: *
-			Pin: release a=$distribCodename-updates
-			Pin-Priority: 1001
-
-			Package: *
-			Pin: release a=$distribCodename-security
-			Pin-Priority: 1001
-
-			Package: *
-			Pin: release a=$distribCodename-backports
-			Pin-Priority: 1001
-
-			Package: *
-			Pin: release a=$distribCodename-proposed
-			Pin-Priority: -1
-EOF
-		} | sudo tee /etc/apt/preferences.d/99-downgrade
-		echo "=> Please re-run the <downgrade> function." >&2
-		return 1
-	fi
-}
 function renameFileInsideZIP {
 	test $# -lt 3 && {
 		echo "=> Usage: $FUNCNAME oldName newName zipFile" >&2
