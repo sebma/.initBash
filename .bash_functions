@@ -288,18 +288,15 @@ function ddPV {
 }
 function dfc {
 	firstArg=$1
-	local args
 	if echo "$firstArg" | \egrep -q "^\-|^$"
 	then
 		command dfc -TW "$@"
 	else
 		shift
-		args=("$@")
-		test $# != 0 && argsRE=("|$(echo "$@" | tr -s / | sed 's/ /$|/g' | sed "s,/$,," | sed 's/$/$/')" )
+		test $# != 0 && argsRE="|$(echo "$@" | tr -s / | sed 's/ /$|/g' | sed "s,/$,," | sed 's/$/$/')"
 		firstArg=$(echo "$firstArg" | tr -s /)
 		test "$firstArg" != / && firstArg="$(echo "$firstArg" | sed "s,/$,,")"
-echo "=> argsRE = ${argsRE[@]}"
-		command dfc -TWfc always | sed "s/ *$//" | \egrep "FILESYSTEM|${firstArg}\$${argsRE[@]}"
+		command dfc -TWfc always | sed "s/ *$//" | \egrep "FILESYSTEM|${firstArg}\$${argsRE}"
 	fi
 }
 function dirName {
