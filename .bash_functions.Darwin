@@ -104,7 +104,8 @@ function netstat {
 	local wasInWhile=false
 	while getopts $OPTSTRING option; do
 		wasInWhile=true
-		echo $option | \egrep -q "l|t|u" && args=("$(echo "${args[@]}" | sed -E "s/$option|-$option | -$option//g")")
+#		echo $option | \egrep -q "l|t|u" && args=("$(echo "${args[@]}" | sed -E "s/$option|-$option | -$option//g")")
+		echo $option | \egrep -q "l|t|u" && args=( "${args[@]/$option\|-$option \| -$option/}" )
 		case "$option" in
 			l) args=("${args[@]}" -a) ;; #Show listening ports
 			t) args=("${args[@]}" -p tcp) ;;
