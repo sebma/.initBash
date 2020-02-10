@@ -28,13 +28,13 @@ alias topf="$find   . -xdev -type f -size +10240k -exec busybox ls -al {} + 2>/d
 
 function find {
 	local find="command find"
-	dir=$1
+	local dir=$1
 	echo $dir | \grep -q "\-" && dir=. || shift
-	args="$@"
-	if echo $args | \grep -q "\-ls"
+	local args=("${@}")
+	if echo "${args[@]}" | \grep -q "\-ls"
 	then
-		args=${args/-ls/}
-		$find $dir $firstPredicate $args -exec busybox ls -alde {} + 2>/dev/null | awk '{
+		args=("${args[@]/-ls/}")
+		$find $dir $firstPredicate "${args[@]}" -exec busybox ls -alde {} + 2>/dev/null | awk '{
 unit=" "
 size=int($5)
 if(size==0)exponent=0
@@ -48,7 +48,7 @@ sub(" *"$5,sprintf(" %10.3f%s",size,unit))
 print
 }'
 	else
-		$find $dir $firstPredicate $args
+		$find $dir $firstPredicate "${args[@]}"
 	fi
 }
 function topflines {
