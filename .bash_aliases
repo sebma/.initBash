@@ -82,10 +82,11 @@ alias dbus-reboot='\dbus-send --system --print-reply --dest="org.freedesktop.Con
 alias dbus-suspend='\dbus-send --system --print-reply --dest="org.freedesktop.UPower" /org/freedesktop/UPower org.freedesktop.UPower.Suspend'
 alias deborphan="\deborphan | sort"
 alias dig="\dig +search +short"
-alias doc2pdf=" \lowriter --headless --convert-to pdf"
-alias doc2odt=" \lowriter --headless --convert-to odt"
-alias docx2pdf="\lowriter --headless --convert-to pdf"
-alias docx2odt="\lowriter --headless --convert-to odt"
+alias libreoffice2=" \lowriter --headless --convert-to"
+alias doc2pdf=" libreoffice2 pdf"
+alias doc2odt=" libreoffice2 odt"
+alias docx2pdf="libreoffice2 pdf"
+alias docx2odt="libreoffice2 odt"
 alias dos2unix="\tr -d '\r'"
 alias doublons='\fdupes -rnASd'
 alias driveinfo='\cdrecord -prcap'
@@ -182,8 +183,8 @@ alias no='yes n'
 alias nocomment="egrep -v '^(#|$)'"
 alias od="\od -ctx1"
 alias odp2pdf="\loimpress --headless --convert-to pdf"
-alias odt2docx="\lowriter --headless --convert-to docx"
-alias odt2pdf="\lowriter  --headless --convert-to pdf"
+alias odt2docx="libreoffice2 docx"
+alias odt2pdf="libreoffice2  pdf"
 alias openedFiles="\strace -e trace=open,close,read,write,connect,accept"
 alias page="\head -50"
 alias pcmanfm="\pcmanfm --no-desktop"
