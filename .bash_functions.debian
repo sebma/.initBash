@@ -75,7 +75,7 @@ function downgradePackages {
 	for package
 	do
 		previousVersion=$(command apt-cache show $package | grep Version | sed -n '2p' | cut -d' ' -f2)
-		packageList="$packageList $package=$previousVersion"
+		test -z "$previousVersion" && echo "E: Version '' for '$package' was not found" >&2 || packageList="$packageList $package=$previousVersion"
 	done
 set -x
 	sudo $apt install -V $packageList
