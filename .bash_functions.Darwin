@@ -99,24 +99,24 @@ function mount {
 function netstat {
 	local mac_netstat_options="AaLnWgisf:p:I:w:c:mr"
 	local OPTSTRING="ltu$mac_netstat_options"
-	local args=$@
+	local args=("$@")
 	local option
 	local wasInWhile=false
 	while getopts $OPTSTRING option; do
 		wasInWhile=true
-		echo $option | \egrep -q "l|t|u" && args="$(echo "$args" | sed -E "s/$option|-$option | -$option//g")"
+		echo $option | \egrep -q "l|t|u" && args=("$(echo "${args[@]}" | sed -E "s/$option|-$option | -$option//g")")
 		case "$option" in
-			l) args="$args -a" ;; #Show listening ports
-			t) args="$args -p tcp" ;;
-			u) args="$args -p udp" ;;
-			"") echo "=> ERROR : the <option> variable is empty." >&2; return 1;;
+			l) args=("${args[@]}" -a) ;; #Show listening ports
+			t) args=("${args[@]}" -p tcp) ;;
+			u) args=("${args[@]}" -p udp) ;;
+			"")  echo "=> ERROR : the <option> variable is empty.">&2; return 1;;
 			'?') echo "=> ERROR : the <option> variable is <$?>." >&2; return 2;;
 		esac
 	done
 	
 	if $wasInWhile
 	then
-		$(which netstat) $args
+		$(which netstat) "${args[@]}"
 	else
 		echo "=> ERROR : There was a problem with the <getopts> builtin." >&2
 		return 1;
