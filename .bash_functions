@@ -288,17 +288,18 @@ function ddPV {
 }
 function dfc {
 	firstArg=$1
+	local args
 	if echo "$firstArg" | \egrep -q "^\-|^$"
 	then
-		args=$@
-		command dfc -TW $args
+		command dfc -TW "$@"
 	else
 		shift
-		args=$@
-		test "$args" && argsRE="|"$(echo $@ | tr -s / | tr " " "|" | sed "s,/$,,")
-		firstArg="$(echo "$firstArg" | tr -s /)"
+		args=("$@")
+		test $# != 0 && argsRE=("|$(echo "$@" | tr -s / | sed 's/ /$|/g' | sed "s,/$,," | sed 's/$/$/')" )
+		firstArg=$(echo "$firstArg" | tr -s /)
 		test "$firstArg" != / && firstArg="$(echo "$firstArg" | sed "s,/$,,")"
-		command dfc -TWfc always | \egrep "FILESYSTEM|$firstArg$argsRE"
+echo "=> argsRE = ${argsRE[@]}"
+		command dfc -TWfc always | sed "s/ *$//" | \egrep "FILESYSTEM|${firstArg}\$${argsRE[@]}"
 	fi
 }
 function dirName {
@@ -389,7 +390,7 @@ function fileTypes {
 function find {
 	local find="command find"
 	[ $osFamily = Darwin ] && find=gfind
-	dir=$1
+	local dir=$1
 	if echo $dir | \grep -q "^-"
 	then
 		dir=.
@@ -398,27 +399,26 @@ function find {
 	fi
 #	firstPredicate=$1
 #	shift
-	args="$@"
-	if echo $@ | \grep -q "\-ls"
+	local args=("$@")
+	if echo "${args[@]}" | \grep -q "\-ls"
 	then
-		args=${args/-ls/}
-		$find $dir $firstPredicate $args -printf "%10i %10k %M %n %-10u %-10g %10s %AY-%Am-%Ad %.12AX %p\n"
+		args=( "${args[@]/-ls/}" )
+		$find $dir $firstPredicate "${args[@]}" -printf "%10i %10k %M %n %-10u %-10g %10s %AY-%Am-%Ad %.12AX %p\n"
 	else
-#		$find $dir $firstPredicate "$arg"
-		$find $dir $firstPredicate "$@"
+		$find $dir $firstPredicate "${args[@]}"
 	fi
 }
 function findHumanReadable {
 	local find="command find"
 	[ $osFamily = Darwin ] && find=gfind
-	dir=$1
+	local dir=$1
 	echo $dir | \grep -q "\-" && dir=. || shift
-	args="$@"
-	if echo $args | \grep -q "\-ls"
+	local args=("$@")
+	if echo "${args[@]}" | \grep -q "\-ls"
 	then
-		$find $dir $firstPredicate $args | numfmt --field 7 --from=iec --to=iec-i --suffix=B | \column -t
+		$find $dir $firstPredicate "${args[@]}" | numfmt --field 7 --from=iec --to=iec-i --suffix=B | \column -t
 	else
-		$find $dir $firstPredicate $args
+		$find $dir $firstPredicate "${args[@]}"
 	fi
 }
 function findLoops {
