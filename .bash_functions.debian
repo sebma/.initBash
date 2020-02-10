@@ -2,7 +2,7 @@
 declare -A | grep -wq colors || source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-declare apt=$(which apt)
+export apt=$(which apt)
 
 function addKeys {
 	for key
@@ -70,11 +70,13 @@ function debEditDependencies {
 	rm -fr $tmp/
 }
 function downgradePackages {
+	local packageList
 	for package
 	do
 		previousVersion=$(command apt-cache show $package | grep Version | sed -n '2p' | cut -d' ' -f2)
-		sudo $apt install -V $package=$previousVersion
+		packageList="$packageList $package=$previousVersion"
 	done
+	sudo $apt install -V $packageList
 }
 function downgradeTo {
 	distribCodename=$1
