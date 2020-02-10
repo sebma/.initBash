@@ -83,7 +83,9 @@ alias dbus-suspend='\dbus-send --system --print-reply --dest="org.freedesktop.UP
 alias deborphan="\deborphan | sort"
 alias dig="\dig +search +short"
 alias doc2pdf=" \lowriter --headless --convert-to pdf"
+alias doc2odt=" \lowriter --headless --convert-to odt"
 alias docx2pdf="\lowriter --headless --convert-to pdf"
+alias docx2odt="\lowriter --headless --convert-to odt"
 alias dos2unix="\tr -d '\r'"
 alias doublons='\fdupes -rnASd'
 alias driveinfo='\cdrecord -prcap'
