@@ -74,7 +74,7 @@ function downgradePackages {
 	local packageList
 	for package
 	do
-		previousVersion=$(command apt-cache show $package | grep Version | sed -n '2p' | cut -d' ' -f2)
+		previousVersion=$(command apt-cache policy $package | awk '!/http:/{version=$1}/ubuntu.com\/ubuntu/{print version;exit;}')
 		test -z "$previousVersion" && echo "E: Version '' for '$package' was not found" >&2 || packageList="$packageList $package=$previousVersion"
 	done
 set -x
