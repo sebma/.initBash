@@ -40,6 +40,7 @@ alias dnsInfo="\nmcli dev list | awk -F ':| *' '/DNS/{print\$NF}'"
 #alias dmesg="\grc less /var/log/dmesg"
 alias findDeadLinks='command find . -xtype l -exec ls --color -l {} +'
 alias firefoxDefrag='pgrep firefox || time $(which find) ~/.mozilla/firefox/ -name "*sqlite" -ls -exec sqlite3 -echo {} vacuum \;'
+alias journalctl='\journalctl -e'
 alias l="ls --color"
 alias lastme='last -w $USER | \grep $USER'
 alias lastmeToday='last $USER | \grep "$USER.*$(LC_TIME=C date +%b\ %_d)"'
