@@ -3,8 +3,6 @@
 declare -A | grep -wq colors || source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-
-unalias df
 function df {
 	$(which df) -PTh "$@" | columns -t | grep ^Filesystem
 	$(which df) -PTh "$@" | columns -t | sort -u | sort -k7 | grep -v ^Filesystem
