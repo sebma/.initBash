@@ -15,8 +15,10 @@ function apt {
 	local args=("$@")
 	local firstArg=$1
 	case $firstArg in
-		install|purge) sudo $apt "${args[@]}" -V;;
-	*) command apt "${args[@]}";;
+		install|autoremove|purge|upgrade|dist-upgrade|full-upgrade)
+			sudo screen $apt "${args[@]}" -V;;
+		*)
+			command apt "${args[@]}";;
 	esac
 }
 function aptGet {
