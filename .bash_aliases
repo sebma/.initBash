@@ -83,6 +83,7 @@ alias dbus-suspend='\dbus-send --system --print-reply --dest="org.freedesktop.UP
 alias deborphan="\deborphan | sort"
 alias dig="\dig +search +short"
 alias libreoffice2=" \lowriter --headless --convert-to"
+alias doc2docx="libreoffice2 docx"
 alias doc2pdf=" libreoffice2 pdf"
 alias doc2odt=" libreoffice2 odt"
 alias docx2pdf="libreoffice2 pdf"
