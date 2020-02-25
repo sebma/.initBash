@@ -476,7 +476,7 @@ function getFiles {
 
 	local lastArg="$(eval echo \${$#})"
 	local baseUrl=$(echo $url | awk -F/ '{print$3}')
-	local wget="$(which wget2 2>/dev/null || which wget)"
+	local wget="$(which wget)"
 	local url=$lastArg
 
 	echo $url | egrep "^(https?|ftp)://" || {
