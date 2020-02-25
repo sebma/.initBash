@@ -5,11 +5,12 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 export apt=$(which apt)
 
 trap 'rc=130;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
-function addKeys {
+function addAptKeys {
 	for key
 	do
 		sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys $key
 	done
+	move_Extra_Keys_To_Main_APT_KeyRing
 }
 function apt {
 	local args=("$@")
