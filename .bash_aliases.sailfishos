@@ -4,7 +4,7 @@ declare -A | grep -wq colors || source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 findExcludedPathList="./proc ./sys ./dev ./media ./opt/alien ./home/$USER/android_storage"
-prunePathsFindExpression=$(printf -- "-path %s -prune -o " $findExcludedPathList)
+prunePathsFindExpression="( -type d -a ( -name .git $(printf -- " -o -path %s" $findExcludedPathList) ) ) -prune -o"
 duExcludedPathList="./proc ./sys ./dev ./opt/alien"
 excludePathsDuExpression=$(printf -- "--exclude %s " $duExcludedPathList)
 
