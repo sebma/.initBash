@@ -10,7 +10,7 @@ test "$wifiInterface" || wifiInterface="$(iwconfig 2>/dev/null | awk '/^[^ \t]/ 
 #alias lpr="\lpr -o PageSize=A4 -o PageRegion=A4 -o Resolution=default -o InputSlot=Tray2 -o Duplex=DuplexNoTumble -o PreFilter=No"
 
 findExcludedPathList="./proc ./sys ./dev"
-prunePathsFindExpression=$(printf -- "-path %s -prune -o " $findExcludedPathList)
+prunePathsFindExpression="( -type d -a ( -name .git $(printf -- " -o -path %s" $findExcludedPathList) ) ) -prune -o"
 duExcludedPathList="./proc ./sys ./dev"
 excludePathsDuExpression=$(printf -- "--exclude %s " $duExcludedPathList)
 find="command find"
