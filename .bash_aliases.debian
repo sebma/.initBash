@@ -9,7 +9,7 @@ alias autoremove="sudo screen -L $apt autoremove -V || sudo screen -L $(which ap
 alias debInfo="\dpkg -I"
 alias full-upgrade="sudo screen -L $apt full-upgrade -V --download-only && sync && sudo screen -L $apt full-upgrade -V --yes;sync"
 alias installSecurityUpdates="\apt list --upgradable 2>/dev/null | awk -F/ '/security/{packages=packages\" \"\$1}END{if(packages){commandLine=\"sudo screen -L apt install -V -y\"packages;print commandLine >\"/dev/stderr\";print commandLine;}}' | sh"
-alias linux-purge="screen -L linux-purge -V"
+alias linux-purge="screen -L linux-purge"
 alias reinstall="sudo screen -L $apt install --reinstall -V"
 alias update="time sudo $apt update;$apt list --upgradable"
 alias upgradable="$apt list --upgradable"
