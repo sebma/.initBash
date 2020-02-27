@@ -74,10 +74,11 @@ fi
 rm -f ~/$cacheLinkName/sessions/xf*
 
 #printf "=> Server Signature : " >&2;ssh-keygen -lf /etc/ssh/ssh_host_rsa_key >&2
-if ip link show eth0 >/dev/null 2>&1 && [ -z $DISPLAY ] && tty -s
+interface=eth0
+if ip link show $interface >/dev/null 2>&1 && [ -z $DISPLAY ] && tty -s
 then
-	printf "=> eth0 MAC@ : " >&2
-	ip link show eth0 | awk '/ether/{print$(NF-2)}' >&2
+#	printf "=> $interface MAC@ : " >&2 # permet de differentier le noeud du cluster sur lequel on est connecte
+	ip link show $interface | awk '/ether/{print$(NF-2)}' >&2
 fi
 
 #function Time { [ "$debug" -gt 1 ] && eval time "$@" || eval "$@"; }
