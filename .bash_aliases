@@ -243,6 +243,7 @@ alias sshStatusLocalForward="$(which ssh) -O check"
 alias sshStopLocalForward="$(which ssh) -O exit"
 alias startSSHAgent='\pgrep -lfu $USER ssh-agent || eval $(ssh-agent -s)'
 alias sudo="\sudo "
+alias systemType='strings $(\ps -p 1 o cmd= | cut -d" " -f1) | \egrep -o "upstart|sysvinit|systemd" | head -1'
 alias swapUsage="\free -m | awk '/^Swap/{print 100*\$3/\$2}'"
 alias taillines='\tail -n $((LINES-2))'
 alias tcpPorts="\netstat -ntl"
