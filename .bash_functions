@@ -306,13 +306,15 @@ function dirName {
 		echo ${arg%/*}
 	done
 }
-function distribPackageMgmt {
+function packageManager {
+	local pkgManager
 	case $(distribType) in
-		debian) packageType="deb";;
-		redhat) packageType="rpm";;
-		*) packageType=unknown;;
+		debian) pkgManager="deb";;
+		redhat) pkgManager="rpm";;
+		Darwin) pkgManager="brew";;
+		*) pkgManager=unknown;;
 	esac
-	echo $packageType
+	echo $pkgManager
 }
 function distribType {
 	local distrib=unknown
@@ -342,7 +344,7 @@ function distribType {
 		elif [ $osFamily = Darwin ]
 		then
 			distrib="$(sw_vers -productName)"
-			distribType=$osFamily
+			distribType=Darwin
 		else
 			distrib=unknown
 			distribType=$osFamily
@@ -737,7 +739,7 @@ function lprPageRange {
 }
 function listPackageContents {
 	package=${1/:/}
-	case "$(distribPackageMgmt)" in
+	case "$(packageManager)" in
 		rpm) packageContents="rpm -ql";;
 		deb) packageContents="dpkg -L";;
 	esac
@@ -1407,14 +1409,14 @@ function wgetParallel {
 }
 function whatPackageContainsExecutable {
 	set -- "${@/:/}" # suppress trailing ":" in all arguments
-	if [ "$(distribPackageMgmt)" = deb ]; then
+	if [ "$(packageManager)" = deb ]; then
 		findPackage="command dpkg -S"; searchPackage="command apt-file search";
 		if echo "$@" | \grep -q ^/;then
 			$findPackage $(printf "%s " "$@")
 		else
 			$findPackage $(printf "bin/%s " "$@")
 		fi
-	elif [ "$(distribPackageMgmt)" = rpm ]; then
+	elif [ "$(packageManager)" = rpm ]; then
 		findPackage="command rpm -qf"; searchPackage="command yum whatprovides";
 		if echo "$@" | \grep -q ^/;then
 			$findPackage $(printf "%s " "$@")
@@ -1424,8 +1426,8 @@ function whatPackageContainsExecutable {
 	else
 		for executable
 		do
-			case "$(distribPackageMgmt)" in
-				*) findPackage="command $(which whohas) 2>/dev/null";; # Search package across most common distributions
+			case "$(packageManager)" in
+				*) findPackage="$(which whohas) 2>/dev/null";; # Search package across most common distributions
 			esac
 			if $findPackage $executable | sed "s|/||";then
 				:
