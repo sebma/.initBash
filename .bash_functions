@@ -332,10 +332,10 @@ function distribType {
 	then
 		if   [ $osFamily = Linux ]
 		then
-			distrib=$(source /etc/os-release;echo $ID)
 			distribType=$(source /etc/os-release && echo $ID_LIKE | cut -d'"' -f2 | cut -d" " -f1) #Pour les cas ou ID_LIKE est de la forme ID_LIKE="rhel fedora"
 			if [ -z "$distribType" ]
 			then
+				distrib=$(source /etc/os-release;echo $ID)
 				case $distrib in
 					sailfishos|rhel|fedora|centos) distribType=redhat;;
 					*) distribType=unknown;;
