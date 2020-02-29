@@ -1262,9 +1262,6 @@ function sshStartLocalForward {
 function sum {
 	awk "{print \$1}" | LC_ALL=C numfmt --from=iec | paste -sd+ | bc | numfmt --to=iec-i --suffix=B
 }
-function systemType {
-	whatPackageContainsExecutable $(which init) | cut -d: -f1
-}
 function tcpConnetTest {
 	test $# -lt 2 && {
 		echo "=> Usage : $FUNCNAME server/ip portNumber" >&2
