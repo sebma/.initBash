@@ -93,6 +93,7 @@ then
 	alias lvextend="\lvextend -r"
 	alias lvreduce="\lvreduce -r"
 	alias lvresize="\lvresize -r"
+	alias bluetoothRestart="sudo service bluetooth stop;sleep 1;sudo service bluetooth start;service bluetooth status"
 	alias nmRestart="sudo service network-manager restart;service network-manager status || sudo service network-manager status"
 	alias pgrep="\pgrep -lf"
 	alias pipInstall=pip2Install
