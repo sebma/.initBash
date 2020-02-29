@@ -306,15 +306,15 @@ function dirName {
 		echo ${arg%/*}
 	done
 }
-function packageManager {
-	local pkgManager
-	case $(distribType) in
-		debian) pkgManager="deb";;
-		redhat) pkgManager="rpm";;
-		Darwin) pkgManager="brew";;
-		*) pkgManager=unknown;;
-	esac
-	echo $pkgManager
+function distribName {
+	local system
+	if which lsb_release >/dev/null
+	then
+		system=$(lsb_release -si)
+	else
+		system=$OSTYPE
+	fi
+	echo $system
 }
 function distribType {
 	local distrib=unknown
@@ -901,6 +901,16 @@ function os {
 		*) ;;
 	esac
 }
+function packageManager {
+	local pkgManager
+	case $(distribType) in
+		debian) pkgManager="deb";;
+		redhat) pkgManager="rpm";;
+		Darwin) pkgManager="brew";;
+		*) pkgManager=unknown;;
+	esac
+	echo $pkgManager
+}
 function pdfAutoRotate {
 	for file
 	do
@@ -1251,16 +1261,6 @@ function sshStartLocalForward {
 }
 function sum {
 	awk "{print \$1}" | LC_ALL=C numfmt --from=iec | paste -sd+ | bc | numfmt --to=iec-i --suffix=B
-}
-function systemType {
-	local system
-	if which lsb_release >/dev/null
-	then
-		system=$(lsb_release -si)
-	else
-		system=$OSTYPE
-	fi
-	echo $system
 }
 function tcpConnetTest {
 	test $# -lt 2 && {
