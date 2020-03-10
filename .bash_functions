@@ -13,22 +13,29 @@ function Echo {
 	set -o histexpand
 	return $rc
 }
+function Cat {
+	local highlightCMD="highlight -O ansi --force"
+	$highlightCMD "$@"
+}
 function Less {
+	local highlightCMD="highlight -O ansi --force"
 	for file
 	do
-		\highlight -O ansi --force "$file" | \less -ir
+		$highlightCMD "$file" | \less -ir
 	done
 }
 function More {
+	local highlightCMD="highlight -O ansi --force"
 	for file
 	do
-		\highlight -O ansi --force "$file" | more
+		$highlightCMD "$file" | more
 	done
 }
 function Most {
+	local highlightCMD="highlight -O ansi --force"
 	for file
 	do
-		\highlight -O ansi --force "$file" | most
+		$highlightCMD "$file" | most
 	done
 }
 function Nohup {
