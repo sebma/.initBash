@@ -6,10 +6,27 @@ export adb=$(which adb)
 export dos2unix="$(which tr) -d '\r'"
 
 function adbGetAndroidCodeName {
-	local androidRelease=$($adb shell getprop ro.build.version.release | $dos2unix | cut -d. -f1-2 | tr -d .)
+	local getprop="$adb shell getprop"
+	( [ $# -ge 2 ] || echo $1 | egrep -q -- "^--?(h|u)" ) && echo "=> Usage : $FUNCNAME [androidRelease]" 1>&2 && return 1
+	
+	local androidRelease=unknown
+	local androidCodeName=unknown
+	if echo $1 | egrep -q "[0-9.]+"; then
+		androidRelease=$1 
+		androidCodeName="REL" # Do not use "androidCodeName" when it equals to "REL" but infer it from "androidRelease"
+	elif [ -n "$($getprop ro.build.version.release 2>/dev/null)" ]; then
+		androidRelease=$($getprop ro.build.version.release)
+		androidCodeName=$($getprop ro.build.version.codename)
+	else
+		echo "=> [$FUNCNAME] ERROR: Could not detect android release on this device" >&2
+		return 2
+	fi
 
-	local androidCodeName=$($adb shell getprop ro.build.version.codename | $dos2unix)
-	test $androidCodeName = REL && {
+	# Time "androidRelease" x10
+	echo $androidRelease | grep -q "\." && androidRelease=$(echo $androidRelease | cut -d. -f1-2 | tr -d .) || androidRelease+="0"
+
+	[ -n "$androidRelease" ] && [ $androidCodeName = REL ] && {
+	# Do not use "androidCodeName" when it equals to "REL" but infer it from "androidRelease"
 		androidCodeName="${colors[blue]}"
 		case $androidRelease in
 		10) androidCodeName+=NoCodename;;
