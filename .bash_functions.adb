@@ -22,7 +22,7 @@ function adbGetAndroidCodeName {
 		return 2
 	fi
 
-	# Time "androidRelease" x10
+	# Time "androidRelease" x10 to test it as an integer
 	echo $androidRelease | grep -q "\." && androidRelease=$(echo $androidRelease | cut -d. -f1-2 | tr -d .) || androidRelease+="0"
 
 	[ -n "$androidRelease" ] && [ $androidCodeName = REL ] && {
