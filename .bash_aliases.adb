@@ -12,11 +12,13 @@ alias adbBuildInfo="$adb shell cat /system/build.pro | $dos2unix"
 alias adbEnablePackage="$adb shell pm enable"
 alias adbFindPackages="$adb shell pm list packages"
 alias adbGetADBTcpPort="$adb shell getprop service.adb.tcp.por | $dos2unix"
+alias adbGetAndroidCodeName="$adb shell getprop ro.build.version.codename | $dos2unix"
+alias adbGetAndroidSDK="$adb shell getprop ro.build.version.sdk | $dos2unix"
 alias adbGetAndroidVersion="$adb shell getprop ro.build.version.release | $dos2unix"
 alias adbGetArch="$adb shell getprop ro.product.cpu.abi | $dos2unix"
 alias adbGetBatteryLevel="$adb shell dumpsys battery | grep level | $dos2unix"
 alias adbGetBrand="$adb shell getprop ro.product.brand | $dos2unix"
-alias adbGetCodeName="$adb shell getprop ro.product.device | $dos2unix"
+alias adbGetDeviceCodeName="$adb shell getprop ro.product.device | $dos2unix"
 alias adbGetExtSDCardMountPoint="$adb shell mount | awk '/emulated|sdcard0/{next}/(Removable|storage)\//{if(\$2==\"on\")print\$3;else print\$2} | $dos2unix"
 alias adbGetManufacturer="$adb shell getprop ro.product.manufacturer | $dos2unix"
 alias adbGetModel="$adb shell getprop ro.product.model | $dos2unix"
@@ -30,7 +32,6 @@ fi
 
 alias adbGetProp="$adb shell getprop"
 alias adbGetPropGrep="$adb shell getprop | $dos2unix | grep -P"
-alias adbGetSDK="$adb shell getprop ro.build.version.sdk | $dos2unix"
 alias adbGetSerial="$adb shell getprop ro.serialno | $dos2unix"
 function adbDisablePackages {
 	for package
