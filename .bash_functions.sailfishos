@@ -1,8 +1,31 @@
 # vim: set ft=bash noet:
-
 declare -A | grep -wq colors || source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
+function androidCodeName {
+	local androidRelease=$(getprop ro.build.version.release | cut -d. -f1-2 | tr -d .)
+
+	local androidCodeName=unknown
+	case $androidRelease in
+	10) androidCodeName=NoCodename;;
+	11) androidCodeName="Petit Four";;
+	15) androidCodeName=Cupcake;;
+	20) androidCodeName=Eclair;;
+	22) androidCodeName=FroYo;;
+	23) androidCodeName=Gingerbread;;
+	30) androidCodeName=Honeycomb;;
+	40) androidCodeName="Ice Cream Sandwich";;
+	41|42|43) androidCodeName="Jelly Bean";;
+	44) androidCodeName=KitKat;;
+	50) androidCodeName=Lollipop;;
+	60) androidCodeName=Marshmallow;;
+	70) androidCodeName=Nougat;;
+	80) androidCodeName=Oreo;;
+	90) androidCodeName=Pie;;
+	*) androidCodeName=unknown;;
+	esac
+	echo $androidCodeName
+}
 function df {
 	$(which df) -PTh "$@" | columns -t | grep ^Filesystem
 	$(which df) -PTh "$@" | columns -t | sort -u | sort -k7 | grep -v ^Filesystem
