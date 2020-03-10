@@ -24,8 +24,8 @@ function adbGetAndroidCodeName {
 
 	# Time "androidRelease" x10 to test it as an integer
 	case $androidRelease in
-		[0-9].[0-9]|[0-9].[0-9].|[0-9].[0-9].[0-9])  androidRelease="$(echo $androidRelease | cut -d. -f1-2 | tr -d .)";;
-		[0-9].) androidRelease="$(echo $androidRelease | tr -d .)0";;
+		[0-9].[0-9]|[0-9].[0-9].|[0-9].[0-9].[0-9])  androidRelease=$(echo $androidRelease | cut -d. -f1-2 | tr -d .);;
+		[0-9].) androidRelease=$(echo $androidRelease | sed 's/\./0/');;
 		[0-9]) androidRelease+="0";;
 	esac
 
