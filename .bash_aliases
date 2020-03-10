@@ -22,7 +22,6 @@ alias ..="cd .."
 #alias lsb_release="\lsb_release -idrc"
 #alias reset="\reset;\printf '\33c\e[3J'"
 
-alias Cat='\highlight -O ansi --force'
 alias Cut='\cut -c 1-$COLUMNS'
 alias 2lower=tolower
 alias 2upper=toupper
