@@ -558,7 +558,7 @@ function gpgPrint {
 	done
 }
 function grepFunction {
-	let $# -lt 2 && {
+	test $# -lt 2 && {
 		echo "=> Usage : $FUNCNAME startRegExpPattern fileList" >&2
 		return 1
 	}
@@ -566,7 +566,7 @@ function grepFunction {
 	grepParagraph "function $1|${1}.*[(]" "^}" "$@"
 }
 function grepParagraph {
-	let $# -lt 3 && {
+	test $# -lt 3 && {
 		echo "=> Usage : $FUNCNAME startRegExpPattern endRegExpPattern fileList" >&2
 		return 1
 	}
