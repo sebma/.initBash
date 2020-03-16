@@ -1068,6 +1068,21 @@ function processUsage {
 	# "tail -n +1" ignores the SIGPIPE
 	\ps -e -o $columns | sort -nr | cut -c-156 | head -500 | awk '!/COMMAND/{printf "%9.3lf MiB %4.1f%% %4.1f%% %5d %s\n", $1/1024,$2,$3,$4,$5}' | tail -n +1 | head -45
 }
+function ps { 
+	local ps=$(which ps)
+	local firstArg=$1
+#	local args=("$@")
+	if [ $# = 0 ];then
+		$ps | head -1 >&2 # Redirect headers to stderr
+		$ps h 
+	elif echo $firstArg | \grep -q -- "^-";then
+		$ps -f "$@" | head -1 >&2 # Redirect headers to stderr
+		$ps h -f "$@"
+	else 
+		$ps "$@" | head -1 >&2 # Redirect headers to stderr
+		$ps h "$@"
+	fi   
+}
 function pythonCalc {
 	\python -c "print(${*/^/**})"
 }
