@@ -2,7 +2,7 @@
 declare -A | grep -wq colors || source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-pkill adb
+test "$SSH_CONNECTION" || pkill adb
 unalias which >/dev/null 2>&1
 if test -e ~/.cache; then
 #	\rm -vfr ~/.cache/*
