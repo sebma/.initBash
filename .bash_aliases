@@ -101,6 +101,7 @@ alias findFunctions="grep -P '(^| )\w+\(\)|\bfunction\b'"
 alias findSpecialFiles="$(which find) . -xdev '(' -type b -o -type c -o -type p -o -type s ')' -a -ls"
 alias findbin='$(which find) $(echo $PATH | tr : "\n" | \egrep "/(s?bin|shl|py|rb|pl)") /system/{bin,xbin} 2>/dev/null | egrep'
 alias findcrlf="\grep -slr "
+alias findprinter=ippfind
 alias free="\free -m"
 alias frman="\man -Lfr"
 alias fuser="\fuser -v"
