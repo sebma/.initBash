@@ -5,7 +5,7 @@ test "$debug" -gt 0 && \echo "=> Running $bold${colors[blue]}$(basename ${BASH_S
 
 #alias installSecurityUpdates="sudo apt install -V $(apt-get -s dist-upgrade | awk "/^Inst.*\/$codeName-security/"'{print$2}')"
 apt=$(which apt 2>/dev/null)
-alias autoremove="sudo screen -L $apt autoremove -V || sudo screen -L $(which apt-get 2>/dev/null) autoremove -V"
+alias autoremove="$apt -h 2>&1 | \grep -wq autoremove && sudo screen -L $apt autoremove -V || sudo screen -L $(which apt-get 2>/dev/null) autoremove -V"
 alias debInfo="\dpkg -I"
 alias full-upgrade="sudo $apt full-upgrade -V --download-only && sync && sudo screen -L $apt full-upgrade -V --yes;sync"
 alias installSecurityUpdates="\apt list --upgradable 2>/dev/null | awk -F/ '/security/{packages=packages\" \"\$1}END{if(packages){commandLine=\"sudo screen -L apt install -V -y\"packages;print commandLine >\"/dev/stderr\";print commandLine;}}' | sh"
