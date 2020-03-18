@@ -770,6 +770,7 @@ function replaceAudioOfVideoFile {
 	local audioFile="$2"
 	local extension="${videoFile/*./}"
 	time $ffmpeg -i "$videoFile" -i "$audioFile" -map 0:v:0 -map 1:a:0 -c copy -shortest "${videoFile/.*/}_NEW.$extension"
+	sync
 }
 function sizeOfStream {
 	trap 'rc=130;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
