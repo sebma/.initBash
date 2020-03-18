@@ -758,6 +758,12 @@ function lsbin {
 		listPackageContents $package
 	done | sort -u | grep bin/
 }
+function lsconf {
+	for package
+	do
+		listPackageContents $package
+	done | sort -u | grep etc/
+}
 function lsdoc {
 	for package
 	do
