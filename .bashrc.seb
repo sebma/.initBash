@@ -48,11 +48,12 @@ addmanpaths $manPathsList
 #Definitions de mes fonctions bash pour Linux
 [ -n "$BASH_VERSION" ] && test -r $initDir/.bash_functions && Source $initDir/.bash_functions
 which mpv >/dev/null 2>&1 && test -r $initDir/.bash_functions.mpv && Source $initDir/.bash_functions.mpv
+
 #Export de toutes les fonctions sauf celles dont le nom commence par "_"
 export -f $(declare -F | egrep -v " __?" | awk '{print$NF}')
-
 user=$(\id -un)
 hostname=$HOSTNAME
+
 test -r $initDir/.bashrc.$osID && Source $initDir/.bashrc.$osID # Pour les OS derives de $osFamily
 
 test -r $initDir/.colors && Source $initDir/.colors
@@ -87,7 +88,7 @@ then
 	which randverse >/dev/null 2>&1 && randverse && echo
 fi
 
-if which xdg-mime >/dev/null 
+if which xdg-mime >/dev/null && [ $osID != sailfishos ]
 then
 	xdg-mime query default application/pdf | grep -wq evince.desktop || xdg-mime default evince.desktop application/pdf
 fi
