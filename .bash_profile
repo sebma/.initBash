@@ -13,15 +13,14 @@ export initDir=$HOME/.initBash
 set | grep -q "^colors=" || source $initDir/.colors
 test $debug || debug=0
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
-function Source { test "$debug" -gt 0 && time source "$@" && echo || source "$@" ; }
 
-test -f $initDir/.bash_profile.seb && Source $initDir/.bash_profile.seb
+test -f $initDir/.bash_profile.seb && source $initDir/.bash_profile.seb
 
 # if running bash
 if [ -n "$BASH_VERSION" ]; then
 	# include .bashrc if it exists
 	if [ -f "$initDir/.bashrc" ]; then
-		Source "$initDir/.bashrc"
+		source "$initDir/.bashrc"
 	fi
 fi
 
