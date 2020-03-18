@@ -47,6 +47,7 @@ addmanpaths $manPathsList
 
 #Definitions de mes fonctions bash pour Linux
 [ -n "$BASH_VERSION" ] && test -r $initDir/.bash_functions && Source $initDir/.bash_functions
+which lpr >/dev/null 2>&1 && test -f $initDir/.bash_aliases.lpr && Source $initDir/.bash_aliases.lpr
 which mpv >/dev/null 2>&1 && test -r $initDir/.bash_functions.mpv && Source $initDir/.bash_functions.mpv
 
 #Export de toutes les fonctions sauf celles dont le nom commence par "_"
