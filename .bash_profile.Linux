@@ -11,6 +11,7 @@ test -d ~/local/lib && test $LD_LIBRARY_PATH && export LD_LIBRARY_PATH=$LD_LIBRA
 
 #Creation du .cache dans /tmp/$USER et pointage de ce dernier via le lien symbolique ~/.cache
 cacheLinkName=.cache
+test -L $HOME/$cacheLinkName && test ! -d /tmp/$USER/$cacheLinkName && mkdir -pv /tmp/$USER/$cacheLinkName
 
 if tty -s && ls --color >/dev/null 2>&1 && [ -L $cacheLinkName ]
 then
