@@ -9,17 +9,22 @@ trap - INT
 
 test -d ~/local/lib && test $LD_LIBRARY_PATH && export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:~/local/lib || export LD_LIBRARY_PATH=~/local/lib
 
-#Creation du .cache dans /tmp/$USER et pointage de ce dernier via le lien symbolique ~/.cache
+#Creation du .cache dans "/tmp/$USER/" ssi le lien symbolique ~/.cache existe
 cacheLinkName=.cache
-test -L $HOME/$cacheLinkName && test ! -d /tmp/$USER/$cacheLinkName && mkdir -pv /tmp/$USER/$cacheLinkName
-
-if tty -s && ls --color >/dev/null 2>&1 && [ -L $cacheLinkName ]
-then
-	ls -ld --color $cacheLinkName | awk /$USER/'{print$(NF-2)" "$(NF-1)" "$NF}'
-else
-	#C'est le cas pour Android
-	[ -L $cacheLinkName ] && ls -ld $cacheLinkName | awk /$USER/'{print$(NF-2)" "$(NF-1)" "$NF}'
+if [ -L $HOME/$cacheLinkName ];then
+	test ! -d /tmp/$USER/$cacheLinkName && mkdir -pv /tmp/$USER/$cacheLinkName
+	if tty -s && ls --color >/dev/null 2>&1
+	then
+		cd && ls -ld --color $cacheLinkName | awk /$USER/'{print$(NF-2)" "$(NF-1)" "$NF}'
+	else
+		#C'est le cas pour Android
+		cd && ls -ld $cacheLinkName | awk /$USER/'{print$(NF-2)" "$(NF-1)" "$NF}'
+	fi
+	cd - >/dev/null
 fi
+
+#Cleanup previous XFCE Sessions
+rm -f ~/$cacheLinkName/sessions/xf*
 
 if [ -e /etc/os-release ]
 then
@@ -57,9 +62,6 @@ then
 		test -d $dir && $(which find) $dir -type f 2>/dev/null | egrep -q '(png|jpg)$' && cp -pv "$(shuf -n1 -e $dir/*/*.{jpg,png})" /boot/grub/today.jpg 2>/dev/null
 	done
 fi
-
-#Cleanup previous XFCE Sessions
-rm -f ~/$cacheLinkName/sessions/xf*
 
 #printf "=> Server Signature : " >&2;ssh-keygen -lf /etc/ssh/ssh_host_rsa_key >&2
 interface=eth0
