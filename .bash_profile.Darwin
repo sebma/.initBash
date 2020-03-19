@@ -11,10 +11,13 @@ findExcludedPathList="./proc ./sys ./dev"
 prunePathsFindExpression="( -type d -a ( -name .git $(printf -- " -o -path %s" $findExcludedPathList) ) ) -prune -o"
 codeName=$(\sed -nE '/SOFTWARE LICENSE AGREEMENT FOR/s/([A-Za-z]+ ){5}|\\$//gp' /System/Library/CoreServices/Setup\ Assistant.app/Contents/Resources/en.lproj/OSXSoftwareLicense.rtf)
 
-cd
+#Creation du .cache dans "/tmp/$USER/" ssi le lien symbolique ~/.cache existe
 cacheLinkName=.cache
-tty -s && [ -L Library/$cacheLinkName ] && echo && ls -ld -G Library/$cacheLinkName | awk '{print$(NF-2)" "$(NF-1)" "$NF}'
-test -L Library/$cacheLinkName && test ! -d /tmp/$USER/$cacheLinkName && mkdir -pv /tmp/$USER/$cacheLinkName
+if [ -L $HOME/Library/$cacheLinkName ];then
+	test ! -d /tmp/$USER/$cacheLinkName && mkdir -pv /tmp/$USER/$cacheLinkName
+	tty -s && echo && cd && ls -ld -G Library/$cacheLinkName | awk '{print$(NF-2)" "$(NF-1)" "$NF}'
+	cd - >/dev/null
+fi
 mkdir -p ~/log
 
 if ! groups | \egrep -wq "sudo|adm|root|admin" 
