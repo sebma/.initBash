@@ -20,7 +20,7 @@ else
 	#C'est le cas pour Android
 	[ -L $cacheLinkName ] && ls -ld $cacheLinkName | awk /$USER/'{print$(NF-2)" "$(NF-1)" "$NF}'
 fi
-	
+
 if [ -e /etc/os-release ]
 then
 	if grep -q ID=sailfishos /etc/os-release
