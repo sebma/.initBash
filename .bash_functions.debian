@@ -22,6 +22,17 @@ function apt {
 			command apt "${args[@]}";;
 	esac
 }
+function apt-cache {
+	local args=("$@")
+	local firstArg=$1
+	local aptCache="$(which apt-cache)"
+	case $firstArg in
+		search)
+			$aptCache "${args[@]}" | sort;;
+		*)
+			$aptCache "${args[@]}";;
+	esac
+}
 function aptGet {
 	local args=("$@")
 	local firstArg=$1
