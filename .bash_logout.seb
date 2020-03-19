@@ -19,10 +19,8 @@ fi 2>/dev/null
 #	lpoptions -x $printerInstance
 #done
 
-#For security reasons
-#[ $osFamily = Linux ] && [ $(hostname) != ssh ] && \pkill -efu $USER ssh-agent
-#[ $osFamily = Linux ] && [ $(hostname) != ssh ] && who | grep $USER | wc -l && [ -n "$SSH_AUTH_SOCK" ] && $(ssh-agent -k)
-[ $osFamily = Linux ] && [ $(hostname) != ssh ] && [ -n "$SSH_AGENT_PID" ] && eval $(ssh-agent -k)
+# For security reasons
+[ $osFamily = Linux ] && [ $(hostname) != ssh ] && [ -n "$SSH_AGENT_PID" ] && [ $(who | grep -c $USER) -le 2 ] && eval $(ssh-agent -k)
 
 set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
