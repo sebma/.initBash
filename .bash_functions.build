@@ -24,7 +24,11 @@ function buildSourceCode {
 			then
 				if which checkinstall >/dev/null
 				then
-					checkinstallFromGITRepo
+					if git status -s 2>/dev/null;then
+						checkinstallFromGITRepo
+					else
+						sudo checkinstall
+					fi
 				else
 					sudo $make install
 				fi
