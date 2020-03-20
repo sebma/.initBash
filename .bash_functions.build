@@ -25,7 +25,7 @@ function buildSourceCode {
 				if which checkinstall >/dev/null
 				then
 					if git status -s 2>/dev/null;then
-						checkinstallFromGITRepo
+						checkinstallFromGITRepoInformation
 					else
 						sudo checkinstall
 					fi
@@ -51,7 +51,7 @@ function buildSourceCode {
 	set +x
 	return $returnCode
 }
-function checkinstallFromGITRepo {
+function checkinstallFromGITRepoInformation {
 	echo "=> description :"
 	echo
 	alias gitHTTP_URL='\git config remote.origin.url | \sed -E "s|^git@|https://|;s|(\.\w+):|\1/|"'
