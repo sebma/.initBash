@@ -1082,8 +1082,13 @@ function ps {
 		$ps | head -1 >&2 # Redirect headers to stderr
 		$ps h 
 	elif echo $firstArg | \grep -q -- "^-";then
-		$ps -f "$@" | head -1 >&2 # Redirect headers to stderr
-		$ps h -f "$@"
+		if echo "$@" | \grep -q -- "-o";then
+			$ps "$@" | head -1 >&2 # Redirect headers to stderr
+			$ps h "$@"
+		else
+			$ps -f "$@" | head -1 >&2 # Redirect headers to stderr
+			$ps h -f "$@"
+		fi
 	else 
 		$ps "$@" | head -1 >&2 # Redirect headers to stderr
 		$ps h "$@"
