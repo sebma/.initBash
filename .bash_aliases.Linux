@@ -20,7 +20,7 @@ test "$wifiInterface" && {
 	alias wifiSpeed="\iwlist $wifiInterface bitrate;\iw dev $wifiInterface link"
 	alias restartWifi="which nmcli >/dev/null && \nmcli nm wifi off;nmcli nm wifi on;sleep 10;wanip"
 	alias wifiRestart=restartWifi
-	alias wifi5GHz="iwlist $wifiInterface frequency | \grep -q '5\..* GHz' && echo true || echo false"
+	which iwlist >/dev/null 2>&1 && alias wifi5GHz="iwlist $wifiInterface frequency | \grep -q '5\..* GHz' && echo true || echo false" || { which iw >/dev/null 2>&1 && alias wifi5GHz="iw phy | \egrep -q '5[0-9]{3} MHz' && echo true || echo false"; }
 }
 set +x
 
