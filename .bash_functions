@@ -825,11 +825,12 @@ function lvm_Mount_Point_2_LVM_Paths {
 function memUsage {
 	local processName=$1
 	local columns="pid,comm,pmem,rssize"
+	local ps=$(which ps)
 	if test $processName
 	then
-		\pgrep -f $processName >/dev/null && \ps -o $columns -p $(\pgrep -f $processName) | awk '/PID/;/[0-9]/{sub($4,$4/1024);print$0" MiB";total+=$4}END{if(total>1024)printf "=> Total= %.3lf GiB\n\n",total/1024>"/dev/stderr"; else printf "=> Total= %.3f MiB\n\n",total>"/dev/stderr"}' | \column -t
+		\pgrep -f $processName >/dev/null && $ps -o $columns -p $(\pgrep -f $processName) | awk '/PID/;/[0-9]/{sub($4,$4/1024);print$0" MiB";total+=$4}END{if(total>1024)printf "=> Total= %.3lf GiB\n\n",total/1024>"/dev/stderr"; else printf "=> Total= %.3f MiB\n\n",total>"/dev/stderr"}' | \column -t
 	else
-#		\ps -eo rss= | awk '/[0-9]/{total+=$1/1024}END{print "\tTotal= "total" MiB"}'
+#		$ps -eo rss= | awk '/[0-9]/{total+=$1/1024}END{print "\tTotal= "total" MiB"}'
 		\free -m | awk '/Mem:/{total=$2}/buffers.cache:/{used=$3}END{printf "%5.2lf%%\n", 100*used/total}'
 	fi
 }
@@ -1068,11 +1069,12 @@ function processSPY {
 }
 function processUsage {
 	local columns="rssize,pmem,pcpu,pid,args"
-#	headers=$(\ps -e -o $columns | grep -v grep.*COMMAND | \grep COMMAND)
-	headers=" RSS\t       %MEM %CPU  PID   COMMAND"
+	local ps=$(which ps)
+#	local headers=$($ps -e -o $columns | grep -v grep.*COMMAND | \grep COMMAND)
+	local headers=" RSS\t       %MEM %CPU  PID   COMMAND"
 	echo -e "$headers" >&2
 	# "tail -n +1" ignores the SIGPIPE
-	\ps -e -o $columns | sort -nr | cut -c-156 | head -500 | awk '!/COMMAND/{printf "%9.3lf MiB %4.1f%% %4.1f%% %5d %s\n", $1/1024,$2,$3,$4,$5}' | tail -n +1 | head -45
+	$ps -e -o $columns | sort -nr | cut -c-156 | head -500 | awk '!/COMMAND/{printf "%9.3lf MiB %4.1f%% %4.1f%% %5d %s\n", $1/1024,$2,$3,$4,$5}' | tail -n +1 | head -45
 }
 function ps { 
 	local ps=$(which ps)
