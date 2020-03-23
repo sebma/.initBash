@@ -16,9 +16,12 @@ excludePathsDuExpression=$(printf -- "--exclude %s " $duExcludedPathList)
 find="command find"
 
 #test "$wifiInterface" && alias wifiList="which nmcli >/dev/null && \nmcli dev wifi list"
-test "$wifiInterface" && alias wifiSpeed="\iwlist $wifiInterface bitrate;\iw dev $wifiInterface link"
-test "$wifiInterface" && alias restartWifi="which nmcli >/dev/null && \nmcli nm wifi off;nmcli nm wifi on;sleep 10;wanip"
-test "$wifiInterface" && alias wifiRestart=restartWifi
+test "$wifiInterface" && {
+	alias wifiSpeed="\iwlist $wifiInterface bitrate;\iw dev $wifiInterface link"
+	alias restartWifi="which nmcli >/dev/null && \nmcli nm wifi off;nmcli nm wifi on;sleep 10;wanip"
+	alias wifiRestart=restartWifi
+	alias wifi5GHz="iwlist $wifiInterface frequency | \grep -q '5\..* GHz' && echo true || echo false"
+}
 set +x
 
 which lspci >/dev/null && {
