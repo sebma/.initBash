@@ -1344,8 +1344,9 @@ function testURLsFromFILE {
 }
 function timeprocess {
 	local process=$1
+	local ps=$(which ps)
 	local pid=$(\pgrep -f "$1" | head -1)
-	test -n "$pid" && \ps -o etime -fp $pid
+	test -n "$pid" && $ps -o etime -fp $pid
 }
 function totalSize {
 	local column=$1
