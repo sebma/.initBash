@@ -240,6 +240,8 @@ alias rsync2SDCard="rsync --size-only"
 alias rsyncMove="rsync --remove-source-files"
 alias scp_unix='time \rsync -h --progress --rsync-path=$HOME/gnu/bin/rsync -ut'
 alias sdiff='\sdiff -w $COLUMNS'
+alias sink-inputs='\pactl list sink-inputs short'
+alias sinks='\pactl list sinks short'
 alias sortip="\sort -nt. -k1,1 -k2,2 -k3,3 -k4,4"
 alias speedtestSimple="time \speedtest --simple"
 alias sshStatusLocalForward="$(which ssh) -O check"
