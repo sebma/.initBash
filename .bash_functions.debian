@@ -20,7 +20,7 @@ function apt {
 		install|remove|purge|upgrade|dist-upgrade|full-upgrade)
 			sudo screen -L $apt "${args[@]}" -V;;
 		autoremove)
-			sudo $apt autoremove -V || sudo screen -L $aptGet autoremove -V
+			sudo $apt autoremove -V || sudo screen -L $aptGet autoremove -V;;
 		*)
 			$apt "${args[@]}";;
 	esac
