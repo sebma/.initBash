@@ -1085,14 +1085,14 @@ function ps {
 		$ps h 
 	elif echo $firstArg | \grep -q -- "^-";then
 		if echo "$@" | \grep -q -- "-o";then
-			$ps "$@" | head -1 >&2 # Redirect headers to stderr
+			$ps "${@//=/}" | \egrep -w 'PID|TTY|TIME|CMD' >&2 # Get headers and redirects them to stderr
 			$ps h "$@"
 		else
-			$ps -f "$@" | head -1 >&2 # Redirect headers to stderr
+			$ps -f "${@//=/}" | \egrep -w 'PID|TTY|TIME|CMD' >&2 # Get headers and redirects them to stderr
 			$ps h -f "$@"
 		fi
 	else 
-		$ps "$@" | head -1 >&2 # Redirect headers to stderr
+		$ps "${@//=/}" | \egrep -w 'PID|TTY|TIME|CMD' >&2 # Get headers and redirects them to stderr
 		$ps h "$@"
 	fi   
 }
