@@ -15,11 +15,14 @@ function addAptKeys {
 function apt {
 	local args=("$@")
 	local firstArg=$1
+	local aptGet=$(which apt-get)
 	case $firstArg in
-		install|autoremove|purge|upgrade|dist-upgrade|full-upgrade)
-			sudo screen $apt "${args[@]}" -V;;
+		install|remove|purge|upgrade|dist-upgrade|full-upgrade)
+			sudo screen -L $apt "${args[@]}" -V;;
+		autoremove)
+			sudo $apt autoremove -V || sudo screen -L $aptGet autoremove -V
 		*)
-			command apt "${args[@]}";;
+			$apt "${args[@]}";;
 	esac
 }
 function apt-cache {
@@ -37,7 +40,7 @@ function aptGet {
 	local args=("$@")
 	local firstArg=$1
 	case $firstArg in
-		install|purge) sudo $apt "${args[@]}" -V;;
+		install|remove|autoremove|purge) sudo $apt "${args[@]}" -V;;
 		download) command apt-get "${args[@]}" --print-uris && $(which apt-get) "${args[@]}";;
 		*) command apt-get "${args[@]}";;
 	esac
