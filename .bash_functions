@@ -1076,7 +1076,7 @@ function processUsage {
 	# "tail -n +1" ignores the SIGPIPE
 	$ps -e -o $columns | sort -nr | cut -c-156 | head -500 | awk '!/COMMAND/{printf "%9.3lf MiB %4.1f%% %4.1f%% %5d %s\n", $1/1024,$2,$3,$4,$5}' | tail -n +1 | head -45
 }
-function ps { 
+function psSeb { # Les fontions qui avaient le meme nom que les commands sont exportes et visibles dans les bash, c_est dangereux
 	local ps=$(which ps)
 	local firstArg=$1
 #	local args=("$@")
