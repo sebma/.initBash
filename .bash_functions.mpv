@@ -60,7 +60,7 @@ function mpv2 {
 		domain=$(echo "$url" | sed "s/https?:..//" | awk -F. '{print$(NF-1)}')
 		case $domain in
 			dailymotion)
-				ytdl_format=$(ytdlnoconfig -F "$url" | awk '/^hls/{last=$1}END{print last}')
+				ytdl_format=$(ytdlnoconfig -F="$url" | awk '/^hls/{last=$1}END{print last}')
 				mpvOptions="--ytdl-format=$ytdl_format $mpvOptions"
 			;;
 			*) ;;
@@ -71,7 +71,7 @@ function mpv2 {
 function mpvFORMAT {
 	\rm nohup.out
 	touch nohup.out
-	nohup $mpv --ytdl-format "$@" &
+	nohup $mpv --ytdl-format="$@" &
 	tail -f nohup.out | egrep -v "AV: "
 }
 function mpvInit {
@@ -102,7 +102,7 @@ function mpvRSSPodCastPlayList {
 	}
 }
 function mpvalt {
-	test $1 && $mpv --no-ytdl $(youtube-dl -gf best $@ | uniq)
+	test $1 && $mpv --no-ytdl $(youtube-dl -g -f=best $@ | uniq)
 }
 function mpvdirectly {
 	\rm nohup.out
@@ -131,10 +131,10 @@ function mpvPlaylistFile {
 	then
 		\sed -n "${index}s/^[^#]*//;${index}p" "$playListFile"
 		awk '{print$1}' "$playListFile" > "${playListFile/.*/__no-title.urls}"
-		$mpv --ytdl-format "$format" $playlistStartIndex --playlist "${playListFile/.*/__no-title.urls}" -- "$@"
+		$mpv --ytdl-format="$format" $playlistStartIndex --playlist="${playListFile/.*/__no-title.urls}" -- "$@"
 		\rm "${playListFile/.*/__no-title.urls}"
 	else
-		$mpv --ytdl-format "$format" $playlistStartIndex --playlist "$playListFile" -- "$@"
+		$mpv --ytdl-format="$format" $playlistStartIndex --playlist="$playListFile" -- "$@"
 	fi
 	tail -f nohup.out | egrep -v "AV: "
 }
@@ -145,7 +145,7 @@ function mpvPlaylistFileFORMAT {
 	local playlist
 	echo -- $1 | \grep -q -- "--" && format="$1" && playlist="$2" && shift || playlist="$1"
 	shift
-	nohup $mpv "$firstArg" --ytdl-format "$format" --playlist "$playlist" "$@" &
+	nohup $mpv "$firstArg" --ytdl-format="$format" --playlist="$playlist" "$@" &
 	tail -f nohup.out | egrep -v "AV: "
 }
 function urlplayer {
