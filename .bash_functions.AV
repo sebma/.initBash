@@ -958,6 +958,7 @@ function videoInfo {
 				#remote stream
 				if \curl -s "$urlOrFile" | file -bi - | \grep -q "^text/"
 				then
+					#undirect stream
 					echo "=> This stream needs first to be resolved by youtube-dl ..."
 					possibleFormats=best[ext=mp4]/best[ext=webm]/best[ext=flv]/18/webm/sd/http-480
 					infos="$(youtube-dl -gef $possibleFormats -- "$urlOrFile")"
@@ -983,7 +984,7 @@ function videoInfo {
 				$ffprobe "$urlOrFile" || $ffprobe $ffprobeOptions "$urlOrFile"
 			fi
 			echo
-		done 2>&1 | \egrep -vi "^ +(:|comment|description +: [^/]+$)" | uniq | egrep -iw "^$|description.*:/|PURL.*:/|stream|local|urlOrFile|kb/s|Input|Size:|Title:|Duration:|Stream|Chapter|Invalid|error|bad| no such file|^\[.* not"
+		done 2>&1 | \egrep -vi "^ +(:|comment|description +: [^/]+$)" | uniq | egrep -iw "^$|description.*:/|PURL.*:/|stream|local|urlOrFile|[0-9]+ kb/s|Input|Size:|Title:|Duration:|Stream|Chapter|Invalid|error|bad| no such file|^\[.* not "
 	}
 }
 function videoInfoOLD {
