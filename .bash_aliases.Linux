@@ -37,8 +37,7 @@ alias catFiles="\tail -vn +1"
 alias connect2MyHiddenWifi="connect2SSID sebWlan"
 alias connect2eduroam="connect2SSID eduroam"
 alias cp='\cp --preserve=timestamps -uv'
-#alias dnsInfo="\nmcli | sed -n '/^DNS /,+3p'"
-alias dnsInfo="\nmcli dev list | awk -F ':| *' '/DNS/{print\$NF}'"
+alias dnsInfo="( \nmcli dev list || \nmcli dev show ) 2>/dev/null | grep DNS || egrep -v '^(#|\$)' /etc/resolv.conf"
 #which ccze >/dev/null 2>&1 && alias ccze="\ccze -A" && alias dmesg="\ccze -A < /var/log/dmesg"
 #alias dmesg="\grc less /var/log/dmesg"
 alias findDeadLinks='command find . -xtype l -exec ls --color -l {} +'
