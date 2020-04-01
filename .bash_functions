@@ -566,13 +566,18 @@ function grepFunction {
 	grepParagraph "function $1|${1}.*[(]" "^}" "$@"
 }
 function grepParagraph {
-	test $# -lt 3 && {
-		echo "=> Usage : $FUNCNAME startRegExpPattern endRegExpPattern fileList" >&2
+	local fileListPattern="-"
+	test $# -lt 2 && {
+		echo "=> Usage : $FUNCNAME startRegExpPattern endRegExpPattern [fileList]" >&2
 		return 1
 	}
+	test $# = 2 && {
+		echo "=> Calling $FUNCNAME through pipe is not yes implemented. " >&2
+		return 2
+	}
+	fileListPattern="${@:3}"
 	local startRegExpPattern
 	local endRegExpPattern
-	local fileListPattern="${@:3}"
 
 #	startRegExp=$1 endRegExp=$2 \sed -E -n "/$startRegExpPattern/,/$endRegExpPattern/p" $fileListPattern
 #	startRegExp=$1 endRegExp=$2 awk "/$startRegExpPattern/{p=1}p;/$endRegExpPattern/{p=0}" $fileListPattern
