@@ -968,7 +968,7 @@ function videoInfo {
 					size=$(\curl -sI "$directURLOfStream" | \sed "s/\r//g" | awk 'BEGIN{IGNORECASE=1;size=0}/Content-Length:/{if($2>0)size=$2}END{printf "%8.3f MiB\n",size/2^20}')
 					echo "Title: $title"
 					echo "Size: $size"
-					command ffprobe $ffprobeOptions "$directURLOfStream" 2>&1
+					$ffprobe $ffprobeOptions "$directURLOfStream" 2>&1
 				else
 					#direct stream
 					echo "=> This stream is direct stream"
@@ -979,7 +979,7 @@ function videoInfo {
 			else
 				echo "=> The file is local to this machine."
 				#Local file
-				size=$(\ls -l "$urlOrFile" | awk '/[0-9]+/{printf "%8.3f MiB\n",$5/1024^2}')
+				size=$(\stat -c %s "$urlOrFile" | awk '/[0-9]+/{printf "%8.3f MiB\n",$1/1024^2}')
 				echo "Size: $size"
 				$ffprobe "$urlOrFile" || $ffprobe $ffprobeOptions "$urlOrFile"
 			fi
