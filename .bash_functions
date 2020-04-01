@@ -1224,6 +1224,18 @@ function setTimestamps {
 		touch -t $timestamp "$file"
 	done
 }
+function sizeOfLocalFiles {
+	local size
+	local totalExpr="0"
+	for file
+	do
+		size=$(\stat -c %s "$file" | awk '{print$2/2^20}')
+		totalExpr="$totalExpr+$size"
+		echo "$url $size Mo"
+	done
+	total=$(perl -e "printf $totalExpr")
+	echo "=> total = $total Mo"
+}
 function sizeOfRemoteFile {
 	trap 'rc=$?;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
 
