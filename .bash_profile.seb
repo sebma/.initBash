@@ -6,7 +6,7 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 
 echo $OSTYPE | grep -q android && export osFamily=Android || export osFamily=$(uname -s)
 
-function Source { test "$debug" -gt 0 && time source "$@" && echo || source "$@" ; }
+function Source { test "$debug" -gt 0 && set -x && time source "$@" && echo || source "$@" ; }
 export bashProfileLoaded=1
 
 [ $osFamily = Linux ] && export osID=$(source /etc/os-release && echo $ID) osID_LIKE=$(source /etc/os-release && echo $ID_LIKE)
@@ -40,8 +40,7 @@ PERL_MM_OPT="INSTALL_BASE=$HOME/perl5"; export PERL_MM_OPT;
 export myPerl5DefaultOptions="-ale"
 export PIP_FORMAT=columns
 
-typeset -r isAdmin=$(groups 2>/dev/null | egrep -wq "sudo|adm|admin|root" && echo true || echo false)
-if ! $isAdmin
+if ! groups 2>/dev/null | egrep -wq "sudo|adm|admin|root"
 then
 	export HOSTALIASES=~/.hosts
 	export PYTHONUSERBASE=$HOME/.local
