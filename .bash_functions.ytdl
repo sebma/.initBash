@@ -264,7 +264,7 @@ function getRestrictedFilenamesFORMAT {
 			echo
 			echo "=> chosenFormatID = $chosenFormatID"
 			echo
-
+			trap - INT
 			if [ $extension = mp4 ] || [ $extension = m4a ] || [ $extension = mp3 ]; then
 				time youtube-dl -o "$fileName" -f "${formats[$j]}" "$url" --embed-thumbnail
 				downloadOK=$?
@@ -274,7 +274,6 @@ function getRestrictedFilenamesFORMAT {
 						downloadOK=1
 						return 1
 					}
-					trap - INT
 					downloadOK=$?
 				}
 			elif [ $extension = m3u ] || [ $extension = m3u8 ]; then
@@ -284,7 +283,6 @@ function getRestrictedFilenamesFORMAT {
 					downloadOK=1
 					return 1
 				}
-				trap - INT
 				downloadOK=$?
 			else
 				time youtube-dl -o $fileName -f "${formats[$j]}" "$url" 2>&1 | egrep -A1 'ERROR:.*No space left on device' >&2 && {
@@ -292,7 +290,6 @@ function getRestrictedFilenamesFORMAT {
 					downloadOK=1
 					return 1
 				}
-				trap - INT
 				downloadOK=$?
 			fi
 
