@@ -237,7 +237,7 @@ function wifiList {
 	fi
 }
 function ytdlUpdate {
-	typeset -r isAdmin=$(groups 2>/dev/null | \egrep -wq "sudo|adm|admin|root" && echo true || echo false)
+	local -r isAdmin=$(groups 2>/dev/null | \egrep -wq "sudo|adm|admin|root" && echo true || echo false)
 	local ytdlGitURL=https://github.com/rg3/youtube-dl
 
 	local sudo=""
@@ -258,7 +258,7 @@ function ytdlUpdate {
 	fi
 }
 function ytdlUpdateFromGit {
-	typeset -r isAdmin=$(groups 2>/dev/null | \egrep -wq "sudo|adm|admin|root" && echo true || echo false)
+	local -r isAdmin=$(groups 2>/dev/null | \egrep -wq "sudo|adm|admin|root" && echo true || echo false)
 	local ytdlGitURL=https://github.com/rg3/youtube-dl
 
 	local sudo=""
