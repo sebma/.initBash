@@ -20,13 +20,13 @@ alias gitStatus="\git status -bs -uno"
 alias gitURL='\git config remote.origin.url'
 alias gitURLs='\git config -l | awk -F= /^remote.*\.url=/{print\$2}'
 alias gitUnIgnoreChanges="\git update-index --no-skip-worktree"
-alias gitUpdate="\git config remote.origin.url | \awk '/github.com/{print\"=> Updating from <\"\$NF\"> ...\"}';\git pull"
+alias gitUpdate="\git config remote.origin.url | \awk '/github.com/{print\"=> Updating from <\"\$NF\"> ...\"}';\git pull;sync"
 alias gitlog="\git log --abbrev-commit"
 alias gitls="\git ls-files"
 alias gitshow="\git show --abbrev-commit"
 alias openGit_http_URL='open $(gitHTTP_URL)'
 alias openGit_http_URL_in_CWD='open $(gitHTTP_URL)/$(pwd | \sed "s|$(git rev-parse --show-toplevel)|tree/master|")'
-alias updateGIT="\git pull"
+alias updateGIT=gitUpdate
 
 set +x
 test "$debug" -gt 0 && \echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
