@@ -6,6 +6,7 @@ declare -A | grep -wq colors || source $initDir/.colors
 function Debug { test "$debug" -gt 0 && echo "$bold${colors[blue]}$@$normal"; }
 Debug "=> Running $(basename ${BASH_SOURCE[0]}) ..."
 
+#function Source { test "$debug" -gt 0 && set -x && time source "$@" && echo || source "$@" ; }
 function Source { test "$debug" -gt 0 && time source "$@" && echo || source "$@" ; }
 test "$debug" -gt "2" && set -x
 
@@ -51,7 +52,8 @@ which lpr >/dev/null 2>&1 && test -f $initDir/.bash_aliases.lpr && Source $initD
 which mpv >/dev/null 2>&1 && test -r $initDir/.bash_functions.mpv && Source $initDir/.bash_functions.mpv
 
 #Export de toutes les fonctions sauf celles dont le nom commence par "_"
-export -f $(declare -F | egrep -v " __?" | awk '{print$NF}')
+#export -f $(declare -F | egrep -v " __?" | awk '{print$NF}')
+
 user=$(\id -un)
 hostname=$HOSTNAME
 
