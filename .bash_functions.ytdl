@@ -230,7 +230,7 @@ function getRestrictedFilenamesFORMAT {
 #		echo $siteVideoFormat | grep -q '[<>]' && siteVideoFormat=\"$siteVideoFormat\" # Etait necessaire si la variable "youtube_dl" utilise "eval"
 
 		echo "=> Testing if $url still exists ..."
-		fileNames=$(set +x;time youtube-dl -f "$siteVideoFormat" --get-filename -- "$url" 2>&1)
+		fileNames=$(set +x;time youtube-dl -f "$siteVideoFormat" --get-filename -o "%(title)s__%(format_id)s__%(id)s.%(ext)s" --restrict-filenames -- "$url" 2>&1)
 		echo $fileNames | \egrep --color -A1 ERROR: && echo && continue
 
 		local -i j=0
@@ -247,8 +247,10 @@ function getRestrictedFilenamesFORMAT {
 	
 			if [ -f "$fileName" ]
 			then
+				echo "=> The file <$fileName> is already exists, comparing it's size with the remote file ..." 1>&2
+				echo
 				fileSizeOnFS=$(stat -c %s "$fileName")
-				time remoteFileSize=$(ytdlGetSize $chosenFormatID $url)
+				time remoteFileSize=$(command youtube-dl --ignore-config -j -f $chosenFormatID $url | jq -r .filesize)
 				test $? != 0 && return
 				if [ ! -w "$fileName" ] || [ $fileSizeOnFS -ge $remoteFileSize ]
 				then
