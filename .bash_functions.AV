@@ -1,6 +1,6 @@
 # vim: set ft=bash noet:
 set +x
-declare -A | grep -wq colors || source $initDir/.colors
+! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 \which ffmpeg  >/dev/null 2>&1 && ffmpeg="command  ffmpeg  -hide_banner" &&  ffmpegOptions="-probesize 400M -analyzeduration 400M"
