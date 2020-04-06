@@ -454,13 +454,13 @@ function updateYoutubeDescription {
 function ytdlFormats {
 	trap 'rc=130;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
 	test $# = 0 && {
-		echo "=> Usage: $FUNCNAME [filterFormats] url1 url2 ..." >&2
+		echo "=> Usage: $FUNCNAME [--filterFormats] url1 url2 ..." >&2
 		return 1
 	}
 
-	local filterFormats
-	echo $1 | \egrep -q '(https?|s?ftps?):' || { filterFormats=$1;shift; }
-	time youtube-dl -F "$@" | \grep -Pv ': Downloading' | egrep "$filterFormats|\<url\>"
+	local filterFormats="."
+	echo $1 | grep -q -- "^--" && { filterFormats=${1:2};shift; }
+	time youtube-dl -F "$@" | egrep -vw "information|metadata|automatic captions|Available formats" | \egrep "$filterFormats|Downloading (webpage|media)|format code  extension  resolution note"
 	trap - INT
 }
 function ytdlGetFormat {
