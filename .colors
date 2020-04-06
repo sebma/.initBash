@@ -1,8 +1,7 @@
 # vim: set ft=bash noet:
 
 #ANSI color codes
-[ $BASH_VERSINFO -ge 4 ] && export escapeChar=$'\e'     || export escapeChar=$'\033'
-[ $BASH_VERSINFO -ge 4 ] && export declare="declare -Ag" || export declare="declare"
+[ $BASH_VERSINFO -ge 4 ] && export escapeChar=$'\e' || export escapeChar=$'\033'
 
 if tty -s
 then
@@ -20,11 +19,9 @@ then
 	export blinkOff="$escapeChar[25m"
 	[ $trace = 1 ] && set -x
 	
-	$declare colors effects
+	[ $BASH_VERSINFO -ge 4 ] && declare -A effects=( [bold]=$(tput bold) [dim]=$(tput dim) [italics]=$(tput sitm) [underlined]=$(tput smul) [blink]=$(tput blink) [reverse]=$(tput rev) [hidden]=$(tput invis) [blinkOff]=$blinkOff )
+	[ $BASH_VERSINFO -ge 4 ] && declare -A colors=( [red]=$(tput setaf 1) [green]=$(tput setaf 2) [blue]=$(tput setaf 4) [cyan]=$(tput setaf 6) [yellow]=$(tput setaf 11) [yellowOnRed]=$(tput setaf 11)$(tput setab 1) [greenOnBlue]=$(tput setaf 2)$(tput setab 4) [yellowOnBlue]=$(tput setaf 11)$(tput setab 4) [cyanOnBlue]=$(tput setaf 6)$(tput setab 4) [whiteOnBlue]=$(tput setaf 7)$(tput setab 4) [redOnGrey]=$(tput setaf 1)$(tput setab 7) [blueOnGrey]=$(tput setaf 4)$(tput setab 7) )
 	
-	[ $BASH_VERSINFO -ge 4 ] && effects=( [bold]=$(tput bold) [dim]=$(tput dim) [italics]=$(tput sitm) [underlined]=$(tput smul) [blink]=$(tput blink) [reverse]=$(tput rev) [hidden]=$(tput invis) [blinkOff]=$blinkOff )
-	[ $BASH_VERSINFO -ge 4 ] && colors=( [red]=$(tput setaf 1) [green]=$(tput setaf 2) [blue]=$(tput setaf 4) [cyan]=$(tput setaf 6) [yellow]=$(tput setaf 11) [yellowOnRed]=$(tput setaf 11)$(tput setab 1) [greenOnBlue]=$(tput setaf 2)$(tput setab 4) [yellowOnBlue]=$(tput setaf 11)$(tput setab 4) [cyanOnBlue]=$(tput setaf 6)$(tput setab 4) [whiteOnBlue]=$(tput setaf 7)$(tput setab 4) [redOnGrey]=$(tput setaf 1)$(tput setab 7) [blueOnGrey]=$(tput setaf 4)$(tput setab 7) )
-	
-	export colors effects
+#	export colors effects
 	printf $normal
 fi
