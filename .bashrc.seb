@@ -162,7 +162,7 @@ test -r $initDir/.bash_functions.$osFamily && Source $initDir/.bash_functions.$o
 test -r $initDir/.bash_functions.$osID && Source $initDir/.bash_functions.$osID # Pour les OS derives de $osFamily
 case $OSTYPE in
 	linux-gnueabi)
-		resize
+		which resize >/dev/null && resize
 		which busybox >/dev/null && test -r $initDir/.bash_aliases.busybox && Source $initDir/.bash_aliases.busybox
 		which toybox >/dev/null && test -r $initDir/.bash_aliases.toybox && Source $initDir/.bash_aliases.toybox
 		;;
