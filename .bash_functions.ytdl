@@ -472,7 +472,7 @@ function ytdlFormats {
 
 	local filterFormats="."
 	echo $1 | grep -q -- "^--" && { filterFormats=${1:2};shift; }
-	time youtube-dl -F "$@" | egrep -vw "information|metadata|automatic captions|Available formats" | \egrep "$filterFormats|Downloading (webpage|media)|format code  extension  resolution note"
+	time youtube-dl -F "$@" | egrep -vw "information|automatic captions|Available formats|Checking .* video format URL" | \egrep "$filterFormats|Downloading|format code  extension  resolution note"
 	trap - INT
 }
 function ytdlGetFormat {
