@@ -208,11 +208,19 @@ function getRestrictedFilenamesFHD {
 function getRestrictedFilenamesFORMAT {
 	trap 'rc=127;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
 #	local translate="trans -b :en" # to translate any language to english
+	local ytdlExtraOptions
 	local translate=cat # Translate through pipe disabled by default
 	local initialSiteVideoFormat="$1"
 	local siteVideoFormat="not_yet_known" downloadOK=-1 extension="not_yet_known" fqdn="not_yet_known" service="not_yet_known" fileSizeOnFS=0 remoteFileSize=0
 	shift
 	local -i i=0
+	local isLIVE=false
+
+	echo $initialSiteVideoFormat | grep -q "^9[0-9]" && isLIVE=true
+	if $isLIVE;then
+		ytdlExtraOptions=(--external-downloader ffmpeg --external-downloader-args "-movflags frag_keyframe+empty_moov")
+	fi
+
 	for url
 	do
 		let i++
@@ -224,8 +232,8 @@ function getRestrictedFilenamesFORMAT {
 		service=$(echo $fqdn | awk -F_ '{print$(NF-1)}')
 
 		case $url in
-		*.facebook.com/*) siteVideoFormat=$(echo $initialSiteVideoFormat+m4a | \sed -E "s/^(\(?)\w+/\1bestvideo/g");; #Replace the first word after the opening parenthesis
-		*) siteVideoFormat=$initialSiteVideoFormat;;
+			*.facebook.com/*) siteVideoFormat=$(echo $initialSiteVideoFormat+m4a | \sed -E "s/^(\(?)\w+/\1bestvideo/g");; #Replace the first word after the opening parenthesis
+			*) siteVideoFormat=$initialSiteVideoFormat;;
 		esac
 #		echo $siteVideoFormat | grep -q '[<>]' && siteVideoFormat=\"$siteVideoFormat\" # Etait necessaire si la variable "youtube_dl" utilise "eval"
 
@@ -245,7 +253,7 @@ function getRestrictedFilenamesFORMAT {
 			chosenFormatID=$(echo "$fileName" | awk -F '__' '{print$2}')
 			fileName="${fileName/.$extension/__$fqdn.$extension}"
 	
-			if [ -f "$fileName" ]
+			if [ -f "$fileName" ] && [ $isLIVE = false ]
 			then
 				echo "=> The file <$fileName> is already exists, comparing it's size with the remote file ..." 1>&2
 				echo
@@ -268,10 +276,10 @@ function getRestrictedFilenamesFORMAT {
 			echo
 			trap - INT
 			if [ $extension = mp4 ] || [ $extension = m4a ] || [ $extension = mp3 ]; then
-				time youtube-dl -o "$fileName" -f "${formats[$j]}" "$url" --embed-thumbnail
+				time youtube-dl -o "$fileName" -f "${formats[$j]}" "${ytdlExtraOptions[@]}" "$url" --embed-thumbnail
 				downloadOK=$?
 				test $downloadOK != 0 && {
-					time youtube-dl -o $fileName -f "${formats[$j]}" "$url" 2>&1 | egrep -A1 'ERROR:.*No space left on device' >&2 && {
+					time youtube-dl -o $fileName -f "${formats[$j]}" "${ytdlExtraOptions[@]}" "$url" 2>&1 | egrep -A1 'ERROR:.*No space left on device' >&2 && {
 						echo >&2
 						downloadOK=1
 						return 1
@@ -287,7 +295,7 @@ function getRestrictedFilenamesFORMAT {
 				}
 				downloadOK=$?
 			else
-				time youtube-dl -o $fileName -f "${formats[$j]}" "$url" 2>&1 | egrep -A1 'ERROR:.*No space left on device' >&2 && {
+				time youtube-dl -o $fileName -f "${formats[$j]}" "${ytdlExtraOptions[@]}" "$url" 2>&1 | egrep -A1 'ERROR:.*No space left on device' >&2 && {
 					echo >&2
 					downloadOK=1
 					return 1
