@@ -1037,7 +1037,7 @@ function videoRemoveMetaData {
 		videoBaseName="${video%.???}"
 		outputVideo="${videoBaseName}-NoMetaData.$extension"
 		echo "=> Processing = $video ..." >&2
-		$ffmpeg -i "$video" -map 0:v:0 -map 0:a -map 0:s -c copy -map_metadata -1 "$outputVideo"
+		$ffmpeg -i "$video" -map 0:v:0 -map 0:a -map 0:s -c copy -map_metadata -1 "$outputVideo" || $ffmpeg -i "$video" -map 0:v:0 -map 0:a -c copy -map_metadata -1 "$outputVideo"
 		test $? = 0 && {
 			touch -r "$video" "$outputVideo"
 			sync
