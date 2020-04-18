@@ -1,0 +1,49 @@
+# vim: set ft=bash noet:
+! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
+test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
+
+mpv="$(which mpv)"
+alias mpv="LANG=en_US.utf8 $mpv $mpvDefaultOptions"
+mpvnoconfig="mpv --no-config"
+alias mpvnoconfig="$mpvnoconfig"
+
+mplayer="$(which mplayer)"
+alias mplayer="LANG=en_US.utf8 $mplayer $mplayerDefaultOptions"
+mplayernoconfig="mplayer --noconfig=user"
+alias mplayernoconfig="$mplayernoconfig"
+
+alias mpvh="mpv --profile=hid"
+alias mpvid="mpv --profile=identify"
+
+alias mpvYouTubeLIVE='mpv --profile=youtube-live'
+alias mpvBEST='mpv --profile=best'
+alias mpvFHD='mpv  --profile=fhd'
+alias mpvHD='mpv   --profile=hd'
+alias mpvHQ='mpv   --profile=hq'
+alias mpvFSD='mpv  --profile=fsd'
+alias mpvSD='mpv   --profile=sd'
+alias mpvLD='mpv   --profile=ld'
+alias mpvVLD='mpv  --profile=vld'
+alias mpvFASTER='mpv --profile=for_slow_hardware'
+alias mpvOK.ru='mpv --profile=ok.ru'
+
+alias mpvPlaylistFileBEST='mpvPlaylistFile --profile=best'
+alias mpvPlaylistFileFHD='mpvPlaylistFile --profile=fhd'
+alias mpvPlaylistFileHD='mpvPlaylistFile --profile=hd'
+alias mpvPlaylistFileHQ='mpvPlaylistFile --profile=hq'
+alias mpvPlaylistFileFSD='mpvPlaylistFile --profile=fsd'
+alias mpvPlaylistFileSD='mpvPlaylistFile --profile=sd'
+alias mpvPlaylistFileLD='mpvPlaylistFile --profile=ld'
+alias mpvPlaylistFileVLD='mpvPlaylistFile --profile=vld'
+
+alias mpvFrench="mpv --profile=french"
+alias mpvEnglish="mpv --profile=english"
+alias mpvGerman="mpv --alang=deu --slang=deu"
+alias mpvSpanish="mpv --alang=spa --slang=spa"
+
+#youtube_dl="eval LANG=C.UTF-8 command youtube-dl" # i.e https://unix.stackexchange.com/questions/505733/ # eval A EVITER
+alias youtube-dl="LANG=C.UTF-8 command youtube-dl"
+alias ytdl="LANG=C.UTF-8 command youtube-dl"
+
+set +x
+test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
