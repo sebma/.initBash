@@ -21,7 +21,7 @@ function Less {
 	local highlightCMD="highlight -O ansi --force"
 	for file
 	do
-		$highlightCMD "$file" | \less -ir
+		$highlightCMD "$file" | \less -iR
 	done
 }
 function More {
