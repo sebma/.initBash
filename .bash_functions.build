@@ -9,6 +9,7 @@ test "$install" || { which checkinstall >/dev/null && export install="$(which ch
 
 function buildSourceCode {
 	test $CC || export CC=$(echo $HOSTTYPE-$OSTYPE-gcc | sed "s/armv[^-]*-/arm-/")
+	local host=$(echo "$@" | grep -oP -- "--host=\K\S+")
 	local defaultBuildOptions=""
 	local returnCode=0
 	local project=$(basename $PWD)
@@ -19,23 +20,26 @@ function buildSourceCode {
 	then
 		if make
 		then
-			returnCode=$?
-			if groups | \egrep -wq "sudo|adm|root"
+			if [ -z "$host" ] # if building for this host then install
 			then
-				if which checkinstall >/dev/null
+				returnCode=$?
+				if groups | \egrep -wq "sudo|adm|root"
 				then
-					if git status -s 2>/dev/null;then
-						checkinstallFromGITRepoInformation
+					if which checkinstall >/dev/null
+					then
+						if git status -s 2>/dev/null;then
+							checkinstallFromGITRepoInformation
+						else
+							sudo checkinstall
+						fi
 					else
-						sudo checkinstall
+						sudo $make install
 					fi
+					returnCode=$?
 				else
-					sudo $make install
+					make install
+					returnCode=$?
 				fi
-				returnCode=$?
-			else
-				make install
-				returnCode=$?
 			fi
 		else
 			returnCode=$?
@@ -47,7 +51,7 @@ function buildSourceCode {
 
 	unset CC
 	echo "=> returnCode = $returnCode" >&2
-	[ $returnCode = 0 ] && set -x && sudo ldconfig
+	[ $returnCode = 0 ] && [ -z "$host" ] && set -x && sudo ldconfig
 	set +x
 	return $returnCode
 }
