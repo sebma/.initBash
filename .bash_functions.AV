@@ -147,7 +147,7 @@ function addURL2Audio_Video {
 	local url=$1
 	local fileName=$2
 	extension=${fileName/*./}
-#	$ffmpeg -i "$fileName" -c copy -metadata description="$url" "${fileName%.*}-NEW.$extension" && mv -vf "${fileName%.*}-NEW.$extension" $fileName
+#	$ffmpeg -i "$fileName" -map 0 -c copy -metadata description="$url" "${fileName%.*}-NEW.$extension" && mv -vf "${fileName%.*}-NEW.$extension" $fileName
 	[ $extension = mp4 ] || [ $extension = m4a ] && mp4tags -m "$url" "$fileName"
 	sync
 }
@@ -1081,7 +1081,7 @@ function videoRotateLeft {
 	for video
 	do
 		extension=${video/*./}
-		$ffmpeg -i "$video" -c copy -metadata:s:v:0 rotate=90 "${video%.*}-ROTATED.$extension"
+		$ffmpeg -i "$video" -map 0 -c copy -metadata:s:v:0 rotate=90 "${video%.*}-ROTATED.$extension"
 	done
 }
 function videoRotateRight {
@@ -1089,7 +1089,7 @@ function videoRotateRight {
 	for video
 	do
 		extension=${video/*./}
-		$ffmpeg -i "$video" -c copy -metadata:s:v:0 rotate=-90 "${video%.*}-ROTATED.$extension"
+		$ffmpeg -i "$video" -map 0 -c copy -metadata:s:v:0 rotate=-90 "${video%.*}-ROTATED.$extension"
 	done
 }
 function videoSplit {
