@@ -317,6 +317,12 @@ function getRestrictedFilenamesFORMAT {
 				downloadOK=$?
 			fi
 
+			if ! which AtomicParsley >/dev/null 2>&1; then
+				if [ -s "${fileName/.$extension/.jpg}" ];then
+					time $ffmpeg -i "$fileName" -i "${fileName/.$extension/.jpg}" -map 0 -map 1 -c copy -disposition:v:1 attached_pic "${fileName/.$extension/_NEW.$extension}" && sync && mv "${fileName/.$extension/_NEW.$extension}" "$fileName" && rm "${fileName/.$extension/.jpg}"
+				fi
+			fi
+
 			if [ $downloadOK = 0 ]
 			then
 				if [ $extension = mp4 ] || [ $extension = m4a ] || [ $extension = mp3 ];then
@@ -325,8 +331,7 @@ function getRestrictedFilenamesFORMAT {
 					if which mp4tags >/dev/null 2>&1;then
 						mp4tags -m "$url" "$fileName"
 					else
-						$ffmpeg -i "$fileName" -map 0 -c copy -metadata description="$url" "${fileName/.$extension/_NEW.$extension}"
-						mv "${fileName/.$extension/_NEW.$extension}" "$fileName"
+						time $ffmpeg -i "$fileName" -map 0 -c copy -metadata description="$url" "${fileName/.$extension/_NEW.$extension}" && sync && mv "${fileName/.$extension/_NEW.$extension}" "$fileName"
 					fi
 					touch -r $timestampFileRef "$fileName" && \rm $timestampFileRef
 				fi
