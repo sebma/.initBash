@@ -509,11 +509,12 @@ function ytdlGetFormat {
 	}
 
 	local format=${1:-mp4[height<=?360]/mp4/best}
-	test $# = 2 && shift
+	test $# -ge 2 && shift
 	for url
 	do
-		$ytdlnoconfig -f "$format" --get-filename -o "=> format_id = %(format_id)s" "$url"
-	done
+#		printf "=> url = $url\t"
+		$ytdlnoconfig -f "$format" "$url" -j | jq -r '"=> url = \(.webpage_url)\tformat_id = \(.format_id)\tresolution = \(.width)x\(.height)"' || echo
+	done | column -c 1-$COLUMNS -ts '	'
 }
 function ytdlGetPlayListIDFromURL {
 	local playListURL="$1"
