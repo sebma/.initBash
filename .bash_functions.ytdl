@@ -20,7 +20,7 @@ alias ytdlnoconfig="$ytdlnoconfig"
 alias ytdlLastRelease='\git ls-remote --tags https://github.com/rg3/youtube-dl | awk -F/ '\''END{print gensub(/\^\{\}/,"","",$NF)}'\'''
 alias ytdlVersion="ytdl --version"
 alias ytdlGetFileName="\youtube-dl --get-filename"
-alias ytdlGetFormatID="\youtube-dl --get-filename -o '%(format_id)s'"
+alias ytdlGetFormatID="\youtube-dl --get-filename -o '%(format_id)s' -f"
 
 function YTRenameFromFiles {
 	trap 'rc=130;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
@@ -512,7 +512,7 @@ function ytdlGetFormat {
 	test $# = 2 && shift
 	for url
 	do
-		$ytdlnoconfig --get-filename -o "=> format_id = %(format_id)s" "$url"
+		$ytdlnoconfig -f "$format" --get-filename -o "=> format_id = %(format_id)s" "$url"
 	done
 }
 function ytdlGetPlayListIDFromURL {
