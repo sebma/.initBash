@@ -180,7 +180,6 @@ alias mv='\mv -vi'
 alias myCity="time curl ipinfo.io/city"
 alias myCountry="time curl ipinfo.io/country"
 alias myIP="time curl ipinfo.io/ip"
-alias mysed="\perl -pe"
 alias nautilus="\nautilus --no-desktop"
 alias no='yes n'
 alias nocomment="egrep -v '^(#|$)'"
