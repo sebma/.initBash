@@ -512,7 +512,6 @@ function ytdlGetFormat {
 	test $# -ge 2 && shift
 	for url
 	do
-#		printf "=> url = $url\t"
 		$ytdlnoconfig -f "$format" "$url" -j | jq -r '"=> url = \(.webpage_url)\tformat_id = \(.format_id)\tresolution = \(.width)x\(.height)"' || echo
 	done | column -c 1-$COLUMNS -ts '	'
 }
