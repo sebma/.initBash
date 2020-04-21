@@ -8,6 +8,7 @@ Debug "=> Running $(basename ${BASH_SOURCE[0]}) ..."
 
 test "$debug" -gt "2" && set -x
 
+addpaths $HOME/jolla/bin $HOME/jolla/shl
 test "$hostname" || hostname=$(hostname) # Pour SailFishOS
 test "$system" || system=$(version | awk '{print $1" "$2" "$3}')
 test "$domain" || domain=local
