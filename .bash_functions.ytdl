@@ -323,8 +323,8 @@ function getRestrictedFilenamesFORMAT {
 				fi
 			fi
 
-			if [ $downloadOK = 0 ]
-			then
+			echo
+			if [ $downloadOK = 0 ] then
 				if [ $extension = mp4 ] || [ $extension = m4a ] || [ $extension = mp3 ];then
 					echo "=> Adding $url to $fileName metadata ..."
 					timestampFileRef=$(mktemp) && touch -r "$fileName" $timestampFileRef
