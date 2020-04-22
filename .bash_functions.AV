@@ -1034,8 +1034,8 @@ function videoRemoveMetaData {
 	for video
 	do
 		extension="${video/*./}"
-		videoBaseName="${video%.???}"
-		outputVideo="${videoBaseName/.$extension/-NoMetaData.$extension}"
+#		videoBaseName="${video%.???}"
+		outputVideo="${video/.$extension/-NoMetaData.$extension}"
 		echo "=> Processing = $video ..." >&2
 		$ffmpeg -i "$video" -map 0:v:0? -map 0:a? -map 0:s? -c copy -map_metadata -1 "$outputVideo"
 		test $? = 0 && {
