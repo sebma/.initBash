@@ -983,6 +983,34 @@ function pem2cer {
 function perlCalc {
 	\perl -le "print ${*/^/**}"
 }
+function perlGrep {
+	local regExp
+	local perlOpts="-ne"
+	local perlOutputVar='"$_"'
+	local perlSetColorCode=""
+	local perlUses="use Term::ANSIColor;"
+
+	if [ $# != 1 ]
+	then
+		regExp="/$2/"
+		if grep -q -- "^-" <<< $1;then
+			firstOption=$1
+			case $firstOption in
+				-i) regExp="${regExp}i";;
+				-o) perlOutputVar='"$&\n"';;
+				--color*) perlSetColorCode='print color("blue");';perlResetColor='print color("reset");';;
+			esac
+			shift
+		fi
+	else
+		regExp="/$1/"
+	fi
+
+	[ "$firstOption" != -o ] && [ "$firstOption" = --color ] && set -x && perlOutputVar='"$`$perlSetColorCode$&$perlResetColor$'\''"' && set +x # Using $PREMATCH and $POSTMATCH dont work here
+
+	\perl "$perlOpts" "$perlUses"'print '"$perlOutputVar"' if '"$regExp;$perlResetColor"
+set +x
+}
 function picMpixels {
 	for fileName
 	do
