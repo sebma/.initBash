@@ -985,22 +985,28 @@ function perlCalc {
 }
 function perlGrep {
 	local regExp
-	local perlOpts="-ne"
+	local perlOpts="-lne"
 	local perlOutputVar='"$_"'
 	local perlSetColorCode=""
 	local perlUses="use Term::ANSIColor;"
 
 	if [ $# != 1 ]
 	then
-		regExp="/$2/"
+		regExp="$2"
 		if grep -q -- "^-" <<< $1;then
 			firstOption=$1
 			case $firstOption in
-				-i) regExp="${regExp}i";;
-				-o) perlOutputVar='"$&\n"';;
+				-w) regExp="\b${regExp}\b";;
+				-o) perlOutputVar='"$&"';;
 				--color*) perlSetColorCode='print color("blue");';perlResetColor='print color("reset");';;
 			esac
-			shift
+		fi
+		regExp="/${regExp}/"
+		if grep -q -- "^-" <<< $1;then
+			firstOption=$1
+			case $firstOption in
+				-i) regExp+="i";;
+			esac
 		fi
 	else
 		regExp="/$1/"
