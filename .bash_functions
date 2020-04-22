@@ -983,6 +983,10 @@ function pem2cer {
 function perlCalc {
 	\perl -le "print ${*/^/**}"
 }
+function perlgrep {
+	local pattern="$1"
+	\perl -ne "print grep /$pattern/ip,\$_"
+}
 function perlGrep {
 	local regExp
 	local perlOpts="-lne"
@@ -1001,7 +1005,7 @@ function perlGrep {
 				--color*) perlSetColorCode='print color("blue");';perlResetColor='print color("reset");';;
 			esac
 		fi
-		regExp="/${regExp}/"
+		regExp="/${regExp}/p"
 		if grep -q -- "^-" <<< $1;then
 			firstOption=$1
 			case $firstOption in
@@ -1012,7 +1016,7 @@ function perlGrep {
 		regExp="/$1/"
 	fi
 
-	[ "$firstOption" != -o ] && [ "$firstOption" = --color ] && set -x && perlOutputVar='"$`$perlSetColorCode$&$perlResetColor$'\''"' && set +x # Using $PREMATCH and $POSTMATCH dont work here
+	[ "$firstOption" != -o ] && [ "$firstOption" = --color ] && set -x && perlOutputVar='"$PREMATCH$perlSetColorCode$&$perlResetColor$POSTMATCH"' && set +x
 
 	\perl "$perlOpts" "$perlUses"'print '"$perlOutputVar"' if '"$regExp;$perlResetColor"
 set +x
