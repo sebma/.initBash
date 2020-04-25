@@ -17,10 +17,11 @@ alias ytdl="LANG=C.UTF-8 command youtube-dl"
 ytdlnoconfig="youtube-dl --ignore-config"
 alias ytdlnoconfig="$ytdlnoconfig"
 
-alias ytdlLastRelease='\git ls-remote --tags https://github.com/rg3/youtube-dl | awk -F/ '\''END{print gensub(/\^\{\}/,"","",$NF)}'\'''
+alias ytdlLastRelease='\git ls-remote --tags https://github.com/ytdl-org/youtube-dl | awk -F/ '\''END{print gensub(/\^\{\}/,"","",$NF)}'\'''
 alias ytdlVersion="ytdl --version"
 alias ytdlGetFileName="\youtube-dl --get-filename"
 alias ytdlGetFormatID="\youtube-dl --get-filename -o '%(format_id)s' -f"
+alias ytdlIssues="open https://github.com/ytdl-org/youtube-dl/issues"
 
 function YTRenameFromFiles {
 	trap 'rc=130;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
