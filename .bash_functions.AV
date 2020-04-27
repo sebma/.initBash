@@ -136,11 +136,41 @@ function addSubtitles2mp4 {
 	[ $codeRet = 0 ] && echo && \mv -vf "$outputVideo" "$inputVideo"
 }
 function addThumbnail2mp4 {
-	local artworkFile=$1
-	shift
-	for mpeg
+	test $# = 0 && {
+		echo "=> Usage: $FUNCNAME mp4File1 mp4File2 mp4File3 ..." >&2
+		return 1
+	}
+
+	for mp4File
 	do
-		AtomicParsley "$mpeg" --artwork "$artworkFile" --overWrite
+		baseName="${mp4File/.*}"
+		artworkFile="$(\ls -1 "$baseName".* | \grep -v ".$extension$")"
+		artworkExtension="${artworkFile/*.}"
+		test ! -s "$artworkFile" && echo "=> [$FUNCNAME][WARNING] There is no artwork for <$mp4File>, skipping ..." >&2 && continue
+		if AtomicParsley "$mp4File" --artwork "$artworkFile" --overWrite;then
+			rm "$artworkFile"
+		else
+			convert "$artworkFile" "${baseName}_NEW.$artworkExtension"
+			\mv "${baseName}_NEW.$artworkExtension" "$artworkFile"
+			AtomicParsley "$mp4File" --artwork "$artworkFile" --overWrite && rm "$artworkFile"
+		fi
+		sync
+	done
+}
+function addThumbnail2mp4_Old {
+	test $# = 0 && {
+		echo "=> Usage: $FUNCNAME artworkFile file1 file2 file3 ..." >&2
+		return 1
+	}
+
+	local artworkFile="$1"
+	local extension="${artworkFile/*.}"
+	convert "$artworkFile" "${artworkFile/.*}_NEW.$extension"
+	\mv "${artworkFile/.*}_NEW.$extension" "$artworkFile"
+	shift
+	for mpeg_4
+	do
+		AtomicParsley "$mpeg_4" --artwork "$artworkFile" --overWrite
 	done
 }
 function addURL2Audio_Video {
