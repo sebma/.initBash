@@ -15,7 +15,7 @@ alias gitLocalUndelete="\git ls-files -d | grep . && \git ls-files -d | \xargs g
 alias gitLocalProjectName='basename -s .git $(git rev-parse --show-toplevel)'
 alias gitPageTitle='echo $(\curl -qs $(gitHTTP_URL) | pup --charset utf8 "title text{}" | cut -d: -f2-)'
 alias gitRemoteProjectName='basename -s .git $(git config remote.origin.url)'
-alias gitRemoteRepoLastRelease='\git ls-remote --tags --sort="version:refname" | awk -F/ '\''END{print gensub(/\^\{\}/,"","",$NF)}'\'''
+alias gitRemoteRepoLastRelease='\git ls-remote --tags --sort="version:refname" | awk -F/ '\''END{print gensub(/\^\{\}/,"",1,$NF)}'\'''
 alias gitStatus="\git status -bs -uno"
 alias gitURL='\git config remote.origin.url'
 alias gitURLs='\git config -l | awk -F= /^remote.*\.url=/{print\$2}'
