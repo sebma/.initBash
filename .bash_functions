@@ -565,26 +565,50 @@ function grepFunction {
 		echo "=> Usage : $FUNCNAME startRegExpPattern fileList" >&2
 		return 1
 	}
+	echo $1 | grep -q -- "^-[a-z]" && local option=$1 && shift
+	local startRegExpPattern=$1
 	shift
-	grepParagraph "function $1|${1}.*[(]" "^}" "$@"
+	grepParagraph $option "function $startRegExpPattern|${startRegExpPattern}.*[(]" "^}" "$@"
 }
 function grepParagraph {
+set +x
 	local fileListPattern="-"
 	test $# -lt 2 && {
-		echo "=> Usage : $FUNCNAME startRegExpPattern endRegExpPattern [fileList]" >&2
+		echo "=> Usage : $FUNCNAME [-h|-l] startRegExpPattern endRegExpPattern [fileList]" >&2
 		return 1
 	}
 	test $# = 2 && {
 		echo "=> Calling $FUNCNAME through pipe is not yes implemented. " >&2
 		return 2
 	}
+
+	echo $1 | grep -q -- "^-[a-z]" && local option=$1 && shift
+
 	fileListPattern="${@:3}"
 	local startRegExpPattern
 	local endRegExpPattern
 
 #	startRegExp=$1 endRegExp=$2 \sed -E -n "/$startRegExpPattern/,/$endRegExpPattern/p" $fileListPattern
 #	startRegExp=$1 endRegExp=$2 awk "/$startRegExpPattern/{p=1}p;/$endRegExpPattern/{p=0}" $fileListPattern
-	startRegExp=$1 endRegExp=$2 perl -ne 'print "$ARGV:$_" if /$ENV{startRegExp}/ ... (/$ENV{endRegExp}/ || eof)' $fileListPattern
+
+	case $option in
+		-h) startRegExp=$1 endRegExp=$2 perl -ne 'print "$_" if /$ENV{startRegExp}/ ... (/$ENV{endRegExp}/ || eof)' $fileListPattern
+		;;
+		-l) startRegExp=$1 endRegExp=$2 perl -ne 'print "$ARGV\n" if /$ENV{startRegExp}/ ... (/$ENV{endRegExp}/ || eof)' $fileListPattern | uniq
+		;;
+		*) startRegExp=$1 endRegExp=$2 perl -ne 'print "$ARGV:$_" if /$ENV{startRegExp}/ ... (/$ENV{endRegExp}/ || eof)' $fileListPattern
+		;;
+	esac
+}
+function grepSection {
+	test $# -lt 2 && {
+		echo "=> Usage : $FUNCNAME startRegExpPattern fileList" >&2
+		return 1
+	}
+	echo $1 | grep -q -- "^-[a-z]" && local option=$1 && shift
+	local startRegExpPattern=$1
+	shift
+	grepParagraph $option "$startRegExpPattern" "^$" "$@"
 }
 function greplast {
 	grep "$@" | awk 'END{print}'
