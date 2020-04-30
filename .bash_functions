@@ -1589,7 +1589,7 @@ function xpiInfo {
 			done | column -ts '='
 		elif unzip -t "$xpiFile" | \grep -wq manifest.json
 		then
-			unzip -q -p "$xpiFile" manifest.json | jq '{name:.name , id:.applications.gecko.id , description:.description , version:.version , url:.homepage_url}'
+			unzip -q -p "$xpiFile" manifest.json | jq '{name, id:.applications.gecko.id , description , version , url:.homepage_url}'
 			xpiID=$(unzip -q -p "$xpiFile" manifest.json | jq -r '.applications.gecko.id')
 		fi
 		echo
