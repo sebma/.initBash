@@ -145,7 +145,7 @@ function getPlaylistsRestrictedFilenamesFSD {
 		else
 			fqdn=$(echo "$playList" | sed "s|https?://||" | cut -d/ -f1)
 			service=$(echo $fqdn | awk -F. '{print$(NF-1)}')
-			listOfUrls=$(time getPlayListURLsFromIDs $(ytdlGetPlayListIDsFromURL $playList))
+			listOfUrls=$(time getPlayListURLsFromIDs $(ytdlGetVideoIDsFromPlayListURL $playList))
 		fi
 
 		getRestrictedFilenamesFSD $listOfUrls
@@ -168,7 +168,7 @@ function getPlaylistsRestrictedFilenamesHD {
 		else
 			fqdn=$(echo "$playList" | sed "s|https?://||" | cut -d/ -f1)
 			service=$(echo $fqdn | awk -F. '{print$(NF-1)}')
-			listOfUrls=$(time getPlayListURLsFromIDs $(ytdlGetPlayListIDsFromURL $playList))
+			listOfUrls=$(time getPlayListURLsFromIDs $(ytdlGetVideoIDsFromPlayListURL $playList))
 		fi
 
 		getRestrictedFilenamesHD $listOfUrls
@@ -192,7 +192,7 @@ function getPlaylistsRestrictedFilenamesSD {
 		else
 			fqdn=$(echo "$playList" | sed "s|https?://||" | cut -d/ -f1)
 			service=$(echo $fqdn | awk -F. '{print$(NF-1)}')
-			listOfUrls=$(time getPlayListURLsFromIDs $(ytdlGetPlayListIDsFromURL $playList))
+			listOfUrls=$(time getPlayListURLsFromIDs $(ytdlGetVideoIDsFromPlayListURL $playList))
 		fi
 
 		getRestrictedFilenamesSD $listOfUrls
@@ -516,7 +516,12 @@ function ytdlGetFormat {
 		$ytdlnoconfig -f "$format" "$url" -j | jq -r '"=> url = " + .webpage_url + "\tresolution = " + (.width|tostring)+"x"+(.height|tostring)  + "\tformat = " + .format_id' || echo
 	done | column -c $COLUMNS -ts '	'
 }
-function ytdlGetPlayListIDsFromURL {
+function ytdlGetVideoIDsFromPlayListURL {
+	test $# = 0 && {
+		echo "=> Usage: $FUNCNAME playListURL" >&2
+		return 1
+	}
+
 	local playListURL="$1"
 	local fqdn=$(echo "$playListURL" | sed "s|https?://||" | cut -d/ -f1)
 	local service=$(echo $fqdn | awk -F. '{print$(NF-1)}')
