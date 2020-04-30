@@ -537,7 +537,7 @@ function ytdlGetSize {
 		return 1
 	} || {
 		echo $firstArg | \egrep -q "^https?://" || { format=$firstArg;shift; }
-		read size url <<< $($ytdlnoconfig -j -f $format "$@" | jq -r .filesize,.url)
+		read size url <<< $($ytdlnoconfig -j -f $format "$@" | jq -r '[ .filesize ,.url | tostring ] | join(" ")')
 		[ $size = null ] && size=$(\curl -sI "$url" | \sed "s/\r//g" | awk -F ": " 'BEGIN{IGNORECASE=1}/^Content-?Length/{printf$2}')
 		echo $size
 	}
