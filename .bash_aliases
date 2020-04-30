@@ -112,6 +112,7 @@ alias gdmlogout="\gnome-session-quit --force"
 alias getFS_TYPE="\blkid -o value -s TYPE"
 alias getPip="wget -qO- https://bootstrap.pypa.io/get-pip.py | python"
 alias getUUID="\blkid -o value -s UUID"
+alias geoip="time ( \curl -sA '' ipinfo.io 2>/dev/null || \wget -qU '' -O- ipinfo.io ) | jq -r '.city+\" \"+.country'"
 alias grepInHome="time \grep --exclude-dir=Audios --exclude-dir=Music --exclude-dir=Podcasts --exclude-dir=Videos --exclude-dir=Karambiri --exclude-dir=iso --exclude-dir=Downloads --exclude-dir=Documents --exclude-dir=src --exclude-dir=Pictures --exclude-dir=.thunderbird --exclude-dir=deb --exclude-dir=apks --exclude-dir=.mozilla --exclude-dir=.PlayOnLinux --exclude-dir=PlayOnLinux\'s\ virtual\ drives --exclude-dir=.cache --exclude-dir=Sauvegarde_MB525 --exclude-dir=A_Master_RES --exclude-dir=SailFishSDK --exclude=.*history"
 alias grepfirst="grep -m1"
 alias grepfirst="grepfirst -P"
@@ -287,7 +288,7 @@ alias vihistory='\vim ~/.bash_history'
 alias vimatlab="vim +'setf matlab'"
 alias vioctave=vimatlab
 alias vlclocal='DISPLAY=:0 vlc'
-alias wanip='time \curl -A "" ipinfo.io/ip || time wget -qU "" -O- ipinfo.io/ip'
+alias wanip='time \curl -sA "" ipinfo.io/ip 2>/dev/null || time wget -qU "" -O- ipinfo.io/ip'
 alias wanipOLD='time \dig +short myip.opendns.com @resolver1.opendns.com'
 alias wavemon="xterm -e wavemon &"
 alias web2pdf='wkhtmltopdf --no-background --outline --header-line --footer-line --header-left [webpage] --footer-left "[isodate] [time]" --footer-right [page]/[toPage]'
