@@ -145,7 +145,7 @@ function getPlaylistsRestrictedFilenamesFSD {
 		else
 			fqdn=$(echo "$playList" | sed "s|https?://||" | cut -d/ -f1)
 			service=$(echo $fqdn | awk -F. '{print$(NF-1)}')
-			listOfUrls=$(time getPlayListURLsFromIDs $(ytdlGetVideoIDsFromPlayListURL $playList))
+			listOfUrls=$(time getVideoURLsFromVideoIDs $(ytdlGetVideoIDsFromPlayListURL $playList))
 		fi
 
 		getRestrictedFilenamesFSD $listOfUrls
@@ -168,7 +168,7 @@ function getPlaylistsRestrictedFilenamesHD {
 		else
 			fqdn=$(echo "$playList" | sed "s|https?://||" | cut -d/ -f1)
 			service=$(echo $fqdn | awk -F. '{print$(NF-1)}')
-			listOfUrls=$(time getPlayListURLsFromIDs $(ytdlGetVideoIDsFromPlayListURL $playList))
+			listOfUrls=$(time getVideoURLsFromVideoIDs $(ytdlGetVideoIDsFromPlayListURL $playList))
 		fi
 
 		getRestrictedFilenamesHD $listOfUrls
@@ -192,7 +192,7 @@ function getPlaylistsRestrictedFilenamesSD {
 		else
 			fqdn=$(echo "$playList" | sed "s|https?://||" | cut -d/ -f1)
 			service=$(echo $fqdn | awk -F. '{print$(NF-1)}')
-			listOfUrls=$(time getPlayListURLsFromIDs $(ytdlGetVideoIDsFromPlayListURL $playList))
+			listOfUrls=$(time getVideoURLsFromVideoIDs $(ytdlGetVideoIDsFromPlayListURL $playList))
 		fi
 
 		getRestrictedFilenamesSD $listOfUrls
@@ -528,7 +528,7 @@ function ytdlGetVideoIDsFromPlayListURL {
 	echo $service
 	test "$playListURL" && $ytdlnoconfig  --ignore-errors --flat-playlist -j "$playListURL" | jq -r .id
 }
-function getPlayListURLsFromIDs {
+function getVideoURLsFromVideoIDs {
 	local service="$1"
 	shift
 	getFullURLsFromIDs "$service" $@
