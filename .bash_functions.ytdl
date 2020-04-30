@@ -513,7 +513,7 @@ function ytdlGetFormat {
 	test $# -ge 2 && shift
 	for url
 	do
-		$ytdlnoconfig -f "$format" "$url" -j | jq -r '"=> url = \(.webpage_url)\tresolution = \(.width)x\(.height)\tformat_id = \(.format_id)"' || echo
+		$ytdlnoconfig -f "$format" "$url" -j | jq -r '"=> url = " + .webpage_url + "\tresolution = " + (.width|tostring)+"x"+(.height|tostring)  + "\tformat = " + .format_id' || echo
 	done | column -c $COLUMNS -ts '	'
 }
 function ytdlGetPlayListIDFromURL {
