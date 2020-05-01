@@ -8,7 +8,7 @@ test "$make" || { which remake >/dev/null && export make="$(which remake) $myMak
 test "$install" || { which checkinstall >/dev/null && export install="$(which checkinstall)" || export install="make install"; }
 
 function buildSourceCode {
-	test $CC || export CC=$(echo $HOSTTYPE-$OSTYPE-gcc | sed "s/armv[^-]*-/arm-/")
+	test $CC || export CC=$(\ls $(which $HOSTTYPE-$OSTYPE-gcc)-? | awk -F/ 'END{print gensub("armv[^-]*-","arm-",1,$NF)}')
 	local host=$(echo "$@" | grep -oP -- "--host=\K\S+")
 	local defaultBuildOptions=""
 	local returnCode=0
@@ -20,6 +20,7 @@ function buildSourceCode {
 	then
 		if make
 		then
+			echo "=> CC = $CC"
 			if [ -z "$host" ] # if building for this host then install
 			then
 				returnCode=$?
@@ -49,10 +50,11 @@ function buildSourceCode {
 		printf "=> ERROR: The Makefile could not be generated therefore the building the <$project> source code has failed !\n=> Listing the files :\n$(ls -l)\n" >&2
 	fi
 
-	unset CC
+	export -n CC
 	echo "=> returnCode = $returnCode" >&2
 	[ $returnCode = 0 ] && [ -z "$host" ] && set -x && sudo ldconfig
 	set +x
+	echo "=> CC = $CC"
 	return $returnCode
 }
 function checkinstallWithGitRepoInformation {
@@ -117,7 +119,7 @@ function build_in_usr_local_DEBIAN {
 	test -s GNUmakefile && time $make && sudo checkinstall
 }
 function configure {
-	test $CC || export CC=$(echo $HOSTTYPE-$OSTYPE-gcc | sed "s/armv[^-]*-/arm-/")
+	test $CC || export CC=$(\ls $(which $HOSTTYPE-$OSTYPE-gcc)-? | awk -F/ 'END{print gensub("armv[^-]*-","arm-",1,$NF)}')
 	local defaultBuildOptions=""
 	local project=$(basename $PWD)
 	local returnCode=0
@@ -219,7 +221,7 @@ function configureForJolla {
 	return $?
 }
 function make {
-	if [ -s Makefile ] || [ -s makefile ]
+	if [ -s Makefile ] || [ -s makefile ] || [ -s GNUmakefile ]
 	then
 		time CFLAGS="-g" $make $@
 	else
