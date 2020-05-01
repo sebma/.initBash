@@ -56,7 +56,8 @@ function buildSourceCode {
 	return $returnCode
 }
 function checkinstallFromGITRepoInformation {
-	echo "=> description :"
+	echo "=> Running $FUNCNAME ..."
+	echo "=> Project description is :"
 	echo
 	alias gitHTTP_URL='\git config remote.origin.url | \sed -E "s|^git@|https://|;s|(\.\w+):|\1/|"'
 	\curl -qs $(gitHTTP_URL) | pup --charset utf8 "title text{}" | cut -d: -f2-
@@ -65,7 +66,9 @@ function checkinstallFromGITRepoInformation {
 	local pkgname=$(basename -s .git $(git config --get remote.origin.url))
 	local pkgversion=$(\git describe --tags --abbrev=0 | \sed -E "s/^v|^[Vv]ersion//g")
 	local pkgsource=$(gitHTTP_URL)
+	set -x
 	sudo checkinstall --pkgname $pkgname --pkgversion $pkgversion --pkgsource=$pkgsource
+	set +x
 }
 function buildSourceCodeForAndroid {
 	local dest=arm-linux-androideabi
