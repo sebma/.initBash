@@ -128,15 +128,16 @@ function addSubtitles2mp4 {
 		return 1
 	}
 
-	local outputVideo=${inputVideo/.mp4/_NEW.mp4}
+	local extension=${inputVideo/*./}
+	local outputVideo=${inputVideo/.$extension/_NEW.$extension}
 	shift
 	local numberOfSubtitles=$#
-	(printf "ffmpeg -hide_banner -i $inputVideo ";printf -- "-i %s " "$@";printf -- "-map %d " $(seq $numberOfSubtitles);printf -- "-map 0:a -map 0:v -c copy -c:s mov_text $outputVideo\n") | sh -x
+	(printf "ffmpeg -hide_banner -i $inputVideo ";printf -- "-i %s " "$@";printf -- "-map %d " $(seq $numberOfSubtitles);printf -- "-map 0:a? -map 0:v? -c copy -c:s mov_text $outputVideo\n") | sh -x
 	local codeRet=$?
 	sync
 	sleep 1
 	touch -r "$inputVideo" "$outputVideo"
-	[ $codeRet = 0 ] && echo && \mv -vf "$outputVideo" "$inputVideo"
+	[ $codeRet = 0 ] && echo && \mv -vf "$outputVideo" "$inputVideo" && \rm "$@"
 }
 function addThumbnail2mp4 {
 	test $# = 0 && {
