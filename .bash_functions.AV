@@ -133,11 +133,11 @@ function addSubtitles2mp4 {
 	shift
 	local numberOfSubtitles=$#
 	(printf "ffmpeg -hide_banner -i $inputVideo ";printf -- "-i %s " "$@";printf -- "-map %d " $(seq $numberOfSubtitles);printf -- "-map 0:a? -map 0:v? -c copy -c:s mov_text $outputVideo\n") | sh -x
-	local codeRet=$?
+	local retCode=$?
 	sync
 	sleep 1
 	touch -r "$inputVideo" "$outputVideo"
-	[ $codeRet = 0 ] && echo && \mv -vf "$outputVideo" "$inputVideo" && \rm "$@"
+	[ $retCode = 0 ] && echo && \mv -vf "$outputVideo" "$inputVideo" && \rm "$@"
 }
 function addThumbnail2mp4 {
 	test $# = 0 && {
