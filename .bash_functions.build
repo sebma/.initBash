@@ -28,7 +28,7 @@ function buildSourceCode {
 					if which checkinstall >/dev/null
 					then
 						if git status -s 2>/dev/null;then
-							checkinstallFromGITRepoInformation
+							checkinstallWithGitRepoInformation
 						else
 							sudo checkinstall
 						fi
@@ -55,7 +55,7 @@ function buildSourceCode {
 	set +x
 	return $returnCode
 }
-function checkinstallFromGITRepoInformation {
+function checkinstallWithGitRepoInformation {
 	echo "=> Running $FUNCNAME ..."
 	echo "=> Project description is :"
 	echo
