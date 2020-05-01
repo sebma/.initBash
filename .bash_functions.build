@@ -118,9 +118,12 @@ function build_in_usr_local_DEBIAN {
 }
 function configure {
 	test $CC || export CC=$(echo $HOSTTYPE-$OSTYPE-gcc | sed "s/armv[^-]*-/arm-/")
-	local defaultBuildOptions="--enable-shared"
+	local defaultBuildOptions=""
 	local project=$(basename $PWD)
 	local returnCode=0
+
+	./configure --help | \grep -q -- "--enable-shared" && defaultBuildOptions="--enable-shared"
+
 	test "$1" = "-h" && {
 		echo "=> Usage: $FUNCNAME [--prefix=/installation/path] [./configure arguments ...]" >&2
 		return 1
