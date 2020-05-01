@@ -28,7 +28,7 @@ function buildSourceCode {
 				then
 					if which checkinstall >/dev/null
 					then
-						if git status -s 2>/dev/null;then
+						if git status -uno -sb 2>/dev/null;then
 							checkinstallWithGitRepoInformation
 						else
 							sudo checkinstall
