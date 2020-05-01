@@ -150,18 +150,19 @@ function addThumbnail2mp4 {
 		baseName="${mp4File/.*}"
 		artworkFile="$(\ls -1 "$baseName".* | \grep -v ".$extension$")"
 		artworkExtension="${artworkFile/*.}"
+
 		test ! -s "$artworkFile" && echo "=> [$FUNCNAME][WARNING] There is no artwork for <$mp4File>, skipping ..." >&2 && continue
-		if AtomicParsley "$mp4File" --artwork "$artworkFile" --overWrite;then
-			rm "$artworkFile"
-		else
+
+		if ! file -b "$artworkFile" | \grep -q JPEG.*JFIF ;then 
 			convert "$artworkFile" "${baseName}_NEW.$artworkExtension"
 			\mv "${baseName}_NEW.$artworkExtension" "$artworkFile"
-			AtomicParsley "$mp4File" --artwork "$artworkFile" --overWrite && rm "$artworkFile"
 		fi
+
+		AtomicParsley "$mp4File" --artwork "$artworkFile" --overWrite && rm "$artworkFile"
 		sync
 	done
 }
-function addThumbnail2mp4_Old {
+function addThumbnail2mp4Files {
 	test $# = 0 && {
 		echo "=> Usage: $FUNCNAME artworkFile file1 file2 file3 ..." >&2
 		return 1
@@ -169,9 +170,13 @@ function addThumbnail2mp4_Old {
 
 	local artworkFile="$1"
 	local extension="${artworkFile/*.}"
-	convert "$artworkFile" "${artworkFile/.*}_NEW.$extension"
-	\mv "${artworkFile/.*}_NEW.$extension" "$artworkFile"
 	shift
+
+	if ! file -b "$artworkFile" | \grep -q JPEG.*JFIF ;then 
+		convert "$artworkFile" "${artworkFile/.*}_NEW.$extension"
+		\mv "${artworkFile/.*}_NEW.$extension" "$artworkFile"
+	fi
+
 	for mpeg_4
 	do
 		AtomicParsley "$mpeg_4" --artwork "$artworkFile" --overWrite
