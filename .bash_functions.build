@@ -58,15 +58,17 @@ function buildSourceCode {
 	return $returnCode
 }
 function checkinstallWithGitRepoInformation {
+	local sed="command sed -E"
+	alias gitHTTP_URL='\git config remote.origin.url | \sed -E "s|^git@|https://|;s|(\.\w+):|\1/|"'
+
 	echo "=> Running $FUNCNAME ..."
 	echo "=> Project description is :"
 	echo
-	alias gitHTTP_URL='\git config remote.origin.url | \sed -E "s|^git@|https://|;s|(\.\w+):|\1/|"'
 	\curl -qs $(gitHTTP_URL) | pup --charset utf8 "title text{}" | cut -d: -f2-
 	echo
 
 	local pkgname=$(basename -s .git $(git config --get remote.origin.url))
-	local pkgversion=$(\git describe --tags --abbrev=0 | \sed -E "s/^v|^[Vv]ersion//g")
+	local pkgversion=$(\git describe --tags --abbrev=0 | $sed "s/^v|^[Vv]ersion//g;s/^.*-//")
 	local pkgsource=$(gitHTTP_URL)
 	set -x
 	sudo checkinstall --pkgname $pkgname --pkgversion $pkgversion --pkgsource=$pkgsource
