@@ -21,7 +21,7 @@ function buildSourceCode {
 	then
 		if make
 		then
-			echo "=> CC = $CC"
+			test -n "$CC" && echo "=> CC = $CC"
 			if [ -z "$host" ] # if building for this host then install
 			then
 				returnCode=$?
@@ -51,11 +51,11 @@ function buildSourceCode {
 		printf "=> ERROR: The Makefile could not be generated therefore the building the <$project> source code has failed !\n=> Listing the files :\n$(ls -l)\n" >&2
 	fi
 
-	export -n CC
 	echo "=> returnCode = $returnCode" >&2
 	[ $returnCode = 0 ] && [ -z "$host" ] && set -x && sudo ldconfig
 	set +x
-	echo "=> CC = $CC"
+	test -n "$CC" && echo "=> CC = $CC"
+	export -n CC
 	return $returnCode
 }
 function checkinstallWithGitRepoInformation {
