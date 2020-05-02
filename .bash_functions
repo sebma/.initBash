@@ -1203,49 +1203,40 @@ function resetRESOLUTION {
 	\xrandr | awk '{if(/\<connected/)output=$1;if(/\*/){print"xrandr --output "output" --mode "$1;exit}}' | sh -x
 }
 function resizePics {
+	local defaultWidth=1024
+	local defaultHeight=768
+	local width=-1 height=-1
+
+	if echo $1 | \egrep -q "^[0-9]+$";then
+		width=$1
+		shift
+		height=$(awk "BEGIN{print $width*768/1024}")
+	else
+		width=$defaultWidth
+		height=$defaultHeight
+	fi
+
+	local format="${width}x${height}"
 	for src
 	do
 		ext=$(echo "$src" | awk -F. '{print$NF}')
 		dst="${src/.$ext/-SMALLER}.$ext"
-		convert -verbose -resize '1024x768>' "$src" "$dst"
+		convert -verbose -resize "${format}>" "$src" "$dst"
 		touch -r "$src" "$dst"
+		exiftran -gpi "$dst"
 	done
 }
 function resizePics_1536 {
-	for src
-	do
-		ext=$(echo "$src" | awk -F. '{print$NF}')
-		dst="${src/.$ext/-SMALLER_1536}.$ext"
-		convert -verbose -resize '1536x1152>' "$src" "$dst"
-		touch -r "$src" "$dst"
-	done
+	resizePics 1536 "$@"
 }
 function resizePics_2048 {
-	for src
-	do
-		ext=$(echo "$src" | awk -F. '{print$NF}')
-		dst="${src/.$ext/-SMALLER_2048}.$ext"
-		convert -verbose -resize "$((2*1024))x$((2*768))>" "$src" "$dst"
-		touch -r "$src" "$dst"
-	done
+	resizePics 2048 "$@"
 }
 function resizePics_3072 {
-	for src
-	do
-		ext=$(echo "$src" | awk -F. '{print$NF}')
-		dst="${src/.$ext/-SMALLER_3072}.$ext"
-		convert -verbose -resize "$((3*1024))x$((3*768))>" "$src" "$dst"
-		touch -r "$src" "$dst"
-	done
+	resizePics 3072 "$@"
 }
 function resizePics_4096 {
-	for src
-	do
-		ext=$(echo "$src" | awk -F. '{print$NF}')
-		dst="${src/.$ext/-SMALLER_4096}.$ext"
-		convert -verbose -resize "$((4*1024))x$((4*768))>" "$src" "$dst"
-		touch -r "$src" "$dst"
-	done
+	resizePics 4096 "$@"
 }
 function restart_conky {
 	for server
