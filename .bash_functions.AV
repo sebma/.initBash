@@ -27,7 +27,7 @@ audioDecode=( [libspeex]=$(which speexdec 2>/dev/null) [speex]=$(which speexdec 
 alias mp32wavstdout="\mpg123 --wav - "
 alias ogg2wavstdout="\oggdec --output=- "
 
-alias addCover2mp4=addThumbnail2mp4
+alias addCover2mp4=addThumbnail2mp4_AtomicParsley
 
 #function aacDir2mp3 { inp=aac; shopt -s globstar && time for f in **/*.$inp; do time avconv -i "$f" "${f/.$inp/.mp3}" && rm -v "$f"; done; }
 function _16kwav16k2opus {
@@ -139,53 +139,86 @@ function addSubtitles2mp4 {
 	touch -r "$inputVideo" "$outputVideo"
 	[ $retCode = 0 ] && echo && \mv -vf "$outputVideo" "$inputVideo" && \rm "$@"
 }
-function addThumbnail2mp4 {
+function addRespectiveThumbnail2mp4 {
 	test $# = 0 && {
 		echo "=> Usage: $FUNCNAME mp4File1 mp4File2 mp4File3 ..." >&2
 		return 1
 	}
 
+	local timestampFileRef=null baseName=null artworkFile=null
 	for mp4File
 	do
-		baseName="${mp4File/.*}"
+		baseName="${mp4File/.*/}"
 		artworkFile="$(\ls -1 "$baseName".* | \grep -v ".$extension$")"
-		artworkExtension="${artworkFile/*.}"
 
 		test ! -s "$artworkFile" && echo "=> [$FUNCNAME][WARNING] There is no artwork for <$mp4File>, skipping ..." >&2 && continue
 
-		if ! file -b "$artworkFile" | \grep -q JPEG.*JFIF ;then 
-			convert "$artworkFile" "${baseName}_NEW.$artworkExtension"
-			\mv "${baseName}_NEW.$artworkExtension" "$artworkFile"
-		fi
-
-		AtomicParsley "$mp4File" --artwork "$artworkFile" --overWrite && rm "$artworkFile"
-		sync
+		timestampFileRef=$(mktemp) && touch -r "$mp4File" $timestampFileRef
+		addThumbnail2mp4_AtomicParsley "$artworkFile" "$mp4File" && rm "$artworkFile"
+		touch -r $timestampFileRef "$mp4File" && \rm $timestampFileRef
 	done
 }
-function addThumbnail2mp4Files {
+function addThumbnail2mp4_ffmpeg {
 	test $# = 0 && {
-		echo "=> Usage: $FUNCNAME artworkFile file1 file2 file3 ..." >&2
+		echo "=> Usage: $FUNCNAME artworkFile file" >&2
 		return 1
 	}
 
 	local artworkFile="$1"
-	local extension="${artworkFile/*.}"
 	shift
 
-	if ! file -b "$artworkFile" | \grep -q JPEG.*JFIF ;then 
-		convert "$artworkFile" "${artworkFile/.*}_NEW.$extension"
-		\mv "${artworkFile/.*}_NEW.$extension" "$artworkFile"
+	local fileName="$1"
+	local timestampFileRef=$(mktemp) && touch -r "$fileName" $timestampFileRef
+	local extension=${fileName/*./}
+
+	echo "[ffmpeg] Adding thumbnail to '$fileName'"
+	set -x
+	$ffmpeg -loglevel repeat+error -i "$fileName" -i "$artworkFile" -map 0 -map 1 -c copy -disposition:v:1 attached_pic "${fileName/.$extension/_NEW.$extension}"
+	[ $? = 0 ] && set +x && mv -f "${fileName/.$extension/_NEW.$extension}" "$fileName" || set +x
+
+	touch -r $timestampFileRef "$fileName" && \rm $timestampFileRef
+	sync
+}
+function addThumbnail2mp4_mp4art {
+	test $# = 0 && {
+		echo "=> Usage: $FUNCNAME artworkFile file" >&2
+		return 1
+	}
+
+	local artworkFile="$1"
+	shift
+
+	local fileName="$1"
+	local timestampFileRef=$(mktemp) && touch -r "$fileName" $timestampFileRef
+	mp4art --remove "$fileName"
+	mp4art --add "$artworkFile" "$fileName"
+	touch -r $timestampFileRef "$fileName" && \rm $timestampFileRef
+	sync
+}
+function addThumbnail2mp4_AtomicParsley {
+	test $# = 0 && {
+		echo "=> Usage: $FUNCNAME artworkFile file" >&2
+		return 1
+	}
+
+	local artworkFile="$1"
+	local artworkExtension="${artworkFile/*./}"
+	shift
+
+	if ! file -b "$artworkFile" | \grep -q JPEG.*JFIF; then
+		convert "$artworkFile" "${artworkFile/.*}_NEW.$artworkExtension" && mv -f "${artworkFile/.*}_NEW.$artworkExtension" "$artworkFile"
 	fi
 
-	for mpeg_4
-	do
-		AtomicParsley "$mpeg_4" --artwork "$artworkFile" --overWrite
-	done
+	local fileName="$1"
+	local timestampFileRef=$(mktemp) && touch -r "$fileName" $timestampFileRef
+	AtomicParsley "$fileName" --artwork "$artworkFile" --overWrite
+	touch -r $timestampFileRef "$fileName" && \rm $timestampFileRef
+	sync
 }
 function addURL2Audio_Video {
 	local url=$1
 	local fileName=$2
-	extension=${fileName/*./}
+	local extension=${fileName/*./}
 #	$ffmpeg -i "$fileName" -map 0 -c copy -metadata description="$url" "${fileName%.*}-NEW.$extension" && mv -vf "${fileName%.*}-NEW.$extension" $fileName
 	[ $extension = mp4 ] || [ $extension = m4a ] && mp4tags -m "$url" "$fileName"
 	sync
