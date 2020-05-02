@@ -1169,6 +1169,16 @@ function psSeb { # Les fontions qui avaient le meme nom que les commands sont ex
 function pythonCalc {
 	\python -c "print(${*/^/**})"
 }
+function realpathSeb {
+	for path
+	do
+		while [ -L "${path}" ]
+		do
+			path="$(\ls -l "${path}" | awk '{print $NF}')"
+		done
+		which "${path}"
+	done
+}
 function reload_SHELL_Functions_And_Aliases {
 #	for script in ~/.${0}rc $initDir/.*functions $initDir/.*aliases $initDir/.*aliases.$osFamily
 	for script in $initDir/.bashrc.$osFamily $initDir/.*functions $initDir/.*functions.$osFamily $initDir/.*aliases $initDir/.*aliases.$osFamily
