@@ -5,13 +5,8 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 
 \which ffmpeg  >/dev/null 2>&1 && ffmpeg="command  ffmpeg  -hide_banner" &&  ffmpegOptions="-probesize 400M -analyzeduration 400M"
 \which ffprobe >/dev/null 2>&1 && ffprobe="command ffprobe -hide_banner" && ffprobeOptions="-probesize 400M -analyzeduration 400M"
-\which ffplay >/dev/null 2>&1 && ffplay="command ffplay -hide_banner" && alias ffplay="\ffplay -hide_banner"
-alias ffmpeg="time \ffmpeg -hide_banner"
-alias ffprobe="time \ffprobe -hide_banner"
 
 #youtube_dl="eval LANG=C.UTF-8 command youtube-dl" # i.e https://unix.stackexchange.com/questions/505733/ # eval A EVITER
-alias youtube-dl="LANG=C.UTF-8 command youtube-dl"
-alias ytdl="LANG=C.UTF-8 command youtube-dl"
 
 remuxOptions="-map 0 -c copy"
 mp4Options="-movflags +frag_keyframe"
@@ -23,11 +18,6 @@ cdr_device=/dev/dvd
 audioExtension=( [libspeex]=spx [speex]=spx [opus]=opus [vorbis]=ogg [aac]=m4a [mp3]=mp3 [mp2]=mp2 [ac3]=ac3 [wmav2]=wma [pcm_dvd]=wav [pcm_s16le]=wav )
 videoExtension=( [h264]=m4v [mpeg1video]=mpg [mpeg2video]=vob [mpeg4]=avi [flv1]=flv [wmv3]=wmv )
 audioDecode=( [libspeex]=$(which speexdec 2>/dev/null) [speex]=$(which speexdec 2>/dev/null) [opus]=$(which opusdec 2>/dev/null) [vorbis]=$(which oggdec 2>/dev/null) )
-
-alias mp32wavstdout="\mpg123 --wav - "
-alias ogg2wavstdout="\oggdec --output=- "
-
-alias addCover2mp4=addThumbnail2mp4_AtomicParsley
 
 #function aacDir2mp3 { inp=aac; shopt -s globstar && time for f in **/*.$inp; do time avconv -i "$f" "${f/.$inp/.mp3}" && rm -v "$f"; done; }
 function _16kwav16k2opus {
@@ -211,7 +201,7 @@ function addThumbnail2mp4_AtomicParsley {
 	shift
 
 	if ! file -b "$artworkFile" | \grep -q JPEG.*JFIF; then
-		convert "$artworkFile" "${artworkFile/.*}_NEW.$artworkExtension" && mv -f "${artworkFile/.*}_NEW.$artworkExtension" "$artworkFile"
+		convert -verbose "$artworkFile" "${artworkFile/.*}_NEW.$artworkExtension" && mv -f "${artworkFile/.*}_NEW.$artworkExtension" "$artworkFile"
 	fi
 
 	local fileName="$1"
