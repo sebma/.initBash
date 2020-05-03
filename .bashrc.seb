@@ -51,6 +51,7 @@ addmanpaths $manPathsList
 which lpr >/dev/null 2>&1 && test -f $initDir/.bash_aliases.lpr && Source $initDir/.bash_aliases.lpr
 
 which mpv >/dev/null 2>&1 && test -r $initDir/.bash_aliases.mpv   && Source $initDir/.bash_aliases.mpv
+which ffmpeg >/dev/null 2>&1 && test -r $initDir/.bash_aliases.AV   && Source $initDir/.bash_aliases.AV
 which mpv >/dev/null 2>&1 && test -r $initDir/.bash_functions.mpv && Source $initDir/.bash_functions.mpv
 
 #Export de toutes les fonctions sauf celles dont le nom commence par "_"
