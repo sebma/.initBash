@@ -8,7 +8,7 @@ alias ffmpeg="time \ffmpeg -hide_banner"
 alias ffprobe="time \ffprobe -hide_banner"
 alias mp32wavstdout="\mpg123 --wav - "
 alias ogg2wavstdout="\oggdec --output=- "
-alias stopLiveRecording='command pkill -SIGINT -fu $USER youtube-dl.*/live'
+alias stopLiveRecording='pkill -SIGINT youtube-dl.*/live'
 alias youtube-dl="LANG=C.UTF-8 command youtube-dl"
 alias ytdl="LANG=C.UTF-8 command youtube-dl"
 
