@@ -176,6 +176,12 @@ alias mpath='\echo $PATH | tr ":" "\n"'
 alias mutt="LANG=C.UTF-8 \mutt"
 alias muttDebug="LANG=C.UTF-8 \mutt -nd5"
 alias mv='\mv -vi'
+alias mv2FAT32="cp2FAT32 --remove-source-files"
+alias mv2NTFS="cp2NTFS --remove-source-files"
+alias mv2SDCard="cp2SDCard --remove-source-files"
+alias mv2exFAT="cp2exFAT --remove-source-files"
+alias mv2ext234="cp2ext234 --remove-source-files"
+alias mv2ftpfs="cp2ftpfs --remove-source-files"
 alias myCity="time curl ipinfo.io/city"
 alias myCountry="time curl ipinfo.io/country"
 alias myIP="time curl ipinfo.io/ip"
