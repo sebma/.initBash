@@ -6,22 +6,27 @@
 if tty -s
 then
 	set -o | \grep -wq xtrace.*on && trace=1 || trace=0
-	export normal=$(tput sgr0)
-	export bell=$(tput bel)
-	export bold=$(tput bold)
-	export dim=$(tput dim)
-	export italics=$(tput sitm)
-	export underlined=$(tput smul)
-	export blink=$(tput blink)
-	set +x
-	export reverse=$(tput rev)
-	export hidden=$(tput invis)
-	export blinkOff="$escapeChar[25m"
-	[ $trace = 1 ] && set -x
+	if which tput >/dev/null 2>&1;then
+		export normal=$(tput sgr0)
+		export bell=$(tput bel)
+		export bold=$(tput bold)
+		export dim=$(tput dim)
+		export italics=$(tput sitm)
+		export underlined=$(tput smul)
+		export blink=$(tput blink)
+		set +x
+		export reverse=$(tput rev)
+		export hidden=$(tput invis)
+		export blinkOff=${escapeChar}'[25m'
+		[ $trace = 1 ] && set -x
 	
-	[ $BASH_VERSINFO -ge 4 ] && declare -A effects=( [bold]=$(tput bold) [dim]=$(tput dim) [italics]=$(tput sitm) [underlined]=$(tput smul) [blink]=$(tput blink) [reverse]=$(tput rev) [hidden]=$(tput invis) [blinkOff]=$blinkOff )
-	[ $BASH_VERSINFO -ge 4 ] && declare -A colors=( [red]=$(tput setaf 1) [green]=$(tput setaf 2) [blue]=$(tput setaf 4) [cyan]=$(tput setaf 6) [yellow]=$(tput setaf 11) [yellowOnRed]=$(tput setaf 11)$(tput setab 1) [greenOnBlue]=$(tput setaf 2)$(tput setab 4) [yellowOnBlue]=$(tput setaf 11)$(tput setab 4) [cyanOnBlue]=$(tput setaf 6)$(tput setab 4) [whiteOnBlue]=$(tput setaf 7)$(tput setab 4) [redOnGrey]=$(tput setaf 1)$(tput setab 7) [blueOnGrey]=$(tput setaf 4)$(tput setab 7) )
+		[ $BASH_VERSINFO -ge 4 ] && declare -A effects=( [bold]=$(tput bold) [dim]=$(tput dim) [italics]=$(tput sitm) [underlined]=$(tput smul) [blink]=$(tput blink) [reverse]=$(tput rev) [hidden]=$(tput invis) [blinkOff]=$blinkOff )
+		[ $BASH_VERSINFO -ge 4 ] && declare -A colors=( [red]=$(tput setaf 1) [green]=$(tput setaf 2) [blue]=$(tput setaf 4) [cyan]=$(tput setaf 6) [yellow]=$(tput setaf 11) [yellowOnRed]=$(tput setaf 11)$(tput setab 1) [greenOnBlue]=$(tput setaf 2)$(tput setab 4) [yellowOnBlue]=$(tput setaf 11)$(tput setab 4) [cyanOnBlue]=$(tput setaf 6)$(tput setab 4) [whiteOnBlue]=$(tput setaf 7)$(tput setab 4) [redOnGrey]=$(tput setaf 1)$(tput setab 7) [blueOnGrey]=$(tput setaf 4)$(tput setab 7) )
 	
+	else
+		export normal=${escapeChar}'[m'
+	fi
+
 #	export colors effects
 	printf $normal
 fi
