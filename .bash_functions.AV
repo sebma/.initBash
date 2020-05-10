@@ -111,7 +111,7 @@ function addChaptersToMP4 {
 	done
 	sync
 }
-function addSubtitles2mp4 {
+function addSubtitles2media {
 	local inputVideo=$1
 	test $# -le 1 && {
 		echo "=> Usage: $FUNCNAME inputVideo subFile1 subFile2 subFile3 ..." >&2
@@ -119,10 +119,17 @@ function addSubtitles2mp4 {
 	}
 
 	local extension=${inputVideo/*./}
+
+	case $extension in
+		mp4|m4a|m4b|mov) subTitleCodec=mov_text;;
+		webm|mkv|mka) subTitleCodec=srt;;
+		*) subTitleCodec=not_supported;;
+	esac
+
 	local outputVideo=${inputVideo/.$extension/_NEW.$extension}
 	shift
 	local numberOfSubtitles=$#
-	(printf "ffmpeg -hide_banner -i $inputVideo ";printf -- "-i %s " "$@";printf -- "-map %d " $(seq $numberOfSubtitles);printf -- "-map 0:a? -map 0:v? -c copy -c:s mov_text $outputVideo\n") | sh -x
+	(printf "ffmpeg -hide_banner -i $inputVideo ";printf -- "-i %s " "$@";printf -- "-map 0:a? -map 0:v? ";printf -- "-map %d " $(seq $numberOfSubtitles);printf -- "-c copy -c:s $subTitleCodec $outputVideo\n") | sh -x
 	local retCode=$?
 	sync
 	sleep 1
