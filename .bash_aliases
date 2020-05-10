@@ -142,7 +142,7 @@ alias jpg2pdfA4=jpeg2pdfA4
 alias jpg2pdfA4R=jpeg2pdfA4R
 alias keyFrames="command ffprobe -hide_banner -loglevel error -skip_frame nokey -select_streams v:0 -show_entries frame=pkt_pts_time -of csv=print_section=0"
 alias killall="\killall -v"
-alias kshVersion="type ksh >/dev/null && strings $(which ksh) | grep Version | tail -2"
+which ksh >/dev/null && alias kshVersion="strings $(which ksh) | grep Version | tail -2"
 alias l1="ls -1"
 alias lastfiles='$(which find) . -xdev -type f -mmin -2'
 alias lastloggin='\lastlog -u $USER'
