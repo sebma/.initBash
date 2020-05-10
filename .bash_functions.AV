@@ -519,18 +519,24 @@ function audio2stout {
 }
 function audioChannelLayoutOfFile {
 	local audioChannelLayout
+	local ffprobeJSON_File_Info=null
 	for file
 	do
-		audioChannelLayout=$($ffprobe "$file" -select_streams a:0 -show_entries stream=channel_layout -of default=noprint_wrappers=1:nokey=1 -v error)
+#		audioChannelLayout=$($ffprobe "$file" -select_streams a:0? -show_entries stream=channel_layout -of default=noprint_wrappers=1:nokey=1 -v error)
+		ffprobeJSON_File_Info=$($ffprobe -v error -show_format -show_streams -print_format json "$file")
+		audioChannelLayout=$(echo $ffprobeJSON_File_Info | jq -r '[ .streams[] | select(.codec_type=="audio") ][-1].channel_layout')
 		printf "=> $file : audioChannelLayout = " >&2
 		echo $audioChannelLayout
 	done
 }
 function audioCodecOfFile {
 	local audioCodec
+	local ffprobeJSON_File_Info=null
 	for file
 	do
-		audioCodec=$($ffprobe "$file" -select_streams a:0 -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 -v error)
+#		audioCodec=$($ffprobe "$file" -select_streams a:0? -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 -v error)
+		ffprobeJSON_File_Info=$($ffprobe -v error -show_format -show_streams -print_format json "$file")
+		audioCodec=$(echo $ffprobeJSON_File_Info | jq -r '[ .streams[] | select(.codec_type=="audio") ][-1].codec_name')
 		printf "=> $file : audioCodec = " >&2
 		echo $audioCodec
 	done
@@ -967,20 +973,38 @@ function urlinfo {
 		$ffprobe $(youtube-dl -gf best -- "$url")
 	done
 }
-function videoCodecOfFile {
-	local videoCodec
+function subtitleCodecOfFile {
+	local subtitleCodec
+	local ffprobeJSON_File_Info=null
 	for file
 	do
-		videoCodec=$($ffprobe "$file" -select_streams v:0 -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 -v error)
+#		subtitleCodec=$($ffprobe "$file" -select_streams s:0? -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 -v error)
+		ffprobeJSON_File_Info=$($ffprobe -v error -show_format -show_streams -print_format json "$file")
+		subtitleCodec=$(echo $ffprobeJSON_File_Info | jq -r '[ .streams[] | select(.codec_type=="subtitle") ][-1].codec_name')
+		printf "=> $file : subtitleCodec = " >&2
+		echo $subtitleCodec
+	done
+}
+function videoCodecOfFile {
+	local videoCodec
+	local ffprobeJSON_File_Info=null
+	for file
+	do
+#		videoCodec=$($ffprobe "$file" -select_streams v:0? -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 -v error)
+		ffprobeJSON_File_Info=$($ffprobe -v error -show_format -show_streams -print_format json "$file")
+		videoCodec=$(echo $ffprobeJSON_File_Info | jq -r '[ .streams[] | select(.codec_type=="video") ][-1].codec_name')
 		printf "=> $file : videoCodec = " >&2
 		echo $videoCodec
 	done
 }
 function containerOfFile {
 	local container
+	local ffprobeJSON_File_Info=null
 	for file
 	do
-		container=$($ffprobe "$file" -show_entries format=format_name -of default=noprint_wrappers=1:nokey=1 -v error)
+#		container=$($ffprobe "$file" -show_entries format=format_name -of default=noprint_wrappers=1:nokey=1 -v error)
+		ffprobeJSON_File_Info=$($ffprobe -v error -show_format -show_streams -print_format json "$file")
+		container=$(echo $ffprobeJSON_File_Info | jq -r .format.format_name | cut -d, -f1)
 		printf "=> $file : container = " >&2
 		echo $container
 	done
