@@ -122,7 +122,8 @@ function addSubtitles2media {
 
 	case $extension in
 		mp4|m4a|m4b|mov) subTitleCodec=mov_text;;
-		webm|mkv|mka) subTitleCodec=srt;;
+#		webm|mkv|mka) subTitleCodec=srt;;
+		webm|mkv|mka) subTitleCodec=webvtt;;
 		*) subTitleCodec=not_supported;;
 	esac
 
