@@ -38,7 +38,7 @@ function mpv2 {
 function mpvFORMAT {
 	\rm nohup.out
 	touch nohup.out
-	nohup $mpv --ytdl-format="$@" &
+	mpvNoHup --ytdl-format="$@" &
 	tail -f nohup.out | egrep -v "AV: "
 }
 function mpvInit {
@@ -74,13 +74,13 @@ function mpvalt {
 function mpvdirectly {
 	\rm nohup.out
 	touch nohup.out
-	nohup $mpv --no-ytdl "$@" &
+	mpvNoHup --no-ytdl "$@" &
 	tail -f nohup.out | egrep -v "AV: "
 }
 function mpvlive {
 	\rm nohup.out
 	touch nohup.out
-	nohup $mpv --no-resume-playback "$@" &
+	mpvNoHup --no-resume-playback "$@" &
 	tail -f nohup.out | egrep -v "AV: "
 }
 function mpvlocal {
@@ -112,8 +112,11 @@ function mpvPlaylistFileFORMAT {
 	local playlist
 	echo -- $1 | \grep -q -- "--" && format="$1" && playlist="$2" && shift || playlist="$1"
 	shift
-	nohup $mpv "$firstArg" --ytdl-format="$format" --playlist="$playlist" "$@" &
+	mpvNoHup "$firstArg" --ytdl-format="$format" --playlist="$playlist" "$@" &
 	tail -f nohup.out | egrep -v "AV: "
+}
+function mpvNoHup {
+	nohup $mpv --profile=background "$@"
 }
 function urlplayer {
 	$mpv $(youtube-dl -gf best "$1")
