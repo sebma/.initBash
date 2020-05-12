@@ -4,7 +4,7 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 
 [ $osFamily = Linux ] && [ -c /dev/fb0 ] && tty | egrep -q "/dev/tty[0-9]+" && mpvDefaultOptions="--vo=drm" && mplayerDefaultOptions="--vo=fbdev2"
 
-export mpv_Output_Perl_Script="'\$| = 1;s/\n/\r/g if \$_ =~ /AV: /;s/Saving state/\nSaving state/'" # On l'export pour qu'elle soit accessible du processus fils
+export mpv_Output_Perl_Script="'\$| = 1;s/\n/\r/g if \$_ =~ /AV: /;s/Saving state/\nSaving state/'" # On l'exporte pour qu'elle soit accessible du processus fils
 
 mpv="$(which mpv)"
 alias mpv="LANG=en_US.utf8 $mpv $mpvDefaultOptions"
