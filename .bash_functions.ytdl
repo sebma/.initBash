@@ -561,7 +561,14 @@ function ytdlSDFormats {
 }
 function ytdlUpdate {
 	local -r isAdmin=$(groups 2>/dev/null | \egrep -wq "sudo|adm|admin|root" && echo true || echo false)
-	local ytdlGitURL=https://github.com/ytdl-org/youtube-dl
+	if [ $# -gt 1 ];then
+		echo "=> Usage: $FUNCNAME [ytdlGitURL]"
+		return 1
+	elif [ $# = 1 ];then
+		local ytdlGitURL=$1
+	else
+		local ytdlGitURL=https://github.com/ytdl-org/youtube-dl
+	fi
 
 	local sudo=""
 	if $isAdmin
