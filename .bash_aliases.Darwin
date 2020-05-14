@@ -51,7 +51,6 @@ alias ll="ls -blF -T"
 alias ls="ls -GF"
 alias lsusb="\system_profiler SPUSBDataType"
 alias more="\more -r"
-alias osFamily='uname -s'
 alias osinfo="\system_profiler SPSoftwareDataType;\system_profiler SPInstallHistoryDataType | \grep Install.macOS"
 alias pkgInstaller="\installer -pkg"
 alias powershell="\pwsh"
