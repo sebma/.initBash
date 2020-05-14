@@ -200,6 +200,7 @@ alias openedFiles="\strace -e trace=open,close,read,write,connect,accept"
 alias openwrtTOH="\curl -s https://openwrt.org/_media/toh_dump_tab_separated_csv.csv.gz | \gunzip -c"
 alias openwrtSupportedRouters="openwrtTOH | awk '/WiFi Router/{for(i=4;i<=5;i++)printf\$i\" \";print\$i}'"
 alias openwrtMostSupportedRouterBrands="openwrtTOH | awk '/WiFi Router/{print\$4}' | sort | uniq -c | sort -rn"
+alias osFamily='echo $OSTYPE | grep android || uname -s'
 alias page="\head -50"
 alias pcmanfm="\pcmanfm --no-desktop"
 alias perlInterpreter="\perl -de ''"
