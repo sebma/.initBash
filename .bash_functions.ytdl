@@ -17,7 +17,7 @@ alias ytdl="LANG=C.UTF-8 command youtube-dl"
 ytdlnoconfig="youtube-dl --ignore-config"
 alias ytdlnoconfig="$ytdlnoconfig"
 
-alias ytdlLastRelease='\git ls-remote --tags --sort="version:refname" https://github.com/ytdl-org/youtube-dl | awk -F/ '\''END{print gensub("[{}^]+","",1,$NF)}'\'''
+alias ytdlLastRelease='\git ls-remote --tags --refs --sort="version:refname" https://github.com/ytdl-org/youtube-dl | awk -F/ "END{print\$NF}"'
 alias ytdlVersion="ytdl --version"
 alias ytdlGetFileName="\youtube-dl --get-filename"
 alias ytdlGetFormatID="\youtube-dl --get-filename -o '%(format_id)s' -f"
@@ -580,7 +580,7 @@ function ytdlUpdate {
 	local youtube_dl=$(which youtube-dl)
 	if [ "$youtube_dl" ];then
 		local ytdlPythonVersion=$($youtube_dl --ignore-config -v 2>&1 | awk -F "[ .]" '/Python version/{printf$4"."$5}')
-		local ytdlLastRelease=$(\git ls-remote --tags --sort="version:refname" $ytdlGitURL | awk -F/ 'END{print gensub("[{}^]+","",1,$NF)}')
+		local ytdlLastRelease=$(\git ls-remote --tags --refs --sort="version:refname" $ytdlGitURL | awk -F/ 'END{print$NF}')
 		local ytdlCurrentRelease=$($youtube_dl --version)
 
 		[ $ytdlLastRelease = $ytdlCurrentRelease ] && echo "[$FUNCNAME] => INFO : You already have the latest release, which is $ytdlLastRelease." >&2 || $sudo $(which pip$ytdlPythonVersion) install -U youtube-dl
