@@ -70,6 +70,9 @@ function aptitude {
 		*) command aptitude "${args[@]}";;
 	esac
 }
+function deblocate {
+	dlocate $(printf "bin/%s$ " "$@")
+}
 function debEditDependencies {
 	test $# = 0 && {
 		echo "=> Usage: $FUNCNAME debianPackageFileName" >&2
