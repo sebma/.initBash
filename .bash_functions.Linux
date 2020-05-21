@@ -116,6 +116,8 @@ function umount {
 		mountDIR="$dir_or_device"
 	fi
 
+	device=$(echo "$device" | egrep -wq /dev/dm-[0-9]+ && { lsblk -n -o NAME "$device" | awk '{print"/dev/mapper/"$1}'; true; } || echo "$device")
+
 	fsType=$(LC_MESSAGES=C $df -T | grep "$device" | awk '!/Filesystem/{print$2}')
 	[ $(blkid $device | wc -c) != 0 ] && fsType=$(blkid $device -o value -s TYPE) # If $device is in /etc/blkid.tab
 
