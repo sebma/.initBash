@@ -126,7 +126,10 @@ cd
 if test -r /usr/share/bash-completion/bash_completion 
 then
 	Debug "=> Running /usr/share/bash-completion/bash_completion ..."
+	set -o | grep -q xtrace.*on && xtrace="set -o xtrace"
+	set +x
 	Source /usr/share/bash-completion/bash_completion
+	$xtrace
 	Debug "=> Running /usr/share/bash-completion/bash_completion ..."
 fi
 
