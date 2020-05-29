@@ -36,6 +36,12 @@ function apt-cache {
 			$aptCache "${args[@]}";;
 	esac
 }
+function aptCachePolicy2LaunchpadURLs {
+	for pkg
+	do
+		apt-cache policy $pkg | awk '/launchpad.net/{print$2}' | awk -F/ '{printf "ppa:"$4"/"$5" ";sub("ppa.","",$3);$4="~"$4"/+archive";tmp=$5;$5=$6;$6=tmp;OFS="/";print}'
+	done | column -t
+}
 function aptGet {
 	local args=("$@")
 	local firstArg=$1
