@@ -176,6 +176,9 @@ case $OSTYPE in
 		;;
 esac
 
+# Disable aliases for tools that are not found in $PATH
+for tool in curl hexdump hw-probe lsb_release vim;do ! which $tool >/dev/null 2>&1 && alias | grep -q $tool && unalias $tool;done
+
 set +x
 tty -s && echo
 Debug "=> END of $(basename ${BASH_SOURCE[0]})"
