@@ -180,8 +180,7 @@ esac
 #for tool in curl ffmpeg ffprobe hexdump hw-probe lsb_release vim;do ! which $tool >/dev/null 2>&1 && alias | grep -q $tool && unalias $tool;done
 alias | sed "s/alias //;s/=[']\w+=\S+ /=/;s/sudo -?\w? //;s/(command|time) //;s/[$]\(which (\w+)\)/\1/;s/\/\S+\///;s/='?\\\?/ /" | awk '!/^[.]+/{print$1" "$2}' | sort -u | while read aliasName tool
 do
-	! which $tool >/dev/null 2>&1 && alias | grep -q $tool && unalias $aliasName
-	:
+	! which $tool >/dev/null 2>&1 && alias | grep -q $tool && unalias $aliasName #Does not work on Jolla1/SFOS3
 done
 
 set +x
