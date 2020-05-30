@@ -299,7 +299,7 @@ alias viewpem="\openssl x509 -noout -text -inform PEM -subject -issuer -dates -p
 alias vihistory='\vim ~/.bash_history'
 alias vimatlab="vim +'setf matlab'"
 alias vioctave=vimatlab
-alias virtualisation="\kvm-ok || kvm-ok.sh"
+alias virtualisation="kvm-ok.sh"
 alias vlclocal='DISPLAY=:0 vlc'
 alias wanip='time \curl -sA "" ipinfo.io/ip 2>/dev/null || time wget -qU "" -O- ipinfo.io/ip'
 alias wanipOLD='time \dig +short myip.opendns.com @resolver1.opendns.com'
