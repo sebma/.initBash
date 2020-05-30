@@ -91,6 +91,7 @@ then
 	alias checkSudoFile="\visudo -cf"
 	alias cupsRestart="sudo service cups restart;service cups status || sudo service cups status"
 	alias dosfsck="\dosfsck -r"
+	alias hw-probe="\sudo -E hw-probe -all -upload"
 	alias lvextend="\lvextend -r"
 	alias lvreduce="\lvreduce -r"
 	alias lvresize="\lvresize -r"
