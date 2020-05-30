@@ -5,7 +5,7 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 
 #alias processUsage="printf ' RSS\t       %%MEM %%CPU  COMMAND\n';\ps -e -o rssize,pmem,pcpu,args | sort -nr | cut -c-156 | head -500 | awk '{printf \"%9.3lf MiB %4.1f%% %4.1f%% %s\n\", \$1/1024, \$2,\$3,\$4}' | head"
 #alias ssh="\ssh -A -Y -C"
-#sdiff -v 2>/dev/null | grep -qw GNU && alias sdiff='$(which sdiff) -Ww $(tput cols 2>/dev/null)' || alias sdiff='$(which sdiff) -w $(tput cols 2>/dev/null)'
+#sdiff -v 2>/dev/null | grep -qw GNU && alias sdiff='\sdiff -Ww $(tput cols 2>/dev/null)' || alias sdiff='\sdiff -w $(tput cols 2>/dev/null)'
 
 #alias findLoops='$(which find) . -follow -printf "" 2>&1 | egrep -w "loop|denied"'
 #alias lsb_release="\lsb_release -idrc"
@@ -26,7 +26,7 @@ alias amv='\advmv -gvi'
 alias any2dos="\perlSed 's/\R/\r\n/g'"
 alias any2man="\pandoc -s -t man"
 alias any2unix="\perlSed 's/\R/\n/'"
-alias audioInfo="which mplayer >/dev/null 2>&1 && \mplayer -identify -vo null -ao null -frames 0"
+alias audioInfo="\mplayer -identify -vo null -ao null -frames 0"
 alias audioRenameFromTags=renameFromTags
 alias bc="\bc -l"
 alias binxi="\binxi -c21 -z"
@@ -64,8 +64,8 @@ alias cp2SDCard="rsync --size-only"
 alias cp2exFAT="rsync -ogpuv"
 alias cp2ext234="rsync -ogpuv -lH"
 alias cp2ftpfs="\rsync -uth --progress --inplace --size-only"
-alias cpanRepair="$(which cpan) -f -i Term::ReadLine::Gnu"
-alias cpuUsage="which mpstat >/dev/null && mpstat 1 1 | awk 'END{print 100-\$NF\"%\"}'"
+alias cpanRepair="cpan -f -i Term::ReadLine::Gnu"
+alias cpuUsage="mpstat 1 1 | awk 'END{print 100-\$NF\"%\"}'"
 alias curlResposeCode="\curl -sw "%{http_code}" -o /dev/null"
 alias d="\du -sh *"
 alias da="\du -sh * .??*"
@@ -141,7 +141,7 @@ alias jpg2pdf=jpeg2pdf
 alias jpg2pdfA4=jpeg2pdfA4
 alias jpg2pdfA4R=jpeg2pdfA4R
 alias killall="\killall -v"
-which ksh >/dev/null && alias kshOldVersion="strings $(which ksh) | grep Version | tail -2"
+which ksh >/dev/null && alias kshOldVersion='strings $(which ksh) | grep Version | tail -2'
 alias kshVersion='ksh -c "echo \$KSH_VERSION" 2>/dev/null'
 alias lkshVersion='lksh -c "echo \$KSH_VERSION" 2>/dev/null'
 alias mkshVersion='mksh -c "echo \$KSH_VERSION" 2>/dev/null'
@@ -280,8 +280,8 @@ alias umask="\umask -S"
 alias uncompress="\uncompress -v"
 alias uncpio="\cpio -idcmv <"
 alias unix2dos="\tr '\n' '\r\n'"
-alias unjar='$(which unjar) 2>/dev/null || \unzip'
-alias untar='$(which untar) 2>/dev/null || \tar -xvf'
+alias unjar='\unjar || \unzip'
+alias untar='\untar || \tar -xvf'
 alias unzipFromPipeToStdout="\zcat"
 alias updateBrew="time \brew update -v"
 alias updatePip="pip install -U pip"
@@ -306,9 +306,9 @@ alias wanipOLD='time \dig +short myip.opendns.com @resolver1.opendns.com'
 alias wavemon="xterm -e wavemon &"
 alias web2pdf='wkhtmltopdf --no-background --outline --header-line --footer-line --header-left [webpage] --footer-left "[isodate] [time]" --footer-right [page]/[toPage]'
 alias wegrep="wgrep -E"
-alias wget1='$(which wget 2>/dev/null)'
+alias wget1='\wget'
 alias wget2noconfig="\wget2 --no-config"
-alias wget='$(which wget2 2>/dev/null || which wget)'
+alias wget='wget2 || wget1'
 alias wgetnoconfig="\wget --config=/dev/null"
 alias xargs="\xargs -ri"
 alias xclock="\xclock -digital -update 1"
@@ -326,7 +326,7 @@ egrep --help 2>&1 | \grep -qw "\--color" && alias egrep="egrep --color"
 grep  --help 2>&1 | \grep -qw "\--color" && alias grep="grep --color"
 which arch >/dev/null 2>&1 || alias arch="uname -m"
 uname -s | grep -q AIX && alias stat="istat"
-which cleartool >/dev/null 2>&1 && alias ct=cleartool
+alias ct=cleartool
 alias curl="\curl -L" && alias curlnoconfig="\curl -q"
 alias hexdump="\hexdump -C" || alias hexdump="\od -ctx1"
 alias lsb_release="\lsb_release -s"
