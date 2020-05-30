@@ -35,7 +35,7 @@ alias df="\df -Ph"
 alias dnsInfo="\scutil --dns"
 alias findDeadLinks='command find . -xtype l -exec ls -G -l {} +'
 
-command -v gdf >/dev/null && alias df="\gdf -PTh"
+alias df="\gdf -PTh"
 which gcp >/dev/null 2>&1 && alias cp='\gcp -puv' || alias cp='\cp -pv'
 alias graphicsinfo="\system_profiler SPDisplaysDataType"
 alias hideFiles='defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app'
