@@ -7,7 +7,7 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 #alias ssh="\ssh -A -Y -C"
 #sdiff -v 2>/dev/null | grep -qw GNU && alias sdiff='\sdiff -Ww $(tput cols 2>/dev/null)' || alias sdiff='\sdiff -w $(tput cols 2>/dev/null)'
 
-#alias findLoops='$(which find) . -follow -printf "" 2>&1 | egrep -w "loop|denied"'
+#alias findLoops='$find . -follow -printf "" 2>&1 | egrep -w "loop|denied"'
 #alias lsb_release="\lsb_release -idrc"
 #alias reset="\reset;\printf '\33c\e[3J'"
 #which vim >/dev/null && alias vim="LANG=$(locale -a 2>/dev/null | egrep -i '(fr_fr|en_us|en_uk).*utf' | sort -r | head -1) \vim" && alias vi=vim
@@ -38,7 +38,7 @@ alias burncdrw='\cdrecord -v -dao driveropts=burnfree fs=14M speed=12 gracetime=
 alias burnclone='\cdrecord -v -clone -raw driveropts=burnfree fs=14M speed=16 gracetime=10 -eject -overburn'
 alias burniso='\cdrecord -v -dao driveropts=burnfree fs=14M speed=24 gracetime=10 -eject -overburn'
 alias bzgrep="\bzgrep --color"
-alias calcSigs="time find . -type f -exec sha1sum {} \;"
+alias calcSigs="time $find . -type f -exec sha1sum {} \;"
 alias cclive="\cclive -c"
 alias cdda_info="\icedax -gHJq -vtitles"
 alias cdinfo='\cdrdao disk-info'
@@ -53,7 +53,7 @@ alias checkder="\openssl x509 -noout -inform DER -in"
 alias chmod="\chmod -v"
 alias chown="\chown -v"
 alias clearXFCESessions="\rm -fv ~/.cache/sessions/xf*"
-alias clearurlclassifier3="$(which find) . -type f -name urlclassifier3.sqlite -exec rm -vf {} \;"
+alias clearurlclassifier3="$find . -type f -name urlclassifier3.sqlite -exec rm -vf {} \;"
 alias closecd='\eject -t $CDR_DEVICE'
 alias columns='\column -c $COLUMNS'
 alias conky_restart=restart_conky
@@ -96,8 +96,8 @@ alias erasecd='\cdrecord -v speed=12 blank=fast gracetime=10 -eject'
 alias erasewholecd='\cdrecord -v speed=12 blank=all gracetime=10 -eject'
 alias errors="\egrep -iC2 'error|erreur|java.*exception'"
 alias findFunctions="grep -P '(^| )\w+\(\)|\bfunction\b'"
-alias findSpecialFiles="$(which find) . -xdev '(' -type b -o -type c -o -type p -o -type s ')' -a -ls"
-alias findbin='$(which find) $(echo $PATH | tr : "\n" | \egrep "/(s?bin|shl|py|rb|pl)") /system/{bin,xbin} 2>/dev/null | egrep'
+alias findSpecialFiles="$find . -xdev '(' -type b -o -type c -o -type p -o -type s ')' -a -ls"
+alias findbin='$find $(echo $PATH | tr : "\n" | \egrep "/(s?bin|shl|py|rb|pl)") /system/{bin,xbin} 2>/dev/null | egrep'
 alias findcrlf="\grep -slr "
 alias fprintSupportedDevices="\curl -s https://fprint.freedesktop.org/supported-devices.html | html2text.py | tail -n +10 | \grep -v '^$' | \sed -zr 's/([a-f0-9]{4}:[a-f0-9]{4})\n/\1 /g'"
 alias fprintMostSupportedDevices="fprintSupportedDevices | awk '{print\$2}' | sort | uniq -c | sort -nr"
@@ -141,13 +141,13 @@ alias jpg2pdf=jpeg2pdf
 alias jpg2pdfA4=jpeg2pdfA4
 alias jpg2pdfA4R=jpeg2pdfA4R
 alias killall="\killall -v"
-which ksh >/dev/null && alias kshOldVersion='strings $(which ksh) | grep Version | tail -2'
+alias kshOldVersion='strings $(which ksh) | grep Version | tail -2'
 alias kshVersion='ksh -c "echo \$KSH_VERSION" 2>/dev/null'
 alias lkshVersion='lksh -c "echo \$KSH_VERSION" 2>/dev/null'
 alias mkshVersion='mksh -c "echo \$KSH_VERSION" 2>/dev/null'
 alias pdkshVersion='pdksh -c "echo \$KSH_VERSION" 2>/dev/null'
 alias l1="ls -1"
-alias lastfiles='$(which find) . -xdev -type f -mmin -2'
+alias lastfiles='$find . -xdev -type f -mmin -2'
 alias lastloggin='\lastlog -u $USER'
 alias less="\less -iR"
 alias libreoffice2=" \lowriter --headless --convert-to"
@@ -254,8 +254,8 @@ alias sink-inputs='\pactl list sink-inputs short'
 alias sinks='\pactl list sinks short'
 alias sortip="\sort -nt. -k1,1 -k2,2 -k3,3 -k4,4"
 alias speedtestSimple="time \speedtest --simple"
-alias sshStatusLocalForward="$(which ssh) -O check"
-alias sshStopLocalForward="$(which ssh) -O exit"
+alias sshStatusLocalForward="command ssh -O check"
+alias sshStopLocalForward="command ssh -O exit"
 alias startSSHAgent='\pgrep -lfu $USER ssh-agent || eval $(ssh-agent -s)'
 alias sudo="\sudo "
 alias swapUsage="\free -m | awk '/^Swap/{print 100*\$3/\$2}'"
@@ -266,7 +266,7 @@ alias terminfo='echo "=> C est un terminal $(tput cols 2>/dev/null)x$(tput lines
 alias testLiveIso="\kvm -m 1G -cdrom"
 alias thunderbirdUnlock='\ps -C thunderbird >/dev/null || rm ~/.thunderbird/default/lock'
 alias timestamp='\date +"%Y%m%d_%HH%M"'
-alias today="$(which find) . -type f -ctime -1"
+alias today="$find . -type f -ctime -1"
 alias tolower="awk '{print tolower(\$0)}'"
 alias topd10="topd $((10+1))"
 alias topd5="topd $((5+1))"
