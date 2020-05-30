@@ -331,7 +331,6 @@ alias curl="\curl -L" && alias curlnoconfig="\curl -q"
 alias hexdump="\hexdump -C" || alias hexdump="\od -ctx1"
 alias lsb_release="\lsb_release -s"
 alias vim="LANG=C.UTF-8 \vim" && alias vi=vim
-for tool in curl hexdump hw-probe lsb_release vim;do ! which $tool >/dev/null 2>&1 && alias | grep -q $tool && unalias $tool;done
 
 set +x
 test "$debug" -gt 0 && \echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
