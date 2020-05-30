@@ -393,7 +393,7 @@ function fileTypes {
 		$find $dir -xdev -ls | awk '{print substr($3,1,1)}' | sort -u
 	done
 }
-function find {
+function findSeb {
 	local find="command find"
 	[ $osFamily = Darwin ] && find=gfind
 	local dir=$1
