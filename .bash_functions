@@ -387,14 +387,14 @@ function extractURLsFromURLs_Simplified  {
 	done | sort -u
 }
 function fileTypes {
-	local find="command find"
+	local find="$(which find)"
 	time for dir
 	do
 		$find $dir -xdev -ls | awk '{print substr($3,1,1)}' | sort -u
 	done
 }
 function findSeb {
-	local find="command find"
+	local find="$(which find)"
 	[ $osFamily = Darwin ] && find=gfind
 	local dir=$1
 	if echo $dir | \grep -q "^-"
@@ -415,7 +415,7 @@ function findSeb {
 	fi
 }
 function findHumanReadable {
-	local find="command find"
+	local find="$(which find)"
 	[ $osFamily = Darwin ] && find=gfind
 	local dir=$1
 	echo $dir | \grep -q "\-" && dir=. || shift
@@ -428,7 +428,7 @@ function findHumanReadable {
 	fi
 }
 function findLoops {
-	[ $osFamily = Darwin ] && find=gfind || find="command find"
+	[ $osFamily = Darwin ] && find=gfind || find="$(which find)"
 	time $find $@ -xdev -follow 2>&1 >/dev/null | egrep -w "loop|denied"
 }
 function functionDefinition {
