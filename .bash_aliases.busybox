@@ -26,7 +26,7 @@ alias topf5="$find  . -xdev -type f -size +10240k -exec busybox ls -al {} + 2>/d
 alias topf="$find   . -xdev -type f -size +10240k -exec busybox ls -al {} + 2>/dev/null | sort -nrk5 | awk '{size=\$5/2^20;sub(\" *\"\$5,sprintf(\" %10.3fM\",size));print}' | head -n | awk '{total+=\$5;print}END{print\"=> total = \"total\" MiB\"}'"
 #alias topflines="$find   . -xdev -type f -size +10240k -exec busybox ls -al {} + 2>/dev/null | sort -nrk5 | awk '{size=\$5/2^20;sub(\" *\"\$5,sprintf(\" %10.3fM\",size));print}' | head -n $(($LINES-4)) | awk '{total+=\$5;print}END{print\"=> total = \"total\" MiB\"}'"
 
-function find {
+function findSeb {
 	local find="command find"
 	local dir=$1
 	echo $dir | \grep -q "\-" && dir=. || shift
