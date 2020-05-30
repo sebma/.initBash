@@ -319,18 +319,19 @@ alias xprop='\xprop WM_CLASS _NET_WM_PID WM_ICON_NAME'
 alias xterm="\xterm -bc -fn 9x15 -geometry 144x40 -sb"
 alias xwinInfo="\ps -fp \$(\xprop _NET_WM_PID | awk -F'=' '/_NET_WM_PID/{print\$NF}')"
 alias xzgrep="\xzgrep --color"
-alias ytGetAudio="\youtube-dl -f 249/250/251/171/m4a"
+alias ytGetAudio="\youtube-dl -x -f 249/250/251/171/m4a"
 alias zgrep="\zgrep --color"
 alias zip="\zip -vr"
 egrep --help 2>&1 | \grep -qw "\--color" && alias egrep="egrep --color"
 grep  --help 2>&1 | \grep -qw "\--color" && alias grep="grep --color"
-type arch >/dev/null 2>&1 || alias arch="uname -m"
+which arch >/dev/null 2>&1 || alias arch="uname -m"
 uname -s | grep -q AIX && alias stat="istat"
 which cleartool >/dev/null 2>&1 && alias ct=cleartool
-which curl >/dev/null 2>&1 && alias curl="\curl -L" && alias curlnoconfig="\curl -q"
-which hexdump >/dev/null && alias hexdump="\hexdump -C" || alias hexdump="\od -ctx1"
-which lsb_release >/dev/null 2>&1 && alias lsb_release="\lsb_release -s"
-which vim >/dev/null && alias vim="LANG=C.UTF-8 \vim" && alias vi=vim
+alias curl="\curl -L" && alias curlnoconfig="\curl -q"
+alias hexdump="\hexdump -C" || alias hexdump="\od -ctx1"
+alias lsb_release="\lsb_release -s"
+alias vim="LANG=C.UTF-8 \vim" && alias vi=vim
+for tool in curl hexdump lsb_release vim;do which $tool >/dev/null 2>&1 || unalias $tool;done
 
 set +x
 test "$debug" -gt 0 && \echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
