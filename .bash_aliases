@@ -140,7 +140,6 @@ alias jpegRotate=jpgRotate
 alias jpg2pdf=jpeg2pdf
 alias jpg2pdfA4=jpeg2pdfA4
 alias jpg2pdfA4R=jpeg2pdfA4R
-alias keyFrames="command ffprobe -hide_banner -loglevel error -skip_frame nokey -select_streams v:0 -show_entries frame=pkt_pts_time -of csv=print_section=0"
 alias killall="\killall -v"
 which ksh >/dev/null && alias kshOldVersion="strings $(which ksh) | grep Version | tail -2"
 alias kshVersion='ksh -c "echo \$KSH_VERSION" 2>/dev/null'
@@ -331,7 +330,7 @@ alias curl="\curl -L" && alias curlnoconfig="\curl -q"
 alias hexdump="\hexdump -C" || alias hexdump="\od -ctx1"
 alias lsb_release="\lsb_release -s"
 alias vim="LANG=C.UTF-8 \vim" && alias vi=vim
-for tool in curl hexdump lsb_release vim;do which $tool >/dev/null 2>&1 || unalias $tool;done
+for tool in curl hexdump hw-probe lsb_release vim;do which $tool >/dev/null 2>&1 || unalias $tool;done
 
 set +x
 test "$debug" -gt 0 && \echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
