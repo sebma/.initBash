@@ -117,6 +117,7 @@ alias geoip="time ( \curl -sA '' ipinfo.io 2>/dev/null || \wget -qU '' -O- ipinf
 alias grepInHome="time \grep --exclude-dir=Audios --exclude-dir=Music --exclude-dir=Podcasts --exclude-dir=Videos --exclude-dir=Karambiri --exclude-dir=iso --exclude-dir=Downloads --exclude-dir=Documents --exclude-dir=src --exclude-dir=Pictures --exclude-dir=.thunderbird --exclude-dir=deb --exclude-dir=apks --exclude-dir=.mozilla --exclude-dir=.PlayOnLinux --exclude-dir=PlayOnLinux\'s\ virtual\ drives --exclude-dir=.cache --exclude-dir=Sauvegarde_MB525 --exclude-dir=A_Master_RES --exclude-dir=SailFishSDK --exclude=.*history"
 alias grepfirst="grep -m1"
 alias grepfirst="grepfirst -P"
+alias grub-emu="xterm -e grub-emu"
 alias gtop="\watch -n1 gps"
 alias gunzip="\gunzip -Nv"
 alias gzcat="\gunzip -c"
