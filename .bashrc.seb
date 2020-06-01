@@ -2,21 +2,20 @@
 unalias which >/dev/null 2>&1
 test -z "$initDir" && export initDir=$HOME/.initBash
 
-! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
 function Debug { test "$debug" -gt 0 && echo "$bold${colors[blue]}$@$normal"; }
-Debug "=> Running $(basename ${BASH_SOURCE[0]}) ..."
 
-#function Source { test "$debug" -gt 0 && set -x && time source "$@" && echo || source "$@" ; }
 function Source { test "$debug" -gt 0 && time source "$@" && echo || source "$@" ; }
+! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && Source $initDir/.colors
 test "$debug" -gt "2" && set -x
 
+Debug "=> Running $(basename ${BASH_SOURCE[0]}) ..."
 set -o histexpand # Re-enable the history expansion disabled previously by my "echo" alias
 
 #test -n "$bashRCLoaded" && return
 bashRCLoaded=1
 
 echo $OSTYPE | grep -q android && export osFamily=Android || export osFamily=$(uname -s)
-[ $osFamily = Linux ] && export osID=$(source /etc/os-release && echo $ID) osID_LIKE=$(source /etc/os-release && echo $ID_LIKE)
+[ $osFamily = Linux ] && export osID=$(Source /etc/os-release && echo $ID) osID_LIKE=$(Source /etc/os-release && echo $ID_LIKE)
 quoteCHAR="'\''"
 
 function addmanpaths {
@@ -178,9 +177,11 @@ esac
 
 # Disable aliases for tools that are not found in $PATH
 #for tool in curl ffmpeg ffprobe hexdump hw-probe lsb_release vim;do ! which $tool >/dev/null 2>&1 && alias | grep -q $tool && unalias $tool;done
-alias | sed "s/alias //;s/=[']\w+=\S+ /=/;s/sudo -?\w? //;s/(command|time) //;s/[$]\(which (\w+)\)/\1/;s/\/\S+\///;s/='?\\\?/ /" | awk '!/^[.]+/{print$1" "$2}' | sort -u | while read aliasName tool
+alias | sed "s/alias //;s/=[']\w+=\S+ /=/;s/sudo -?\w? //;s/(command|time) //;s/[$]\(which (\w+)\)/\1/;s/\/\S+\///;s/='?\\\?/ /" | awk '!/^[.]+/{print$1" "$2}' | sort -u | grep -vP '\s?-|^$' | while read aliasName tool
 do
+#	echo "$tool" | grep -q -- "^-" && echo "=> aliasName = <$aliasName> tool = <$tool>" && continue
 	! which $tool >/dev/null 2>&1 && alias | grep -q $tool && unalias $aliasName #Does not work on Jolla1/SFOS3
+	set +x
 done
 
 set +x
