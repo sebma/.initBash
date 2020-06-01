@@ -110,8 +110,6 @@ then
 	alias restart_nm="nmRestart"
 	alias rtmpdumprd='\sudo iptables -t nat -A OUTPUT -p tcp --dport 1935 -m owner \! --uid-owner root -j REDIRECT'
 	alias rtmpdumprs='\sudo iptables -t nat -D OUTPUT -p tcp --dport 1935 -m owner \! --uid-owner root -j REDIRECT'
-	alias testLiveUSB_BIOS="sudo -b \kvm -m 1G -boot menu=on -hda"
-	alias testLiveUSB_UEFI="sudo -b \kvm -m 1G -bios /usr/share/qemu/OVMF.fd -hda"
 	alias update-mime-database="\sudo \rm -vf /usr/share/mime/packages/kde.xml;time sudo \update-mime-database /usr/share/mime"
 	alias updatedb="time sudo updatedb"
 	alias youtube-dlUpdate='\sudo -H $(which pip3) install -U youtube-dl || \sudo -H $(which pip) install -U youtube-dl'
