@@ -265,7 +265,6 @@ alias systemType='strings $(\ps -p 1 -o cmd= | cut -d" " -f1) | \egrep -o "upsta
 alias taillines='\tail -n $((LINES-2))'
 alias tcpPorts="\netstat -ntl"
 alias terminfo='echo "=> C est un terminal $(tput cols 2>/dev/null)x$(tput lines 2>/dev/null)."'
-alias testLiveIso="\kvm -m 1G -cdrom"
 alias thunderbirdUnlock='\ps -C thunderbird >/dev/null || rm ~/.thunderbird/default/lock'
 alias timestamp='\date +"%Y%m%d_%HH%M"'
 alias today="$find . -type f -ctime -1"
@@ -301,7 +300,6 @@ alias viewpem="\openssl x509 -noout -text -inform PEM -subject -issuer -dates -p
 alias vihistory='\vim ~/.bash_history'
 alias vimatlab="vim +'setf matlab'"
 alias vioctave=vimatlab
-alias virtualisation="kvm-ok.sh"
 alias vlclocal='DISPLAY=:0 vlc'
 alias wanip='time \curl -sA "" ipinfo.io/ip 2>/dev/null || time wget -qU "" -O- ipinfo.io/ip'
 alias wanipOLD='time \dig +short myip.opendns.com @resolver1.opendns.com'
