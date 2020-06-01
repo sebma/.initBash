@@ -2,10 +2,13 @@
 ! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
+bridgeInterface=$(\ls /sys/class/net | egrep -v "(eth|wlan|tap)[0-9]|lo")
 alias testLiveIso="\kvm -m 1G -cdrom"
-alias testLiveUSB_BIOS="sudo -b \kvm -m 1G -boot menu=on -net bridge,br=virbr0 -net nic,model=virtio -hda"
-alias testLiveUSB_UEFI="sudo -b \kvm -m 1G -bios /usr/share/qemu/OVMF.fd -net bridge,br=virbr0 -net nic,model=virtio -hda"
+alias testLiveUSB_BIOS="sudo -b \kvm -m 1G -boot menu=on -net bridge,br=$bridgeInterface -net nic,model=virtio -hda"
+alias testLiveUSB_UEFI="sudo -b \kvm -m 1G -bios /usr/share/qemu/OVMF.fd -net bridge,br=$bridgeInterface -net nic,model=virtio -hda"
 alias virtualisation="kvm-ok.sh"
+grep -q $bridgeInterface /etc/qemu/bridge.conf 2>/dev/null || echo "=> INFO : You need to add: allow $bridgeInterface to your /etc/qemu/bridge.conf file."
+unset bridgeInterface
 
 set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
