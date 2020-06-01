@@ -255,6 +255,7 @@ alias sink-inputs='\pactl list sink-inputs short'
 alias sinks='\pactl list sinks short'
 alias sortip="\sort -nt. -k1,1 -k2,2 -k3,3 -k4,4"
 alias speedtestSimple="time \speedtest --simple"
+alias sources="grep -woP '[Ss]ource\s[^{ ]*\"?'"
 alias sshStatusLocalForward="command ssh -O check"
 alias sshStopLocalForward="command ssh -O exit"
 alias startSSHAgent='\pgrep -lfu $USER ssh-agent || eval $(ssh-agent -s)'
