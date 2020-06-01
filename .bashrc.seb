@@ -147,6 +147,7 @@ which conda >/dev/null 2>&1 && test -r $initDir/.bashrc.conda && Source $initDir
 which adb >/dev/null 2>&1 && test -r $initDir/.bash_aliases.adb && Source $initDir/.bash_aliases.adb
 which adb >/dev/null 2>&1 && test -r $initDir/.bash_functions.adb && Source $initDir/.bash_functions.adb
 which getprop >/dev/null 2>&1 && test -r $initDir/.bash_aliases.getprop && Source $initDir/.bash_aliases.getprop
+which qemu-system-$(arch) >/dev/null 2>&1 && test -r $initDir/.bash_aliases.qemu && Source $initDir/.bash_aliases.qemu
 
 test -r $initDir/.bashrc.$osFamily && Source $initDir/.bashrc.$osFamily
 #test -r $initDir/.bashrc.$osFamily.local && Source $initDir/.bashrc.$osFamily.local
