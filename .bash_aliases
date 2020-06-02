@@ -27,6 +27,7 @@ alias amv='\advmv -gvi'
 alias any2dos="\perlSed 's/\R/\r\n/g'"
 alias any2man="\pandoc -s -t man"
 alias any2unix="\perlSed 's/\R/\n/'"
+alias arch="arch 2>/dev/null || uname -m"
 alias audioInfo="\mplayer -identify -vo null -ao null -frames 0"
 alias audioRenameFromTags=renameFromTags
 alias bc="\bc -l"
@@ -325,7 +326,6 @@ alias zgrep="\zgrep --color"
 alias zip="\zip -vr"
 egrep --help 2>&1 | \grep -qw "\--color" && alias egrep="egrep --color"
 grep  --help 2>&1 | \grep -qw "\--color" && alias grep="grep --color"
-which arch >/dev/null 2>&1 || alias arch="uname -m"
 uname -s | grep -q AIX && alias stat="istat"
 alias ct=cleartool
 alias curl="\curl -L" && alias curlnoconfig="\curl -q"
