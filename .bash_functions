@@ -15,28 +15,56 @@ function Echo {
 }
 function Cat {
 	local highlightCMD="highlight -O ansi --force"
-	$highlightCMD "$@"
+	if [ $# = 0 ] || [ "$1" = - ];then
+		$highlightCMD
+	else
+		for file
+		do
+			echo "::::::::::::::" 1>&2
+			echo $file 1>&2
+			echo "::::::::::::::" 1>&2
+			$highlightCMD "$file"
+		done
+	fi
 }
 function Less {
 	local highlightCMD="highlight -O ansi --force"
-	for file
-	do
-		$highlightCMD "$file" | \less -iR
-	done
+	if [ $# = 0 ] || [ "$1" = - ];then
+		$highlightCMD | \less -R
+	else
+		for file
+		do
+			$highlightCMD "$file" | \less -R
+		done
+	fi
 }
 function More {
 	local highlightCMD="highlight -O ansi --force"
-	for file
-	do
-		$highlightCMD "$file" | more
-	done
+	if [ $# = 0 ] || [ "$1" = - ];then
+		$highlightCMD
+	else
+		for file
+		do
+			echo "::::::::::::::" 1>&2
+			echo $file 1>&2
+			echo "::::::::::::::" 1>&2
+			$highlightCMD "$file"
+		done
+	fi | more
 }
 function Most {
 	local highlightCMD="highlight -O ansi --force"
-	for file
-	do
-		$highlightCMD "$file" | most
-	done
+	if [ $# = 0 ] || [ "$1" = - ];then
+		$highlightCMD | most
+	else
+		for file
+		do
+			echo "::::::::::::::" 1>&2
+			echo $file 1>&2
+			echo "::::::::::::::" 1>&2
+			$highlightCMD "$file" | most
+		done
+	fi
 }
 function Nohup {
 	local firstArg=$1
