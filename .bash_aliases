@@ -322,7 +322,10 @@ alias xmlsh="\xmllint --shell"
 alias xpath="\xmllint --xpath"
 alias xprop='\xprop WM_CLASS _NET_WM_PID WM_ICON_NAME'
 alias xterm="\xterm -bc -fn 9x15 -geometry 144x40 -sb"
+alias xwinDPI="xdpyinfo | awk '/resolution:/{print\$2}'"
 alias xwinProcessInfo="\ps -fp \$(\xprop _NET_WM_PID | awk -F'=' '/_NET_WM_PID/{print\$NF}')"
+alias xwinResolution="xdotool selectwindow getwindowgeometry | awk '/Geometry:/{print\$NF}'"
+alias xwinSize=$'xwininfo | awk \'/geometry/{print gensub("[+-].+","",1,$2)}\''
 alias xzgrep="\xzgrep --color"
 alias ytGetAudio="\youtube-dl -x -f 249/250/251/171/m4a"
 alias zgrep="\zgrep --color"
