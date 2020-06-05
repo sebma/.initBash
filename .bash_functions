@@ -14,7 +14,7 @@ function Echo {
 	return $rc
 }
 function Cat {
-	local highlightCMD="highlight -O ansi --force"
+	local highlightCMD="command highlight -O ansi --force"
 	if [ $# = 0 ] || [ "$1" = - ];then
 		$highlightCMD
 	else
@@ -28,7 +28,7 @@ function Cat {
 	fi
 }
 function Less {
-	local highlightCMD="highlight -O ansi --force"
+	local highlightCMD="command highlight -O ansi --force"
 	if [ $# = 0 ] || [ "$1" = - ];then
 		$highlightCMD | \less -R
 	else
@@ -39,7 +39,7 @@ function Less {
 	fi
 }
 function More {
-	local highlightCMD="highlight -O ansi --force"
+	local highlightCMD="command highlight -O ansi --force"
 	if [ $# = 0 ] || [ "$1" = - ];then
 		$highlightCMD
 	else
@@ -53,7 +53,7 @@ function More {
 	fi | more
 }
 function Most {
-	local highlightCMD="highlight -O ansi --force"
+	local highlightCMD="command highlight -O ansi --force"
 	if [ $# = 0 ] || [ "$1" = - ];then
 		$highlightCMD | most
 	else
