@@ -37,6 +37,7 @@ which lspci >/dev/null && {
 alias brewUnInstall='\ruby -e "$(\curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/uninstall)"'
 alias catFiles="\tail -vn +1"
 alias connect2MyHiddenWifi="connect2SSID sebWlan"
+alias connect2MyHiddenWifi_2.4GHz="connect2SSID sebWlan_2.4GHz"
 alias connect2eduroam="connect2SSID eduroam"
 alias cp='\cp --preserve=timestamps -uv'
 alias dnsInfo="( \nmcli dev list || \nmcli dev show ) 2>/dev/null | grep DNS || egrep -v '^(#|\$)' /etc/resolv.conf"
