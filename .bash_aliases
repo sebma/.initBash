@@ -253,6 +253,8 @@ alias rpmt="\rpm --test"
 alias rsync2SDCard="rsync --size-only"
 alias rsyncMove="rsync --remove-source-files"
 alias scp_unix='time \rsync -h --progress --rsync-path=$HOME/gnu/bin/rsync -ut'
+alias screenResolution=$'xrandr | awk \'/ connected/{print gensub("[+].+","",1,$4)}\''
+alias screenSize=$'xrandr | awk \'/ connected/{print sqrt( ($(NF-2)/10)^2 + ($NF/10)^2 )/2.54" inches"}\''
 alias sdiff='\sdiff -w $COLUMNS'
 alias sink-inputs='\pactl list sink-inputs short'
 alias sinks='\pactl list sinks short'
@@ -320,7 +322,7 @@ alias xmlsh="\xmllint --shell"
 alias xpath="\xmllint --xpath"
 alias xprop='\xprop WM_CLASS _NET_WM_PID WM_ICON_NAME'
 alias xterm="\xterm -bc -fn 9x15 -geometry 144x40 -sb"
-alias xwinInfo="\ps -fp \$(\xprop _NET_WM_PID | awk -F'=' '/_NET_WM_PID/{print\$NF}')"
+alias xwinProcessInfo="\ps -fp \$(\xprop _NET_WM_PID | awk -F'=' '/_NET_WM_PID/{print\$NF}')"
 alias xzgrep="\xzgrep --color"
 alias ytGetAudio="\youtube-dl -x -f 249/250/251/171/m4a"
 alias zgrep="\zgrep --color"
