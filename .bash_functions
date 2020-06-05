@@ -1309,6 +1309,9 @@ function rtt {
 	[ $osFamily = Linux ]  && deadline="-w 5"
 	$ping -c $NBPackets $deadline -i $interval $remote | $awk -F/ '//{print}/min\/avg\/max\/\w+dev/{avg=$5}END{print "=> avg = "avg" ms"}'
 }
+function screenResolution {
+	xrandr | awk '/ connected/{print gensub("[+].+","",1,$4)}'
+}
 function screenSize {
 	xrandr | awk '/ connected/{print sqrt( ($(NF-2)/10)^2 + ($NF/10)^2 )/2.54" inches"}'
 }
