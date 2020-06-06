@@ -66,16 +66,17 @@ function mountISO {
 function nmRestart {
 	local -r systemType=$( ( strings $(\ps -p 1 -o cmd= | cut -d" " -f1) | \egrep -o "upstart|sysvinit|systemd" || echo unknown ) | head -1)
 	if ! env | grep SSH_CONNECTION=;then
-		sudo -k
-		if [ $systemType = systemd ];then
-			sudo systemctl --no-block restart network-manager
-			systemctl --no-pager status network-manager
-		elif [ $systemType = upstart ] || [ $systemType = sysvinit ];then
-			sudo service network-manager restart
-#			sudo service network-manager status
+		if sudo -k true;then
+			if [ $systemType = systemd ];then
+				sudo systemctl --no-block restart network-manager
+				systemctl --no-pager status network-manager
+			elif [ $systemType = upstart ] || [ $systemType = sysvinit ];then
+				sudo service network-manager restart
+#				sudo service network-manager status
+			fi
+			sleep 7
+			\curl -sA "" ipinfo.io/ip 2>/dev/null || \wget -qU "" -O- ipinfo.io/ip
 		fi
-		sleep 7
-		\curl -sA "" ipinfo.io/ip 2>/dev/null || \wget -qU "" -O- ipinfo.io/ip
 	fi
 }
 function open {
