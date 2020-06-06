@@ -229,6 +229,7 @@ function wifiList {
 
 	if test "$wifiInterface"; then
 		if which nmcli >/dev/null; then
+			nmcliVersion=$(nmcli -v | awk -F"[. ]" '/version/{printf"%d.%d%02d\n", $4, $5, $6}')
 			\nmcli -f ssid,bssid,mode,freq,rate,signal,security,active dev wifi list | \grep 'SSID' >&2 # Print nmcli headers
 			\nmcli -f ssid,bssid,mode,freq,rate,signal,security,active dev wifi list | grep -v 'SSID' 
 		elif which iw >/dev/null; then
@@ -236,6 +237,15 @@ function wifiList {
 		elif which iwlist >/dev/null; then
 			sudo iwlist $wifiInterface scan | \grep SSID
 		fi
+	fi
+}
+function wifiRestart {
+	if ! env | grep SSH_CONNECTION=
+	then
+		\nmcli nm wifi off 2>/dev/null || \nmcli radio wifi off
+		\nmcli nm wifi on  2>/dev/null || \nmcli radio wifi on
+		sleep 7
+		\curl -sA "" ipinfo.io/ip 2>/dev/null || \wget -qU "" -O- ipinfo.io/ip
 	fi
 }
 
