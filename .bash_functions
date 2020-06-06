@@ -927,7 +927,8 @@ function nbPages {
 function numberSmallerEqual {
 	number1=$1
 	number2=$2
-	return perl -e "exit(! ( $number1 <= $number2 ) )"
+#	return $( awk "BEGIN{ exit(! ( $number1 <= $number2 ) ) }" )
+	return $( perl -e "exit(! ( $number1 <= $number2 ) )" )
 }
 function odf2 {
 	formats="pdf|doc|docx|odt|odp|ods|ppt|pptx|xls|xlsx"
@@ -1524,9 +1525,9 @@ function usletter2A4 {
 	open "$output"
 }
 function versionSmallerEqual {
-	number1=$1
-	number2=$2
-	return perl -Mversion -e "exit(! ( version->parse( $number1 ) <= version->parse( $number2 ) ) )"
+	version1=$1
+	version2=$2
+	return $( perl -Mversion -e "exit ! ( version->parse( $version1 ) <= version->parse( $version2 ) )" )
 }
 function webgrep {
 	url=$1
