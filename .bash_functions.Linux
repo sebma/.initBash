@@ -63,6 +63,20 @@ function mountISO {
 	loopBackDevice=$(udisksctl loop-setup -r -f "$1" | awk -F "[ .]" '{print$(NF-1)}')
 	udisksctl mount -b $loopBackDevice
 }
+function nmRestart {
+	local -r systemType=$( ( strings $(\ps -p 1 -o cmd= | cut -d" " -f1) | \egrep -o "upstart|sysvinit|systemd" || echo unknown ) | head -1)
+	if ! env | grep SSH_CONNECTION=;then
+		if [ $systemType = systemd ];then
+			sudo systemctl --no-block restart network-manager
+			systemctl --no-pager status network-manager
+		elif [ $systemType = upstart ] || [ $systemType = sysvinit ];then
+			sudo service network-manager restart
+			sudo service network-manager status
+		fi
+		sleep 7
+		\curl -sA "" ipinfo.io/ip 2>/dev/null || \wget -qU "" -O- ipinfo.io/ip
+	fi
+}
 function open {
 	local openCommand="command xdg-open"
 	[ $# = 0 ] && set -- .
@@ -240,8 +254,7 @@ function wifiList {
 	fi
 }
 function wifiRestart {
-	if ! env | grep SSH_CONNECTION=
-	then
+	if ! env | grep SSH_CONNECTION=;then
 		\nmcli nm wifi off 2>/dev/null || \nmcli radio wifi off
 		\nmcli nm wifi on  2>/dev/null || \nmcli radio wifi on
 		sleep 7
