@@ -229,8 +229,8 @@ function wifiList {
 
 	if test "$wifiInterface"; then
 		if which nmcli >/dev/null; then
-			\nmcli dev wifi list | \grep 'SSID' >&2 # Print nmcli headers
-			\nmcli dev wifi list | grep -v 'SSID' 
+			\nmcli -f ssid,bssid,mode,freq,rate,signal,security,active dev wifi list | \grep 'SSID' >&2 # Print nmcli headers
+			\nmcli -f ssid,bssid,mode,freq,rate,signal,security,active dev wifi list | grep -v 'SSID' 
 		elif which iw >/dev/null; then
 			sudo iw dev $wifiInterface scan | \grep SSID
 		elif which iwlist >/dev/null; then
