@@ -17,7 +17,7 @@ export find="$(which find)"
 
 test "$wifiInterface" && {
 	alias wifiSpeed="\iwlist $wifiInterface bitrate;\iw dev $wifiInterface link"
-	alias restartWifi="( \nmcli nm wifi off || \nmcli radio wifi off ) 2>/dev/null;( \nmcli nm wifi on || \nmcli radio wifi on ) 2>/dev/null;sleep 10;wanip"
+	alias restartWifi="env | grep SSH_CONNECTION= || ( \nmcli nm wifi off || \nmcli radio wifi off ) 2>/dev/null;( \nmcli nm wifi on || \nmcli radio wifi on ) 2>/dev/null;sleep 10;wanip"
 	alias wifiRestart=restartWifi
 	if which iwlist >/dev/null 2>&1 ;then
 		alias wifi5GHz="iwlist $wifiInterface frequency | \grep -q '5\..* GHz' && echo true || echo false"
