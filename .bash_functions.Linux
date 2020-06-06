@@ -71,7 +71,7 @@ function nmRestart {
 			systemctl --no-pager status network-manager
 		elif [ $systemType = upstart ] || [ $systemType = sysvinit ];then
 			sudo service network-manager restart
-			sudo service network-manager status
+#			sudo service network-manager status
 		fi
 		sleep 7
 		\curl -sA "" ipinfo.io/ip 2>/dev/null || \wget -qU "" -O- ipinfo.io/ip
