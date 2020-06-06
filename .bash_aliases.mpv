@@ -2,12 +2,12 @@
 ! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-mpv="$(which mpv)"
+mpv="$(which mpv 2>/dev/null)"
 alias mpv="LANG=en_US.utf8 $mpv $mpvDefaultOptions"
 mpvnoconfig="mpv --no-config"
 alias mpvnoconfig="$mpvnoconfig"
 
-mplayer="$(which mplayer)"
+mplayer="$(which mplayer 2>/dev/null)"
 alias mplayer="LANG=en_US.utf8 $mplayer $mplayerDefaultOptions"
 mplayernoconfig="mplayer --noconfig=user"
 alias mplayernoconfig="$mplayernoconfig"
