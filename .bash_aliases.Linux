@@ -99,7 +99,6 @@ then
 	alias lvreduce="\lvreduce -r"
 	alias lvresize="\lvresize -r"
 	alias bluetoothRestart="sudo service bluetooth stop;sleep 1;sudo service bluetooth start;service bluetooth status"
-	alias nmRestart="( sudo systemctl --no-block restart network-manager 2>/dev/null || sudo service network-manager restart );systemctl --no-pager status network-manager 2>/dev/null || sudo PAGER= service network-manager status"
 	alias pgrep="\pgrep -lf"
 	alias pipInstall=pip2Install
 	alias pip2Install="curl -s https://bootstrap.pypa.io/get-pip.py | sudo -H python2"
