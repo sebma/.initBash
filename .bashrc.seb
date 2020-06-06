@@ -102,7 +102,7 @@ fi
 
 #test -f ~/.rvm/scripts/rvm && Source ~/.rvm/scripts/rvm
 
-if which pdflatex >/dev/null
+if which pdflatex >/dev/null 2>&1
 then
 	grep -qw pdflatex= $HOME/.pdfnup.conf || echo pdflatex=$(which pdflatex) >> $HOME/.pdfnup.conf
 fi
