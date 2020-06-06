@@ -4,7 +4,6 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 
 Source $initDir/.bash_functions.build
 Source $initDir/.bash_functions.AV
-Source $initDir/.bash_functions.ytdl
 
 function Echo {
 	local rc=$?
