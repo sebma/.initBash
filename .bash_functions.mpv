@@ -6,12 +6,12 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 
 export mpv_Output_Perl_Script="'\$| = 1;s/\n/\r/g if \$_ =~ /AV: /;s/Saving state/\nSaving state/'" # On l'exporte pour qu'elle soit accessible du processus fils
 
-mpv="$(which mpv)"
+mpv="$(which mpv 2>/dev/null)"
 alias mpv="LANG=en_US.utf8 $mpv $mpvDefaultOptions"
 mpvnoconfig="mpv --no-config"
 alias mpvnoconfig="$mpvnoconfig"
 
-mplayer="$(which mplayer)"
+mplayer="$(which mplayer 2>/dev/null)"
 alias mplayer="LANG=en_US.utf8 $mplayer $mplayerDefaultOptions"
 mplayernoconfig="mplayer --noconfig=user"
 
