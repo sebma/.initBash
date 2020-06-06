@@ -66,6 +66,7 @@ function mountISO {
 function nmRestart {
 	local -r systemType=$( ( strings $(\ps -p 1 -o cmd= | cut -d" " -f1) | \egrep -o "upstart|sysvinit|systemd" || echo unknown ) | head -1)
 	if ! env | grep SSH_CONNECTION=;then
+		sudo -k
 		if [ $systemType = systemd ];then
 			sudo systemctl --no-block restart network-manager
 			systemctl --no-pager status network-manager
