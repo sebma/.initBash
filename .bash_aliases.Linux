@@ -17,8 +17,7 @@ export find="$(which find)"
 
 test "$wifiInterface" && {
 	alias wifiSpeed="\iwlist $wifiInterface bitrate;\iw dev $wifiInterface link"
-	alias restartWifi="env | grep SSH_CONNECTION= || ( \nmcli nm wifi off || \nmcli radio wifi off ) 2>/dev/null;( \nmcli nm wifi on || \nmcli radio wifi on ) 2>/dev/null;sleep 10;wanip"
-	alias wifiRestart=restartWifi
+	alias restartWifi=wifiRestart
 	if which iwlist >/dev/null 2>&1 ;then
 		alias wifi5GHz="iwlist $wifiInterface frequency | \grep -q '5\..* GHz' && echo true || echo false"
 	elif which iw >/dev/null 2>&1 ;then
@@ -100,7 +99,7 @@ then
 	alias lvreduce="\lvreduce -r"
 	alias lvresize="\lvresize -r"
 	alias bluetoothRestart="sudo service bluetooth stop;sleep 1;sudo service bluetooth start;service bluetooth status"
-	alias nmRestart="sudo service network-manager restart;service network-manager status || sudo service network-manager status"
+	alias nmRestart="( sudo systemctl --no-block restart network-manager 2>/dev/null || sudo service network-manager restart );service network-manager status 2>/dev/null || sudo service network-manager status"
 	alias pgrep="\pgrep -lf"
 	alias pipInstall=pip2Install
 	alias pip2Install="curl -s https://bootstrap.pypa.io/get-pip.py | sudo -H python2"
