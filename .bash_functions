@@ -416,6 +416,7 @@ function extractURLsFromURLs_Simplified  {
 }
 function fileTypes {
 	local find="$(which find)"
+	[ $osFamily = Darwin ] && find=gfind
 	time for dir
 	do
 		$find $dir -xdev -ls | awk '{print substr($3,1,1)}' | sort -u
@@ -456,7 +457,8 @@ function findHumanReadable {
 	fi
 }
 function findLoops {
-	[ $osFamily = Darwin ] && find=gfind || find="$(which find)"
+	local find="$(which find)"
+	[ $osFamily = Darwin ] && find=gfind
 	time $find $@ -xdev -follow 2>&1 >/dev/null | egrep -w "loop|denied"
 }
 function functionDefinition {
@@ -561,8 +563,10 @@ function getVideosFromRSSPodCastPlayList {
 	}
 }
 function gitUpdateAllLocalRepos {
+	local find="$(which find)"
+	[ $osFamily = Darwin ] && find=gfind
 	local dir=""
-	command gfind ~ -type d -name .git | while read dir
+	$find ~ -type d -name .git | while read dir
 	do
 		cd $dir/..
 		echo "=> Updating <$dir> local repo. ..." >&2
