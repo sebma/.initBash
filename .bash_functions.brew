@@ -10,15 +10,19 @@ function brew {
 	return $rc
 }
 function brewPostInstall {
-	set -x
-	$brew update -v
-	$brew tap homebrew/services
-	$brew tap homebrew/cask
-	$brew tap homebrew/cask-versions
-	$brew tap homebrew/cask-drivers
-	$brew tap homebrew/cask-fonts
-	$brew tap buo/cask-upgrade # To use "brew cu"
-	set +x
+	echo "=> Updating homebrew ..." >&2
+	echo >&2
+	time $brew update -v
+	echo >&2
+	echo "=> Adding missing taps ..." >&2
+	echo >&2
+	time for tap in homebrew/services homebrew/cask homebrew/cask-versions homebrew/cask-drivers homebrew/cask-fonts buo/cask-upgrade;do
+		$brew tap | \grep -q $tap || {
+			set -x
+			$brew tap $tap
+			set +x
+		}
+	done
 }
 function brewServicesStatus {
 	if [ $osFamily = Darwin ];then
