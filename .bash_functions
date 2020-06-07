@@ -833,24 +833,6 @@ function lsdoc {
 		listPackageContents $package
 	done | sort -u | egrep "(doc|man[0-9]?)/"
 }
-function lseth {
-	\lspci | awk '/Ethernet controller/{print$1}' | while read device
-	do
-		\lspci -nns $device "$@"
-	done
-}
-function lsgroup {
-	for group
-	do
-		printf "%s:" $group;awk -F: "/$group:/"'{gsub(","," ");print$NF}' /etc/group
-	done
-}
-function lswifi {
-	\lspci | awk '/Network controller/{print$1}' | while read device
-	do
-		\lspci -nns $device "$@"
-	done
-}
 function lv_Dev_Creation_Date {
 	sudo -v
 	for lv
