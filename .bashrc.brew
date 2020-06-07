@@ -2,8 +2,8 @@
 ! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-[ $osFamily = Linux  ] && alias upgradable="\brew outdated"
-[ $osFamily = Darwin ] && alias upgradable="\brew outdated;yes N | \brew cu -aq;echo" && alias upgrade="\brew cu -aq"
+export brew=$(which brew)
+[ $osFamily = Darwin ] && export brewCask="$(which brew) cask" && alias brew-cask="$brewCask"
 
 set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
