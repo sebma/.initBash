@@ -845,12 +845,6 @@ function lsgroup {
 		printf "%s:" $group;awk -F: "/$group:/"'{gsub(","," ");print$NF}' /etc/group
 	done
 }
-function lsgroup {
-	for group
-	do
-		printf "%s:" $group;awk -F: "/$group:/"'{gsub(","," ");print$NF}' /etc/group
-	done
-}
 function lswifi {
 	\lspci | awk '/Network controller/{print$1}' | while read device
 	do
