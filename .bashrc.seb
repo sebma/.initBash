@@ -22,7 +22,7 @@ function addmanpaths {
 	for manpath
 	do
 		test ! -d "$manpath" && continue
-		echo $MANPATH | grep -wq "$manpath" || {
+		echo $MANPATH | \grep -wq "$manpath" || {
 			test -z "$MANPATH" && MANPATH=$manpath || MANPATH=$MANPATH:$manpath
 		}
 	done
@@ -32,7 +32,7 @@ function addpaths {
 	for path
 	do
 		test ! -d "$path" && continue
-		echo $PATH | grep -wq "$path" || PATH=$path:$PATH
+		echo $PATH | \grep -wq "$path" || PATH=$path:$PATH
 	done
 	export PATH
 }
@@ -144,6 +144,8 @@ then
 fi
 
 which brew >/dev/null 2>&1 && test -r $initDir/.bashrc.brew && Source $initDir/.bashrc.brew
+which brew >/dev/null 2>&1 && test -r $initDir/.bash_aliases.brew && Source $initDir/.bash_aliases.brew
+which brew >/dev/null 2>&1 && test -r $initDir/.bash_functions.brew && Source $initDir/.bash_functions.brew
 which conda >/dev/null 2>&1 && test -r $initDir/.bashrc.conda && Source $initDir/.bashrc.conda
 which adb >/dev/null 2>&1 && test -r $initDir/.bash_aliases.adb && Source $initDir/.bash_aliases.adb
 which adb >/dev/null 2>&1 && test -r $initDir/.bash_functions.adb && Source $initDir/.bash_functions.adb
