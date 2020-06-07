@@ -1,0 +1,32 @@
+# vim: set ft=bash noet:
+! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
+test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
+
+function brew {
+	local brew=$(which brew)
+	$brew $@
+	rc=$?
+	test "$brew" && \rm -fr $($brew --prefix)/var/homebrew/locks
+	return $rc
+}
+function brewPostInstall {
+	set -x
+	$brew update -v
+	$brew tap homebrew/services
+	$brew tap homebrew/cask
+	$brew tap homebrew/cask-versions
+	$brew tap homebrew/cask-drivers
+	$brew tap homebrew/cask-fonts
+	$brew tap buo/cask-upgrade # To use "brew cu"
+	set +x
+}
+function brewServicesStatus {
+	if [ $osFamily = Darwin ];then
+		local serviceList=$@
+		serviceList=$(echo $serviceList | tr " " "|")
+		$brew services list | \egrep "$serviceList" | \egrep "started|stopped"
+	fi
+}
+
+set +x
+test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
