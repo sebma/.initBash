@@ -49,6 +49,24 @@ function locate {
 	groups 2>/dev/null | \egrep -wq "sudo|admin" && locateOptions="-e" || locateOptions="--database $HOME/.local/lib/mlocate/mlocate.db -e"
 	echo "$@" | \grep -q "\-[a-z]*r" && $locate $locateOptions "$@" || $locate $locateOptions -i --regex "${@}"
 }
+function lseth {
+	\lspci | awk '/Ethernet controller/{print$1}' | while read device
+	do
+		\lspci -nns $device "$@"
+	done
+}
+function lsgroup {
+	for group
+	do
+		printf "%s:" $group;awk -F: "/$group:/"'{gsub(","," ");print$NF}' /etc/group
+	done
+}
+function lswifi {
+	\lspci | awk '/Network controller/{print$1}' | while read device
+	do
+		\lspci -nns $device "$@"
+	done
+}
 function mac@ {
 	ethName=$1
 	if [ -n "$ethName" ]
