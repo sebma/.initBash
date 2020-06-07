@@ -1,0 +1,9 @@
+# vim: set ft=bash noet:
+! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
+test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
+
+[ $osFamily = Linux  ] && alias brewUpgradable="\brew outdated"
+[ $osFamily = Darwin ] && alias brewUpgradable="\brew outdated;yes N | \brew cu -aq;echo" && alias brewUpgrade="\brew cu -aq"
+
+set +x
+test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
