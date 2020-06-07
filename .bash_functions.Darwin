@@ -6,38 +6,21 @@ function applescript2app {
 		osacompile -o "/Applications/${file/.applescript/.app}" "$file"
 	done
 }
-function brew {
-	local brew=$(which brew)
-	$brew $@
-	rc=$?
-	test "$brew" && \rm -fr $($brew --prefix)/var/homebrew/locks
-	return $rc
-}
 function brewInstall {
 	if ! which brew >/dev/null 2>&1
 	then
 		if groups | \egrep -wq "adm|admin|sudo"
 		then
 			$(which ruby) -e "$(\curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" || return
-			brew=/usr/local/bin/brew
+			addpaths /usr/local/bin
+			brew=$(which brew)
 		else
 			brewPrefix=$HOME/homebrew
 			mkdir -p $brewPrefix && \curl -L https://github.com/Homebrew/brew/tarball/master | \tar xz --strip 1 -C $brewPrefix || return
 			brew=$brewPrefix/bin/brew
 		fi
 	fi
-	set -x
-	$brew update
-	$brew tap caskroom/cask
-	$brew tap caskroom/drivers
-	$brew tap caskroom/versions
-	$brew tap buo/cask-upgrade
-	set +x
-}
-function brewServicesStatus {
-	local serviceList=$@
-	serviceList=$(echo $serviceList | tr " " "|")
-	\brew services list | \egrep "$serviceList" | \egrep "started|stopped"
+	brewPostInstall
 }
 function dmgInstall {
 	local sudo defaultDst
