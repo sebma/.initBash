@@ -47,6 +47,8 @@ addmanpaths $manPathsList
 
 #Definitions de mes fonctions bash pour Linux
 [ -n "$BASH_VERSION" ] && test -r $initDir/.bash_functions && Source $initDir/.bash_functions
+test -r $initDir/.bash_functions.seb && Source $initDir/.bash_functions.seb
+
 which lpr >/dev/null 2>&1 && test -f $initDir/.bash_aliases.lpr && Source $initDir/.bash_aliases.lpr
 which mpv >/dev/null 2>&1 && test -r $initDir/.bash_aliases.mpv   && Source $initDir/.bash_aliases.mpv
 which ffmpeg >/dev/null 2>&1 && test -r $initDir/.bash_aliases.AV   && Source $initDir/.bash_aliases.AV
