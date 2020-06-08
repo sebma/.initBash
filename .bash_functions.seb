@@ -3,10 +3,12 @@
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 function gpartedNoUdisks2Inhibit {
-	sudo chmod -v -x /usr/lib/udisks2/udisks2-inhibit
-	sudo -b gparted "$@"
-	sleep 1
-	sudo chmod -v +x /usr/lib/udisks2/udisks2-inhibit
+	if sudo -b gparted 2>&1 "$@" | \grep "mount.*bad.* /run/udisks2/inhibit-polkit";then
+		sudo chmod -v -x /usr/lib/udisks2/udisks2-inhibit
+		sudo -b gparted "$@"
+		sleep 1
+		sudo chmod -v +x /usr/lib/udisks2/udisks2-inhibit
+	fi
 }
 
 set +x
