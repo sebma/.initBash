@@ -97,7 +97,6 @@ function mountISO {
 	fi
 	isoFile="$1"
 	isoLabel="$(blkid -o export "$isoFile" | grep LABEL | cut -d= -f2-)"
-#	mkdir -p "/media/$USER/$isoLabel/"
 	fuseiso -p "$isoFile" "$HOME/mnt/$isoLabel/" && command df -TP "$HOME/mnt/$isoLabel/"
 
 #	loopBackDevice=$(udisksctl loop-setup -r -f "$1" | awk -F "[ .]" '{print$(NF-1)}')
@@ -179,12 +178,12 @@ function umount.seb {
 
 	device=$(echo "$device" | \egrep -wq /dev/dm-[0-9]+ && { lsblk -n -o NAME "$device" | awk '{print"/dev/mapper/"$1}'; true; } || echo "$device")
 
-	fsType=$(LC_MESSAGES=C $df -T | grep "$device\s" | awk '!/Filesystem/{print$2}')
+	fsType=$(LC_MESSAGES=C $df -a -T | grep "$device\s" | awk '!/Filesystem/{print$2}')
 	[ $(blkid $device | wc -c) != 0 ] && fsType=$(blkid $device -o value -s TYPE) # If $device is in /etc/blkid.tab
 
 	echo "=> Unmounting $device ..." >&2
 	case $fsType in
-		iso96600) command udisksctl unmount -b $device;udisksctl loop-delete -b $device ;;
+		iso9660) command udisksctl unmount -b $device;udisksctl loop-delete -b $device ;;
 		fuseblk|exfat) command umount.udisks2 "$@"  || command umount.udisks "$@" || udisksctl unmount -b $device || udisksctl unmount -b $device -f || { sudo -k $(which umount) -v "$@"; } ;;
 		fuse.*) fusermount -u "$mountDIR";;
 		unknown) echo "=> $FUNCNAME : ERROR : This filesystem is of an <unknown> type." >&2; return 3;;
