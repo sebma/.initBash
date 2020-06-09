@@ -98,7 +98,7 @@ function mountISO {
 	isoFile="$1"
 	isoLabel="$(blkid -o export "$isoFile" | grep LABEL | cut -d= -f2-)"
 #	mkdir -p "/media/$USER/$isoLabel/"
-	fuseiso -p "$isoFile" "$HOME/mnt/$isoLabel/"
+	fuseiso -p "$isoFile" "$HOME/mnt/$isoLabel/" && command df -TP "$HOME/mnt/$isoLabel/"
 
 #	loopBackDevice=$(udisksctl loop-setup -r -f "$1" | awk -F "[ .]" '{print$(NF-1)}')
 #	udisksctl mount -b $loopBackDevice
