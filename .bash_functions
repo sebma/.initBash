@@ -132,7 +132,7 @@ function apkInfo {
 
 		$apkFullInfo "$package"
 		echo
-	done | egrep "^$|package|[s]dkVersion:|application-label:|native-code:|\bversionName=[^ ]+"
+	done | egrep "^$|\b([s]dkVersion|application-label|native-code|versionName|package: +name)[:=][^ ]+"
 }
 function apkRename {
 	type aapt >/dev/null || return
