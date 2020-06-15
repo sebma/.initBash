@@ -306,8 +306,8 @@ alias vihistory='\vim ~/.bash_history'
 alias vimatlab="vim +'setf matlab'"
 alias vioctave=vimatlab
 alias vlclocal='DISPLAY=:0 vlc'
-alias wanip='time \curl -sA "" ipinfo.io/ip 2>/dev/null || time wget -qU "" -O- ipinfo.io/ip'
-alias wanipOLD='time \dig +short myip.opendns.com @resolver1.opendns.com'
+alias wanip='time \dig @resolver1.opendns.com A myip.opendns.com +short -4'
+alias wanip6='time \dig @resolver1.opendns.com AAAA myip.opendns.com +short -6'
 alias wavemon="xterm -e wavemon &"
 alias web2pdf='wkhtmltopdf --no-background --outline --header-line --footer-line --header-left [webpage] --footer-left "[isodate] [time]" --footer-right [page]/[toPage]'
 alias wegrep="wgrep -E"
