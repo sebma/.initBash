@@ -25,7 +25,7 @@ function connect2SSID {
 	nmcli con status 2>/dev/null || nmcli con show --active
 	time nmcli con up id $ssid
 	nmcli con status 2>/dev/null || nmcli con show --active
-	time \curl -A "" ipinfo.io/ip || time \wget -qU "" -O- ipinfo.io/ip
+	time \dig @resolver1.opendns.com A myip.opendns.com +short -4 2>/dev/null || time host -4 -t A myip.opendns.com resolver1.opendns.com | awk '/\<has\>/{print$NF}'
 	set +x
 }
 function df {
