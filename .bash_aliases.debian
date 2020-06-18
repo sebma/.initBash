@@ -3,10 +3,12 @@
 ! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
 test "$debug" -gt 0 && \echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-#alias installSecurityUpdates="sudo apt install -V $(apt-get -s dist-upgrade | awk "/^Inst.*\/$codeName-security/"'{print$2}')"
-LC_MESSAGES=C
+#LC_MESSAGES_OLD=$LC_MESSAGES
+#LC_MESSAGES=C.UTF-8
+
 apt=$(which apt 2>/dev/null)
 aptGet=$(which apt-get 2>/dev/null)
+#alias installSecurityUpdates="sudo apt install -V $(apt-get -s dist-upgrade | awk "/^Inst.*\/$codeName-security/"'{print$2}')"
 alias autoremove="$apt -h 2>&1 | \grep -wq autoremove && $aptGet autoremove -s | \grep '[^0][0-9]* to remove' && sudo screen -L $apt autoremove -V || ( $aptGet autoremove -s | \grep '[^0][0-9]* to remove' && sudo screen -L $aptGet autoremove -V )"
 alias cleanupOldKernels="\linux-purge -k 2 -s | grep ', [^0] to remove' && sudo screen -L \linux-purge -k 2"
 alias debInfo="\dpkg -I"
@@ -22,6 +24,8 @@ alias reinstall="sudo screen -L $apt install --reinstall -V"
 alias update="time sudo $apt update;$apt list --upgradable"
 alias upgradable="$apt list --upgradable"
 alias upgrade="$aptGet upgrade -s | \grep '^[^0][0-9]* upgraded' && sudo $apt upgrade -V --download-only && sync && sudo screen -L $apt upgrade -V --yes;sync"
+
+#LC_MESSAGES=$LC_MESSAGES_OLD
 
 set +x
 test "$debug" -gt 0 && \echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
