@@ -257,7 +257,7 @@ alias screenResolution=$'xrandr | awk \'/ connected/{print gensub("[+].+","",1,$
 alias screenDiagonal=$'xrandr | awk \'/ connected/{print sqrt( ($(NF-2)/10)^2 + ($NF/10)^2 )/2.54" inches"}\''
 alias screenSize=$'xrandr | awk \'/ connected/{print$(NF-2)" x "$NF}\''
 alias screenDPI=$'xdpyinfo | awk \'/dots per inch/{$1="";sub("^ ","");print}\''
-alias screenDPI_Calculated=$'xrandr | awk -F "[ x+]" \'/ connected/{gsub("mm","");print$4*25.4/$(NF-3)" x "$5*25.4/$NF}\''
+alias screenDPI_Calculated=$'xrandr | awk -F "[ x+]" \'/ connected/{gsub("mm","");print$4*25.4/$(NF-3)" dpi x "$5*25.4/$NF" dpi"}\''
 alias sdiff='\sdiff -w $COLUMNS'
 alias sink-inputs='\pactl list sink-inputs short'
 alias sinks='\pactl list sinks short'
