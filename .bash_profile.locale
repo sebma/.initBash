@@ -7,7 +7,11 @@ test "$debug" -gt 2 && locale
 test "$debug" -gt 3 && set -x
 
 test -z "$LANG" && export LANG=$(locale -a 2>/dev/null | awk 'BEGIN{IGNORECASE=1}/^(fr_FR|en_US|en_UK).utf-?8/{print$1;exit}')
-locale -a | egrep -iq "c.utf-?8" && export LC_{CTYPE,COLLATE,MESSAGES}=C.UTF-8 || export LC_{CTYPE,COLLATE,MESSAGES}=$(locale -a 2>/dev/null | awk 'BEGIN{IGNORECASE=1}/^(en_US|en_UK).utf-?8/{print$1;exit}')
+
+if locale -a | egrep -iq "c.utf-?8";then
+	export LC_{CTYPE,COLLATE,MESSAGES}=C.UTF-8 || export LC_{CTYPE,COLLATE,MESSAGES}=$(locale -a 2>/dev/null | awk 'BEGIN{IGNORECASE=1}/^(en_US|en_UK).utf-?8/{print$1;exit}')
+fi
+
 export LC_{ADDRESS,IDENTIFICATION,MEASUREMENT,MONETARY,NAME,NUMERIC,PAPER,TELEPHONE,TIME}=$(locale -a 2>/dev/null | awk 'BEGIN{IGNORECASE=1}/^fr_FR.utf-?8/{print$1;exit}') # Locale parameters for France
 export LC_TIME=$(locale -a 2>/dev/null | awk 'BEGIN{IGNORECASE=1}/^fr_FR.utf-?8/{print$1;exit}') # Heures et dates francaises
 export LANGUAGE=en:C:fr # i.e https://unix.stackexchange.com/a/181867/135038
