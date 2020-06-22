@@ -855,15 +855,22 @@ function replaceAudioOfVideoFile {
 	sync
 }
 function sizeOfStream {
-	trap 'rc=130;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
-
 	local size
 	local totalExpr="0"
 	local format=18
+
+	if [ $# = 0 ];then
+		echo "=> $FUNCNAME [format] url1 url2 ..." >&2
+		return 1
+	fi
+
+	trap 'rc=130;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
+
 	echo $1 | \grep -q ^http || {
 		format=$1
 		shift
 	}
+
 	for url
 	do
 		size=$(curl -sI "$(youtube-dl -gf $format -- "$url")" | \sed "s/\r//g" | awk 'BEGIN{IGNORECASE=1}/Content-Length:/{print$2/2^20}')
