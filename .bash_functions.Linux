@@ -79,6 +79,16 @@ function lsgroup {
 		printf "%s:" $group;awk -F: "/$group:/"'{gsub(","," ");print$NF}' /etc/group
 	done
 }
+function lsbluetooth {
+	\lspci | awk '/Bluetooth/{print$1}' | while read device
+	do
+		\lspci -nns $device "$@"
+	done
+	\lsusb | awk '/\<Bluetooth\>/{print$6}' | while read device
+	do
+		\lsusb -d $device "$@"
+	done
+}
 function lswifi {
 	\lspci | awk '/Network controller/{print$1}' | while read device
 	do
