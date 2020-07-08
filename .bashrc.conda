@@ -11,7 +11,7 @@ do
 	test -x $condaPath/bin/conda && export CONDA_HOME=$condaPath && break
 done
 
-test -n "$CONDA_HOME" && echo $PATH | grep -wq $CONDA_HOME || export PATH=$CONDA_HOME/bin${PATH:+:${PATH}}
+test -n "$CONDA_HOME" && echo $PATH | grep -wq $CONDA_HOME || export PATH=$PATH:$CONDA_HOME/bin
 
 set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
