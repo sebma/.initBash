@@ -38,7 +38,7 @@ function addpaths {
 }
 
 #echo "=> BEFORE: PATH = $PATH"
-pathsList="/sbin /usr/local/sbin /usr/sbin /usr/local/go/bin /usr/local/miniconda2/bin /usr/local/miniconda3/bin /home/linuxbrew/.linuxbrew/bin $GOPATH/bin /opt/local/bin /usr/share/fslint/fslint $HOME/.opam/system/bin $HOME/perl5/bin $HOME/rvm/bin $HOME/homebrew/bin $HOME/local/sbin $HOME/local/bin $HOME/usr/bin $HOME/usr/local/bin $HOME/gnu/bin $HOME/.local/bin $HOME/shl $HOME/py $HOME/pl $HOME/bin $HOME/php $HOME/.linuxbrew/bin $HOME/miniconda2/bin $HOME/miniconda3/bin $HOME/myScripts/shl $HOME/myScripts/py $HOME/myScripts/pl"
+pathsList="/sbin /usr/sbin /usr/local/sbin /usr/local/go/bin $GOPATH/bin /opt/local/bin /usr/share/fslint/fslint $HOME/.opam/system/bin $HOME/perl5/bin $HOME/rvm/bin $HOME/local/sbin $HOME/local/bin $HOME/usr/bin $HOME/usr/local/bin $HOME/gnu/bin $HOME/.local/bin $HOME/shl $HOME/py $HOME/pl $HOME/bin $HOME/php $HOME/myScripts/shl $HOME/myScripts/py $HOME/myScripts/pl"
 addpaths $pathsList
 #echo "=> AFTER: PATH = $PATH"
 
