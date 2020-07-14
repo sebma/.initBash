@@ -583,7 +583,7 @@ function ytdlUpdate {
 		local ytdlLastRelease=$(\git ls-remote --tags --refs $ytdlGitURL | awk -F/ '{print$NF}' | sort -rV | head -1)
 		local ytdlCurrentRelease=$($youtube_dl --version)
 
-		[ $ytdlLastRelease = $ytdlCurrentRelease ] && echo "[$FUNCNAME] => INFO : You already have the latest release, which is $ytdlLastRelease." >&2 || $sudo $(which pip$ytdlPythonVersion) install -U youtube-dl
+		[ $ytdlLastRelease = $ytdlCurrentRelease ] && echo "=> [$FUNCNAME] INFO : You already have the latest release, which is $ytdlLastRelease." >&2 || $sudo $(which pip$ytdlPythonVersion) install -U youtube-dl
 	else
 		$sudo $(which pip) install -U youtube-dl
 	fi
