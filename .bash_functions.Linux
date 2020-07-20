@@ -53,7 +53,7 @@ function hw-probeAddToInventory {
 		echo "=> $FUNCNAME [inventoryID]" >&2
 		return 1
 	fi
-	sudo -E \hw-probe -all -upload -i $inventoryID
+	sudo -E \hw-probe -all -upload -i $inventoryID && echo "=> INFO: Check your email to add confirm adding the new node to your inventory : https://linux-hardware.org/index.php?view=computers&inventory=$inventoryID" >&2
 }
 function isoLabel {
 	for isoFile;do
