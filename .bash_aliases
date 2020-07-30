@@ -233,6 +233,7 @@ alias prettyjson='\python -m json.tool'
 alias psu='ps -fu $USER'
 alias putty='\putty -geometry 157x53 -l $USER -t -A -C -X'
 alias qrdecode="\zbarimg -q --raw"
+alias ramInfo="\inxi -mx"
 alias rcp="\rsync -uth -P"
 alias rdesktop="\rdesktop -k fr"
 alias rdiff="\diff -rq"
