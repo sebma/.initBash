@@ -29,7 +29,7 @@ function buildSourceCode {
 				then
 					if which checkinstall >/dev/null
 					then
-						if git status -uno -sb 2>/dev/null;then
+						if git rev-parse --git-dir >/dev/null 2>&1;then
 							checkinstallWithGitRepoInformation
 						else
 							sudo checkinstall
@@ -59,18 +59,20 @@ function buildSourceCode {
 	return $returnCode
 }
 function checkinstallWithGitRepoInformation {
-	local sed="command sed -E"
-	alias gitHTTP_URL='\git config remote.origin.url | \sed -E "s|^git@|https://|;s|(\.\w+):|\1/|"'
+	local sed=$(which sed)
+	[ $osFamily = Darwin ] && sed="$sed -E"
+	[ $osFamily = Linux ]  && sed="$sed -r"
+	local gitHTTP_URL='$(\git config --get remote.origin.url | $sed "s|^git@|https://|;s|(\.\w+):|\1/|")'
 
 	echo "=> Running $FUNCNAME ..."
 	echo "=> Project description is :"
 	echo
-	\curl -qs $(gitHTTP_URL) | pup --charset utf8 "title text{}" | cut -d: -f2-
+	\curl -qs $gitHTTP_URL | \pup --charset utf8 "title text{}" | cut -d: -f2-
 	echo
 
-	local pkgname=$(basename -s .git $(git config --get remote.origin.url))
+	local pkgname=$(basename -s .git $gitHTTP_URL)
 	local pkgversion=$(\git describe --tags --abbrev=0 | $sed "s/^v|^[Vv]ersion//g;s/^.*-//")
-	local pkgsource=$(gitHTTP_URL)
+	local pkgsource=$gitHTTP_URL
 	set -x
 	sudo checkinstall --pkgname $pkgname --pkgversion $pkgversion --pkgsource=$pkgsource
 	set +x
