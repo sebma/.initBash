@@ -1061,11 +1061,22 @@ function picMpixels {
 }
 function pingMyLAN {
 	local myLAN=$(\ip addr show | awk '/inet /{print$2}' | egrep -v '127.0.0.[0-9]|192.168.122.[0-9]')
-	if which fping >/dev/null 2>&1
-	then
-		time fping -r 0 -aAg $myLAN 2>/dev/null | sort -u
+	if [ $# = 0 ];then
+		if which fping >/dev/null 2>&1;then
+			time fping -r 0 -aAg $myLAN 2>/dev/null | sort -u
+		else
+			time \nmap -T5 -sP $myLAN | sed -n '/Nmap scan report for /s/Nmap scan report for //p'
+		fi
 	else
-		time \nmap -T5 -sP $myLAN | sed -n '/Nmap scan report for /s/Nmap scan report for //p'
+		time if [ $# = 1 ];then
+			port=$1
+			if which fping >/dev/null 2>&1;then
+				\nmap -T5 -sP $myLAN | sed -n '/Nmap scan report for /s/Nmap scan report for //p' | while read ip
+				do
+					tcpConnetTest $ip $port
+				done
+			fi
+		fi
 	fi
 }
 function pip {
@@ -1399,19 +1410,19 @@ function tcpConnetTest {
 		then
 			if which nc.openbsd > /dev/null 2>&1
 			then
-				time \nc.openbsd -x $proxyName:$proxyPort -v -z -w 5 $(echo $@ | tr ":" " ")
+				\nc.openbsd -x $proxyName:$proxyPort -v -z -w 5 $(echo $@ | tr ":" " ")
 			else
 				echo "=> $FUNCNAME: Cannot connect through $proxyName:$proxyPort because <nc.openbsd> is not installed." >&2		
 				return 1
 			fi
 		else
-			time \netcat -v -z -w 5 $(echo $@ | tr ":" " ")
+			\netcat -v -z -w 5 $(echo $@ | tr ":" " ")
 		fi
 	else
 #		local remoteSSHServer=$(echo $@ | awk '{sub("^(-[[:alnum:]_]+ ?)+","");sub("[[:alnum:]_]+@","");print$1}')
 		local remoteSSHServer=$1
 		local remotePort=$2
-		time command bash -c ": < /dev/tcp/$remoteSSHServer/$remotePort && echo '$0: connect: connection succeeded'"
+		command bash -c ": < /dev/tcp/$remoteSSHServer/$remotePort && echo '$0: connect: connection succeeded'"
 	fi
 }
 function termtitle {
