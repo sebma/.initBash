@@ -342,10 +342,13 @@ function wifiList {
 	fi
 }
 function wifiRestart {
+	local -r timer=7s
 	if ! env | grep SSH_CONNECTION=;then
 		\nmcli nm wifi off 2>/dev/null || \nmcli radio wifi off
 		\nmcli nm wifi on  2>/dev/null || \nmcli radio wifi on
-		sleep 7
+		echo "=> Waiting $timer for Wi-Fi to connect back again ..."
+		sleep $timer
+		printf "=> WANIP: "
 		\curl -sA "" ipinfo.io/ip 2>/dev/null || \wget -qU "" -O- ipinfo.io/ip
 	fi
 }
