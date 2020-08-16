@@ -14,7 +14,9 @@ if which $qemu >/dev/null 2>&1;then
 	alias testLiveUSB_UEFI="$kvmBoot -bios /usr/share/qemu/OVMF.fd -hda"
 	alias virtioKernelConfig='grep VIRTIO /boot/config-$(uname -r)'
 	alias virtualisation="kvm-ok.sh"
-	test -f /etc/qemu/bridge.conf && grep -q $bridgeInterface /etc/qemu/bridge.conf 2>/dev/null || echo "=> INFO : You need to add and allow <$bridgeInterface> to your /etc/qemu/bridge.conf file."
+	test -f /etc/qemu/bridge.conf && test -n "$bridgeInterface" && if ! grep -q $bridgeInterface /etc/qemu/bridge.conf;then
+		echo "=> INFO : You need to add and allow <$bridgeInterface> to your /etc/qemu/bridge.conf file."
+	fi
 	unset bridgeInterface
 fi
 
