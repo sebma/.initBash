@@ -1,4 +1,4 @@
-# vim: set ft=bash noet:
+# vim: set ft=sh noet:
 
 ! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
 test "$debug" -gt 0 && \echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
@@ -88,7 +88,7 @@ alias wlanmac=wifimac
 alias xdg-dirs='ls $HOME/.config/user-dirs.dirs && grep ^XDG $HOME/.config/user-dirs.dirs'
 alias ytdlInstall="pip3 install youtube-dl || pip install youtube-dl"
 
-if groups 2>/dev/null | \egrep -wq "sudo|admin"
+if groups $USER 2>/dev/null | \egrep -wq "sudo|admin|adm"
 then
 	test -r $initDir/.bash_aliases.$osID_LIKE && Source $initDir/.bash_aliases.$osID_LIKE # Si c'est un Linux de type Debian ou Redhat
 	alias checkSudoFile="\visudo -cf"
