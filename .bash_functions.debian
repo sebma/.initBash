@@ -96,6 +96,18 @@ function debEditDependencies {
 	dpkg -l $pkg  | grep -q ^ii || $dpkg_deb -b $tmp/ $newPackage && echo "=> Installing \"$pkg\" and its dependencies ..." && sudo gdebi $newPackage
 	rm -fr $tmp/
 }
+function downgradePPA_Package {
+	which ppa-purge >/dev/null || sudo apt install -V ppa-purge -y
+	local ppa=""
+	for pkg
+	do
+		ppa=$(command apt-cache policy $pkg | awk '/launchpad.net/{print$2}' | awk -F/ '{print"ppa:"$4"/"$5}')
+		if [ -n "$ppa" ];then
+			echo "=> Downgrading <$pkg> by removing the launchpad <$ppa> repository ..." >&2
+			sudo ppa-purge $ppa
+		fi
+	done
+}
 function downgradePackages {
 	local packageList
 	for package
