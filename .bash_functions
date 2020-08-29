@@ -877,14 +877,18 @@ function memUsageOfProcessName {
 	local ps=$(which ps)
 	for processName
 	do
-		$ps -o rss= -C $processName | LC_ALL=C numfmt --from-unit=1K --from=iec | paste -sd+ | bc | numfmt --to=iec-i
+		if \pgrep $processName >/dev/null;then
+			which smem >/dev/null && smem -P $processName -t -c "swap rss uss pss" -k | \sed -n '1p;$p' || $ps -o rss= -C $processName | LC_ALL=C numfmt --from-unit=1K --from=iec | paste -sd+ | bc | numfmt --to=iec-i
+		fi
 	done
 }
 function memUsageOfProcessRegExp {
 	local ps=$(which ps)
 	for processRegExp
 	do
-		\pgrep $processRegExp >/dev/null && $ps -o rss= -p $(\pgrep $processRegExp) | LC_ALL=C numfmt --from-unit=1K --from=iec | paste -sd+ | bc | numfmt --to=iec-i
+		if \pgrep $processRegExp >/dev/null;then
+			which smem >/dev/null && smem -P $processRegExp -t -c "swap rss uss pss" -k | \sed -n '1p;$p' || $ps -o rss= -p $(\pgrep $processRegExp) | LC_ALL=C numfmt --from-unit=1K --from=iec | paste -sd+ | bc | numfmt --to=iec-i
+		fi
 	done
 }
 function mkdircd {
