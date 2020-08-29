@@ -873,6 +873,20 @@ function memUsage {
 		\free -m | awk '/Mem:/{total=$2}/buffers.cache:/{used=$3}END{printf "%5.2lf%%\n", 100*used/total}'
 	fi
 }
+function memUsageOfProcessName {
+	local ps=$(which ps)
+	for processName
+	do
+		$ps -o rss= -C $processName | LC_ALL=C numfmt --from-unit=1K --from=iec | paste -sd+ | bc | numfmt --to=iec-i
+	done
+}
+function memUsageOfProcessRegExp {
+	local ps=$(which ps)
+	for processRegExp
+	do
+		\pgrep $processRegExp >/dev/null && $ps -o rss= -p $(\pgrep $processRegExp) | LC_ALL=C numfmt --from-unit=1K --from=iec | paste -sd+ | bc | numfmt --to=iec-i
+	done
+}
 function mkdircd {
 	\mkdir -pv $1
 	cd $1 && pwd -P
