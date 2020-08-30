@@ -30,9 +30,9 @@ function YTRenameFromFiles {
 	for file
 	do
 		echo "=> file = $file"
-		grep -q __ <<< $file || continue
-		id=$(awk -F"__|[.]" '{print$(NF-1)}' <<< $file)
-		format=$(awk -F__ '{print$(NF-1)}' <<< $file)
+		echo $file | grep -q __ || continue
+		id=$(echo $file | awk -F"__|[.]" '{print$(NF-1)}')
+		format=$(echo $file | awk -F__ '{print$(NF-1)}')
 #		url="$2"
 #		test $# != 2 && echo "=> Usage: $FUNCNAME file youtube-URL" && return 1
 		newName="$(youtube-dl -f "$format" --get-filename -- $id)"
@@ -224,13 +224,13 @@ function getRestrictedFilenamesFORMAT {
 
 	if [ $BASH_VERSINFO -ge 4 ];then
 		if $isLIVE;then
-			ytdlExtraOptions=( --external-downloader ffmpeg --external-downloader-args "-movflags frag_keyframe+empty_moov" )
+			ytdlExtraOptions=( --hls-use-mpegts --hls-prefer-ffmpeg )
 		else
 			ytdlExtraOptions=( --hls-prefer-native )
 		fi
 	else
 		if $isLIVE;then
-			ytdlExtraOptions="--external-downloader ffmpeg --external-downloader-args -movflags\\ frag_keyframe+empty_moov"
+			ytdlExtraOptions="--hls-use-mpegts --hls-prefer-ffmpeg"
 		else
 			ytdlExtraOptions="--hls-prefer-native"
 		fi
