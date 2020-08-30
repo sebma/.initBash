@@ -120,6 +120,25 @@ function addUsersInGroup {
 		sudo adduser $user $lastArg
 	done
 }
+function anyTZ2LocalTime {
+	local remoteTime=to_be_defined
+	local remoteTZ
+	if [ $# = 0 ];then
+		echo "=> Usage : $FUNCNAME remoteTime [remoteTZ]" >&2
+		return 1
+	elif [ $# = 1 ];then
+		case $1 in
+			-h|--h|-help|--help) echo "=> Usage : $FUNCNAME remoteTime [remoteTZ]" >&2;return 1;;
+			*) remoteTime=$1
+		esac
+	else
+		remoteTime=$1
+		remoteTZ=$2
+	fi
+
+	remoteTime=${remoteTime/./:}
+	date -d "$remoteTime $remoteTZ"
+}
 function apkInfo {
 	type aapt >/dev/null || return
 	local apkFullInfo="$(which aapt aapt2 | tail -1) dump badging"
@@ -1047,7 +1066,7 @@ function perlGrep {
 	if [ $# != 1 ]
 	then
 		regExp="$2"
-		if grep -q -- "^-" <<< $1;then
+		if echo $1 | grep -q -- "^-";then
 			firstOption=$1
 			case $firstOption in
 				-w) regExp="\b${regExp}\b";;
@@ -1056,7 +1075,7 @@ function perlGrep {
 			esac
 		fi
 		regExp="/${regExp}/p"
-		if grep -q -- "^-" <<< $1;then
+		if echo $1 | grep -q -- "^-";then
 			firstOption=$1
 			case $firstOption in
 				-i) regExp+="i";;
