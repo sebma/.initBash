@@ -1565,6 +1565,17 @@ function webgrep {
 	}
 	test $# -ge 1 && curl -s $url | egrep $@
 }
+function webp2jpg {
+	local image
+	for image
+	do
+		if identify "$image" | \grep -q "no decode delegate for this image format";then
+			dwebp "$image" -o - 2>/dev/null | convert - "${image/.webp/.jpg}"
+		else
+			convert "$image" "${image/.webp/.jpg}"
+		fi
+	done
+}
 function wgrep {
 	local allArgsButLast="${@:1:$#-1}"
 	local lastArg="${@: -1}"
