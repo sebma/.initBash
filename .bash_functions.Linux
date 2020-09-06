@@ -43,7 +43,7 @@ function df {
 	LANG=C $df $dfOptions $@ | \grep "^Filesystem" 1>&2
 	LANG=C $df $dfOptions $@ | grep -v "^Filesystem"
 }
-function hw-probeAddToInventory {
+function hw-probeAddNodeToInventory {
 	local inventoryID=null
 	if [ $# = 0 ];then
 		inventoryID="LHW-8028-0102-D496-15BF"
