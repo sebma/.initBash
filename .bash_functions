@@ -858,6 +858,12 @@ function lsdoc {
 		listPackageContents $package
 	done | sort -u | egrep "(doc|man[0-9]?)/"
 }
+function lsicons {
+	for package
+	do
+		listPackageContents $package
+	done | sort -u | egrep "(svg|png)$"
+}
 function lv_Dev_Creation_Date {
 	sudo -v
 	for lv
