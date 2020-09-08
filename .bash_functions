@@ -846,6 +846,12 @@ function lsconf {
 		listPackageContents $package
 	done | sort -u | grep etc/
 }
+function lsdesktopfiles {
+	for package
+	do
+		listPackageContents $package
+	done | sort -u | grep "\.desktop$"
+}
 function lsdoc {
 	for package
 	do
@@ -997,7 +1003,7 @@ function packageManager {
 	case $(distribType) in
 		debian) pkgManager="deb";;
 		redhat) pkgManager="rpm";;
-		Darwin) pkgManager="brew";;
+		Darwin) which brew >/dev/null 2>&1 && pkgManager="brew";;
 		*) pkgManager=unknown;;
 	esac
 	echo $pkgManager
