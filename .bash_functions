@@ -1043,6 +1043,12 @@ function pdfConcat {
 		time gs -dBATCH -dNOPAUSE -sDEVICE=pdfwrite -dAutoRotatePages=/None -sOutputFile="$lastArg" $allArgsButLast && open "$lastArg" || time pdfjoin --rotateoversize false $allArgsButLast -o $lastArg || time pdftk $allArgsButLast cat output $lastArg verbose
 	}
 }
+function pdfInfo {
+	for pdfFile
+	do
+		pdfinfo "$pdfFile"
+	done
+}
 function pdfSelect {
 	input=$1
 	pages=$2
