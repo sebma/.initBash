@@ -201,7 +201,7 @@ function lsPackagesFromRepo {
 		repo="$1"
 	fi
 
-	aptitude search -F '%p' "?origin($repo) ( ?architecture($arch) | ?architecture(all) ) ?installed"
+	aptitude search -F '%p' "?origin($repo) ( ?architecture($arch) | ?architecture(all) ) ?installed" || \grep -h -P -o "^Package: \K.*" /var/lib/apt/lists/*$repo*_*Packages | sort -u || grep-dctrl -sPackage . /var/lib/apt/lists/*$repo*_*Packages | sed 's/^Package: //' | sort -u
 }
 function move_Extra_Keys_To_Main_APT_KeyRing {
 	apt-key list 2>&1 >/dev/null | awk -F"[\`']" '/resource limit/{print "sudo apt-key add "$2"; sudo \\rm -vf "$2}' | sh -x
