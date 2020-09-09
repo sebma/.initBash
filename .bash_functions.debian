@@ -197,6 +197,7 @@ function lsPackagesFromRepo {
 
 	if [ $# != 1 ];then
 		echo "=> Usage : $FUNCNAME repo" >&2
+		return 1
 	else
 		repo="$1"
 	fi
