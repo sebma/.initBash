@@ -193,6 +193,7 @@ function lsPackagesFromRepo {
 		x86_64) arch=amd64;;
 		i686) arch=i386;;
 	esac
+	#arch=$(dpkg --print-architecture)
 
 	if [ $# != 1 ];then
 		echo "=> Usage : $FUNCNAME repo" >&2
