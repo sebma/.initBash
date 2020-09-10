@@ -92,8 +92,8 @@ function debEditDependencies {
 	$dpkg_deb -x $pkg $tmp/
 	$dpkg_deb --control $pkg $tmp/DEBIAN
 	$EDITOR $tmp/DEBIAN/control
-	dpkg -l gdebi | grep -q ^ii || sudo apt install -Vy gdebi
-	dpkg -l $pkg  | grep -q ^ii || $dpkg_deb -b $tmp/ $newPackage && echo "=> Installing \"$pkg\" and its dependencies ..." && sudo gdebi $newPackage
+	dpkg -l gdebi | grep -q ^.i || sudo apt install -Vy gdebi
+	dpkg -l $pkg  | grep -q ^.i || $dpkg_deb -b $tmp/ $newPackage && echo "=> Installing \"$pkg\" and its dependencies ..." && sudo gdebi $newPackage
 	rm -fr $tmp/
 }
 function downgradePPA_Package {
@@ -166,9 +166,6 @@ EOF
 		return 1
 	fi
 }
-function dpkgExists {
-	test $1 && dpkg -l $1 | grep -q ^ii
-}
 function fixAptKeys {
 	LANG=C apt-key list | awk -F"/| *" '/expired/{print"sudo apt-key del "$3}' | sh -x
 	time (sudo apt-get update 2>/tmp/keymissing; cat /tmp/keymissing)
@@ -185,6 +182,9 @@ function fixAptKeys {
 		sudo rm -v $keyFile
 	done
 	\rm -v /tmp/keymissing
+}
+function isInstalled {
+	test $1 && dpkg -l $1 | grep -q ^.i
 }
 function lsPackagesFromRepo {
 	local arch=$(uname -m)
@@ -218,7 +218,8 @@ function removePackages {
 	case $regexp in
 	""|.) echo "=> Usage: $FUNCNAME non-empty-regexp" >&2;return 1;;
 	esac
-	dpkg -l | awk 'BEGIN {printf"sudo apt purge -V "}'"/$regexp/"'{printf $2" "}'"END{print \"$*\"}" | sh -x
+	local packagesToBeRemoved=$(dpkg -l | awk "/^.i +.*$regexp/"'{printf $2" "}')
+	test -n "$packagesToBeRemoved" && sudo apt purge -V $packagesToBeRemoved
 }
 function updateRepositoryKeys {
 	time sudo apt-get update 2>&1 >/dev/null | awk '/Release:.*not available: NO_PUBKEY/{print "sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys "$NF}' | sh -x
