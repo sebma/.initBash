@@ -161,6 +161,31 @@ function open {
 		$openCommand "$file" 2>&1 | \egrep -v "MBuntu-Y-For-Unity"
 	done
 }
+function processChildren {
+	local -i ppid=0
+	test $# != 1 && {
+		echo "=> Usage: $FUNCNAME ppid" >&2
+		return 1
+	} || ppid=$1
+
+	if ps $ppid >/dev/null;then
+		echo "  PID COMMAND" > $ppid.log
+		while ps $ppid >/dev/null
+		do
+			for pid in $(ps -o pid= --ppid $ppid)
+			do
+				\grep -qw $pid $ppid.log || ps -o pid=,command= $pid | tee -a $ppid.log
+			done
+			sleep 0.5s
+		done
+
+		echo "=> cat $ppid.log" >&2
+		cat $ppid.log
+	else
+		echo "=> WARNING: The process of pid <$ppid> is not here anymore" >&2
+        return 2
+	fi
+}
 function processENV_Variables {
 	local processName=$1
 	local -i pid=0
