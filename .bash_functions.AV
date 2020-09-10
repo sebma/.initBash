@@ -57,6 +57,7 @@ function aac2MP44YouTube {
 	local audio=$1
 	local picture=$2
 	time $ffmpeg -i "$audio" -loop 1 -framerate 4 -i "$picture" -shortest -speed max -c:a copy -preset medium -tune stillimage -crf 18 -pix_fmt yuv420p -movflags +frag_keyframe "${audio%.*}.mp4" #cf. https://trac.ffmpeg.org/wiki/Encode/YouTube
+	sync
 }
 function aac2m4a {
 #	file="$1"
@@ -508,6 +509,7 @@ function audio2Video4YouTube {
 		;;
 	*) echo "=> ERROR : $FUNCNAME : $audioCodec is not supported yet." >&2;return 1 ;;
 	esac
+	sync
 	videoInfo "$video4YouTubeFile"
 }
 function audio2stout {
@@ -841,6 +843,7 @@ function opus2WebM4YouTube {
 	local audio=$1
 	local picture=$2
 	time $ffmpeg -i "$audio" -loop 1 -framerate 1 -i "$picture" -shortest -speed max -c:a copy "${audio%.*}.webm"
+	sync
 }
 function replaceAudioOfVideoFile {
 	test $# -ne 2 && {
