@@ -218,7 +218,8 @@ function removePackages {
 	case $regexp in
 	""|.) echo "=> Usage: $FUNCNAME non-empty-regexp" >&2;return 1;;
 	esac
-	dpkg -l | awk 'BEGIN {printf"sudo apt purge -V "}'"/^.i +.*$regexp/"'{printf $2" "}'"END{print \"$*\"}" | sh -x
+	local packagesToBeRemoved=$(dpkg -l | awk "/^.i +.*$regexp/"'{printf $2" "}')
+	test -n "$packagesToBeRemoved" && sudo apt purge -V $packagesToBeRemoved
 }
 function updateRepositoryKeys {
 	time sudo apt-get update 2>&1 >/dev/null | awk '/Release:.*not available: NO_PUBKEY/{print "sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys "$NF}' | sh -x
