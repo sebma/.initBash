@@ -166,9 +166,6 @@ EOF
 		return 1
 	fi
 }
-function dpkgExists {
-	test $1 && dpkg -l $1 | grep -q ^.i
-}
 function fixAptKeys {
 	LANG=C apt-key list | awk -F"/| *" '/expired/{print"sudo apt-key del "$3}' | sh -x
 	time (sudo apt-get update 2>/tmp/keymissing; cat /tmp/keymissing)
@@ -185,6 +182,9 @@ function fixAptKeys {
 		sudo rm -v $keyFile
 	done
 	\rm -v /tmp/keymissing
+}
+function isInstalled {
+	test $1 && dpkg -l $1 | grep -q ^.i
 }
 function lsPackagesFromRepo {
 	local arch=$(uname -m)
@@ -218,7 +218,7 @@ function removePackages {
 	case $regexp in
 	""|.) echo "=> Usage: $FUNCNAME non-empty-regexp" >&2;return 1;;
 	esac
-	dpkg -l | \egrep "^.i +" | awk 'BEGIN {printf"sudo apt purge -V "}'"/$regexp/"'{printf $2" "}'"END{print \"$*\"}" | sh -x
+	dpkg -l | awk 'BEGIN {printf"sudo apt purge -V "}'"/^.i +.*$regexp/"'{printf $2" "}'"END{print \"$*\"}" | sh -x
 }
 function updateRepositoryKeys {
 	time sudo apt-get update 2>&1 >/dev/null | awk '/Release:.*not available: NO_PUBKEY/{print "sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys "$NF}' | sh -x
