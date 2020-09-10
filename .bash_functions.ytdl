@@ -60,20 +60,20 @@ function YTRenameFromURLs {
 	done
 	trap - INT
 }
-function addYoutubeTDescription {
+function addYoutubeDescriptionToVideoFromURL {
 	trap 'rc=130;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
-	local file="$1"
+	local video="$1"
 	local url="$2"
-	test $# != 2 && echo "=> Usage: $FUNCNAME file youtube-URL" && return 1
+	test $# != 2 && echo "=> Usage: $FUNCNAME video youtube-URL" && return 1
 	youtube-dl -qs -- "https://www.youtube.com/watch?v=$url" 2>/dev/null && url="https://www.youtube.com/watch?v=$url"
-	mp4tags -c "$(youtube-dl --get-description "$url")" "$file"
-	mp4tags -m "$url" "$file"
+	mp4tags -c "$(youtube-dl --get-description "$url")" "$video"
+	mp4tags -m "$url" "$video"
 #	artworkURL=$(youtube-dl --list-thumbnails "$url" | awk '/http/{print$NF}')
 #	wget -nv "$artworkURL"
 #	artworkFile=$(basename "$artworkURL")
-#	AtomicParsley "$file" --artwork "$artworkFile" --overWrite
+#	AtomicParsley "$video" --artwork "$artworkFile" --overWrite
 #	rm "$artworkFile"
-	chmod -w "$file"
+	chmod -w "$video"
 	trap - INT
 }
 function continueYoutube_Download {
