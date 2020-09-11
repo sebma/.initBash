@@ -1404,6 +1404,13 @@ function sortInPlace {
 		$sort -uo "$file" "$file"
 	done
 }
+function sortM3U {
+	local sort="command sort"
+	for file
+	do
+		( echo "#EXTM3U";grep -v "#EXTM3U" "$file" | paste - - | $sort -V | \sed "s/\t/\n/" )
+	done
+}
 function speedTest {
 	type iperf3 >/dev/null || return
 	for iperf3PublicServer in bouygues.testdebit.info ping.online.net ikoula.testdebit.info debit.k-net.fr speedtest.serverius.net iperf.eenet.ee iperf.volia.net
