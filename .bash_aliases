@@ -253,6 +253,7 @@ alias rpml="\rpm --root ~/local -Uvh"
 alias rpmt="\rpm --test"
 alias rsync2SDCard="rsync --size-only"
 alias rsyncMove="rsync --remove-source-files"
+alias rubyInterpreter="\irb"
 alias scp_unix='time \rsync -h --progress --rsync-path=$HOME/gnu/bin/rsync -ut'
 alias screenResolution=$'xrandr | awk \'/ connected/{print gensub("[+].+","",1,$4)}\''
 alias screenDiagonal=$'xrandr | awk \'/ connected/{print sqrt( ($(NF-2)/10)^2 + ($NF/10)^2 )/2.54" inches"}\''
