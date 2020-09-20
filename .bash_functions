@@ -864,6 +864,12 @@ function lsicons {
 		listPackageContents $package
 	done | sort -u | egrep "(svg|png)$"
 }
+function lslib {
+	for package
+	do
+		listPackageContents $package
+	done | sort -u | egrep "(\.so)"
+}
 function lv_Dev_Creation_Date {
 	sudo -v
 	for lv
