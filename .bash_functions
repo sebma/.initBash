@@ -476,8 +476,9 @@ function findHumanReadable {
 }
 function findLoops {
 	local find="$(which find)"
+	echo $OSTYPE | grep -q android && local osFamily=Android || local osFamily=$(uname -s)
 	[ $osFamily = Darwin ] && find=gfind
-	time $find $@ -xdev -follow 2>&1 >/dev/null | egrep -w "loop|denied"
+	time $find "$@" -xdev -follow -printf ""
 }
 function functionDefinition {
 	local sed=$(which sed)
