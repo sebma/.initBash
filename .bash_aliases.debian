@@ -11,6 +11,7 @@ aptGet=$(which apt-get 2>/dev/null)
 #sudo="$(which sudo >/dev/null 2>&1 && echo LANGUAGE=$LANGUAGE $(which sudo))"
 
 #alias installSecurityUpdates="sudo apt install -V $(apt-get -s dist-upgrade | awk "/^Inst.*\/$codeName-security/"'{print$2}')"
+alias architecture="dpkg-architecture -q DEB_BUILD_ARCH"
 alias autoremove="$apt -h 2>&1 | \grep -wq autoremove && $aptGet autoremove -s | \grep -wq '^Remv' && sudo screen -L $apt autoremove -V || ( $aptGet autoremove -s | \grep -wq '^Remv' && sudo screen -L $aptGet autoremove -V )"
 alias cleanupOldKernels="\linux-purge -k 2 -s | \grep -wq '^Purg' && sudo screen -L \linux-purge -k 2"
 alias debInfo="\dpkg -I"
