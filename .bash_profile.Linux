@@ -88,14 +88,14 @@ then
 		$time test $profile && $time gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$profile/ login-shell true
 		$time gsettings set org.gnome.desktop.wm.preferences resize-with-right-button true 2>/dev/null
 		$time gsettings set org.gnome.desktop.wm.preferences mouse-button-modifier "\<Alt\>" 2>/dev/null
-		$time dconf write /org/gnome/desktop/input-sources/xkb-options "\[\'terminate:ctrl_alt_bksp\'\]" 2>/dev/null
+		which dconf >/dev/null 2>&1 && $time dconf write /org/gnome/desktop/input-sources/xkb-options "\[\'terminate:ctrl_alt_bksp\'\]" 2>/dev/null
 		[ "$debug" -lt 4 ] && set +x
 		[ "$debug" -gt 0 ] && echo "=> DONE."
 	fi
 fi
 trap - INT
 
-if [ $(dconf read /org/gnome/shell/favorite-apps | wc -c) != 0 ]
+if which dconf >/dev/null 2>&1 && [ $(dconf read /org/gnome/shell/favorite-apps | wc -c) != 0 ]
 then
 	dconf read /org/gnome/shell/favorite-apps | grep -wqi firefox.desktop || dconf write /org/gnome/shell/favorite-apps "$(dconf read /org/gnome/shell/favorite-apps | sed "s/\]/, 'Firefox.desktop']/")" 2>/dev/null
 fi
