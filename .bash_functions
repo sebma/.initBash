@@ -581,11 +581,11 @@ function getVideosFromRSSPodCastPlayList {
 		$wget $(curl -s "$rssURL" | egrep -o "https?:[^ <>]*(mp4|webm)" | grep -v .google.com/ | uniq)
 	}
 }
-function gitUpdateAllLocalRepos {
+function gitUpdateAllMyLocalRepos {
 	local find="$(which find)"
 	[ $osFamily = Darwin ] && find=gfind
 	local dir=""
-	$find ~ -type d -name .git | while read dir
+	$find ~ -maxdepth 2 -type d -name .git | while read dir
 	do
 		cd $dir/..
 		echo "=> Updating <$dir> local repo. ..." >&2
