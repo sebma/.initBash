@@ -33,7 +33,7 @@ which lspci >/dev/null && {
 	alias lsvga=lsgpu
 }
 
-alias batteryINFO="acpi -bi 2>/dev/null;upower -i $(upower -e | grep BAT) 2>/dev/null;LC_ALL=C \inxi -z -Bxxx 2>/dev/null"
+alias batteryINFO="upower -i $(upower -e | grep BAT) 2>/dev/null;acpi -bi 2>/dev/null;LC_ALL=C \inxi -z -Bxxx 2>/dev/null"
 alias brewUnInstall='\ruby -e "$(\curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/uninstall)"'
 alias catFiles="\tail -vn +1"
 alias connect2MyHiddenWifi="connect2SSID sebWlan"
