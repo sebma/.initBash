@@ -3,7 +3,7 @@
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 toybox="command toybox"
-alias topd="$toybox du -xhd 1 2>/dev/null | grep -v '\s*\.$' | sort -nr | head -n"
+alias topd="$toybox du -cxhd 1 2>/dev/null | grep -v '\s*\.$' | sort -nr | head -n"
 
 set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
