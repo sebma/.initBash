@@ -60,7 +60,8 @@ alias closecd='\eject -t $CDR_DEVICE'
 alias columns='\column -c $COLUMNS'
 alias conky_restart=restart_conky
 alias copy2Clipboard="\xclip -i -selection clipboard"
-alias cp2FAT32="rsync --size-only"
+#alias cp2FAT32="rsync --size-only"
+alias cp2FAT32="rsync --modify-window=1"
 alias cp2NTFS="rsync -ogpuv"
 alias cp2SDCard="rsync --size-only"
 alias cp2exFAT="rsync -ogpuv"
