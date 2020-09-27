@@ -141,7 +141,7 @@ function getPlaylistsRestrictedFilenamesFSD {
 		mkdir -pv $playListTitle && cd $playListTitle
 		if echo $playList | \egrep -q "youtube|dailymotion|vevo|tonvid"
 		then
-			listOfUrls=$(hxwls 2>/dev/null "$playList" | awk -F '&' '/\<(watch|video)\>/{print$1}' | sort -u | tr "\n" " ")
+			listOfUrls=$(hxwls 2>/dev/null "$playList" | awk -F '&' '/\<(watch|video)\>/{print$1}' | sort -u | paste -sd" ")
 			test $? != 0 && return
 		else
 			fqdn=$(echo "$playList" | sed "s|https?://||" | cut -d/ -f1)
@@ -165,7 +165,7 @@ function getPlaylistsRestrictedFilenamesHD {
 		mkdir -pv $playListTitle && cd $playListTitle
 		if echo $playList | \egrep -q "youtube|dailymotion|vevo|tonvid"
 		then
-			listOfUrls=$(hxwls 2>/dev/null "$playList" | awk -F '&' '/\<(watch|video)\>/{print$1}' | sort -u | tr "\n" " ")
+			listOfUrls=$(hxwls 2>/dev/null "$playList" | awk -F '&' '/\<(watch|video)\>/{print$1}' | sort -u | paste -sd" ")
 		else
 			fqdn=$(echo "$playList" | sed "s|https?://||" | cut -d/ -f1)
 			service=$(echo $fqdn | awk -F. '{print$(NF-1)}')
@@ -188,7 +188,7 @@ function getPlaylistsRestrictedFilenamesSD {
 		mkdir -pv $playListTitle && cd $playListTitle
 		if echo $playList | \egrep -q "youtube|dailymotion|vevo|tonvid"
 		then
-			listOfUrls=$(hxwls 2>/dev/null "$playList" | awk -F '&' '/\<(watch|video)\>/{print$1}' | sort -u | tr "\n" " ")
+			listOfUrls=$(hxwls 2>/dev/null "$playList" | awk -F '&' '/\<(watch|video)\>/{print$1}' | sort -u | paste -sd" ")
 			test $? != 0 && return
 		else
 			fqdn=$(echo "$playList" | sed "s|https?://||" | cut -d/ -f1)
