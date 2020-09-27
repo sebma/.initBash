@@ -75,7 +75,7 @@ fi
 which gnuplot >/dev/null 2>&1 && export GNUTERM=qt
 
 export RSYNC_SKIP_COMPRESS_LIST="7z/aac/avi/bz2/deb/flv/gz/iso/jpeg/jpg/mkv/mov/m4a/mp2/mp3/mp4/mpeg/mpg/oga/ogg/ogm/ogv/webm/rpm/tbz/tgz/z/zip"
-export RSYNC_EXCLUSION=$(printf -- "--exclude \"%s\" " /dev/ /sys/ /run/ /proc/ /mnt/)
+export RSYNC_EXCLUSION=$(printf -- "--exclude %s/ " /dev /sys /run /proc)
 #FIN DE DEFINITION DES VARIABLES
 
 if [ $osFamily = Linux ] || [ $osFamily = Darwin ]
