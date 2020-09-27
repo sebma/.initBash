@@ -1003,7 +1003,7 @@ function os {
 			if [ -s /etc/os-release ]; then
 				( source /etc/os-release; echo $PRETTY_NAME )
 			elif which lsb_release >/dev/null 2>&1; then
-				\lsb_release -scd | tr "\n" " ";echo
+				\lsb_release -scd | paste -sd" ";echo
 			else
 				\sed -n 's/\\[nl]//g;1p' /etc/issue
 			fi
