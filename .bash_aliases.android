@@ -14,7 +14,7 @@ unalias less
 alias ll="ls -lF"
 alias topd10="topd10"
 alias topd5="topd5"
-alias topd="\du   -xmd 1 2>/dev/null | grep -v '\s*\.$' | sort -nr | head -n"
+alias topd="\du -cxmd 1 2>/dev/null | grep -v '\s*\.$' | sort -nr | head -n"
 alias topdlines='topd $(($LINES-2))'
 
 alias topf10="$find . -xdev -type f -size +10240k -exec ls -al {} + 2>/dev/null | sort -nrk4 | awk '{size=\$5/2^20;sub(\" *\"\$5,sprintf(\" %10.3fM\",size));print}' | head | awk '{total+=\$5;print}END{print\"=> total = \"total\" MiB\"}'"
