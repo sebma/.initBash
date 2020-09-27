@@ -33,7 +33,7 @@ then
 		export system=$(Source /etc/os-release && echo "$NAME $VERSION_ID")
 	elif which lsb_release >/dev/null 2>&1 
 	then
-		export system="$( ( \lsb_release -sd | grep "[0-9.]" || \lsb_release -sir ) | tr '\n' ' ')"
+		export system="$( ( \lsb_release -sd | grep "[0-9.]" || \lsb_release -sir ) | paste -sd' ')"
 	else
 		ID=$(awk -F"=" '/^ID\>/{print$2}' /etc/os-release)
 		case $ID in
