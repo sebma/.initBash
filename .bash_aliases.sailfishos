@@ -36,7 +36,7 @@ alias smsSearch=smsGrep
 alias timedRestart='systemctl --user restart timed-qt5.service;systemctl --user status timed-qt5.service | egrep " - |Active:"'
 alias topd10="topd 10"
 alias topd5="topd 5"
-alias topd="toybox du -xmd 1 2>/dev/null | grep -v '\s*\.$' | sort -nr | head -n"
+alias topd="toybox du -cxmd 1 2>/dev/null | grep -v '\s*\.$' | sort -nr | head -n"
 
 alias topf10='$find . $prunePathsFindExpression -xdev -type f -size +10240k -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | column -t | head -10 | awk '\''{total+=$5;print}END{print"=> total = "total" MiB"}'\'''
 alias topf50='$find . $prunePathsFindExpression -xdev -type f -size +10240k -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | column -t | head -50 | awk '\''{total+=$5;print}END{print"=> total = "total" MiB"}'\'''
