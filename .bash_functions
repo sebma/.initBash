@@ -360,49 +360,47 @@ function dirName {
 	done
 }
 function distribName {
-	local system
-	if which lsb_release >/dev/null
-	then
-		system=$(lsb_release -si)
+	local osName=unknown
+	echo $OSTYPE | grep -q android && local osFamily=Android || local osFamily=$(uname -s)
+
+	if [ $osFamily = Linux ]; then
+		if which lsb_release > /dev/null; then
+			osName=$(lsb_release -si)
+			[ $osName = "n/a" ] && osName=$(\sed -n "s/[\"']//g;s/^ID=//p;" /etc/os-release)
+		elif [ -s /etc/os-release ]; then
+			osName=$(\sed -n "s/[\"']//g;s/^ID=//p;" /etc/os-release)
+		fi
+	elif [ $osFamily = Darwin ]; then
+		osName="$(sw_vers -productName)"
+	elif [ $osFamily = Android ]; then
+		osName=Android
 	else
-		system=$OSTYPE
+		osName=$OSTYPE
 	fi
-	echo $system
+
+	echo $osName | awk '{print tolower($0)}'
 }
 function distribType {
-	local distrib=unknown
+	local distribName=unknown
 	local distribType=unknown
-	if which lsb_release >/dev/null 2>&1
-	then
-		distrib=$(\lsb_release -si)
-		case $distrib in
-			Ubuntu|Debian) distribType=debian;;
-			Mer |Redhat|Fedora) distribType=redhat;;
-			*) distribType=unknown;;
+	echo $OSTYPE | grep -q android && local osFamily=Android || local osFamily=$(uname -s)
+
+	distribName=$(distribName)
+
+	if [ $osFamily = Linux ]; then
+		case $distribName in
+			sailfishos|rhel|fedora|centos) distribType=redhat ;;
+			ubuntu) distribType=debian;;
+			*) distribType=$distribName ;;
 		esac
-	fi
-	if [ $distribType = unknown ]
-	then
-		if   [ $osFamily = Linux ]
-		then
-			distribType=$(source /etc/os-release && echo $ID_LIKE | cut -d'"' -f2 | cut -d" " -f1) #Pour les cas ou ID_LIKE est de la forme ID_LIKE="rhel fedora"
-			if [ -z "$distribType" ]
-			then
-				distrib=$(source /etc/os-release;echo $ID)
-				case $distrib in
-					sailfishos|rhel|fedora|centos) distribType=redhat;;
-					*) distribType=unknown;;
-				esac
-			fi
-		elif [ $osFamily = Darwin ]
-		then
-			distrib="$(sw_vers -productName)"
+	elif [ $osFamily = Darwin ]; then
 			distribType=Darwin
-		else
-			distrib=unknown
-			distribType=$osFamily
-		fi
+	elif [ $osFamily = Android ]; then
+			distribType=Android
+	else
+		which bash >/dev/null 2>&1 && distribType=$(bash -c 'echo $OSTYPE') || distribType=$osFamily
 	fi
+
 	echo $distribType
 }
 function env {
