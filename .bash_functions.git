@@ -22,6 +22,21 @@ function gitCloneNonEmptyDir {
 		git branch --set-upstream-to=origin/master master
 	}
 }
+function gitUpdateAllMyLocalRepos {
+	local find="$(which find)"
+	[ $osFamily = Darwin ] && find=gfind
+	local dir=""
+	$find ~ -maxdepth 2 -type d -name .git | while read dir
+	do
+		cd $dir/..
+		echo "=> Updating <$dir> local repo. ..." >&2
+		git config --local remote.origin.url
+		git pull
+		cd - >/dev/null
+		echo
+	done
+	unset dir
+}
 
 set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
