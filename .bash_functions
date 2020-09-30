@@ -579,20 +579,6 @@ function getVideosFromRSSPodCastPlayList {
 		$wget $(curl -s "$rssURL" | egrep -o "https?:[^ <>]*(mp4|webm)" | grep -v .google.com/ | uniq)
 	}
 }
-function gitUpdateAllMyLocalRepos {
-	local find="$(which find)"
-	[ $osFamily = Darwin ] && find=gfind
-	local dir=""
-	$find ~ -maxdepth 2 -type d -name .git | while read dir
-	do
-		cd $dir/..
-		echo "=> Updating <$dir> local repo. ..." >&2
-		\grep -w "^[[:blank:]]url" ./.git/config
-		\git pull
-		cd - >/dev/null
-	done
-	unset dir
-}
 function gpg2asc {
 	for gpgFile
 	do
