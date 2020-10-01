@@ -217,7 +217,7 @@ function brewInstall {
 		else
 			brewPrefix=$HOME/homebrew
 #			mkdir -pv $brewPrefix && \curl -L https://github.com/Homebrew/brew/tarball/master | \tar xz --strip 1 -C $brewPrefix || return
-			git clone $portableHomeBrewURL $brewPrefix # cf. https://stackoverflow.com/a/55021458/5649639
+			git clone https://github.com/Homebrew/brew $brewPrefix # cf. https://stackoverflow.com/a/55021458/5649639
 			\mkdir -pv $brewPrefix/bin
 			\ln -vs $brewPrefix/Homebrew/bin/brew $brewPrefix/bin/brew
 			brew=$brewPrefix/bin/brew
