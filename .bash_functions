@@ -216,12 +216,15 @@ function brewInstall {
 			brew=$(which brew)
 		else
 			brewPrefix=$HOME/homebrew
-			mkdir -p $brewPrefix && \curl -L https://github.com/Homebrew/brew/tarball/master | \tar xz --strip 1 -C $brewPrefix || return
+#			mkdir -pv $brewPrefix && \curl -L https://github.com/Homebrew/brew/tarball/master | \tar xz --strip 1 -C $brewPrefix || return
+			git clone $portableHomeBrewURL $brewPrefix # cf. https://stackoverflow.com/a/55021458/5649639
+			\mkdir -pv $brewPrefix/bin
+			\ln -vs $brewPrefix/Homebrew/bin/brew $brewPrefix/bin/brew
 			brew=$brewPrefix/bin/brew
 		fi
 	fi
 
-	if which brew >/dev/null 2>&1;then
+	if test -x $brew;then
 		source .bash_functions.brew
 		brewPostInstall
 	fi
