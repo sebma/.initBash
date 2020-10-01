@@ -33,6 +33,7 @@ alias audioRenameFromTags=renameFromTags
 alias bc="\bc -l"
 alias binxi="\binxi -c17 -z"
 alias binxiSummary="binxi -Fm -v3"
+alias brewUnInstall='\ruby -e "$(\curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall)"'
 alias brewUpdate="time \brew update -v"
 alias bsu='chmod +r $XAUTHORITY;cd $BEA_HOME/utils/bsu; ./bsu.sh'
 alias burnaudiocd='\burnclone'
