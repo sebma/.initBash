@@ -213,7 +213,7 @@ function brewInstall {
 	then
 		if groups | \egrep -wq "adm|admin|sudo|wheel"
 		then
-			$(which ruby) -e "$(\curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" || return
+			$(which ruby) -e "$(\curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" || return
 			addpaths /usr/local/bin
 			brew=$(which brew)
 		else
