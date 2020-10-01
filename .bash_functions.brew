@@ -19,7 +19,7 @@ function brewPostInstall {
 	time for tap in homebrew/core homebrew/services homebrew/cask homebrew/cask-versions homebrew/cask-drivers homebrew/cask-fonts buo/cask-upgrade;do
 		$brew tap | \grep -q $tap || {
 			set -x
-			$brew tap $tap
+			time $brew tap $tap
 			set +x
 		}
 	done
