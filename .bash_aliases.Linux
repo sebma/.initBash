@@ -45,6 +45,7 @@ alias dnsInfo="( \nmcli dev list || \nmcli dev show ) 2>/dev/null | grep DNS || 
 alias findDeadLinks='$find . -xtype l -exec ls --color -l {} +'
 alias firefoxDefrag='pgrep firefox || time find ~/.mozilla/firefox/ -name "*sqlite" -ls -exec sqlite3 -echo {} vacuum \;'
 alias journalctl='\journalctl -e'
+alias isUEFI="[ -d /sys/firmware/efi ] && echo 'Session EFI' || echo 'Session non-EFI'"
 alias l="ls --color"
 alias lastme='last -w $USER'
 alias lastmeToday='lastme | \grep "$(LC_TIME=C date +%b\ %_d)"'
