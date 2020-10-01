@@ -224,7 +224,7 @@ function brewInstall {
 	fi
 
 	if test -x $brew;then
-		source .bash_functions.brew
+		source $initDir/.bash_functions.brew
 		brewPostInstall
 	fi
 	sync
