@@ -4,11 +4,6 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 
 test -r $initDir/.bash_functions.$osID_LIKE && Source $initDir/.bash_functions.$osID_LIKE # Si c'est un Linux de type Debian ou Redhat
 
-function brewInstall {
-	which brew >/dev/null 2>&1 || sh -c "$(\curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
-	which brew >/dev/null || return 1
-	brew update
-}
 function connect2SSID {
 	local ssid=$1
 	test -z "$ssid" && {
