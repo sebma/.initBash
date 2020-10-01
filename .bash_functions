@@ -215,12 +215,12 @@ function brewInstall {
 			addpaths /usr/local/bin
 			brew=$(which brew)
 		else
-			brewPrefix=$HOME/homebrew
-#			mkdir -pv $brewPrefix && \curl -L https://github.com/Homebrew/brew/tarball/master | \tar xz --strip 1 -C $brewPrefix || return
-			git clone https://github.com/Homebrew/brew $brewPrefix # cf. https://stackoverflow.com/a/55021458/5649639
-			\mkdir -pv $brewPrefix/bin
-			\ln -vs $brewPrefix/Homebrew/bin/brew $brewPrefix/bin/brew
+			# cf. https://stackoverflow.com/a/55021458/5649639
+			brewPrefix=$HOME/brew
+			git clone https://github.com/Homebrew/brew $brewPrefix
 			brew=$brewPrefix/bin/brew
+#			cd $brewPrefix/Library/Taps/homebrew && git clone https://github.com/Homebrew/homebrew-core
+			$brew tap Homebrew/homebrew-core
 		fi
 	fi
 
