@@ -208,6 +208,22 @@ function bible {
 		$bible -f $verses | cut -d: -f2
 	done
 }
+function brewInstall {
+	if ! which brew >/dev/null 2>&1
+	then
+		if groups | \egrep -wq "adm|admin|sudo|wheel"
+		then
+			$(which ruby) -e "$(\curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" || return
+			addpaths /usr/local/bin
+			brew=$(which brew)
+		else
+			brewPrefix=$HOME/homebrew
+			mkdir -p $brewPrefix && \curl -L https://github.com/Homebrew/brew/tarball/master | \tar xz --strip 1 -C $brewPrefix || return
+			brew=$brewPrefix/bin/brew
+		fi
+	fi
+	brewPostInstall
+}
 function castnowPlaylist {
 	test $# = 0 && {
 		echo "=> Usage: $FUNCNAME [index] [format] playlistFile ..." >&2
