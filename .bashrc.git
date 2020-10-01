@@ -22,5 +22,7 @@ if ! git config --global --get credential.helper >/dev/null;then
 	[ $osFamily = Darwin ] && git config --global credential.helper osxkeychain
 fi
 
+git config --global pull.rebase | grep -q false || git config --global pull.rebase false
+
 set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
