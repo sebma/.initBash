@@ -6,22 +6,6 @@ function applescript2app {
 		osacompile -o "/Applications/${file/.applescript/.app}" "$file"
 	done
 }
-function brewInstall {
-	if ! which brew >/dev/null 2>&1
-	then
-		if groups | \egrep -wq "adm|admin|sudo"
-		then
-			$(which ruby) -e "$(\curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" || return
-			addpaths /usr/local/bin
-			brew=$(which brew)
-		else
-			brewPrefix=$HOME/homebrew
-			mkdir -p $brewPrefix && \curl -L https://github.com/Homebrew/brew/tarball/master | \tar xz --strip 1 -C $brewPrefix || return
-			brew=$brewPrefix/bin/brew
-		fi
-	fi
-	brewPostInstall
-}
 function dmgInstall {
 	local sudo defaultDst
 	groups | \egrep -wq "admin|sudo" && { sudo=sudo;defaultDst=/; }	|| { sudo="";defaultDst="$HOME"; }
