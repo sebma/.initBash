@@ -218,9 +218,8 @@ function brewInstall {
 			# cf. https://stackoverflow.com/a/55021458/5649639
 			brewPrefix=$HOME/brew
 			git clone https://github.com/Homebrew/brew $brewPrefix
+			time git clone https://github.com/Homebrew/homebrew-core $brewPrefix/Library/Taps/homebrew/homebrew-core
 			brew=$brewPrefix/bin/brew
-#			cd $brewPrefix/Library/Taps/homebrew && git clone https://github.com/Homebrew/homebrew-core
-			$brew tap Homebrew/homebrew-core
 		fi
 	fi
 
@@ -228,6 +227,7 @@ function brewInstall {
 		source .bash_functions.brew
 		brewPostInstall
 	fi
+	sync
 }
 function castnowPlaylist {
 	test $# = 0 && {
