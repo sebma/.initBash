@@ -18,7 +18,8 @@ unset -f dfc
 alias dfc='dfc -TWfc always | egrep -v "/opt/alien/data| /data"'
 alias getIMEI="ssu status | awk '/UID/{print\$NF}'"
 alias imei="ssu status | awk '/UID/{print\$NF}'"
-alias inxiSummary='inxi -Fm -v3 -f'
+alias inxi='inxi -c2 -f'
+alias inxiSummary='inxi -Fm -v3'
 alias keyboardRestart='systemctl --user restart maliit-server.service;systemctl --user status maliit-server.service | egrep " - |Active:"'
 alias la='ls -A'
 alias notesGrep='sqlite3 ~/.local/share/jolla-notes/QML/OfflineStorage/Databases/8b63c31a7656301b3f7bcbbfef8a2b6f.sqlite "select body from notes;" | grep'
