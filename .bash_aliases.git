@@ -13,7 +13,8 @@ alias gitHTTP_URL='\git config remote.origin.url | \sed -E "s|^git@|https://|;s|
 alias gitLastRelease='\git describe --tags --abbrev=0'
 alias gitLocalUndelete="\git ls-files -d | grep . && \git ls-files -d | \xargs git checkout-index"
 alias gitLocalProjectName='basename -s .git $(git rev-parse --show-toplevel)'
-alias gitPageTitle='echo $(\curl -qs $(gitHTTP_URL) | pup --charset utf8 "title text{}" | cut -d: -f2-)'
+#alias gitPageTitle='echo $(\curl -qs $(gitHTTP_URL) | pup --charset utf8 "title text{}" | cut -d: -f2-)'
+alias gitPageTitle='echo $(xidel -s -e //title $(gitHTTP_URL) | cut -d: -f2-)'
 alias gitRemoteProjectName='basename -s .git $(git config remote.origin.url)'
 alias gitRemoteRepoLastRelease='\git ls-remote --tags --refs | awk -F/ "{print\$NF}" | sort -rV | head -1'
 alias gitStatus="\git status -bs -uno"
