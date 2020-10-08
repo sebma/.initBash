@@ -4,7 +4,7 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 
 qemu=qemu-system-$(arch)
 if which $qemu >/dev/null 2>&1;then
-	bridgeInterface=$(\ls /sys/class/net | egrep -v "(eth|wlan|tap)[0-9]|lo")
+	bridgeInterface=$(\ls /sys/class/net | egrep -v "(eth|wlan|tap)[0-9]|lo" | paste -sd "|")
 	which kvm >/dev/null 2>&1 && kvm=kvm || kvm="$qemu -enable-kvm"
 	test -n "$bridgeInterface" && kvmBridge="-net bridge,br=$bridgeInterface"
 	kvmBoot="sudo -b $kvm -m 1G $kvmBridge -net nic,model=virtio -redir tcp:2222::22"
@@ -15,7 +15,7 @@ if which $qemu >/dev/null 2>&1;then
 	alias testLiveUSB_UEFI="$kvmBoot -bios /usr/share/qemu/OVMF.fd -hda"
 	alias virtioKernelConfig='grep VIRTIO /boot/config-$(uname -r)'
 	alias virtualisation="kvm-ok.sh"
-	test -n "$bridgeInterface" && { cat /etc/qemu/bridge.conf | grep -q $bridgeInterface 2>/dev/null || echo "=> INFO : You need to add and allow <$bridgeInterface> to your /etc/qemu/bridge.conf file."; }
+	test -n "$bridgeInterface" && { cat /etc/qemu/bridge.conf | egrep -q $bridgeInterface 2>/dev/null || echo "=> INFO : You need to add and allow <$bridgeInterface> to your /etc/qemu/bridge.conf file."; }
 	unset bridgeInterface
 fi
 
