@@ -217,8 +217,8 @@ function brewInstall {
 		else
 			# cf. https://stackoverflow.com/a/55021458/5649639
 			brewPrefix=$HOME/brew
-			git clone https://github.com/Homebrew/brew $brewPrefix
-			time git clone https://github.com/Homebrew/homebrew-core $brewPrefix/Library/Taps/homebrew/homebrew-core
+			git clone https://github.com/homebrew/brew $brewPrefix
+			time git clone https://github.com/homebrew/homebrew-core $brewPrefix/Library/Taps/homebrew/homebrew-core
 			brew=$brewPrefix/bin/brew
 		fi
 	fi
