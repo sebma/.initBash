@@ -62,11 +62,10 @@ function checkinstallWithGitRepoInformation {
 	local sed=$(which sed)
 	[ $osFamily = Darwin ] && sed="$sed -E"
 	[ $osFamily = Linux ]  && sed="$sed -r"
-	local gitHTTP_URL='$(\git config --get remote.origin.url | $sed "s|^git@|https://|;s|(\.\w+):|\1/|")'
+	local gitHTTP_URL=$(\git config --get remote.origin.url | $sed "s|^git@|https://|;s|(\.\w+):|\1/|")
 
 	echo "=> Running $FUNCNAME ..."
-	echo "=> Project description is :"
-	echo
+	printf "=> Project description is :"
 #	\curl -qs $gitHTTP_URL | \pup --charset utf8 "title text{}" | cut -d: -f2-
 	xidel -s -e //title $gitHTTP_URL | cut -d: -f2-
 	echo
