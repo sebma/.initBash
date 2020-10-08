@@ -130,6 +130,7 @@ alias h5dump="\h5dump -n 1"
 alias halt="\halt && exit"
 alias headlines='\head -n $((LINES-2))'
 alias highlight="\highlight -O ansi --force"
+#alias html2json="\xidel -s --output-format=json-wrapped -e //html"
 alias html2json="\pup 'json{}'"
 alias html2xml="\xmllint --html --format --recover --xmlout"
 alias htmldecode="perl -MHTML::Entities -pe 'decode_entities(\$_)'"
