@@ -589,7 +589,8 @@ function getURLTitle {
 	for url
 	do
 		printf "=> $url : " >&2
-		\curl -Ls $url | pup --charset utf8 'title text{}'| \recode html..latin9
+#		\curl -Ls "$url" | pup --charset utf8 'title text{}'| \recode html..latin9
+		xidel -s -e //title "$url" | \recode html..latin9
 	done
 }
 function getVideosFromRSSPodCastPlayList {
