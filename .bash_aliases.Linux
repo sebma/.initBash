@@ -18,10 +18,10 @@ export find="$(which find)"
 test "$wifiInterface" && {
 	alias wifiSpeed="\iwlist $wifiInterface bitrate;\iw dev $wifiInterface link"
 	alias restartWifi=wifiRestart
-	if which iwlist >/dev/null 2>&1 ;then
-		alias wifi5GHz="iwlist $wifiInterface frequency | \grep -q '5\..* GHz' && echo true || echo false"
-	elif which iw >/dev/null 2>&1 ;then
+	if which iw >/dev/null 2>&1 ;then
 		alias wifi5GHz="iw phy | \egrep -q '5[0-9]{3} MHz' && echo true || echo false"
+	elif which iwlist >/dev/null 2>&1;then
+		iwlist $wifiInterface frequency 2>&1 | grep "no frequency information" || alias wifi5GHz="iwlist $wifiInterface frequency | \grep -q '5\..* GHz' && echo true || echo false"
 	fi
 }
 
