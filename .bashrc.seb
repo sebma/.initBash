@@ -16,7 +16,6 @@ bashRCLoaded=1
 
 echo $OSTYPE | grep -q android && export osFamily=Android || export osFamily=$(uname -s)
 [ $osFamily = Linux ] && export osID=$(Source /etc/os-release && echo $ID) osID_LIKE=$(Source /etc/os-release && echo $ID_LIKE)
-quoteCHAR="'\''"
 
 function addmanpaths {
 	for manpath
@@ -191,6 +190,8 @@ do
 	! which $tool >/dev/null 2>&1 && alias | grep -q $tool && unalias $aliasName #Does not work on Jolla1/SFOS3
 	set +x
 done
+
+quoteCHAR="'\''"
 
 set +x
 tty -s && echo
