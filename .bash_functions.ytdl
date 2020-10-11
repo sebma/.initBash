@@ -17,11 +17,11 @@ alias ytdl="LANG=C.UTF-8 command youtube-dl"
 ytdlnoconfig="youtube-dl --ignore-config"
 alias ytdlnoconfig="$ytdlnoconfig"
 
-alias ytdlLastRelease='\git ls-remote --tags --refs https://github.com/ytdl-org/youtube-dl | awk -F/ "{print\$NF}" | sort -rV | head -1'
 alias ytdlVersion="ytdl --version"
 alias ytdlGetFileName="\youtube-dl --get-filename"
 alias ytdlGetFormatID="\youtube-dl --get-filename -o '%(format_id)s' -f"
-alias ytdlIssues="open https://github.com/ytdl-org/youtube-dl/issues"
+alias ytdlLatestRelease='\git ls-remote --tags --refs https://github.com/ytdl-org/youtube-dl | awk -F/ "{print\$NF}" | sort -rV | head -1'
+alias ytdlOpenIssues="open https://github.com/ytdl-org/youtube-dl/issues"
 alias ytdlUpdateFromGit="ytdlUpdate https://github.com/ytdl-org/youtube-dl"
 
 function YTRenameFromFiles {
@@ -580,10 +580,10 @@ function ytdlUpdate {
 	local youtube_dl=$(which youtube-dl)
 	if [ "$youtube_dl" ];then
 		local ytdlPythonVersion=$($youtube_dl --ignore-config -v 2>&1 | awk -F "[ .]" '/Python version/{printf$4"."$5}')
-		local ytdlLastRelease=$(\git ls-remote --tags --refs $ytdlGitURL | awk -F/ '{print$NF}' | sort -rV | head -1)
+		local ytdlLatestRelease=$(\git ls-remote --tags --refs $ytdlGitURL | awk -F/ '{print$NF}' | sort -rV | head -1)
 		local ytdlCurrentRelease=$($youtube_dl --version)
 
-		[ $ytdlLastRelease = $ytdlCurrentRelease ] && echo "=> [$FUNCNAME] INFO : You already have the latest release, which is $ytdlLastRelease." >&2 || $sudo $(which pip$ytdlPythonVersion) install -U youtube-dl
+		[ $ytdlLatestRelease = $ytdlCurrentRelease ] && echo "=> [$FUNCNAME] INFO : You already have the latest release, which is $ytdlLatestRelease." >&2 || $sudo $(which pip$ytdlPythonVersion) install -U youtube-dl
 	else
 		$sudo $(which pip) install -U youtube-dl
 	fi
