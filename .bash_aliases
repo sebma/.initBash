@@ -82,6 +82,7 @@ alias dbus-reboot='\dbus-send --system --print-reply --dest="org.freedesktop.Con
 alias dbus-suspend='\dbus-send --system --print-reply --dest="org.freedesktop.UPower" /org/freedesktop/UPower org.freedesktop.UPower.Suspend'
 alias deborphan="\deborphan | sort"
 alias dig="\dig +search +short"
+alias disconnectB206_BT_From_DAC="ssh b206 myScripts/shl/bluetoothDisconnectAllBlueZ5.sh"
 alias doc2docx="libreoffice2 docx"
 alias doc2odt=" libreoffice2 odt"
 alias doc2pdf=" libreoffice2 pdf"
