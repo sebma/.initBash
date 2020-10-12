@@ -210,16 +210,22 @@ function bible {
 }
 function brewInstall {
 	if ! which brew >/dev/null 2>&1;then
-		if groups | \egrep -wq "adm|admin|sudo|wheel";then
-			$(which bash) -c "$(\curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" || return
+		if [ $osFamily = Linux ]
+			if groups | \egrep -wq "adm|admin|sudo|wheel";then
+				$(which bash) -c "$(\curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" || return
+				addpaths /home/linuxbrew/.linuxbrew/bin
+				brew=$(which brew)
+			else
+				# cf. https://stackoverflow.com/a/55021458/5649639
+				brewPrefix=$HOME/brew
+				git clone https://github.com/homebrew/brew $brewPrefix
+				time git clone https://github.com/homebrew/homebrew-core $brewPrefix/Library/Taps/homebrew/homebrew-core
+				brew=$brewPrefix/bin/brew
+			fi
+		elif [ $osFamily = Darwin ]
+			$(which zsh) -c "$(\curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" || return
 			addpaths /home/linuxbrew/.linuxbrew/bin
 			brew=$(which brew)
-		else
-			# cf. https://stackoverflow.com/a/55021458/5649639
-			brewPrefix=$HOME/brew
-			git clone https://github.com/homebrew/brew $brewPrefix
-			time git clone https://github.com/homebrew/homebrew-core $brewPrefix/Library/Taps/homebrew/homebrew-core
-			brew=$brewPrefix/bin/brew
 		fi
 	fi
 
