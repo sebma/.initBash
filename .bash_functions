@@ -1587,6 +1587,13 @@ function updateYoutubePlaylistLUAForVLC {
 		wget --content-disposition -NP ~/.local/share/vlc/lua/playlist/ $playlist_youtubeLuaURL
 	fi
 }
+function usbFlashDriveInfo {
+	test $# != 1 && echo "=> Usage: $FUNCNAME usbFlashDriveDevice" >&2 && return 1
+	usbFlashDriveDevice=$1
+	sudo smartctl -i -d scsi -T permissive $usbFlashDriveDevice
+	sudo parted $usbFlashDriveDevice print
+	sudo gdisk -l $usbFlashDriveDevice
+}
 function usletter2A4 {
 	input="$1"
 	output="${input/.pdf/--A4.pdf}"
