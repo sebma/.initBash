@@ -209,8 +209,8 @@ function bible {
 	done
 }
 function brewInstall {
-	if ! which brew >/dev/null 2>&1;then
-		if [ $osFamily = Linux ]
+	if ! which brew >/dev/null 2>&1; then
+		if [ $osFamily = Linux ]; then
 			if groups | \egrep -wq "adm|admin|sudo|wheel";then
 				$(which bash) -c "$(\curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" || return
 				addpaths /home/linuxbrew/.linuxbrew/bin
