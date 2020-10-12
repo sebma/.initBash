@@ -26,7 +26,7 @@ function gitUpdateAllMyLocalRepos {
 	local find="$(which find)"
 	[ $osFamily = Darwin ] && find=gfind
 	local dir=""
-	$find ~ -maxdepth 2 -type d -name .git | while read dir
+	$find ~ -maxdepth 2 -type d -name .git | sort | while read dir
 	do
 		cd $dir/..
 		echo "=> Updating <$dir> local repo. ..." >&2
