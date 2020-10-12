@@ -153,7 +153,7 @@ which adb >/dev/null 2>&1 && test -r $initDir/.bash_functions.adb && Source $ini
 which getprop >/dev/null 2>&1 && test -r $initDir/.bash_aliases.getprop && Source $initDir/.bash_aliases.getprop
 
 test -r $initDir/.bashrc.$osFamily && Source $initDir/.bashrc.$osFamily
-#test -r $initDir/.bashrc.$osFamily.local && Source $initDir/.bashrc.$osFamily.local
+#test -r $initDir/.bashrc.$osFamily.$HOSTNAME && Source $initDir/.bashrc.$osFamily.$HOSTNAME
 test -r $initDir/.bashrc.$osID_LIKE && Source $initDir/.bashrc.$osID_LIKE # Si c'est un Linux de type Debian ou Redhat
 
 #my git configuration
@@ -186,7 +186,7 @@ esac
 [ $osFamily = Linux ]  && sed="$(which sed) -r"
 [ $osFamily = Darwin ] && sed="$(which sed) -E"
 #for tool in curl ffmpeg ffprobe hexdump hw-probe lsb_release vim;do ! which $tool >/dev/null 2>&1 && alias | grep -q $tool && unalias $tool;done
-alias | $sed "s/alias //;s/=[']\w+=\S+ /=/;s/sudo -?\w? //;s/(command|time) //;s/[$]\(which (\w+)\)/\1/;s/\/\S+\///;s/='?\\\?/ /" | awk '!/^[.]+/{print$1" "$2}' | sort -u | grep -vP '\s?-|^$' | while read aliasName tool
+alias | $sed "s/alias //;s/=[']\w+=\S+ /=/;s/sudo -?\w? //;s/(command|time) //;s/[$]\(which (\w+)\)/\1/;s/\/\S+\///;s/='?\\\?/ /" | awk '!/^[.]+/{print$1" "$2}' | sort -u | Pgrep -v '\s?-|^$' | while read aliasName tool
 do
 #	echo "$tool" | grep -q -- "^-" && echo "=> aliasName = <$aliasName> tool = <$tool>" && continue
 	! which $tool >/dev/null 2>&1 && alias | grep -q $tool && unalias $aliasName #Does not work on Jolla1/SFOS3
