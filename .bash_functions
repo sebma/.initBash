@@ -212,21 +212,23 @@ function brewInstall {
 	if ! which brew >/dev/null 2>&1; then
 		if [ $osFamily = Linux ]; then
 			if groups | \egrep -wq "adm|admin|sudo|wheel";then
-				$(which bash) -c "$(\curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" || return
-				addpaths /home/linuxbrew/.linuxbrew/bin
-				brew=$(which brew)
+				$SHELL -c "$(\curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" || return
+				brewPrefix=/home/linuxbrew/.linuxbrew
 			else
-				# cf. https://stackoverflow.com/a/55021458/5649639
+				git --help >/dev/null || return
 				brewPrefix=$HOME/brew
-				git clone https://github.com/homebrew/brew $brewPrefix
-				time git clone https://github.com/homebrew/homebrew-core $brewPrefix/Library/Taps/homebrew/homebrew-core
-				brew=$brewPrefix/bin/brew
+				cd $brewPrefix
+				git clone https://github.com/homebrew/brew
+				time git clone https://github.com/homebrew/homebrew-core ./Library/Taps/homebrew/homebrew-core
+				cd - >/dev/null
 			fi
 		elif [ $osFamily = Darwin ]; then
-			$(which zsh) -c "$(\curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" || return
-			addpaths /home/linuxbrew/.linuxbrew/bin
-			brew=$(which brew)
+			$SHELL -c "$(\curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" || return
+			brewPrefix=/usr/local
 		fi
+
+		addpaths $brewPrefix
+		brew=$brewPrefix/bin/brew
 	fi
 
 	if test -x $brew;then
