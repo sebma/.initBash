@@ -508,9 +508,8 @@ function findLoops {
 	time $find "$@" -xdev -follow -printf ""
 }
 function functionDefinition {
-	local sed=$(which sed)
-	[ $osFamily = Darwin ] && sed="$sed -E"
-	[ $osFamily = Linux ]  && sed="$sed -r"
+	[ $osFamily = Darwin ] && local sed="$(which sed) -E"
+	[ $osFamily = Linux ]  && local sed="$(which sed) -r"
 	type "$@" | \grep -v 'is a function$' | $sed 's/(;| )$//;s/    /\t/g'
 }
 function gdebiALL {
