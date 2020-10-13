@@ -59,9 +59,8 @@ function buildSourceCode {
 	return $returnCode
 }
 function checkinstallWithGitRepoInformation {
-	local sed=$(which sed)
-	[ $osFamily = Darwin ] && sed="$sed -E"
-	[ $osFamily = Linux ]  && sed="$sed -r"
+	[ $osFamily = Darwin ] && local sed="$(which sed) -E"
+	[ $osFamily = Linux ]  && local sed="$(which sed) -r"
 	local gitHTTP_URL=$(\git config --get remote.origin.url | $sed "s|^git@|https://|;s|(\.\w+):|\1/|")
 
 	echo "=> Running $FUNCNAME ..."
