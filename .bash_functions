@@ -1486,7 +1486,7 @@ function sshStartLocalForward {
 		\pgrep -lf $tunnelDef
 	fi
 }
-function sum {
+function sumFirstColumn {
 	awk "{print \$1}" | LC_ALL=C numfmt --from=iec | paste -sd+ | bc | numfmt --to=iec-i --suffix=B
 }
 function tcpConnetTest {
