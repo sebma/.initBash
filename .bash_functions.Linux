@@ -199,10 +199,10 @@ function processENV_Variables {
 	[ $pid != 0 ] && tr '\0' '\n' < /proc/$pid/environ | egrep -v "^hidden=" | grep -P "^[^\s%]+=" | sort -u | egrep -w "$varNAME"
 }
 function topf {
-	$find . -xdev $prunePathsFindExpression -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | head -n "$1" | numfmt --field 5 --from=iec --to=iec-i --suffix=B | column -t
+	$find . -xdev $findPrunePathsExpression -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | head -n "$1" | numfmt --field 5 --from=iec --to=iec-i --suffix=B | column -t
 }
 function topflines {
-	$find "$@" -xdev $prunePathsFindExpression -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | head -n $(($LINES-4)) | numfmt --field 5 --from=iec --to=iec-i --suffix=B | column -t
+	$find "$@" -xdev $findPrunePathsExpression -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | head -n $(($LINES-4)) | numfmt --field 5 --from=iec --to=iec-i --suffix=B | column -t
 }
 function umount.seb {
 	set -- ${@%/}  # Remove trailing "/" from all arguments
