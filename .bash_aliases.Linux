@@ -10,7 +10,7 @@ test "$wifiInterface" || wifiInterface="$(iwconfig 2>/dev/null | awk '/^[^ \t]/ 
 #alias lpr="\lpr -o PageSize=A4 -o PageRegion=A4 -o Resolution=default -o InputSlot=Tray2 -o Duplex=DuplexNoTumble -o PreFilter=No"
 
 findExcludedPathList="./proc ./sys ./dev"
-prunePathsFindExpression="( -type d -a ( -name .git $(printf -- " -o -path %s" $findExcludedPathList) ) ) -prune -o"
+findPrunePathsExpression="( -type d -a ( -name .git $(printf -- " -o -path %s" $findExcludedPathList) ) ) -prune -o"
 duExcludedPathList="./proc ./sys ./dev"
 excludePathsDuExpression=$(printf -- "--exclude %s " $duExcludedPathList)
 export find="$(which find)"
@@ -77,13 +77,13 @@ alias scp='time \rsync -h --progress -u -zt --skip-compress=$RSYNC_SKIP_COMPRESS
 alias poweroff="\systemctl poweroff && exit"
 alias reboot="\systemctl reboot && exit"
 alias suspend="\systemctl suspend && exit"
-#alias topf='$find . -xdev $prunePathsFindExpression -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | head -n | awk '\''{total+=$5;print}END{print"=> total = "total" MiB"}'\'' | column -t'
-#alias topf10='$find . -xdev $prunePathsFindExpression -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | head -10 | awk '\''{total+=$5;print}END{print"=> total = "total" MiB"}'\'' | column -t'
-#alias topf50='$find . -xdev $prunePathsFindExpression -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | head -50 | awk '\''{total+=$5;print}END{print"=> total = "total" MiB"}'\'' | column -t'
-#alias topf5='$find . -xdev $prunePathsFindExpression -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 |  head -5 | awk '\''{total+=$5;print}END{print"=> total = "total" MiB"}'\'' | column -t'
-alias topf10='$find . -xdev $prunePathsFindExpression -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | head -10 | numfmt --field 5 --from=iec --to=iec-i --suffix=B | column -t'
-alias topf50='$find . -xdev $prunePathsFindExpression -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | head -50 | numfmt --field 5 --from=iec --to=iec-i --suffix=B | column -t'
-alias topf5='$find . -xdev $prunePathsFindExpression -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 |  head -5  | numfmt --field 5 --from=iec --to=iec-i --suffix=B | column -t'
+#alias topf='$find . -xdev $findPrunePathsExpression -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | head -n | awk '\''{total+=$5;print}END{print"=> total = "total" MiB"}'\'' | column -t'
+#alias topf10='$find . -xdev $findPrunePathsExpression -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | head -10 | awk '\''{total+=$5;print}END{print"=> total = "total" MiB"}'\'' | column -t'
+#alias topf50='$find . -xdev $findPrunePathsExpression -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | head -50 | awk '\''{total+=$5;print}END{print"=> total = "total" MiB"}'\'' | column -t'
+#alias topf5='$find . -xdev $findPrunePathsExpression -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 |  head -5 | awk '\''{total+=$5;print}END{print"=> total = "total" MiB"}'\'' | column -t'
+alias topf10='$find . -xdev $findPrunePathsExpression -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | head -10 | numfmt --field 5 --from=iec --to=iec-i --suffix=B | column -t'
+alias topf50='$find . -xdev $findPrunePathsExpression -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | head -50 | numfmt --field 5 --from=iec --to=iec-i --suffix=B | column -t'
+alias topf5='$find . -xdev $findPrunePathsExpression -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 |  head -5  | numfmt --field 5 --from=iec --to=iec-i --suffix=B | column -t'
 alias version="\lsb_release -sd"
 alias webcamInfo="\xawtv -hwscan || \v4l2-ctl --list-devices 2>/dev/null"
 alias wifimac="\ifconfig $wifiInterface | awk '/HWaddr/{print\$1\"\\t\"\$NF}'"
