@@ -135,5 +135,5 @@ function stop {
 	test $serviceName && sudo launchctl unload $macOSServiceDIR/$serviceName.plist && status $serviceName
 }
 function topflines {
-	$(which gfind) "$@" $prunePathsFindExpression -xdev -type f -size +10M -exec gls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | column -t | head -n $(($LINES-4)) | awk '{total+=$5;print}END{if(total) print"=> total = "total" MiB"}'
+	$(which gfind) "$@" $findPrunePathsExpression -xdev -type f -size +10M -exec gls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | column -t | head -n $(($LINES-4)) | awk '{total+=$5;print}END{if(total) print"=> total = "total" MiB"}'
 }
