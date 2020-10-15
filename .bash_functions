@@ -946,6 +946,14 @@ function mkdircd {
 	\mkdir -pv $1
 	cd $1 && pwd -P
 }
+function mkdirSeb {
+	local dir
+	for dir
+	do
+		dir="${dir// /_}"
+		mkdir "$dir"
+	done
+}
 function mountISO {
 	loopBackDevice=$(udisksctl loop-setup -r -f "$1" | awk -F "[ .]" '{print$(NF-1)}')
 	udisksctl mount -b $loopBackDevice
