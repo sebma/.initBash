@@ -3,7 +3,7 @@
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 findExcludedPathList="./proc ./sys ./dev ./media ./opt/alien ./home/$USER/android_storage"
-prunePathsFindExpression="( -type d -a ( -name .git $(printf -- " -o -path %s" $findExcludedPathList) ) ) -prune -o"
+findPrunePathsExpression="( -type d -a ( -name .git $(printf -- " -o -path %s" $findExcludedPathList) ) ) -prune -o"
 duExcludedPathList="./proc ./sys ./dev ./opt/alien"
 excludePathsDuExpression=$(printf -- "--exclude %s " $duExcludedPathList)
 
@@ -39,9 +39,9 @@ alias topd10="topd 10"
 alias topd5="topd 5"
 alias topd="toybox du -cxmd 1 2>/dev/null | grep -v '\s*\.$' | sort -nr | head -n"
 
-alias topf10='$find . $prunePathsFindExpression -xdev -type f -size +10240k -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | column -t | head -10 | awk '\''{total+=$5;print}END{print"=> total = "total" MiB"}'\'''
-alias topf50='$find . $prunePathsFindExpression -xdev -type f -size +10240k -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | column -t | head -50 | awk '\''{total+=$5;print}END{print"=> total = "total" MiB"}'\'''
-alias topf5='$find . $prunePathsFindExpression -xdev -type f -size +10240k -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 |  column -t | head -5 | awk '\''{total+=$5;print}END{print"=> total = "total" MiB"}'\'''
+alias topf10='$find . $findPrunePathsExpression -xdev -type f -size +10240k -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | column -t | head -10 | awk '\''{total+=$5;print}END{print"=> total = "total" MiB"}'\'''
+alias topf50='$find . $findPrunePathsExpression -xdev -type f -size +10240k -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | column -t | head -50 | awk '\''{total+=$5;print}END{print"=> total = "total" MiB"}'\'''
+alias topf5='$find . $findPrunePathsExpression -xdev -type f -size +10240k -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 |  column -t | head -5 | awk '\''{total+=$5;print}END{print"=> total = "total" MiB"}'\'''
 alias virtualisation="\grep flags /proc/cpuinfo | head -n1 | \grep -Eo '(vmx|svm)' | sort -u"
 
 set +x
