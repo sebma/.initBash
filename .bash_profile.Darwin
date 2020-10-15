@@ -8,7 +8,7 @@ export system="$(sw_vers -productName) $(sw_vers -productVersion)"
 duExcludedPathList="./proc ./sys ./dev"
 excludePathsDuExpression=$(printf -- "--exclude %s " $duExcludedPathList)
 findExcludedPathList="./proc ./sys ./dev"
-prunePathsFindExpression="( -type d -a ( -name .git $(printf -- " -o -path %s" $findExcludedPathList) ) ) -prune -o"
+findPrunePathsExpression="( -type d -a ( -name .git $(printf -- " -o -path %s" $findExcludedPathList) ) ) -prune -o"
 codeName=$(\sed -nE '/SOFTWARE LICENSE AGREEMENT FOR/s/([A-Za-z]+ ){5}|\\$//gp' /System/Library/CoreServices/Setup\ Assistant.app/Contents/Resources/en.lproj/OSXSoftwareLicense.rtf)
 
 #Creation du .cache dans "/tmp/$USER/" ssi le lien symbolique ~/.cache existe
