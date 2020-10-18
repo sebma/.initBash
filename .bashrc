@@ -3,7 +3,7 @@
 # for examples
 test -z "$initDir" && export initDir=$HOME/.initBash
 ! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
-test $debug || debug=0
+test "$debug" || debug=0
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 #test -z "$bashProfileLoaded" && source .profile
