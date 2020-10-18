@@ -118,8 +118,7 @@ which ssh-add >/dev/null && {
 			if ! env | grep -q SSH_CLIENT; then # Si on est PAS a l autre bout d une connection ssh
 				trap 'echo "=> Ignoring this step and continuing the script <$(basename $BASH_SOURCE)> ..." >&2' INT
 				tty -s && echo "=> Loading my ssh key from <$(basename $BASH_SOURCE)> ..."
-#				set -x
-				timeout -s SIGINT 30s ssh-add ~/.ssh/.$UPMC_ID >/dev/null && set +x
+				ssh-add ~/.ssh/.$UPMC_ID >/dev/null && echo "=> ssh key successfully loaded." >&2 || echo "=> Failed loading ssh key." >&2
 				trap - INT
 			fi
 		fi
