@@ -52,7 +52,7 @@ groups 2>/dev/null | egrep -wq "sudo|admin" && xhost SI:localuser:root >/dev/nul
 trap - INT
 
 groups 2>/dev/null | egrep -wq "sudo|admin" || \mkdir -p ~/.local/lib/mlocate/ ~/.local/share/applications/ 2>/dev/null
-[ $TERM = linux ] && setterm -blength 0 > $(tty)
+[ $TERM = linux ] && setterm -blength 0
 
 #Choix d'une splash image grub aleatoire
 if test -w /boot/grub/today.jpg 
