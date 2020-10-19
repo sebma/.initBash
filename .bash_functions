@@ -5,7 +5,7 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 Source $initDir/.bash_functions.build
 Source $initDir/.bash_functions.AV
 
-function Echo {
+function EchoSpecialCharacters {
 	local rc=$?
 	set +o histexpand # Turn off history expansion to be able easily use the exclamation mark in strings i.e https://stackoverflow.com/a/22130745/5649639
 	command echo "$@"
