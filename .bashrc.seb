@@ -2,6 +2,8 @@
 unalias which >/dev/null 2>&1
 test -z "$initDir" && export initDir=$HOME/.initBash
 
+function Echo { tty -s && echo "$@"; }
+
 function Debug { test "$debug" -gt 0 && echo "$bold${colors[blue]}$@$normal"; }
 
 function Source { test "$debug" -gt 0 && time source "$@" && echo || source "$@" ; }
@@ -83,16 +85,18 @@ fi
 
 \mkdir -pvm 700 ~/.ssh/sockets/
 
+env | grep -q SSH_CLIENT && pax11publish -r
+
 if tty -s #Si c'est une session interactive
 then
 	trap 'echo "=> Ignoring this step and continuing the script <$(basename $BASH_SOURCE)> ..." >&2' INT
-
 	if which aplay >/dev/null 2>&1 && LANG=C timeout 5 aplay -l 2>/dev/null | grep -wq "card"
 	then
 		audioCardNumber=$(LANG=C aplay -l 2>/dev/null | grep -wv HDMI | awk -F "[ :]" '/^card/{number=$2;exit}END{print number}')
 #		test $audioCardNumber && amixer -q -c $audioCardNumber -- sset Master 100%
 	fi
 	trap - INT
+
 	echo
 	which randverse >/dev/null 2>&1 && randverse && echo
 fi
@@ -109,16 +113,14 @@ then
 	grep -qw pdflatex= $HOME/.pdfnup.conf || echo pdflatex=$(which pdflatex) >> $HOME/.pdfnup.conf
 fi
 
-env | grep -q SSH_CLIENT && pax11publish -r
-
-which ssh-add >/dev/null && {
+tty -s && which ssh-add >/dev/null && {
 	if ! ssh-add -l 2>/dev/null | grep -q "$UPMC_ID"
 	then
 		if test -s ~/.ssh/.$UPMC_ID; then
 			if ! env | grep -q SSH_CLIENT; then # Si on est PAS a l autre bout d une connection ssh
 				trap 'echo "=> Ignoring this step and continuing the script <$(basename $BASH_SOURCE)> ..." >&2' INT
-				tty -s && echo "=> Loading my ssh key from <$(basename $BASH_SOURCE)> ..."
-				ssh-add ~/.ssh/.$UPMC_ID >/dev/null && echo "=> ssh key successfully loaded." >&2 || echo "=> Failed loading ssh key." >&2
+				Echo "=> Loading my ssh key from <$(basename $BASH_SOURCE)> ..."
+				ssh-add ~/.ssh/.$UPMC_ID >/dev/null && Echo "=> ssh key successfully loaded." >&2 || Echo "=> Failed loading ssh key." >&2
 				trap - INT
 			fi
 		fi
@@ -140,11 +142,8 @@ which register-python-argcomplete >/dev/null 2>&1 && eval "$(register-python-arg
 
 #[[ -s "$HOME/.rvm/scripts/rvm" ]] && Source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 
-if tty -s #Si c'est une session interactive
-then
-	date;echo
-	echo "=> The cups admin console is http://localhost:631/admin"
-fi
+tty -s && date && echo
+Echo "=> The cups admin console is http://localhost:631/admin"
 
 which brew >/dev/null 2>&1 && test -r $initDir/.bashrc.brew && Source $initDir/.bashrc.brew
 which brew >/dev/null 2>&1 && test -r $initDir/.bash_aliases.brew && Source $initDir/.bash_aliases.brew
