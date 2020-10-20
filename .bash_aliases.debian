@@ -26,7 +26,8 @@ alias installSecurityUpdates="\apt list --upgradable 2>/dev/null | awk -F/ '/sec
 alias kdeVersion="dpkg -l | awk -F'[:-]' '/plasma-desktop\s/{print \$3}'"
 alias listPPAs=$'awk -F "[ /]" \'/^deb .*launchpad.net/{print"ppa:"$5"/"$6}\' /etc/apt/sources.list.d/*.list | sort -u'
 alias lsPPAs=listPPAs
-alias reinstall="sudo screen -L $apt install --reinstall -V"
+alias reinstallPkg="sudo screen -L $apt install --reinstall -V"
+alias reinstallPkgWithConfigFiles="sudo screen -L $apt install --reinstall -V -o Dpkg::Options::=--force-confask,confnew,confmiss"
 alias update="time sudo $apt update;$apt list --upgradable"
 alias upgradable="$apt list --upgradable"
 alias upgrade="LANGUAGE=$LANGUAGE $aptGet upgrade -s | \grep '^[1-9][0-9]* upgraded' && sudo $apt upgrade -V --download-only && sync && sudo screen -L $apt upgrade -V --yes;sync"
