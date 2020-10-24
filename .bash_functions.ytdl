@@ -308,7 +308,8 @@ function getRestrictedFilenamesFORMAT {
 				while read m3u_URL resolution
 				do
 					:
-				done < youtube-dl --get-filename -o"%(resolution)s" -gf "${formats[$j]}" "$url"
+				done < <(youtube-dl --get-filename -o"%(resolution)s" -gf "${formats[$j]}" "$url")
+
 				time youtube-dl -o $fileName "$m3u_URL" 2>&1 | egrep -A1 'ERROR:.*No space left on device' >&2 && {
 					echo >&2
 					downloadOK=1
@@ -552,7 +553,7 @@ function ytdlGetSize {
 		while read size url
 		do
 			:
-		done < $ytdlnoconfig -j -f $format "$@" | jq -r '[ .filesize ,.url | tostring ] | join(" ")'
+		done < <($ytdlnoconfig -j -f $format "$@" | jq -r '[ .filesize ,.url | tostring ] | join(" ")')
 		[ $size = null ] && size=$(\curl -sI "$url" | \sed "s/\r//g" | awk -F ": " 'BEGIN{IGNORECASE=1}/^Content-?Length/{printf$2}')
 		echo $size
 	}
