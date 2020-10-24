@@ -20,9 +20,10 @@ alias ytdlnoconfig="$ytdlnoconfig"
 alias ytdlVersion="ytdl --version"
 alias ytdlGetFileName="\youtube-dl --get-filename"
 alias ytdlGetFormatID="\youtube-dl --get-filename -o '%(format_id)s' -f"
-alias ytdlLatestRelease='\git ls-remote --tags --refs https://github.com/ytdl-org/youtube-dl | awk -F/ "{print\$NF}" | sort -rV | head -1'
-alias ytdlOpenIssues="open https://github.com/ytdl-org/youtube-dl/issues"
-alias ytdlUpdateFromGit="ytdlUpdate https://github.com/ytdl-org/youtube-dl"
+#alias ytdlLatestRelease='\git ls-remote --tags --refs https://github.com/ytdl-org/youtube-dl | awk -F/ "{print\$NF}" | sort -rV | head -1'
+alias ytdlLatestRelease=2020.09.20 # Le repo. youtube-dl a ete interdit par Google/Youtube le 23/10/2020 https://github.com/ytdl-org/youtube-dl
+#alias ytdlOpenIssues="open https://github.com/ytdl-org/youtube-dl/issues"
+#alias ytdlUpdateFromGit="ytdlUpdate https://github.com/ytdl-org/youtube-dl"
 
 function YTRenameFromFiles {
 	trap 'rc=130;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
@@ -303,7 +304,11 @@ function getRestrictedFilenamesFORMAT {
 					downloadOK=$?
 				}
 			elif [ $extension = m3u ] || [ $extension = m3u8 ]; then
-				read m3u_URL resolution <<< "$(youtube-dl --get-filename -o"%(resolution)s" -gf "${formats[$j]}" "$url")"
+#				read m3u_URL resolution <<< "$(youtube-dl --get-filename -o"%(resolution)s" -gf "${formats[$j]}" "$url")"
+				while read m3u_URL resolution
+				do
+					:
+				done < youtube-dl --get-filename -o"%(resolution)s" -gf "${formats[$j]}" "$url"
 				time youtube-dl -o $fileName "$m3u_URL" 2>&1 | egrep -A1 'ERROR:.*No space left on device' >&2 && {
 					echo >&2
 					downloadOK=1
@@ -432,9 +437,9 @@ function updateYTMetadataFromFiles {
 	for file
 	do
 		echo "=> file = $file"
-		grep -q __ <<< $file || continue
-		id=$(awk -F"__|[.]" '{print$(NF-1)}' <<< $file)
-		format=$(awk -F__ '{print$(NF-1)}' <<< $file)
+		echo $file | grep -q __ || continue
+		id=$(echo $file | awk -F"__|[.]" '{print$(NF-1)}')
+		format=$(echo $file | awk -F__ '{print$(NF-1)}')
 		youtube-dl -qs -- "http://www.youtube.com/watch?v=$id" 2>/dev/null && url="http://www.youtube.com/watch?v=$id"
 		chmod +w $file
 		[ $format = 22 ] && getRestrictedFilenamesHD $url || getRestrictedFilenamesSD $url
@@ -543,7 +548,11 @@ function ytdlGetSize {
 		return 1
 	} || {
 		echo $firstArg | \egrep -q "^https?://" || { format=$firstArg;shift; }
-		read size url <<< $($ytdlnoconfig -j -f $format "$@" | jq -r '[ .filesize ,.url | tostring ] | join(" ")')
+#		read size url <<< $($ytdlnoconfig -j -f $format "$@" | jq -r '[ .filesize ,.url | tostring ] | join(" ")')
+		while read size url
+		do
+			:
+		done < $ytdlnoconfig -j -f $format "$@" | jq -r '[ .filesize ,.url | tostring ] | join(" ")'
 		[ $size = null ] && size=$(\curl -sI "$url" | \sed "s/\r//g" | awk -F ": " 'BEGIN{IGNORECASE=1}/^Content-?Length/{printf$2}')
 		echo $size
 	}
@@ -580,7 +589,8 @@ function ytdlUpdate {
 	local youtube_dl=$(which youtube-dl)
 	if [ "$youtube_dl" ];then
 		local ytdlPythonVersion=$($youtube_dl --ignore-config -v 2>&1 | awk -F "[ .]" '/Python version/{printf$4"."$5}')
-		local ytdlLatestRelease=$(\git ls-remote --tags --refs $ytdlGitURL | awk -F/ '{print$NF}' | sort -rV | head -1)
+#		local ytdlLatestRelease=$(\git ls-remote --tags --refs $ytdlGitURL | awk -F/ '{print$NF}' | sort -rV | head -1)
+		local ytdlLatestRelease=2020.09.20 # Le repo. youtube-dl a ete interdit par Google/Youtube le 23/10/2020 https://github.com/ytdl-org/youtube-dl
 		local ytdlCurrentRelease=$($youtube_dl --version)
 
 		[ $ytdlLatestRelease = $ytdlCurrentRelease ] && echo "=> [$FUNCNAME] INFO : You already have the latest release, which is $ytdlLatestRelease." >&2 || $sudo $(which pip$ytdlPythonVersion) install -U youtube-dl
