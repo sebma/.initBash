@@ -67,6 +67,8 @@ alias Pgrep="grep -P"
 alias qtVersion='QT_SELECT=$(qtchooser -l | tail -1) qmake -v'
 alias quota="\quota -s"
 alias rename="\prename -v"
+alias rename2LowerCase="\prename -v y/A-Z/a-z/"
+alias rename2UpperCase="\prename -v y/a-z/A-Z/"
 alias rgrep='time grep -Ir --exclude-dir=.git'
 alias rgrepFollowSymLinks='time grep -IR --exclude-dir=.git'
 alias rmdir="\rmdir -v"
