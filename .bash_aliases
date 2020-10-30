@@ -153,6 +153,7 @@ alias kshOldVersion='strings $(which ksh) | grep Version | tail -2'
 alias kshVersion='ksh -c "echo \$KSH_VERSION" 2>/dev/null'
 alias lkshVersion='lksh -c "echo \$KSH_VERSION" 2>/dev/null'
 alias mkshVersion='mksh -c "echo \$KSH_VERSION" 2>/dev/null'
+alias memInfo=ramInfo
 alias pdkshVersion='pdksh -c "echo \$KSH_VERSION" 2>/dev/null'
 alias l1="ls -1"
 alias lastfiles='$find . -xdev -type f -mmin -2'
