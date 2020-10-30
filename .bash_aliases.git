@@ -5,8 +5,8 @@ test "$debug" -gt 0 && \echo "=> Running $bold${colors[blue]}$(basename ${BASH_S
 
 alias git-ls=gitls
 alias gitCompareLocalRemote="\git fetch && \git diff origin"
-alias gitConf-alias.ci="git config alias.ci '!f() { cd \${GIT_PREFIX:-.}; for file; do git commit -uno \$file -m \"Updated \$file\"; done; }; f';git config alias.ci"
-alias gitConf-alias.cipart="git config alias.cipart '!f() { cd \${GIT_PREFIX:-.}; for file; do git commit -uno -p \$file -m \"Partially updated \$file\"; done; }; f';git config alias.cipart"
+alias gitConf-alias.ci="git config alias.ci '!f() { cd \${GIT_PREFIX:-.}; for file; do git commit -uno \"\$file\" -m \"Updated \$file\"; done; }; f';git config alias.ci"
+alias gitConf-alias.cipart="git config alias.cipart '!f() { cd \${GIT_PREFIX:-.}; for file; do git commit -uno -p \"\$file\" -m \"Partially updated \$file\"; done; }; f';git config alias.cipart"
 alias gitConf="\git config -l"
 alias gitEditConfig='\git config --edit'
 alias gitHTTP_URL='\git config remote.origin.url | \sed -E "s|^git@|https://|;s|(\.\w+):|\1/|"'
