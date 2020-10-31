@@ -1150,15 +1150,13 @@ function pingMyLAN {
 		else
 			time \nmap -T5 -sP $myLAN | sed -n '/Nmap scan report for /s/Nmap scan report for //p'
 		fi
-	else
-		time if [ $# = 1 ];then
-			port=$1
-			if which fping >/dev/null 2>&1;then
-				\nmap -T5 -sP $myLAN | sed -n '/Nmap scan report for /s/Nmap scan report for //p' | while read ip
-				do
-					tcpConnetTest $ip $port
-				done
-			fi
+	elif [ $# = 1 ];then
+		port=$1
+		if which fping >/dev/null 2>&1;then
+			time \nmap -T5 -sP $myLAN | sed -n '/Nmap scan report for /s/Nmap scan report for //p' | while read ip
+			do
+				tcpConnetTest $ip $port
+			done
 		fi
 	fi
 }
