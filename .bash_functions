@@ -1143,7 +1143,7 @@ function picMpixels {
 	done | \column -t
 }
 function pingMyLAN {
-	local myLAN=$(\ip addr show | awk '/inet /{print$2}' | egrep -v '127.0.0.[0-9]|192.168.122.[0-9]')
+	local myLAN=$(\ip addr show | awk '!/virbr[0-9]/&&!/\<lo\>/&&/\<inet\>/{print$2}')
 	if [ $# = 0 ];then
 		if which fping >/dev/null 2>&1;then
 			time fping -r 0 -aAg $myLAN 2>/dev/null | sort -u
