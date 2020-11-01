@@ -137,6 +137,7 @@ alias html2xml="\xmllint --html --format --recover --xmlout"
 alias htmldecode="perl -MHTML::Entities -pe 'decode_entities(\$_)'"
 alias htmlencode="perl -MHTML::Entities -pe 'encode_entities(\$_)'"
 alias integer="typeset -i"
+alias install="\install -pv"
 alias inxi="LC_ALL=C \inxi -z -c2"
 alias inxiSummary="inxi -Fm -v3"
 alias ip@=lanip
