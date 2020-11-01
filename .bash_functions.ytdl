@@ -21,7 +21,6 @@ alias ytdlVersion="ytdl --version"
 alias ytdlGetFileName="\youtube-dl --get-filename"
 alias ytdlGetVideoID="\youtube-dl --get-id"
 alias ytdlGetFormatID="\youtube-dl --get-filename -o '%(format_id)s' -f"
-alias ytdlGetLiveURL="\youtube-dl --get-filename -o '%(webpage_url)s' --playlist-items 1"
 #alias ytdlLatestRelease='\git ls-remote --tags --refs https://github.com/ytdl-org/youtube-dl | awk -F/ "{print\$NF}" | sort -rV | head -1'
 alias ytdlLatestRelease="echo 2020.09.20" # Le repo. youtube-dl a ete interdit par Google/Youtube le 23/10/2020 https://github.com/ytdl-org/youtube-dl
 #alias ytdlOpenIssues="open https://github.com/ytdl-org/youtube-dl/issues"
@@ -536,6 +535,14 @@ function ytdlGetVideoIDsFromPlayListURL {
 	local service=$(echo $fqdn | awk -F. '{print$(NF-1)}')
 	echo $service
 	test "$playListURL" && $ytdlnoconfig  --ignore-errors --flat-playlist -j "$playListURL" | jq -r .id
+}
+function ytdlGetLiveURL {
+	local youtube_dl=$(which youtube-dl)
+	local url="$1"
+	set -o pipefail
+	url="$($youtube_dl -j --playlist-items 1 "$url" | jq -r .webpage_url || echo "$url")"
+	set +o pipefail
+	echo "$url"
 }
 function getVideoURLsFromVideoIDs {
 	local service="$1"
