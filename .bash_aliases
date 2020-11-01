@@ -156,6 +156,7 @@ alias lkshVersion='lksh -c "echo \$KSH_VERSION" 2>/dev/null'
 alias mkshVersion='mksh -c "echo \$KSH_VERSION" 2>/dev/null'
 alias memInfo=ramInfo
 alias pdkshVersion='pdksh -c "echo \$KSH_VERSION" 2>/dev/null'
+alias pup2json="\pup 'json{}'"
 alias l1="ls -1"
 alias lastfiles='$find . -xdev -type f -mmin -2'
 alias lastloggin='\lastlog -u $USER'
