@@ -929,7 +929,7 @@ function memUsageOfProcessName {
 	for processName
 	do
 		if \pgrep $processName >/dev/null;then
-			printf "=> $processRegExp: "
+			printf "=> $processName: "
 			which smem >/dev/null && smem -P $processName -t -c "swap rss uss pss" -k | \sed -n '1p;$p' || $ps -o rss= -C $processName | LC_ALL=C numfmt --from-unit=1K --from=iec | paste -sd+ | bc | numfmt --to=iec-i
 		fi
 	done
