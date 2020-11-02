@@ -85,7 +85,7 @@ fi
 
 \mkdir -pvm 700 ~/.ssh/sockets/
 
-env | grep -q SSH_CLIENT && pax11publish -r
+env | grep -q SSH_CLIENT && which pax11publish >/dev/null 2>&1 && pax11publish -r
 
 if tty -s #Si c'est une session interactive
 then
