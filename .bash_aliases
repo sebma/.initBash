@@ -16,9 +16,9 @@ alias .....="cd ../../../.."
 alias ....="cd ../../.."
 alias ...="cd ../.."
 alias ..="cd .."
-alias 2iec='numfmt --to=iec-i --suffix=B --format="%.1f"'
+alias 2iec='\numfmt --to=iec-i --suffix=B --format="%.1f"'
 alias 2lower=tolower
-alias 2si='numfmt  --to=si    --suffix=B --format="%.1f"'
+alias 2si='\numfmt  --to=si    --suffix=B --format="%.1f"'
 alias 2upper=toupper
 alias Cut='\cut -c 1-$COLUMNS'
 alias Pgreplast="greplast -P"
