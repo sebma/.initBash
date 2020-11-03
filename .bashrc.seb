@@ -183,6 +183,12 @@ case $OSTYPE in
 		;;
 esac
 
+if [ $osFamily = Linux ];then
+	groups | \egrep -wq "adm|admin|sudo|wheel" && export GOBIN=/usr/local/bin || export GOBIN=~/go/bin
+elif [ $osFamily = Darwin ];then
+	export GOBIN=/usr/local/bin
+fi
+
 # Disable aliases for tools that are not found in $PATH
 [ $osFamily = Linux ]  && sed="$(which sed) -r"
 [ $osFamily = Darwin ] && sed="$(which sed) -E"
