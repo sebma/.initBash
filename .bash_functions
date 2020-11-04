@@ -219,7 +219,8 @@ function brewInstall {
 				brewPrefix=$HOME/brew
 				cd $brewPrefix
 				git clone https://github.com/homebrew/brew
-				time git clone https://github.com/homebrew/homebrew-core ./Library/Taps/homebrew/homebrew-core
+#				time git clone https://github.com/homebrew/homebrew-core ./Library/Taps/homebrew/homebrew-core
+				time $brewPrefix/bin/brew update
 				cd - >/dev/null
 			fi
 		elif [ $osFamily = Darwin ]; then
@@ -229,6 +230,7 @@ function brewInstall {
 
 		addpaths $brewPrefix
 		brew=$brewPrefix/bin/brew
+		$brew -v
 	fi
 
 	if test -x $brew;then
