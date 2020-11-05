@@ -386,6 +386,11 @@ function getRestrictedFilenamesSD {
 function getRestrictedFilenamesVLD {
 	getRestrictedFilenamesFORMAT "(mp4[height<=?144]/mp4/best)"  $@ # because of the "eval" statement in the "youtube_dl" bash variable
 }
+function getVideoURLsFromVideoIDs {
+	local service="$1"
+	shift
+	getFullURLsFromIDs "$service" $@
+}
 function reget {
 	trap 'rc=130;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
 	local url=$1
@@ -527,11 +532,6 @@ function ytdlGetLiveURL {
 	url="$($youtube_dl -j --playlist-items 1 "$url" | jq -r .webpage_url || echo "$url")"
 	set +o pipefail
 	echo "$url"
-}
-function getVideoURLsFromVideoIDs {
-	local service="$1"
-	shift
-	getFullURLsFromIDs "$service" $@
 }
 function ytdlGetSize {
 	type jq >/dev/null || { echo -1;return 1; }
