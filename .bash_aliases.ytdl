@@ -1,0 +1,21 @@
+# vim: set ft=sh noet:
+! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
+test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
+
+#youtube_dl="eval LANG=C.UTF-8 command youtube-dl" # i.e https://unix.stackexchange.com/questions/505733/ # eval A EVITER
+alias recordYTLive="timeout -s SIGINT 150m getRestrictedFilenamesFORMAT.sh 94"
+alias youtube-dl="LANG=C.UTF-8 command youtube-dl"
+alias ytdl="LANG=C.UTF-8 command youtube-dl"
+ytdlnoconfig="youtube-dl --ignore-config"
+alias ytdlnoconfig="$ytdlnoconfig"
+alias ytdlVersion="ytdl --version"
+alias ytdlGetFileName="\youtube-dl --get-filename"
+alias ytdlGetVideoID="\youtube-dl --get-id"
+alias ytdlGetFormatID="\youtube-dl --get-filename -o '%(format_id)s' -f"
+#alias ytdlLatestRelease='\git ls-remote --tags --refs https://github.com/ytdl-org/youtube-dl | awk -F/ "{print\$NF}" | sort -rV | head -1'
+alias ytdlLatestRelease="echo 2020.09.20" # Le repo. youtube-dl a ete interdit par Google/Youtube le 23/10/2020 https://github.com/ytdl-org/youtube-dl
+#alias ytdlOpenIssues="open https://github.com/ytdl-org/youtube-dl/issues"
+#alias ytdlUpdateFromGit="ytdlUpdate https://github.com/ytdl-org/youtube-dl"
+
+set +x
+test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
