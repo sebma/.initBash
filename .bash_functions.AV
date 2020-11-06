@@ -1,5 +1,6 @@
 # vim: set ft=sh noet:
 set +x
+echo "=> local = $local"
 ! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
@@ -513,7 +514,7 @@ function audio2Video4YouTube {
 	videoInfo "$video4YouTubeFile"
 }
 function audio2stout {
-	typeset inputFile="$1"
+	$local inputFile="$1"
 	if [ -s "$inputFile" ]
 	then
 		$ffmpeg -i "$inputFile" -f wav -
@@ -622,7 +623,7 @@ function ffprobe2XML {
 	done 2>&1 | cut -c 1-$(tput cols)
 }
 function flac2spx {
-	typeset inputFile="$1"
+	$local inputFile="$1"
 	if [ -s "$inputFile" ]
 	then
 		outputFile=${inputFile/.flac/_speex.oga}
@@ -724,7 +725,7 @@ function mp32opus {
 	done
 }
 function mp32spx {
-	typeset inputFile="$1"
+	$local inputFile="$1"
 	if [ -s "$inputFile" ]
 	then
 		title=$(mp3info2 -p %t "$inputFile")
@@ -779,7 +780,7 @@ do
 done
 }
 function mp4DashAudio2aac {
-	typeset inputFile="$1"
+	$local inputFile="$1"
 	if [ -s "$inputFile" ]
 	then
 		outputFile=${inputFile/.mp4/.aac}
@@ -799,7 +800,7 @@ function mp4DashAudio2aac {
 	fi
 }
 function mp4DashAudio2m4a {
-	typeset inputFile="$1"
+	$local inputFile="$1"
 	if [ -s "$inputFile" ]
 	then
 		outputFile=${inputFile/.mp4/.m4a}
@@ -886,7 +887,7 @@ function sizeOfStream {
 	trap - INT
 }
 function spx216kHzopus {
-	typeset inputFile="$1"
+	$local inputFile="$1"
 	if [ -s "$inputFile" ]
 	then
 		outputFile="${inputFile%.*}.opus"
@@ -911,7 +912,7 @@ function spx216kHzopus {
 	fi
 }
 function spx216kHzspx {
-	typeset inputFile="$1"
+	$local inputFile="$1"
 	if [ -s "$inputFile" ]
 	then
 		outputFile=${inputFile/.oga/_speex.oga}
@@ -936,7 +937,7 @@ function spx216kHzspx {
 	fi
 }
 function spx2opus {
-	typeset inputFile="$1"
+	$local inputFile="$1"
 	if [ -s "$inputFile" ]
 	then
 		outputFile="${inputFile%.*}.opus"
@@ -1251,7 +1252,7 @@ function vlcRecord {
 	echo "=> The recording is saved into the file: <$file>" >&2
 }
 function wav16k2spx {
-	typeset inputFile="$1"
+	$local inputFile="$1"
 	if [ -s "$inputFile" ]
 	then
 #		title=$(mp3info -p %t "$inputFile")
@@ -1278,7 +1279,7 @@ function wav16k2spx {
 	fi
 }
 function wav216kHz {
-	typeset inputFile="$1"
+	$local inputFile="$1"
 	if [ -s "$inputFile" ]
 	then
 		outputFile=${inputFile/.wav/_16k.wav}
@@ -1299,7 +1300,7 @@ function wav216kHz {
 	fi
 }
 function wav216kwav {
-	typeset inputFile="$1"
+	$local inputFile="$1"
 	if [ -s "$inputFile" ]
 	then
 		outputFile=${inputFile/.wav/_16kHz.wav}
@@ -1319,7 +1320,7 @@ function wav216kwav {
 	fi
 }
 function wav2opus {
-	typeset inputFile="$1"
+	$local inputFile="$1"
 	if [ -s "$inputFile" ]
 	then
 #		title=$(mp3info -p %t "$inputFile")
@@ -1350,7 +1351,7 @@ function wav2opus {
 	fi
 }
 function wav2spx {
-	typeset inputFile="$1"
+	$local inputFile="$1"
 	if [ -s "$inputFile" ]
 	then
 		outputFile=${inputFile/.wav/_speex.oga}
@@ -1376,7 +1377,7 @@ function wav2spx {
 	fi
 }
 function webmAudio2ogg {
-	typeset inputFile="$1"
+	$local inputFile="$1"
 	if [ -s "$inputFile" ]
 	then
 		outputFile=${inputFile/.webm/.ogg}
