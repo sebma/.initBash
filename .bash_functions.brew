@@ -13,6 +13,7 @@ function brewPostInstall {
 	echo "=> Updating homebrew ..." >&2
 	echo >&2
 	time $brew update -v
+	sync
 	echo >&2
 	echo "=> Adding missing taps ..." >&2
 	echo >&2
@@ -20,6 +21,7 @@ function brewPostInstall {
 		$brew tap | \grep -q $tap || {
 			set -x
 			time $brew tap $tap && sync
+			sync
 			set +x
 		}
 	done
