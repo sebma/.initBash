@@ -212,23 +212,17 @@ function brewInstall {
 	if ! which brew >/dev/null 2>&1; then
 		if [ $osFamily = Linux ]; then
 			if groups | \egrep -wq "adm|admin|sudo|wheel";then
-				$SHELL -c "$(\curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" || return
 				brewPrefix=/home/linuxbrew/.linuxbrew
 			else
-				git --help >/dev/null || return
-				brewPrefix=$HOME/brew
-				cd $brewPrefix
-				git clone https://github.com/homebrew/brew
-#				time git clone https://github.com/homebrew/homebrew-core ./Library/Taps/homebrew/homebrew-core
-				time $brewPrefix/bin/brew tab homebrew/core
-				cd - >/dev/null
+				brewPrefix=$HOME/.linuxbrew
 			fi
 		elif [ $osFamily = Darwin ]; then
-			$SHELL -c "$(\curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" || return
 			brewPrefix=/usr/local
 		fi
 
-		addpaths $brewPrefix
+		$SHELL -c "$(\curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" || return
+
+		echo $PATH | grep -q $brewPrefix || export PATH=$brewPrefix/bin:$PATH
 		brew=$brewPrefix/bin/brew
 		$brew -v
 	fi
@@ -237,7 +231,24 @@ function brewInstall {
 		source $initDir/.bash_functions.brew
 		brewPostInstall
 	fi
-	sync
+}
+function brewPortableInstall {
+	brew=undefined
+	brewPrefix=undefined
+	if ! which brew > /dev/null 2>&1; then
+		git --help >/dev/null || return
+		brewPrefix=$HOME/.linuxbrew
+		git clone https://github.com/homebrew/brew $brewPrefix
+
+		echo $PATH | grep -q $brewPrefix || export PATH=$brewPrefix/bin:$PATH
+		brew=$brewPrefix/bin/brew
+		$brew -v
+	fi
+
+	if test -x $brew;then
+		source $initDir/.bash_functions.brew
+		brewPostInstall
+	fi
 }
 function castnowPlaylist {
 	test $# = 0 && {
