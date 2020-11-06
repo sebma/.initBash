@@ -39,8 +39,14 @@ function addpaths {
 }
 
 #echo "=> BEFORE: PATH = $PATH"
-pathsList="/sbin /usr/sbin /usr/local/sbin /usr/local/go/bin $GOPATH/bin /opt/local/bin /usr/share/fslint/fslint $HOME/.opam/system/bin $HOME/perl5/bin $HOME/rvm/bin $HOME/local/sbin $HOME/local/bin $HOME/usr/bin $HOME/usr/local/bin $HOME/gnu/bin $HOME/.local/bin $HOME/shl $HOME/py $HOME/pl $HOME/bin $HOME/php $HOME/myScripts/shl $HOME/myScripts/py $HOME/myScripts/pl $HOME/.poetry/bin"
-addpaths $pathsList
+systemPathsList="/sbin /usr/sbin /usr/local/sbin /usr/local/go/bin $GOPATH/bin /opt/local/bin /usr/share/fslint/fslint"
+userPathsList="$GOPATH/bin $HOME/.opam/system/bin $HOME/perl5/bin $HOME/rvm/bin $HOME/local/sbin $HOME/local/bin $HOME/usr/bin $HOME/usr/local/bin $HOME/gnu/bin $HOME/.local/bin $HOME/shl $HOME/py $HOME/pl $HOME/bin $HOME/php"
+
+addpaths $systemPathsList
+addpaths $userPathsList
+addpaths $HOME/myScripts/shl $HOME/myScripts/py $HOME/myScripts/pl
+addpaths $HOME/.poetry/bin
+addpaths $HOME/.linuxbrew/bin /home/linuxbrew/.linuxbrew/bin
 #echo "=> AFTER: PATH = $PATH"
 
 manPathsList="/opt/ffmpeg/share/man $HOME/.local/share/man /usr/local/share/man /usr/share/man /usr/local/miniconda3/share/man /usr/local/miniconda2/share/man"
