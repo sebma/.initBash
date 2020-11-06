@@ -1465,7 +1465,7 @@ function ssh {
 		time $ssh -o ConnectTimeout=$timeout $@
 	fi
 }
-function sshStartLocalForward {
+function sshStartLocalForwarding {
 	local tunnelDef=$1
 	if test $tunnelDef
 	then
