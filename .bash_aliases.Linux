@@ -94,7 +94,7 @@ alias wlanmac=wifimac
 alias xdg-dirs='ls $HOME/.config/user-dirs.dirs && grep ^XDG $HOME/.config/user-dirs.dirs'
 alias ytdlInstall="pip3 install youtube-dl || pip install youtube-dl"
 
-if groups $USER 2>/dev/null | \egrep -wq "sudo|admin|adm"
+if groups $USER 2>/dev/null | \egrep -wq "sudo|admin|adm|root|wheel"
 then
 	test -r $initDir/.bash_aliases.$osID_LIKE && Source $initDir/.bash_aliases.$osID_LIKE # Si c'est un Linux de type Debian ou Redhat
 	alias bluetoothRestart="sudo service bluetooth stop;sleep 1;sudo service bluetooth start;service bluetooth status"
