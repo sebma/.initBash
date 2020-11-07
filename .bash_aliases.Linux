@@ -108,7 +108,7 @@ then
 	alias lvextendToFillVG="\lvextend -r -l +100%FREE"
 	alias lvreduce="\lvreduce -r"
 	alias lvresize="\lvresize -r"
-	alias pvs="\pvs -s"
+	alias pvs="\pvs -v"
 	alias pgrep="\pgrep -lf"
 	alias pip2Install="curl -s https://bootstrap.pypa.io/get-pip.py | sudo -H python2"
 	alias pip3Install="curl -s https://bootstrap.pypa.io/get-pip.py | sudo -H python3"
@@ -122,7 +122,7 @@ then
 	alias usermod="\usermod -a" # A default to always use with "usermod -G"
 	alias youtube-dlUpdate='\sudo -H $(which pip3) install -U youtube-dl || \sudo -H $(which pip) install -U youtube-dl'
 	alias ytdlInstall='\sudo -H $(which pip3) install youtube-dl || \sudo -H $(which pip) install youtube-dl'
-	alias vgs="\vgs -s"
+	alias vgs="\vgs -v"
 else
 	alias updatedb='time updatedb -l 0 -o ~/.local/lib/mlocate/mlocate.db --prunefs "rpc_pipefs afs binfmt_misc proc smbfs iso9660 ncpfs coda devpts ftpfs devfs mfs shfs sysfs cifs lustre tmpfs usbfs udf fuse.glusterfs fuse.sshfs curlftpfs"'
 fi
