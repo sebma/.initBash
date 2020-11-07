@@ -97,6 +97,7 @@ alias ytdlInstall="pip3 install youtube-dl || pip install youtube-dl"
 if groups $USER 2>/dev/null | \egrep -wq "sudo|admin|adm"
 then
 	test -r $initDir/.bash_aliases.$osID_LIKE && Source $initDir/.bash_aliases.$osID_LIKE # Si c'est un Linux de type Debian ou Redhat
+	alias bluetoothRestart="sudo service bluetooth stop;sleep 1;sudo service bluetooth start;service bluetooth status"
 	alias checkSudoFile="\visudo -cf"
 	alias cupsRestart="sudo service cups restart;service cups status || sudo service cups status"
 	alias dosfsck="\dosfsck -r"
@@ -107,7 +108,7 @@ then
 	alias lvextendToFillVG="\lvextend -r -l +100%FREE"
 	alias lvreduce="\lvreduce -r"
 	alias lvresize="\lvresize -r"
-	alias bluetoothRestart="sudo service bluetooth stop;sleep 1;sudo service bluetooth start;service bluetooth status"
+	alias pvs="\pvs -s"
 	alias pgrep="\pgrep -lf"
 	alias pip2Install="curl -s https://bootstrap.pypa.io/get-pip.py | sudo -H python2"
 	alias pip3Install="curl -s https://bootstrap.pypa.io/get-pip.py | sudo -H python3"
@@ -123,6 +124,7 @@ then
 	alias ytdlInstall='\sudo -H $(which pip3) install youtube-dl || \sudo -H $(which pip) install youtube-dl'
 else
 	alias updatedb='time updatedb -l 0 -o ~/.local/lib/mlocate/mlocate.db --prunefs "rpc_pipefs afs binfmt_misc proc smbfs iso9660 ncpfs coda devpts ftpfs devfs mfs shfs sysfs cifs lustre tmpfs usbfs udf fuse.glusterfs fuse.sshfs curlftpfs"'
+	alias vgs="\vgs -s"
 fi
 
 set +x
