@@ -122,9 +122,9 @@ then
 	alias usermod="\usermod -a" # A default to always use with "usermod -G"
 	alias youtube-dlUpdate='\sudo -H $(which pip3) install -U youtube-dl || \sudo -H $(which pip) install -U youtube-dl'
 	alias ytdlInstall='\sudo -H $(which pip3) install youtube-dl || \sudo -H $(which pip) install youtube-dl'
+	alias vgs="\vgs -s"
 else
 	alias updatedb='time updatedb -l 0 -o ~/.local/lib/mlocate/mlocate.db --prunefs "rpc_pipefs afs binfmt_misc proc smbfs iso9660 ncpfs coda devpts ftpfs devfs mfs shfs sysfs cifs lustre tmpfs usbfs udf fuse.glusterfs fuse.sshfs curlftpfs"'
-	alias vgs="\vgs -s"
 fi
 
 set +x
