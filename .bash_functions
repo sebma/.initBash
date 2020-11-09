@@ -1100,7 +1100,7 @@ function pdfSelect {
 		echo "=> Usage : $FUNCNAME <inputFile> <pageRanges> <outputFile>" >&2
 		return 1
 	}
-	time \pdfjam $input $pages -o $output
+	time \pdfjam --keepinfo $input $pages -o $output
 	open $output
 }
 function pem2cer {
@@ -1621,7 +1621,7 @@ function usletter2A4 {
 		echo "=> Usage : $FUNCNAME <inputFile>" >&2
 		return 1
 	}
-	time \pdfjam -o "$output" --paper a4paper "$input"
+	time \pdfjam --keepinfo -o "$output" --paper a4paper "$input"
 	open "$output"
 }
 function versionSmallerEqual {
