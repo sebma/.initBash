@@ -1089,6 +1089,7 @@ function pdfConcat {
 function pdfInfo {
 	for pdfFile
 	do
+		echo "=> pdfFile = $pdfFile" >&2
 		pdfinfo "$pdfFile"
 	done
 }
