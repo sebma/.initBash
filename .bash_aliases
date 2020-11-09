@@ -155,6 +155,7 @@ alias kshVersion='ksh -c "echo \$KSH_VERSION" 2>/dev/null'
 alias lkshVersion='lksh -c "echo \$KSH_VERSION" 2>/dev/null'
 alias mkshVersion='mksh -c "echo \$KSH_VERSION" 2>/dev/null'
 alias memInfo=ramInfo
+alias pdfjamhelp="\pdfjam --help | less"
 alias pdkshVersion='pdksh -c "echo \$KSH_VERSION" 2>/dev/null'
 alias pup2json="\pup 'json{}'"
 alias l1="ls -1"
