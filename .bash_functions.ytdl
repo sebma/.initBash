@@ -513,6 +513,16 @@ function ytdlGetFormat {
 		$ytdlnoconfig -f "$format" "$url" -j | jq -r '"=> url = " + .webpage_url + "\tresolution = " + (.width|tostring)+"x"+(.height|tostring)  + "\tformat = " + .format_id' || echo
 	done | column -c $COLUMNS -ts '	'
 }
+function ytdlGetThumbNail {
+	$local url
+	for url
+	do
+		thumbnailURL="$(youtube-dl --get-thumbnail "$url")"
+		thumbnailBaseName="$(basename "$thumbnailURL" | sed "s/\?.*//")"
+		\wget -O "$thumbnailBaseName" "$thumbnailURL"
+		du -h "$thumbnailBaseName"
+	done
+}
 function ytdlGetVideoIDsFromPlayListURL {
 	test $# = 0 && {
 		echo "=> Usage: $FUNCNAME playListURL" >&2
