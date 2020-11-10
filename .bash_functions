@@ -1101,7 +1101,7 @@ function pdfSelect {
 		echo "=> Usage : $FUNCNAME <inputFile> <pageRanges> <outputFile>" >&2
 		return 1
 	}
-	time \pdfjam --keepinfo $input $pages -o $output
+	time \pdfjam --fitpaper true --keepinfo $input $pages -o $output
 	open $output
 }
 function pem2cer {
