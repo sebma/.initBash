@@ -41,7 +41,7 @@ PERL_MM_OPT="INSTALL_BASE=$HOME/perl5"; export PERL_MM_OPT;
 export myPerl5DefaultOptions="-ale"
 export PIP_FORMAT=columns
 
-which tlmgr >/dev/null 2>&1 && ! [ -d $HOME/texmf ] && tlmgr init-usertree
+which tlmgr >/dev/null 2>&1 && ! [ -d $HOME/texmf ] && tlmgr init-usertree && tlmgr option docfiles 1
 
 if ! groups 2>/dev/null | egrep -wq "sudo|adm|admin|root"
 then
