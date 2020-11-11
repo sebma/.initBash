@@ -63,8 +63,9 @@ function hw-probeAddNodeToInventory {
 	sudo -E \hw-probe -all -upload -i $inventoryID && echo "=> INFO: Check your email to add confirm adding the new node to your inventory : https://linux-hardware.org/index.php?view=computers&inventory=$inventoryID" >&2
 }
 function isoLabel {
-	for isoFile;do
-		blkid -o export "$isoFile" | grep LABEL | cut -d= -f2-
+	for isoFile
+	do
+		blkid -o value -s LABEL "$isoFile"
 	done
 }
 function lanip {
@@ -134,7 +135,7 @@ function mountISO {
 		return 1
 	fi
 	isoFile="$1"
-	isoLabel="$(blkid -o export "$isoFile" | grep LABEL | cut -d= -f2-)"
+	isoLabel="$(blkid -o value -s LABEL "$isoFile")"
 	fuseiso -p "$isoFile" "$HOME/mnt/$isoLabel/" && command df -TP "$HOME/mnt/$isoLabel/"
 
 #	loopBackDevice=$(udisksctl loop-setup -r -f "$1" | awk -F "[ .]" '{print$(NF-1)}')
