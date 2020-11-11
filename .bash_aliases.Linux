@@ -44,6 +44,7 @@ alias dnsInfo="( \nmcli dev list || \nmcli dev show ) 2>/dev/null | grep DNS || 
 #alias dmesg="\grc less /var/log/dmesg"
 alias findDeadLinks='$find . -xtype l -exec ls --color -l {} +'
 alias firefoxDefrag='pgrep firefox || time find ~/.mozilla/firefox/ -name "*sqlite" -ls -exec sqlite3 -echo {} vacuum \;'
+alias fstype="\lsblk -n -o FSTYPE"
 alias journalctl='\journalctl -e'
 alias isUEFI="[ -d /sys/firmware/efi ] && echo 'Session EFI' || echo 'Session non-EFI'"
 alias kwinRestart="\kwin --replace >/dev/null 2>&1 &"
@@ -101,7 +102,6 @@ then
 	alias checkSudoFile="\visudo -cf"
 	alias cupsRestart="sudo service cups restart;service cups status || sudo service cups status"
 	alias dosfsck="\dosfsck -r"
-	alias fstype="\sudo lsblk -n -o FSTYPE"
 	alias goSudo="\sudo -E go"
 	alias grubFindUUID="\sudo grub-probe --target=compatibility_hint --device"
 	alias hw-probe="\sudo -E hw-probe -all -upload"
