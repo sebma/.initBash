@@ -35,8 +35,7 @@ which lspci >/dev/null && {
 
 alias batteryINFO='upower -i $(upower -e 2>/dev/null | grep BAT) 2>/dev/null;acpi -i 2>/dev/null && echo;LC_ALL=C \inxi -z -Bxxx 2>/dev/null'
 alias catFiles="\tail -vn +1"
-alias connect2MyHiddenWifi="connect2SSID sebWlan"
-alias connect2MyHiddenWifi_2.4GHz="connect2SSID sebWlan_2.4GHz"
+wifi5GHz | grep -wq true && alias connect2MyHiddenWifi="connect2SSID sebWlan" || alias connect2MyHiddenWifi="connect2SSID sebWlan_2.4GHz"
 alias connect2eduroam="connect2SSID eduroam"
 alias cp='\cp --preserve=timestamps -uv'
 alias dnsInfo="( \nmcli dev list || \nmcli dev show ) 2>/dev/null | grep DNS || egrep -v '^(#|\$)' /etc/resolv.conf"
