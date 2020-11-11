@@ -47,12 +47,13 @@ function addpaths {
 systemPathsList="/sbin /usr/sbin /usr/local/sbin /usr/local/go/bin $GOPATH/bin /opt/local/bin /usr/share/fslint/fslint"
 userPathsList="$GOPATH/bin $HOME/.opam/system/bin $HOME/perl5/bin $HOME/rvm/bin $HOME/local/sbin $HOME/local/bin $HOME/usr/bin $HOME/usr/local/bin $HOME/gnu/bin $HOME/.local/bin $HOME/shl $HOME/py $HOME/pl $HOME/bin $HOME/php"
 
+TeXLiveDIR=$(\ls -d /usr/local/texlive/*/bin/* 2>/dev/null | egrep "/texlive/[0-9]+/bin/$arch-${osFamily,,}")
 addpaths $systemPathsList
 addpaths $userPathsList
 addpaths $HOME/myScripts/shl $HOME/myScripts/py $HOME/myScripts/pl
 addpaths $HOME/.poetry/bin
 addpaths $HOME/.linuxbrew/bin /home/linuxbrew/.linuxbrew/bin
-addpaths $(\ls -d /usr/local/texlive/*/bin/* 2>/dev/null | egrep "/texlive/[0-9]+/bin/$arch-${osFamily,,}")
+addpaths $TeXLiveDIR
 #echo "=> AFTER: PATH = $PATH"
 
 manPathsList="/opt/ffmpeg/share/man $HOME/.local/share/man /usr/local/share/man /usr/share/man /usr/local/miniconda3/share/man /usr/local/miniconda2/share/man"
@@ -159,6 +160,8 @@ which register-python-argcomplete >/dev/null 2>&1 && eval "$(register-python-arg
 
 tty -s && date && echo
 Echo "=> The cups admin console is http://localhost:631/admin"
+
+which tlmgr >/dev/null 2>&1 && test -r $initDir/.bashrc.texlive && Source $initDir/.bashrc.texlive
 
 which brew >/dev/null 2>&1 && test -r $initDir/.bashrc.brew && Source $initDir/.bashrc.brew
 which brew >/dev/null 2>&1 && test -r $initDir/.bash_aliases.brew && Source $initDir/.bash_aliases.brew
