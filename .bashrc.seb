@@ -22,6 +22,7 @@ bashRCLoaded=1
 
 echo $OSTYPE | grep -q android && export osFamily=Android || export osFamily=$(uname -s)
 [ $osFamily = Linux ] && export osID=$(Source /etc/os-release && echo $ID) osID_LIKE=$(Source /etc/os-release && echo $ID_LIKE)
+arch=$(uname -m)
 
 function addmanpaths {
 	for manpath
@@ -51,6 +52,7 @@ addpaths $userPathsList
 addpaths $HOME/myScripts/shl $HOME/myScripts/py $HOME/myScripts/pl
 addpaths $HOME/.poetry/bin
 addpaths $HOME/.linuxbrew/bin /home/linuxbrew/.linuxbrew/bin
+addpaths $(\ls -d /usr/local/texlive/*/bin/* 2>/dev/null | egrep "/texlive/[0-9]+/bin/$arch-${osFamily,,}")
 #echo "=> AFTER: PATH = $PATH"
 
 manPathsList="/opt/ffmpeg/share/man $HOME/.local/share/man /usr/local/share/man /usr/share/man /usr/local/miniconda3/share/man /usr/local/miniconda2/share/man"
@@ -184,7 +186,7 @@ test -r $initDir/.bash_aliases && Source $initDir/.bash_aliases
 test -r $initDir/.bash_aliases.$osFamily && Source $initDir/.bash_aliases.$osFamily #Pour Darwin ou Linux ou Android
 test -r $initDir/.bash_aliases.$osID && Source $initDir/.bash_aliases.$osID # Pour les OS derives de $osFamily
 
-which qemu-system-$(arch) >/dev/null 2>&1 && test -r $initDir/.bash_aliases.qemu && Source $initDir/.bash_aliases.qemu
+which qemu-system-$arch >/dev/null 2>&1 && test -r $initDir/.bash_aliases.qemu && Source $initDir/.bash_aliases.qemu
 
 test -r $initDir/.bash_functions.$osFamily && Source $initDir/.bash_functions.$osFamily #Pour Darwin ou Linux ou Android
 test -r $initDir/.bash_functions.$osID && Source $initDir/.bash_functions.$osID # Pour les OS derives de $osFamily
