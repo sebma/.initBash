@@ -28,12 +28,16 @@ function Cat {
 }
 function Less {
 	local highlightCMD="command highlight -O ansi --force"
+	local extension=not_yet_defined
+	local lessColors="command less -R"
+	local less="command less -r"
 	if [ $# = 0 ] || [ "$1" = - ];then
-		$highlightCMD | \less -R
+		$highlightCMD | $lessColors
 	else
 		for file
 		do
-			$highlightCMD "$file" | \less -R
+			extension=$(basename "$file" | awk -F"." '{print tolower($NF)}')
+			[ $extension != pdf ] && $highlightCMD "$file" | $lessColors || $less "$file"
 		done
 	fi
 }
