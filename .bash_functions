@@ -1085,6 +1085,7 @@ function pdfCompress_pdftk {
 	done
 }
 function pdfCompress_ps2pdf {
+	trap 'echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;' INT
 	for pdf
 	do
 		if \ls "$pdf" >/dev/null;then
@@ -1096,6 +1097,7 @@ function pdfCompress_ps2pdf {
 		fi
 		echo
 	done
+	trap - INT
 }
 function pdfConcat {
 	test $# -lt 2 && {
