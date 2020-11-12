@@ -119,7 +119,10 @@ function lsbluetooth {
 		\lsusb -d $device "$@"
 	done
 }
-function lswifi {
+function lswifiInterface {
+	\ls /sys/class/ieee80211/*/device/net
+}
+function lswifiNIC {
 	\lspci | awk '/Network controller/{print$1}' | while read device
 	do
 		\lspci -nns $device "$@"
