@@ -120,7 +120,13 @@ function lsbluetooth {
 	done
 }
 function lswifiInterfaces {
-	\ls /sys/class/ieee80211/*/device/net
+	set -o pipefail
+	if \ls /sys/class/ieee80211/*/device/net 2>/dev/null;then
+		:
+	elif \ls -d /sys/class/net/*/wireless 2>/dev/null | awk -F/ '{print$5}';then
+		:
+	fi
+	set +o pipefail
 }
 function lswifiNIC {
 	\lspci | awk '/Network controller/{print$1}' | while read device
