@@ -3,7 +3,7 @@
 ! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
 test "$debug" -gt 0 && \echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-lswifiInterfaces() {
+lswiFiInterfaces() {
 	set -o pipefail
 	if \ls /sys/class/ieee80211/*/device/net 2>/dev/null;then
 		:
@@ -13,7 +13,7 @@ lswifiInterfaces() {
 	set +o pipefail
 }
 
-export wifiInterface=$(lswifiInterfaces | head -1)
+export wiFiInterface=$(lswiFiInterfaces | head -1)
 
 #alias lpr="\lpr -P ppti-14-503-imp -o PageSize=A4 -o PageRegion=A4 -o Resolution=default -o InputSlot=Tray2 -o Duplex=DuplexNoTumble -o PreFilter=No"
 #alias lpr="\lpr -o PageSize=A4 -o PageRegion=A4 -o Resolution=default -o InputSlot=Tray2 -o Duplex=DuplexNoTumble -o PreFilter=No"
@@ -24,8 +24,8 @@ duExcludedPathList="./proc ./sys ./dev"
 excludePathsDuExpression=$(printf -- "--exclude %s " $duExcludedPathList)
 export find="$(which find)"
 
-test "$wifiInterface" && {
-	alias wifiSpeed="\iwlist $wifiInterface bitrate;\iw dev $wifiInterface link"
+test "$wiFiInterface" && {
+	alias wifiSpeed="\iwlist $wiFiInterface bitrate;\iw dev $wiFiInterface link"
 	alias restartWifi=wifiRestart
 }
 
@@ -92,7 +92,7 @@ alias topf50='$find . -xdev $findPrunePathsExpression -type f -size +10M -exec l
 alias topf5='$find . -xdev $findPrunePathsExpression -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 |  head -5  | numfmt --field 5 --from=iec --to=iec-i --suffix=B | column -t'
 alias version="\lsb_release -sd"
 alias webcamInfo="\xawtv -hwscan || \v4l2-ctl --list-devices 2>/dev/null"
-alias wifimac="\ifconfig $wifiInterface | awk '/HWaddr/{print\$1\"\\t\"\$NF}'"
+alias wifimac="\ifconfig $wiFiInterface | awk '/^\w+:/{printf\$1\"\\t\"}/ether/{print\$2}'"
 alias wlanmac=wifimac
 alias xdg-dirs='ls $HOME/.config/user-dirs.dirs && grep ^XDG $HOME/.config/user-dirs.dirs'
 alias ytdlInstall="pip3 install youtube-dl || pip install youtube-dl"
