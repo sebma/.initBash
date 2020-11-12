@@ -330,7 +330,7 @@ function wifiCapabilities {
 
 	[ -n "$wifiPhysicalDevice" ] && which iw >/dev/null 2>&1 && echo "=> Wifi physical device capabilities :" && iw phy $wifiPhysicalDevice info | more
 
-	if iwlist >/dev/null 2>&1;then
+	if which iwlist >/dev/null 2>&1;then
 		echo "========================================================================"
 		iwlist $wiFiInterface bitrate || sudo iwlist $wiFiInterface bitrate
 		iwlist $wiFiInterface encryption || sudo iwlist $wiFiInterface encryption
@@ -369,7 +369,7 @@ function wifiInfos {
 		iw dev $wiFiInterface link || sudo iw dev $wiFiInterface link
 	fi | more
 
-	if iwlist >/dev/null 2>&1;then
+	if which iwlist >/dev/null 2>&1;then
 		echo "========================================================================"
 		iwlist $wiFiInterface bitrate
 		iwlist $wiFiInterface encryption
@@ -385,7 +385,7 @@ function wifiList {
 			\nmcli -f ssid,bssid,mode,freq,rate,signal,security,active dev wifi list | grep -v 'SSID' 
 		elif iw dev 2>/dev/null | grep -q Interface;then
 			sudo iw dev $wiFiInterface scan | \grep SSID
-		elif which iwlist >/dev/null; then
+		elif which iwlist >/dev/null 2>&1; then
 			sudo iwlist $wiFiInterface scan | \grep SSID
 		fi
 	fi
