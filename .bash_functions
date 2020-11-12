@@ -1074,20 +1074,26 @@ function pdfAutoRotate {
 function pdfCompress_pdftk {
 	for pdf
 	do
-		echo "=> Compressing $pdf ..."
-		time \pdftk $pdf output ${pdf/.pdf/__SMALLER.pdf} compress
-		echo
-		du -h ${pdf/.pdf/*.pdf}
+		if \ls "$pdf" >/dev/null;then
+			echo "=> Compressing $pdf ..."
+			outputFile="${pdf/.pdf/-SMALLER_pdftk.pdf}"
+			time \pdftk "$pdf" output "$outputFile" compress
+			echo
+			du -h "$pdf" "$outputFile"
+			fi
 		echo
 	done
 }
 function pdfCompress_ps2pdf {
 	for pdf
 	do
-		echo "=> Compressing $pdf ..."
-		time \ps2pdf -dPDFSETTINGS=/ebook $pdf ${pdf/.pdf/__SMALLER.pdf} 2>&1 | uniq
-		echo
-		du -h ${pdf/.pdf/*.pdf}
+		if \ls "$pdf" >/dev/null;then
+			echo "=> Compressing $pdf ..."
+			outputFile="${pdf/.pdf/-SMALLER_ps2pdf.pdf}"
+			time \ps2pdf -dPDFSETTINGS=/ebook "$pdf" "$outputFile" 2>&1 | uniq
+			echo
+			du -h "$pdf" "$outputFile"
+		fi
 		echo
 	done
 }
@@ -1105,29 +1111,33 @@ function pdfConcat {
 function pdfDPI {
 	for pdfFile
 	do
-		echo "=> pdfFile = $pdfFile" >&2
-		time identify -format "%x x %y\n" "$pdfFile" 2>&1 | uniq
+		if \ls "$pdfFile" >/dev/null;then
+			echo "=> pdfFile = $pdfFile" >&2
+			time identify -format "%x x %y\n" "$pdfFile" 2>&1 | uniq
+		fi
 		echo
 	done
 }
 function pdfInfo {
 	for pdfFile
 	do
-		echo "=> pdfFile = $pdfFile" >&2
-		pdfinfo "$pdfFile"
+		if \ls "$pdfFile" >/dev/null;then
+			echo "=> pdfFile = $pdfFile" >&2
+			pdfinfo "$pdfFile"
+		fi
 		echo
 	done
 }
 function pdfSelect {
-	input=$1
+	input="$1"
 	pages=$2
-	output=$3
+	output="$3"
 	test $# != 3 && {
 		echo "=> Usage : $FUNCNAME <inputFile> <pageRanges> <outputFile>" >&2
 		return 1
 	}
-	time \pdfjam --fitpaper true --keepinfo $input $pages -o $output
-	open $output
+	time \pdfjam --fitpaper true --keepinfo "$input" $pages -o "$output"
+	open "$output"
 }
 function pem2cer {
 	for pemCertificate
