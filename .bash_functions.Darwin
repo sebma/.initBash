@@ -33,7 +33,7 @@ function dmgInstall {
 	unset dmgFilePath
 	set +x
 }
-function lanip {
+function lanIP {
 	ethName=$1
 	if [ -n "$ethName" ]
 	then
