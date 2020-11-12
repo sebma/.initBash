@@ -3,7 +3,16 @@
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 addmanpaths $(kpsewhich -var-value TEXMFDIST)/doc/man
-export tlmgr=$(which tlmgr)
+
+if groups 2>/dev/null | egrep -wq "sudo|adm|admin|root|wheel";then
+	tlmgr="sudo $(which tlmgr)"
+else
+	tlmgr=tlmgr
+	[ -d $HOME/texmf ] || $tlmgr init-usertree
+fi
+export tlmgr
+
+tlmgr option docfiles | grep -wq '1$' || $tlmgr option docfiles 1
 
 set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
