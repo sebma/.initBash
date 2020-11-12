@@ -74,6 +74,7 @@ alias umount="\diskutil unmount"
 alias wifiList="airport -s"
 alias wifiRestart='\networksetup -setairportpower $wiFiInterface off;\networksetup -setairportpower $wiFiInterface on'
 alias wifiSpeed="airport -I | awk '/lastTxRate/{print\$0\" MBit/s\"}'"
+#alias wifimac="\ifconfig $wiFiInterface | awk '/HWaddr/{print\$1\"\\t\"\$NF}'"
 alias xlock="\/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend"
 alias ytdlInstall="brew install youtube-dl"
 alias ytdlInstall="brew install youtube-dl"
