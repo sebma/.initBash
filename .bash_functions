@@ -1070,11 +1070,20 @@ function pdfAutoRotate {
 		echo "=> $output"
 	done
 }
-function pdfCompress {
+function pdfCompress_pdftk {
 	for pdf
 	do
 		echo "=> Compressing $pdf ..."
 		time \pdftk $pdf output ${pdf/.pdf/__SMALLER.pdf} compress
+		echo
+		du -h ${pdf/.pdf/*.pdf}
+	done
+}
+function pdfCompress_ps2pdf {
+	for pdf
+	do
+		echo "=> Compressing $pdf ..."
+		time \ps2pdf -dPDFSETTINGS=/ebook $pdf ${pdf/.pdf/__SMALLER.pdf}
 		echo
 		du -h ${pdf/.pdf/*.pdf}
 	done
@@ -1089,6 +1098,13 @@ function pdfConcat {
 		local allArgsButLast="${@:1:$#-1}"
 		time gs -dBATCH -dNOPAUSE -sDEVICE=pdfwrite -dAutoRotatePages=/None -sOutputFile="$lastArg" $allArgsButLast && open "$lastArg" || time pdfjoin --rotateoversize false $allArgsButLast -o $lastArg || time pdftk $allArgsButLast cat output $lastArg verbose
 	}
+}
+function pdfDPI {
+	for pdfFile
+	do
+		echo "=> pdfFile = $pdfFile" >&2
+		time identify -format "%x x %y\n" "$pdfFile" | uniq
+	done
 }
 function pdfInfo {
 	for pdfFile
