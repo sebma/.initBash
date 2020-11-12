@@ -41,16 +41,11 @@ PERL_MM_OPT="INSTALL_BASE=$HOME/perl5"; export PERL_MM_OPT;
 export myPerl5DefaultOptions="-ale"
 export PIP_FORMAT=columns
 
-if ! groups 2>/dev/null | egrep -wq "sudo|adm|admin|root|wheel"
-then
+if ! groups 2>/dev/null | egrep -wq "sudo|adm|admin|root|wheel";then
 	export HOSTALIASES=~/.hosts
 	export PYTHONUSERBASE=$HOME/.local
 	export HOMEBREW_PREFIX=$HOME/usr/local
-
-	which tlmgr >/dev/null 2>&1 && ! [ -d $HOME/texmf ] && tlmgr init-usertree
 fi
-
-which tlmgr >/dev/null 2>&1 && tlmgr option docfiles 1
 
 export domain=$(awk -F"[ .]" '/domain/{print$(NF-1);exit}' /etc/resolv.conf /private/etc/resolv.conf 2>/dev/null)
 test -z $domain && export domain=local # Si le domaine est inconnu
