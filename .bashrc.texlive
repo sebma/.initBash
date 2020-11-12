@@ -4,7 +4,7 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 
 addmanpaths $(kpsewhich -var-value TEXMFDIST)/doc/man
 
-if groups 2>/dev/null | egrep -wq "sudo|adm|admin|root|wheel";then
+if groups 2>/dev/null | egrep -wq "sudo|adm|admin|root|wheel" && ! tlmgr --version 2>/dev/null | grep -q "user mode";then
 	tlmgr="sudo $(which tlmgr)"
 else
 	tlmgr=tlmgr
