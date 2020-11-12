@@ -3,8 +3,17 @@
 ! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
 test "$debug" -gt 0 && \echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-wifiInterface=$(iw dev 2>/dev/null | awk '/Interface/{lastInterface=$NF}END{print lastInterface}')
-test "$wifiInterface" || wifiInterface="$(iwconfig 2>/dev/null | awk '/^[^ \t]/ { if ($1 ~ /^[0-9]+:/) { lastInterface=$2 } else { lastInterface=$1 } }END{print lastInterface}')"
+lswifiInterfaces() {
+	set -o pipefail
+	if \ls /sys/class/ieee80211/*/device/net 2>/dev/null;then
+		:
+	elif \ls -d /sys/class/net/*/wireless 2>/dev/null | awk -F/ '{print$5}';then
+		:
+	fi | egrep -v "p2p[0-9]"
+	set +o pipefail
+}
+
+export wifiInterface=$(lswifiInterfaces | head -1)
 
 #alias lpr="\lpr -P ppti-14-503-imp -o PageSize=A4 -o PageRegion=A4 -o Resolution=default -o InputSlot=Tray2 -o Duplex=DuplexNoTumble -o PreFilter=No"
 #alias lpr="\lpr -o PageSize=A4 -o PageRegion=A4 -o Resolution=default -o InputSlot=Tray2 -o Duplex=DuplexNoTumble -o PreFilter=No"
@@ -18,13 +27,6 @@ export find="$(which find)"
 test "$wifiInterface" && {
 	alias wifiSpeed="\iwlist $wifiInterface bitrate;\iw dev $wifiInterface link"
 	alias restartWifi=wifiRestart
-	wifi5GHz() {
-		if iw dev 2>/dev/null | grep -q Interface;then
-			iw dev | \egrep -q '5[0-9]{3} MHz' && echo true || echo false
-		elif which iwlist >/dev/null 2>&1;then
-			iwlist $wifiInterface frequency 2>&1 | grep "no frequency information" || iwlist $wifiInterface frequency | \grep -q '5\..* GHz' && echo true || echo false
-		fi
-	}
 }
 
 which lspci >/dev/null && {
@@ -37,7 +39,6 @@ which lspci >/dev/null && {
 
 alias batteryINFO='upower -i $(upower -e 2>/dev/null | grep BAT) 2>/dev/null;acpi -i 2>/dev/null && echo;LC_ALL=C \inxi -z -Bxxx 2>/dev/null'
 alias catFiles="\tail -vn +1"
-wifi5GHz | \grep -wq true && alias connect2MyHiddenWifi="connect2SSID sebWlan" || alias connect2MyHiddenWifi="connect2SSID sebWlan_2.4GHz"
 alias connect2eduroam="connect2SSID eduroam"
 alias cp='\cp --preserve=timestamps -uv'
 alias dnsInfo="( \nmcli dev list || \nmcli dev show ) 2>/dev/null | grep DNS || egrep -v '^(#|\$)' /etc/resolv.conf"
