@@ -119,7 +119,7 @@ function lsbluetooth {
 		\lsusb -d $device "$@"
 	done
 }
-function lswifiInterface {
+function lswifiInterfaces {
 	\ls /sys/class/ieee80211/*/device/net
 }
 function lswifiNIC {
