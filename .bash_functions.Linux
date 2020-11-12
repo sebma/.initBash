@@ -381,6 +381,8 @@ function wifiList {
 	if [ -n "$wiFiInterface" ]; then
 		if which nmcli >/dev/null; then
 			nmcliVersion=$(nmcli -v | awk -F"[. ]" '/version/{printf"%d.%d%02d\n", $4, $5, $6}')
+			echo "=> Rescanning WiFi networks ..."
+			\nmcli dev wifi rescan && sleep 2
 			\nmcli -f ssid,bssid,mode,freq,rate,signal,security,active dev wifi list | \grep 'SSID' >&2 # Print nmcli headers
 			\nmcli -f ssid,bssid,mode,freq,rate,signal,security,active dev wifi list | grep -v 'SSID' 
 		elif iw dev 2>/dev/null | grep -q Interface;then
