@@ -1068,6 +1068,7 @@ function pdfAutoRotate {
 		time \gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -dAutoRotatePages=/All -sOutputFile="$output" "$file"
 		echo
 		echo "=> $output"
+		echo
 	done
 }
 function pdfCompress_pdftk {
@@ -1077,6 +1078,7 @@ function pdfCompress_pdftk {
 		time \pdftk $pdf output ${pdf/.pdf/__SMALLER.pdf} compress
 		echo
 		du -h ${pdf/.pdf/*.pdf}
+		echo
 	done
 }
 function pdfCompress_ps2pdf {
@@ -1086,6 +1088,7 @@ function pdfCompress_ps2pdf {
 		time \ps2pdf -dPDFSETTINGS=/ebook $pdf ${pdf/.pdf/__SMALLER.pdf} 2>&1 | uniq
 		echo
 		du -h ${pdf/.pdf/*.pdf}
+		echo
 	done
 }
 function pdfConcat {
@@ -1104,6 +1107,7 @@ function pdfDPI {
 	do
 		echo "=> pdfFile = $pdfFile" >&2
 		time identify -format "%x x %y\n" "$pdfFile" 2>&1 | uniq
+		echo
 	done
 }
 function pdfInfo {
@@ -1111,6 +1115,7 @@ function pdfInfo {
 	do
 		echo "=> pdfFile = $pdfFile" >&2
 		pdfinfo "$pdfFile"
+		echo
 	done
 }
 function pdfSelect {
@@ -1129,6 +1134,7 @@ function pem2cer {
 	do
 		openssl x509 -inform PEM -in "$pemCertificate" -outform DER -out "${pemCertificate/.pem/.cer}"
 		ls -l "${pemCertificate/.pem/.cer}"
+		echo
 	done
 }
 function perlCalc {
