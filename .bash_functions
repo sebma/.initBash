@@ -1083,7 +1083,7 @@ function pdfCompress_ps2pdf {
 	for pdf
 	do
 		echo "=> Compressing $pdf ..."
-		time \ps2pdf -dPDFSETTINGS=/ebook $pdf ${pdf/.pdf/__SMALLER.pdf}
+		time \ps2pdf -dPDFSETTINGS=/ebook $pdf ${pdf/.pdf/__SMALLER.pdf} 2>&1 | uniq
 		echo
 		du -h ${pdf/.pdf/*.pdf}
 	done
@@ -1103,7 +1103,7 @@ function pdfDPI {
 	for pdfFile
 	do
 		echo "=> pdfFile = $pdfFile" >&2
-		time identify -format "%x x %y\n" "$pdfFile" | uniq
+		time identify -format "%x x %y\n" "$pdfFile" 2>&1 | uniq
 	done
 }
 function pdfInfo {
