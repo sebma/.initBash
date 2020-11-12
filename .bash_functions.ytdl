@@ -594,7 +594,7 @@ function ytdlUpdate {
 	if [ "$youtube_dl" ];then
 		local ytdlPythonVersion=$($youtube_dl --ignore-config -v 2>&1 | awk -F "[ .]" '/Python version/{printf$4"."$5}')
 #		local ytdlLatestRelease=$(\git ls-remote --tags --refs $ytdlGitURL | awk -F/ '{print$NF}' | sort -rV | head -1)
-		local ytdlLatestRelease=2020.09.20 # Le repo. youtube-dl a ete interdit par Google/Youtube le 23/10/2020 https://github.com/ytdl-org/youtube-dl
+		local ytdlLatestRelease=2020.11.12 # Le repo. youtube-dl a ete interdit par Google/Youtube le 23/10/2020 https://github.com/ytdl-org/youtube-dl
 		local ytdlCurrentRelease=$($youtube_dl --version)
 
 		[ $ytdlLatestRelease = $ytdlCurrentRelease ] && echo "=> [$FUNCNAME] INFO : You already have the latest release, which is $ytdlLatestRelease." >&2 || $sudo $(which pip$ytdlPythonVersion) install -U youtube-dl
