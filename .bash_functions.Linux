@@ -68,7 +68,7 @@ function isoLabel {
 		blkid -o value -s LABEL "$isoFile"
 	done
 }
-function lanip {
+function lanIP {
 	local ethName=$1
 	if [ -n "$ethName" ]
 	then
