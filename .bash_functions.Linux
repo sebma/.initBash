@@ -302,17 +302,17 @@ function watchProcess {
 }
 function wifiCapabilities {
 	export LANG=C
-	local physicalDevice wiFiDevice
+	local physicalDevice wiFiInterface
 	if [ $osFamily = Darwin ]
 	then
 		echo "=> Darwin/macOS operating systems are not supported yet." >&2
 		return 1
 	fi
 
-	wiFiDevice=$(iw dev 2>/dev/null | awk '/Interface/{lastInterface=$NF}END{print lastInterface}')
-	test "$wiFiDevice" || wiFiDevice="$(iwconfig 2>/dev/null | awk '/^[^ \t]/ { if ($1 ~ /^[0-9]+:/) { lastInterface=$2 } else { lastInterface=$1 } }END{print lastInterface}')"
+	wiFiInterface=$(iw dev 2>/dev/null | awk '/Interface/{lastInterface=$NF}END{print lastInterface}')
+	test "$wiFiInterface" || wiFiInterface="$(iwconfig 2>/dev/null | awk '/^[^ \t]/ { if ($1 ~ /^[0-9]+:/) { lastInterface=$2 } else { lastInterface=$1 } }END{print lastInterface}')"
 
-	[ "$wiFiDevice" ] || {
+	[ "$wiFiInterface" ] || {
 		echo "=> ERROR : Could not find any wireless network card." >&2
 		return 1
 	}
@@ -322,26 +322,26 @@ function wifiCapabilities {
 
 	which iwlist >/dev/null && {
 		echo "========================================================================"
-		iwlist $wiFiDevice bitrate || sudo iwlist $wiFiDevice bitrate
-		iwlist $wiFiDevice encryption || sudo iwlist $wiFiDevice encryption
-		iwlist $wiFiDevice frequency
-		iwlist $wiFiDevice event
-		iwlist $wiFiDevice retry
+		iwlist $wiFiInterface bitrate || sudo iwlist $wiFiInterface bitrate
+		iwlist $wiFiInterface encryption || sudo iwlist $wiFiInterface encryption
+		iwlist $wiFiInterface frequency
+		iwlist $wiFiInterface event
+		iwlist $wiFiInterface retry
 	}
 }
 function wifiInfos {
 	export LANG=C
-	local physicalDevice wiFiDevice
+	local physicalDevice wiFiInterface
 	if [ $osFamily = Darwin ]
 	then
 		echo "=> Darwin/macOS operating systems are not supported yet." >&2
 		return 1
 	fi
 
-	wiFiDevice=$(iw dev 2>/dev/null | awk '/Interface/{lastInterface=$NF}END{print lastInterface}')
-	test "$wiFiDevice" || wiFiDevice="$(iwconfig 2>/dev/null | awk '/^[^ \t]/ { if ($1 ~ /^[0-9]+:/) { lastInterface=$2 } else { lastInterface=$1 } }END{print lastInterface}')"
+	wiFiInterface=$(iw dev 2>/dev/null | awk '/Interface/{lastInterface=$NF}END{print lastInterface}')
+	test "$wiFiInterface" || wiFiInterface="$(iwconfig 2>/dev/null | awk '/^[^ \t]/ { if ($1 ~ /^[0-9]+:/) { lastInterface=$2 } else { lastInterface=$1 } }END{print lastInterface}')"
 
-	[ "$wiFiDevice" ] || {
+	[ "$wiFiInterface" ] || {
 		echo "=> ERROR : Could not find any wireless network card." >&2
 		return 1
 	}
@@ -352,23 +352,23 @@ function wifiInfos {
 		iw phy $physicalDevice info
 
 		echo "=> Stations infos. :"
-		iw dev $wiFiDevice station dump
+		iw dev $wiFiInterface station dump
 
 		echo "=> Wifi networks list :"
-		which nmcli >/dev/null && nmcli dev wifi list || iw dev $wiFiDevice scan || sudo iw dev $wiFiDevice scan
+		which nmcli >/dev/null && nmcli dev wifi list || iw dev $wiFiInterface scan || sudo iw dev $wiFiInterface scan
 
 		echo "=> Connected network link status :"
-		iw dev $wiFiDevice link || sudo iw dev $wiFiDevice link
+		iw dev $wiFiInterface link || sudo iw dev $wiFiInterface link
 	fi
 
 	which iwlist >/dev/null && {
 		echo "========================================================================"
-		iwlist $wiFiDevice bitrate || sudo iwlist $wiFiDevice bitrate
-		iwlist $wiFiDevice encryption || sudo iwlist $wiFiDevice encryption
-		iwlist $wiFiDevice frequency
-		iwlist $wiFiDevice event
-		iwlist $wiFiDevice retry
-		iwlist $wiFiDevice scan | more
+		iwlist $wiFiInterface bitrate || sudo iwlist $wiFiInterface bitrate
+		iwlist $wiFiInterface encryption || sudo iwlist $wiFiInterface encryption
+		iwlist $wiFiInterface frequency
+		iwlist $wiFiInterface event
+		iwlist $wiFiInterface retry
+		iwlist $wiFiInterface scan | more
 	}
 }
 function wifiList {
