@@ -6,8 +6,7 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 
 echo $OSTYPE | grep -q android && export osFamily=Android || export osFamily=$(uname -s)
 
-#function Source { test "$debug" -gt 0 && set -x && time source "$@" && echo || source "$@" ; }
-function Source { test "$debug" -gt 0 && time source "$@" && echo || source "$@" ; }
+function Source { test "$debug" -gt 0 && { time source "$@";echo;true; } || source "$@" ; }
 export bashProfileLoaded=1
 
 [ $osFamily = Linux ] && export osID=$(source /etc/os-release && echo $ID) osID_LIKE=$(source /etc/os-release && echo $ID_LIKE)
