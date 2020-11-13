@@ -60,6 +60,8 @@ jussieu|enst)
 	;;
 esac
 
+export ssh=$(which ssh)
+
 #Si le proxy est joignable
 if [ $domain != localhost ] && nc -v -z -w 4 $proxyName $proxyPort >/dev/null 2>&1
 then
