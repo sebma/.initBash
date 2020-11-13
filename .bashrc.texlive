@@ -5,14 +5,13 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 addmanpaths $(kpsewhich -var-value TEXMFDIST)/doc/man
 
 if groups 2>/dev/null | egrep -wq "sudo|adm|admin|root|wheel" && ! tlmgr --version 2>/dev/null | grep -q "user mode";then
-	tlmgr="sudo $(which tlmgr)"
+	export tlmgr="sudo $(which tlmgr)"
 else
-	tlmgr=tlmgr
+	export tlmgr=tlmgr
 	[ -d $HOME/texmf ] || $tlmgr init-usertree
 fi
-export tlmgr
 
-tlmgr option docfiles | grep -wq '1$' || $tlmgr option docfiles 1
+#tlmgr option docfiles | grep -wq '1$' || $tlmgr option docfiles 1
 
 set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
