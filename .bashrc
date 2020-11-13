@@ -10,13 +10,20 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 if [ -n "$BASH_VERSION" ]; then
 	# include .bashrc if it exists
 	if [ -f "/etc/skel/.bashrc" ]; then
-		test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}/etc/skel/.bashrc$normal ..."
-		source /etc/skel/.bashrc
-		test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}/etc/skel/.bashrc$normal"
+		if [ "$debug" -gt 0 ];then
+			echo "=> Running $bold${colors[blue]}/etc/skel/.bashrc$normal ..."
+			time source /etc/skel/.bashrc;true
+			echo "=> END of $bold${colors[blue]}/etc/skel/.bashrc$normal"
+		else
+			source /etc/skel/.bashrc
+		fi
 	fi
 fi
 
-tty -s && test -f $initDir/.bashrc.seb && source $initDir/.bashrc.seb #Pour que "scp/rsync" fonctionnent meme si il y a des commandes "echo"
+# Le "tty -s" indique si le shell est interactif.Il est donc la pour ne pas sourcer ".bashrc.seb" en mode non-interif afin que "scp/rsync" puissen(nt) fonctionner
+if tty -s && [ -f $initDir/.bashrc.seb ];then
+	test "$debug" -gt 0 && { time source $initDir/.bashrc.seb;true; } || source $initDir/.bashrc.seb
+fi
 
 test "$debug" -lt 3 && set +x
 test "$debug" -gt 0 && \echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
