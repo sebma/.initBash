@@ -142,6 +142,7 @@ alias install="\install -pv"
 alias inxi="LC_ALL=C \inxi -z -c2"
 alias inxiSummary="inxi -Fm -v3"
 alias ip@=lanip
+alias ipNeighbours="ip neighbour | column -t"
 alias is32or64bits='\getconf LONG_BIT'
 alias jpeg2pdf="\convert +density"
 alias jpeg2pdfA4="jpeg2pdf -page A4"
