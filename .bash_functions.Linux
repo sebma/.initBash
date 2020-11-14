@@ -72,22 +72,22 @@ function isoLabel {
 	done
 }
 function lanIP {
-	local ifName=$1
 	local ip=$(which ip)
 	if $ip -4 -brief addr >/dev/null 2>&1;then
-		$ip -4 -brief addr show $ifName
+		$ip -4 -brief addr show "$@"
 	else
-		$ip -4 -o addr show | awk '{print$2" "$4}' | column -t
+		$ip -4 -o addr show "$@" | awk '{print$2" "$4}' | column -t
 	fi
+	test $? != 0 && $ip addr show help
 }
 function lanIPv6 {
-	local ifName=$1
 	local ip=$(which ip)
 	if $ip -6 -brief addr >/dev/null 2>&1;then
-		$ip -6 -brief addr show $ifName
+		$ip -6 -brief addr show "$@"
 	else
-		$ip -6 -o addr show | awk '{print$2" "$4}' | column -t
+		$ip -6 -o addr show "$@" | awk '{print$2" "$4}' | column -t
 	fi
+	test $? != 0 && $ip addr show help
 }
 function locate {
 	local locate="command locate"
@@ -131,13 +131,13 @@ function lswifiNICs {
 	done
 }
 function mac@ {
-	local ifName=$1
 	local ip=$(which ip)
 	if $ip -brief addr >/dev/null 2>&1;then
-		$ip -brief link show $ifName
+		$ip -brief link show "$@"
 	else
-		$ip -o link show $ifName | awk '/link\/(ether|loopback)/{for(i=1;i<=NF;i++){if($i=="state"){status=$(i+1);break;}};print gensub(":","",1,$2)" "status" "$(NF-2)" "$3}' | column -t
+		$ip -o link show "$@" | awk '/link\/(ether|loopback)/{for(i=1;i<=NF;i++){if($i=="state"){status=$(i+1);break;}};print gensub(":","",1,$2)" "status" "$(NF-2)" "$3}' | column -t
 	fi
+	test $? != 0 && $ip link show help
 }
 function mountISO {
 	if [ $# = 0 ];then
