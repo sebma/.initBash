@@ -72,6 +72,7 @@ function isoLabel {
 	done
 }
 function lanIP {
+	set -o pipefail
 	local ip=$(which ip)
 	if $ip -4 -brief addr >/dev/null 2>&1;then
 		$ip -4 -brief addr show "$@"
@@ -79,8 +80,10 @@ function lanIP {
 		$ip -4 -o addr show "$@" | awk '{print$2" "$4}' | column -t
 	fi
 	test $? != 0 && $ip addr show help
+	set +o pipefail
 }
 function lanIPv6 {
+	set -o pipefail
 	local ip=$(which ip)
 	if $ip -6 -brief addr >/dev/null 2>&1;then
 		$ip -6 -brief addr show "$@"
@@ -88,6 +91,7 @@ function lanIPv6 {
 		$ip -6 -o addr show "$@" | awk '{print$2" "$4}' | column -t
 	fi
 	test $? != 0 && $ip addr show help
+	set +o pipefail
 }
 function locate {
 	local locate="command locate"
@@ -131,6 +135,7 @@ function lswifiNICs {
 	done
 }
 function mac@ {
+	set -o pipefail
 	local ip=$(which ip)
 	if $ip -brief addr >/dev/null 2>&1;then
 		$ip -brief link show "$@"
@@ -138,6 +143,7 @@ function mac@ {
 		$ip -o link show "$@" | awk '/link\/(ether|loopback)/{for(i=1;i<=NF;i++){if($i=="state"){status=$(i+1);break;}};print gensub(":","",1,$2)" "status" "$(NF-2)" "$3}' | column -t
 	fi
 	test $? != 0 && $ip link show help
+	set +o pipefail
 }
 function mountISO {
 	if [ $# = 0 ];then
