@@ -28,6 +28,7 @@ alias any2dos="\perlSed 's/\R/\r\n/g'"
 alias any2man="\pandoc -s -t man"
 alias any2unix="\perlSed 's/\R/\n/'"
 alias arch="arch 2>/dev/null || uname -m"
+alias arp="\arp -n"
 alias audioInfo="\mplayer -identify -vo null -ao null -frames 0"
 alias audioRenameFromTags=renameFromTags
 alias bc="\bc -l"
