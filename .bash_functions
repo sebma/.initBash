@@ -1197,7 +1197,8 @@ function picMpixels {
 	done | \column -t
 }
 function pingMyLAN {
-	local myLAN=$(\ip addr show | awk '!/virbr[0-9]/&&!/\<lo\>/&&/\<inet\>/{print$2}')
+	local myOutgoingInterFace=$(ip route | awk '/default/{print$5}')
+	local myLAN=$(\ip -o -4 addr show $myOutgoingInterFace scope global up | awk '{print$4}')
 	if [ $# = 0 ];then
 		if which fping >/dev/null 2>&1;then
 			time fping -r 0 -aAg $myLAN 2>/dev/null | sort -u
