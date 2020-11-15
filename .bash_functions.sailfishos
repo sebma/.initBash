@@ -55,24 +55,32 @@ function df {
 	$(which df) -PTh "$@" | columns -t | sort -u | sort -k7 | grep -v ^Filesystem
 }
 function rebalance {
-	which btrfs-balancer && {
+	which btrfs-balancer >/dev/null && {
 		df /
 		echo
+		set -x
 		sudo systemctl stop aliendalvik.service 
+		set +x
 		for i in $(seq 5)
 		do
 			printf "=> Balancing #%2d\n" $i
+			set -x
 			sudo btrfs-balancer allocation
+			set -x
 			echo
 			time sudo btrfs-balancer balance || break
 			echo
 			sync
 			sleep 3
+			set -x
 			sudo btrfs-balancer allocation
+			set +x
 		done
 		echo
 		df /
+		set -x
 		sudo systemctl start aliendalvik.service
+		set +x
 	}
 }
 function sailFishOSUpgrade {
