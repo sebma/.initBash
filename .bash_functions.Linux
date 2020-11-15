@@ -29,7 +29,7 @@ function connect2SSID {
 	echo
 	nmcli con status 2>/dev/null || nmcli con show --active
 	echo
-	time \dig @resolver1.opendns.com A myip.opendns.com +short -4 2>/dev/null || time host -4 -t A myip.opendns.com resolver1.opendns.com | awk '/\<has\>/{print$NF}'
+	time \dig -4 +short @resolver1.opendns.com A myip.opendns.com 2>/dev/null || time host -4 -t A myip.opendns.com resolver1.opendns.com | awk '/\<has\>/{print$NF}'
 	set +x
 }
 function df {
