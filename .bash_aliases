@@ -89,7 +89,7 @@ alias doc2odt=" libreoffice2 odt"
 alias doc2pdf=" libreoffice2 pdf"
 alias docx2odt="libreoffice2 odt"
 alias docx2pdf="libreoffice2 pdf"
-alias dos2unix="\tr -d '\r'"
+alias dos2unix="\sed -i 's/\r//'"
 alias doublons='\fdupes -rnASd'
 alias driveinfo='\cdrecord -prcap'
 alias du="LANG=C \du -h"
@@ -296,7 +296,7 @@ alias ulogtodayerrors="egrep -iB4 -A1 'error|erreur|Err: [^0]' $ulog"
 alias umask="\umask -S"
 alias uncompress="\uncompress -v"
 alias uncpio="\cpio -idcmv <"
-alias unix2dos="\tr '\n' '\r\n'"
+alias unix2dos="\sed -i 's/$/\r/'"
 alias unjar='\unjar || \unzip'
 alias untar='\untar || \tar -xvf'
 alias unzipFromPipeToStdout="\zcat"
