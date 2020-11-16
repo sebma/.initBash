@@ -593,25 +593,27 @@ function ytdlUpdate {
 
 	local youtube_dl=$(which youtube-dl)
 	if [ "$youtube_dl" ];then
-		local ytdlCurrentRelease=$($youtube_dl --version)
-		local ytdlPythonVersion=$($youtube_dl --ignore-config -v 2>&1 | awk -F "[ .]" '/Python version/{printf$4"."$5}')
-
-		echo "=> Searching for the latest release on $ytdlGitURL ..." >&2
-#		local ytdlLatestRelease=$(\git ls-remote --tags --refs $ytdlGitURL | awk -F/ '{print$NF}' | sort -rV | head -1)
+		echo "=> Searching for the latest release on $ytdlPyPI_URL ..." >&2
 		local ytdlLatestRelease=$(\curl -Ls $ytdlPyPI_URL/json | jq -r .info.version)
 		if [ -z "$ytdlLatestRelease" ];then
 			# Le repo. youtube-dl avait ete interdit par la R.I.A.A. le 23/10/2020 cf. https://github.com/github/dmca/blob/master/2020/10/2020-10-23-RIAA.md mais il est reouvert
 			set -o pipefail
-			echo "=> Couldn't find on $ytdlGitURL, checking in the PYPI repositories ..." >&2
-			time local ytdlLatestRelease=$(pip$ytdlPythonVersion list --outdated | awk '/youtube-dl/{print$(NF-1)}' || echo $ytdlCurrentRelease)
+			echo "=> Couldn't find the latest release on $ytdlPyPI_URL, checking the $ytdlGitURL repository ..." >&2
+			local ytdlLatestRelease=$(\git ls-remote --tags --refs $ytdlGitURL | awk -F/ '{print$NF}' | sort -rV | head -1)
 			set +o pipefail
 		else
 			echo "=> Found the $ytdlLatestRelease version." >&2
 		fi
 
-		[ $ytdlLatestRelease = $ytdlCurrentRelease ] && echo "=> [$FUNCNAME] INFO : You already have the latest release, which is $ytdlLatestRelease." >&2 || $sudo $(which pip$ytdlPythonVersion) install -U youtube-dl
+		local ytdlCurrentRelease=$($youtube_dl --version)
+		if [ "$ytdlLatestRelease" != $ytdlCurrentRelease ];then
+			local ytdlPythonVersion=$($youtube_dl --ignore-config -v 2>&1 | awk -F "[ .]" '/Python version/{printf$4"."$5}')
+			$sudo $(which pip$ytdlPythonVersion) install -U youtube-dl
+		else
+			echo "=> [$FUNCNAME] INFO : You already have the latest release, which is $ytdlLatestRelease." >&2
+		fi
 	else
-		$sudo $(which pip) install -U youtube-dl
+		$sudo $(which pip3) install -U youtube-dl
 	fi
 }
 function ytget {
