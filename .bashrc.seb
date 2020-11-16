@@ -162,8 +162,6 @@ which register-python-argcomplete >/dev/null 2>&1 && eval "$(register-python-arg
 tty -s && date && echo
 Echo "=> The cups admin console is http://localhost:631/admin"
 
-which tlmgr >/dev/null 2>&1 && test -r $initDir/.bashrc.texlive && Source $initDir/.bashrc.texlive
-
 which brew >/dev/null 2>&1 && test -r $initDir/.bashrc.brew && Source $initDir/.bashrc.brew
 which brew >/dev/null 2>&1 && test -r $initDir/.bash_aliases.brew && Source $initDir/.bash_aliases.brew
 which brew >/dev/null 2>&1 && test -r $initDir/.bash_functions.brew && Source $initDir/.bash_functions.brew
