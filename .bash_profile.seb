@@ -7,6 +7,30 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 echo $OSTYPE | grep -q android && export osFamily=Android || export osFamily=$(uname -s)
 
 function Source { test "$debug" -gt 0 && { time source "$@";echo;true; } || source "$@" ; }
+function addmanpaths {
+	for manpath
+	do
+		test ! -d "$manpath" && continue
+		echo $MANPATH | \grep -wq "$manpath" || {
+			test -z "$MANPATH" && MANPATH=$manpath || MANPATH=$MANPATH:$manpath
+		}
+	done
+	export MANPATH
+}
+function addpaths {
+	for path
+	do
+		test ! -d "$path" && continue
+		echo $PATH | \grep -wq "$path" || PATH=$path:$PATH
+	done
+	export PATH
+}
+
+TeXLiveDIR=$(\ls -d /usr/local/texlive/*/bin/* 2>/dev/null | egrep "/texlive/[0-9]+/bin/$arch-${osFamily,,}")
+addpaths $TeXLiveDIR
+
+which tlmgr >/dev/null 2>&1 && test -r $initDir/.bash_profile.texlive && Source $initDir/.bash_profile.texlive
+
 export bashProfileLoaded=1
 
 [ $osFamily = Linux ] && export osID=$(source /etc/os-release && echo $ID) osID_LIKE=$(source /etc/os-release && echo $ID_LIKE)
