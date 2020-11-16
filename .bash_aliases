@@ -30,6 +30,7 @@ alias any2unix="\perlSed 's/\R/\n/'"
 alias arch="arch 2>/dev/null || uname -m"
 #alias arp="\arp -n"
 alias arp="\ip -4 neigh"
+alias arpShow="\ip -4 neigh show"
 alias audioInfo="\mplayer -identify -vo null -ao null -frames 0"
 alias audioRenameFromTags=renameFromTags
 alias bc="\bc -l"
