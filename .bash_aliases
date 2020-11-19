@@ -111,6 +111,7 @@ alias fprintSupportedDevices="\curl -s https://fprint.freedesktop.org/supported-
 alias fprintMostSupportedDevices="fprintSupportedDevices | awk '{print\$2}' | sort | uniq -c | sort -nr"
 alias free="\free -m"
 alias frman="\man -Lfr"
+alias ftp="\pftp" # Passive FTP
 alias fuser="\fuser -v"
 alias fuserumount="\fusermount -u"
 alias gateWay="\route -n | awk '/^(0.0.0.0|default)/{print\$2}'"
