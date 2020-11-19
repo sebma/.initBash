@@ -334,6 +334,7 @@ alias wgetnoconfig="\wget --config=/dev/null"
 alias xargs="\xargs -ri"
 alias xclock="\xclock -digital -update 1"
 alias xfree="\xterm -geometry 73x5 -e watch -n2 free -om &"
+alias xlock="\xdg-screensaver lock"
 alias xmlsh="\xmllint --shell"
 alias xpath="\xmllint --xpath"
 alias xprop='\xprop WM_CLASS _NET_WM_PID WM_ICON_NAME'
