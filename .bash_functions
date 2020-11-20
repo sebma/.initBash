@@ -143,6 +143,18 @@ function anyTZ2LocalTime {
 	remoteTime=${remoteTime/./:}
 	date -d "$remoteTime $remoteTZ"
 }
+function any2ascii {
+	local encoding=unknown
+	for file
+	do
+		encoding=$(file -b -i "$file" | cut -d= -f2 | $sed "s/([0-9]+)[lb]e/\1/")
+		if which iconv >/dev/null 2>&1;then
+			iconv -f $encoding "$file"
+		elif which recode >/dev/null 2>&1;then
+			cat "$file" | recode $encoding.. 2>/dev/null
+		fi
+	done
+}
 function apkInfo {
 	type aapt >/dev/null || return
 	local apkFullInfo="$(which aapt aapt2 | tail -1) dump badging"
