@@ -14,6 +14,8 @@ alias ytdlGetVideoID="\youtube-dl --get-id"
 alias ytdlGetFormatID="\youtube-dl --get-filename -o '%(format_id)s' -f"
 alias ytdlLatestRelease='\git ls-remote --tags --refs https://github.com/ytdl-org/youtube-dl | awk -F/ "{print\$NF}" | sort -rV | head -1'
 alias ytdlOpenIssues="open https://github.com/ytdl-org/youtube-dl/issues"
+alias ytdlOpenReleases="open https://github.com/ytdl-org/youtube-dl/releases"
+alias ytdlOpenLatestRelease="open https://github.com/ytdl-org/youtube-dl/releases/latest"
 alias ytdlUpdateFromGit="ytdlUpdate https://github.com/ytdl-org/youtube-dl"
 
 set +x
