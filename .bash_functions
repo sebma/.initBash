@@ -1762,6 +1762,14 @@ function wlanmac {
 	wlanIF=$(iwconfig 2>&1 | awk '/ESSID:/{print$1}')
 	test "$wlanIF" && ip link show $wlanIF | awk '/link\/ether /{print$2}'
 }
+function xmlReIndent {
+	for file
+	do
+		xmllint --format "$file" 2>/dev/null > "${file/.*/.indented.html}"
+		[ $? != 0 ] && echo "=> WARNING: xmllint could not re-indent $file." >&2 && continue
+		\mv "${file/.*/.indented.html}".indented "$file"
+	done | sort -u
+}
 function xpiInfo {
 	type jq >/dev/null || return
 	local xpiFile
