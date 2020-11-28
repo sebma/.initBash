@@ -726,6 +726,11 @@ function html2pdf {
 		return 1
 	}
 
+	if ! which wkhtmltopdf >/dev/null 2>&1;then
+		echo "=> ERROR[$FUNCNAME]: You need to install the <wkhtmltopdf> tool." >&2
+		return 2
+	fi
+
 	local pdfFiles=""
 	for url_or_file
 	do
