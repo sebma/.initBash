@@ -1232,6 +1232,9 @@ function pingMyLAN {
 		fi
 	fi
 }
+function pingSeb {
+	time ping "$@" | \egrep -m1 "ttl=[0-9]+\stime=[0-9.]+\sms|errors"
+}
 function pip {
 	local caller=${FUNCNAME[1]}
 	test $caller || caller="pip"
