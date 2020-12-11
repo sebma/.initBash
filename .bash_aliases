@@ -353,7 +353,7 @@ grep  --help 2>&1 | \grep -qw "\--color" && alias grep="grep --color"
 uname -s | grep -q AIX && alias stat="istat"
 alias ct=cleartool
 alias curl="\curl -L" && alias curlnoconfig="\curl -q"
-alias hexdump="\hexdump -C" || alias hexdump="\od -ctx1"
+alias hexdump="\hexdump -Cc" || alias hexdump="\od -tx1z"
 alias lsb_release="\lsb_release -s"
 alias vim="LANG=C.UTF-8 \vim" && alias vi=vim
 
