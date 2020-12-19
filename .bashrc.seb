@@ -10,7 +10,7 @@ function Echo { tty -s && echo "$@"; }
 
 function Debug { test "$debug" -gt 0 && echo "$bold${colors[blue]}$@$normal"; }
 
-function Source { test "$debug" -gt 0 && { time source "$@";echo;true; } || source "$@" ; }
+function Source { test "$debug" -gt 0 && { time . "$@";echo;true; } || . "$@" ; }
 
 ! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && Source $initDir/.colors
 test "$debug" -gt "2" && set -x
