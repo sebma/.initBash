@@ -1058,7 +1058,7 @@ function os {
 			sw_vers >/dev/null 2>&1 && echo $(sw_vers -productName) $(sw_vers -productVersion) || system_profiler SPSoftwareDataType || defaults read /System/Library/CoreServices/SystemVersion ProductVersion ;;
 		Linux)
 			if [ -s /etc/os-release ]; then
-				( source /etc/os-release; echo $PRETTY_NAME )
+				( source /etc/os-release && echo $PRETTY_NAME )
 			elif which lsb_release >/dev/null 2>&1; then
 				\lsb_release -scd | paste -sd" ";echo
 			else
