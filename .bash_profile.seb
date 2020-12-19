@@ -6,7 +6,7 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 
 echo $OSTYPE | grep -q android && export osFamily=Android || export osFamily=$(uname -s)
 
-function Source { test "$debug" -gt 0 && { time source "$@";echo;true; } || source "$@" ; }
+function Source { test "$debug" -gt 0 && { time . "$@";echo;true; } || . "$@" ; }
 function addmanpaths {
 	for manpath
 	do
