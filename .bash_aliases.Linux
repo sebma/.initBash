@@ -43,7 +43,7 @@ alias catFiles="\tail -vn +1"
 alias connect2eduroam="connect2SSID eduroam"
 alias cp='\cp --preserve=timestamps -uv'
 #alias dmesg="\grc less /var/log/dmesg"
-alias dnsInfo="( \nmcli -f IP4.DNS,IP6.DNS dev list iface $wiFiInterface || \nmcli -f IP4.DNS,IP6.DNS dev show $wiFiInterface ) 2>/dev/null | grep DNS || egrep -v '^(#|\$)' /etc/resolv.conf"
+alias dnsInfo="( \nmcli -f IP4.DNS,IP6.DNS dev list iface $wiFiInterface || \nmcli -f IP4.DNS,IP6.DNS dev show) 2>/dev/null | grep DNS || egrep -v '^(#|\$)' /etc/resolv.conf"
 alias findDeadLinks='$find . -xtype l -exec ls --color -l {} +'
 alias firefoxDefrag='pgrep firefox || time find ~/.mozilla/firefox/ -name "*sqlite" -ls -exec sqlite3 -echo {} vacuum \;'
 alias fstype="\lsblk -n -o FSTYPE"
