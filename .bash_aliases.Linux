@@ -111,6 +111,7 @@ then
 	alias lvextendToFillVG="\lvextend -r -l +100%FREE"
 	alias lvreduce="\lvreduce -r"
 	alias lvresize="\lvresize -r"
+	alias lvs=$'lvs -v | awk \'{printf"  %-16s%-36s%5d %-10s%9s%4d%4d%5d%5d %s\\n",$1,$2,$3,$4,$5,$6,$7,$8,$9,$NF}\''
 	alias pvs="\pvs -v"
 	alias pgrep="\pgrep -lf"
 	alias pip2Install="curl -s https://bootstrap.pypa.io/get-pip.py | sudo -H python2"
