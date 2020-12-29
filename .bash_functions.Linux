@@ -134,6 +134,9 @@ function lswifiNICs {
 		\lsusb -d $device "$@"
 	done
 }
+function lvs {
+	lvs -v "$@" | awk '{printf"  %-16s%-36s%5d %-10s%9s%4d%4d%5d%5d %s\\n",$1,$2,$3,$4,$5,$6,$7,$8,$9,$NF}'
+}
 function mac@ {
 	set -o pipefail
 	local ip=$(which ip)
