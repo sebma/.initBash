@@ -18,9 +18,18 @@ function apt {
 	local aptGet=$(which apt-get)
 	case $firstArg in
 		install|remove|purge|upgrade|dist-upgrade|full-upgrade)
-			sudo screen -L $apt "${args[@]}" -V;;
+			if [ -n "$SSH_CONNECTION" ] && which screen >/dev/null 2>&1;then
+				sudo screen -L $apt "${args[@]}" -V
+			else
+				sudo $apt "${args[@]}" -V
+			fi
+			;;
 		autoremove)
-			sudo $apt autoremove -V || sudo screen -L $aptGet autoremove -V;;
+			if [ -n "$SSH_CONNECTION" ] && which screen >/dev/null 2>&1;then
+				sudo screen -L $apt autoremove -V || sudo screen -L $aptGet autoremove -V;;
+			else
+				sudo $apt autoremove -V || sudo $aptGet autoremove -V;;
+			fi
 		*)
 			$apt "${args[@]}";;
 	esac
