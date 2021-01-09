@@ -10,7 +10,7 @@ function Echo { tty -s && echo -e "$@"; }
 
 function Debug { test "$debug" -gt 0 && echo "$bold${colors[blue]}$@$normal"; }
 
-function Source { test "$debug" -gt 0 && { time . "$@";echo;true; } || . "$@" ; }
+function Source { test "$debug" -gt 0 && { time . "$@";echo;true; } || { . "$@" ; } ; }
 
 ! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && Source $initDir/.colors
 test "$debug" -gt "2" && set -x
@@ -210,12 +210,14 @@ fi
 [ $osFamily = Linux ]  && sed="$(which sed) -r"
 [ $osFamily = Darwin ] && sed="$(which sed) -E"
 #for tool in curl ffmpeg ffprobe hexdump hw-probe lsb_release vim;do ! which $tool >/dev/null 2>&1 && alias | grep -q $tool && unalias $tool;done
-alias | $sed "s/alias //;s/=[']\w+=\S+ /=/;s/sudo -?\w? //;s/(command|time) //;s/[$]\(which (\w+)\)/\1/;s/\/\S+\///;s/='?\\\?/ /" | awk '!/^[.]+/{print$1" "$2}' | sort -u | Pgrep -v '\s?-|^$' | while read aliasName tool
+Echo "=> Undefining aliases for which the tools are not installed ..."
+time alias | $sed "s/alias //;s/=[']\w+=\S+ /=/;s/sudo -?\w? //;s/(command|time) //;s/[$]\(which (\w+)\)/\1/;s/\/\S+\///;s/='?\\\?/ /" | awk '!/^[.]+/{print$1" "$2}' | sort -u | Pgrep -v '\s?-|^$' | while read aliasName tool
 do
 #	echo "$tool" | grep -q -- "^-" && echo "=> aliasName = <$aliasName> tool = <$tool>" && continue
 	! which $tool >/dev/null 2>&1 && alias | grep -q $tool && unalias $aliasName #Does not work on Jolla1/SFOS3
 	set +x
 done
+Echo "=> DONE !"
 
 quoteCHAR="'\''"
 
