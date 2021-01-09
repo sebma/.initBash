@@ -26,10 +26,11 @@ function apt {
 			;;
 		autoremove)
 			if [ -n "$SSH_CONNECTION" ] && which screen >/dev/null 2>&1;then
-				sudo screen -L $apt autoremove -V || sudo screen -L $aptGet autoremove -V;;
+				sudo screen -L $apt autoremove -V || sudo screen -L $aptGet autoremove -V
 			else
-				sudo $apt autoremove -V || sudo $aptGet autoremove -V;;
+				sudo $apt autoremove -V || sudo $aptGet autoremove -V
 			fi
+			;;
 		*)
 			$apt "${args[@]}";;
 	esac
