@@ -41,7 +41,7 @@ then
 			ubuntu) export system="$(Source /etc/os-release && echo $PRETTY_NAME)" ;;
 		esac
 	fi
-	# test -r $initDir/.bash_profile.$osID && Source $initDir/.bash_profile.$osID
+	# test -r $initDir/.bash_profile.$osID && SourceProfile $initDir/.bash_profile.$osID
 else
 	export system=$(echo $HOSTTYPE-$OSTYPE | sed "s/arm[^-]*-/arm-/")
 fi
