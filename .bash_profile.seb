@@ -6,6 +6,7 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 
 echo $OSTYPE | grep -q android && export osFamily=Android || export osFamily=$(uname -s)
 
+function SourceProfile { test "$debug" -gt 0 && { time . "$@";echo;true; } || . "$@" ; }
 function Source { test "$debug" -gt 0 && { time . "$@";echo;true; } || . "$@" ; }
 function addmanpaths {
 	for manpath
@@ -29,7 +30,7 @@ function addpaths {
 TeXLiveDIR=$(\ls -d /usr/local/texlive/*/bin/* 2>/dev/null | egrep "/texlive/[0-9]+/bin/$arch-${osFamily,,}")
 addpaths $TeXLiveDIR
 
-which tlmgr >/dev/null 2>&1 && test -r $initDir/.bash_profile.texlive && Source $initDir/.bash_profile.texlive
+which tlmgr >/dev/null 2>&1 && test -r $initDir/.bash_profile.texlive && SourceProfile $initDir/.bash_profile.texlive
 
 export bashProfileLoaded=1
 
@@ -120,25 +121,25 @@ then
 	fi
 
 	#my locale configuration
-	which locale >/dev/null 2>&1 && test -e $initDir/.bash_profile.locale && Source $initDir/.bash_profile.locale
+	which locale >/dev/null 2>&1 && test -e $initDir/.bash_profile.locale && SourceProfile $initDir/.bash_profile.locale
 	#GDM_LANG=fr_FR.UTF-8
 	export GDM_LANG=$LANG
 
 	#my lpr configuration
-	which lpr >/dev/null 2>&1 && test -f $initDir/.bash_profile.lpr && Source $initDir/.bash_profile.lpr
+	which lpr >/dev/null 2>&1 && test -f $initDir/.bash_profile.lpr && SourceProfile $initDir/.bash_profile.lpr
 fi
 
-test -r $initDir/.bash_profile.$osFamily && Source $initDir/.bash_profile.$osFamily
+test -r $initDir/.bash_profile.$osFamily && SourceProfile $initDir/.bash_profile.$osFamily
 
 if [ $osFamily != Darwin ] && [ $osFamily != Linux ]; then
 	which lsb_release >/dev/null 2>&1 && export system="$(lsb_release -sd | awk -F '"' '{print$(NF-1)}')" || export system=$(echo $HOSTTYPE-$OSTYPE | sed "s/arm[^-]*-/arm-/")
 fi
 
-which matlab >/dev/null 2>&1 && test -r $initDir/.bash_profile.matlab && Source $initDir/.bash_profile.matlab
+which matlab >/dev/null 2>&1 && test -r $initDir/.bash_profile.matlab && SourceProfile $initDir/.bash_profile.matlab
 brew=$(\ls ~/.linuxbrew/bin/brew /home/linuxbrew/.linuxbrew/bin/brew 2>/dev/null | head -1)
 set -o | grep -q xtrace.*on && xtrace="set -o xtrace"
 set +x
-test -x "$brew" && test -r $initDir/.bash_profile.brew && Source $initDir/.bash_profile.brew
+test -x "$brew" && test -r $initDir/.bash_profile.brew && SourceProfile $initDir/.bash_profile.brew
 $xtrace
 which hub >/dev/null 2>&1 && eval "$(hub alias -s)"
 
