@@ -190,7 +190,7 @@ function open {
 }
 function ppidof {
 	local regExp="$1"
-	\ps -o ppid= $(\pgrep "$regExp")
+	\ps -o ppid= $(\pidof "$regExp")
 }
 function processChildren {
 	local -i ppid=0
