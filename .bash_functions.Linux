@@ -188,6 +188,10 @@ function open {
 		$openCommand "$file" 2>&1 | \egrep -v "MBuntu-Y-For-Unity"
 	done
 }
+function ppidof {
+	local regExp="$1"
+	\ps -o ppid= $(\pgrep "$regExp")
+}
 function processChildren {
 	local -i ppid=0
 	test $# != 1 && {
