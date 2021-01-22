@@ -119,7 +119,7 @@ function lsbluetooth {
 	do
 		\lspci -nns $device "$@"
 	done
-	\lsusb | awk '/\<Bluetooth\>/{print$6}' | while read device
+	\lsusb -v 2>/dev/null | awk '/^Bus/{id=$6}/\<Bluetooth\>/{print id}' | uniq | while read device
 	do
 		\lsusb -d $device "$@"
 	done
