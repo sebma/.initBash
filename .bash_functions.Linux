@@ -129,7 +129,7 @@ function lswifiNICs {
 	do
 		\lspci -nns $device "$@"
 	done
-	\lsusb | awk '/\<Wireless\>/{print$6}' | while read device
+	\lsusb -v 2>/dev/null | awk 'BEGIN{IGNORECASE=1}/^Bus/{id=$6}/\<WLAN\>|802.11|wireless /{print id}' | uniq | while read device
 	do
 		\lsusb -d $device "$@"
 	done
