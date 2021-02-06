@@ -333,7 +333,7 @@ alias web2pdf='wkhtmltopdf --no-background --outline --header-line --footer-line
 alias wegrep="wgrep -E"
 alias wget1='\wget'
 alias wget2noconfig="\wget2 --no-config"
-alias wget='wget2 || wget1'
+#alias wget='wget2 || wget1'
 alias wgetnoconfig="\wget --config=/dev/null"
 alias xargs="\xargs -ri"
 alias xclock="\xclock -digital -update 1"
