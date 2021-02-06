@@ -994,6 +994,14 @@ function mountISO {
 	loopBackDevice=$(udisksctl loop-setup -r -f "$1" | awk -F "[ .]" '{print$(NF-1)}')
 	udisksctl mount -b $loopBackDevice
 }
+function mountLVM {
+	local LV="$1"
+	local mountPount=$(basename $(echo $LV  | cut -d- -f2-))
+	shift
+	sudo mkdir /mnt/$mountPount
+	sudo findmnt /mnt/$mountPount && echo "=> There is already a mounted filesystem here !" >&2 && return
+	sudo mount $LV /mnt/$mountPount
+}
 function myUnlink {
 	for file
 	do
