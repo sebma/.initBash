@@ -999,8 +999,8 @@ function mountLVM {
 	local mountPount=$(basename $(echo $LV  | cut -d- -f2-))
 	shift
 	sudo mkdir /mnt/$mountPount
-	sudo findmnt /mnt/$mountPount && echo "=> There is already a mounted filesystem here !" >&2 && return
-	sudo mount $LV /mnt/$mountPount
+	sudo findmnt /mnt/$mountPount && echo "=> There is already a mounted filesystem here !" >&2 && return 1
+	sudo mount -v $LV /mnt/$mountPount
 }
 function myUnlink {
 	for file
