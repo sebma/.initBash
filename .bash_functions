@@ -1226,6 +1226,7 @@ function pingMyLAN {
 	local myLAN=$(\ip -o -4 addr show $myOutgoingInterFace scope global up | awk '{print$4}')
 	if [ $# = 0 ];then
 		if which fping >/dev/null 2>&1;then
+			getcap $(which fping) | \grep -q cap_net_raw+ep || sudo setcap cap_net_raw+ep $(which fping)
 			time fping -r 0 -aAg $myLAN 2>/dev/null | sort -u
 		else
 			time \nmap -T5 -sP $myLAN | sed -n '/Nmap scan report for /s/Nmap scan report for //p'
