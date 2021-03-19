@@ -517,6 +517,10 @@ function findSeb {
 		$find $dir $firstPredicate "${args[@]}"
 	fi
 }
+function findCorruptedFilesIn {
+	local grep=$(which grep)
+	time $grep -a -r . "$@" >/dev/null
+}
 function findHumanReadable {
 	local find="$(which find)"
 	[ $osFamily = Darwin ] && find=gfind
