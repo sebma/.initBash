@@ -518,7 +518,7 @@ function findSeb {
 	fi
 }
 function findCorruptedFilesIn {
-	local grep=$(which grep)
+	local grep=$(which ggrep 2>/dev/null || which grep)
 	time $grep -a -r . "$@" >/dev/null
 }
 function findHumanReadable {
