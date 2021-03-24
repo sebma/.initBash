@@ -9,8 +9,12 @@ trap - INT
 
 test -d ~/local/lib && test $LD_LIBRARY_PATH && export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:~/local/lib || export LD_LIBRARY_PATH=~/local/lib
 
-#Creation du .cache dans "/tmp/$USER/" ssi le lien symbolique ~/.cache existe
 cacheLinkName=.cache
+if ! [ -L $HOME/$cacheLinkName ];then
+	cd $HOME && ln -s /tmp/$USER/$cacheLinkName
+fi
+
+#Creation du .cache dans "/tmp/$USER/" ssi le lien symbolique ~/.cache existe
 if [ -L $HOME/$cacheLinkName ];then
 	test ! -d /tmp/$USER/$cacheLinkName && mkdir -pv /tmp/$USER/$cacheLinkName
 	if tty -s && ls --color >/dev/null 2>&1
