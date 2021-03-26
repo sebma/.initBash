@@ -10,22 +10,25 @@ trap - INT
 test -d ~/local/lib && test $LD_LIBRARY_PATH && export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:~/local/lib || export LD_LIBRARY_PATH=~/local/lib
 
 cacheLinkName=.cache
-if ! [ -L $HOME/$cacheLinkName ];then
+if [ -e $HOME/$cacheLinkName ];then
+	if ! [ -L $HOME/$cacheLinkName ];then
+		mkdir -v /tmp/$USER
+		mv $HOME/$cacheLinkName /tmp/$USER/
+		cd $HOME && ln -s /tmp/$USER/$cacheLinkName
+	fi
+else
+	mkdir -pv /tmp/$USER/$cacheLinkName
 	cd $HOME && ln -s /tmp/$USER/$cacheLinkName
 fi
 
-#Creation du .cache dans "/tmp/$USER/" ssi le lien symbolique ~/.cache existe
-if [ -L $HOME/$cacheLinkName ];then
-	test ! -d /tmp/$USER/$cacheLinkName && mkdir -pv /tmp/$USER/$cacheLinkName
-	if tty -s && ls --color >/dev/null 2>&1
-	then
-		cd && ls -ld --color $cacheLinkName | awk /$USER/'{print$(NF-2)" "$(NF-1)" "$NF}'
-	else
-		#C'est le cas pour Android
-		cd && ls -ld $cacheLinkName | awk /$USER/'{print$(NF-2)" "$(NF-1)" "$NF}'
-	fi
-	cd - >/dev/null
+if tty -s && ls --color >/dev/null 2>&1
+then
+	cd && ls -ld --color $cacheLinkName | awk /$USER/'{print$(NF-2)" "$(NF-1)" "$NF}'
+else
+	#C'est le cas pour Android
+	cd && ls -ld $cacheLinkName | awk /$USER/'{print$(NF-2)" "$(NF-1)" "$NF}'
 fi
+cd - >/dev/null
 
 #Cleanup previous XFCE Sessions
 rm -f ~/$cacheLinkName/sessions/xf*
