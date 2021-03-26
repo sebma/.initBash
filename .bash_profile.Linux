@@ -12,6 +12,7 @@ test -d ~/local/lib && test $LD_LIBRARY_PATH && export LD_LIBRARY_PATH=$LD_LIBRA
 cacheLinkName=.cache
 if [ -e $HOME/$cacheLinkName ];then
 	if ! [ -L $HOME/$cacheLinkName ];then
+		rm -fr /tmp/$USER/$cacheLinkName/
 		mkdir -pv /tmp/$USER
 		mv -f $HOME/$cacheLinkName /tmp/$USER/
 		cd $HOME && ln -s /tmp/$USER/$cacheLinkName
