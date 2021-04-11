@@ -69,6 +69,7 @@ which mpv >/dev/null 2>&1 && test -r $initDir/.bash_aliases.mpv   && Source $ini
 which ffmpeg >/dev/null 2>&1 && test -r $initDir/.bash_aliases.AV   && Source $initDir/.bash_aliases.AV
 
 which mpv >/dev/null 2>&1 && test -r $initDir/.bash_functions.mpv && Source $initDir/.bash_functions.mpv
+which units >/dev/null 2>&1 && test -r $initDir/.bash_functions.units && Source $initDir/.bash_functions.units
 which youtube-dl >/dev/null 2>&1 && test -r $initDir/.bash_aliases.ytdl && Source $initDir/.bash_aliases.ytdl
 which youtube-dl >/dev/null 2>&1 && test -r $initDir/.bash_functions.ytdl && Source $initDir/.bash_functions.ytdl
 
