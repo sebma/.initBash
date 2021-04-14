@@ -1196,12 +1196,12 @@ function videoRemux {
 	touch -r "$inputFile" "$outputFile"
 }
 function videoRepair {
-	for file
+	for video
 	do
-		extension="${file/*./}"
-		time $ffmpeg -i "$file" $remuxOptions "${file/.$extension/-REPAIRED.$extension}"
+		extension="${video/*./}"
+		time $ffmpeg -i "$video" $remuxOptions "${video/.$extension/-REPAIRED.$extension}"
 		sync
-		touch -r "$file" "${file/.$extension/-REPAIRED.$extension}"
+		touch -r "$video" "${video/.$extension/-REPAIRED.$extension}"
 	done
 }
 function videoRotateLeft {
