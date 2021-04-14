@@ -1031,7 +1031,7 @@ function videoConcatFFMPEG {
 
 	destFile="$1"
 	shift
-	videosListFile="$(mktemp)"
+	videosListFile="$(mktemp -p .)"
 	for video
 	do
 		extension="${video/*./}"
@@ -1039,7 +1039,7 @@ function videoConcatFFMPEG {
 	done
 
 	time $ffmpeg -f concat -i "$videosListFile" $remuxOptions "$destFile"
-	rm "$videosListFile"
+	rm -vf "$videosListFile"
 	sync
 }
 function videoDelay {
