@@ -1199,9 +1199,9 @@ function videoRepair {
 	for file
 	do
 		extension="${file/*./}"
-		time $ffmpeg -i "$file" $remuxOptions "${file/.$extension/_REPAIRED.$extension}"
+		time $ffmpeg -i "$file" $remuxOptions "${file/.$extension/-REPAIRED.$extension}"
 		sync
-		touch -r "$file" "${file/.$extension/_REPAIRED.$extension}"
+		touch -r "$file" "${file/.$extension/-REPAIRED.$extension}"
 	done
 }
 function videoRotateLeft {
