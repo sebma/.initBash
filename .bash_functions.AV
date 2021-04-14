@@ -578,6 +578,18 @@ function avprobe {
 #	done 2>&1 | cut -c 1-$(tput cols)
 	done
 }
+function containerOfFile {
+	local container
+	local ffprobeJSON_File_Info=null
+	for file
+	do
+#		container=$($ffprobe "$file" -show_entries format=format_name -of default=noprint_wrappers=1:nokey=1 -v error)
+		ffprobeJSON_File_Info=$($ffprobe -v error -show_format -show_streams -print_format json "$file")
+		container=$(echo $ffprobeJSON_File_Info | jq -r .format.format_name | cut -d, -f1)
+		printf "=> $file : container = " >&2
+		echo $container
+	done
+}
 function cropdetect {
 	ffmpeg -i "$1" -t 1 -vf cropdetect -f null - 2>&1 | awk '/crop/{line=$NF}END{print line}'
 }
@@ -1010,17 +1022,25 @@ function videoCodecOfFile {
 		echo $videoCodec
 	done
 }
-function containerOfFile {
-	local container
-	local ffprobeJSON_File_Info=null
-	for file
+function videoConcatFFMPEG {
+	if [ $# -lt 3 ]
+	then
+		echo "=> Usage: $FUNCNAME destFile video1 video2 ..." >&2
+		return 1
+	fi
+
+	destFile="$1"
+	shift
+	videosListFile="$(mktemp)"
+	for video
 	do
-#		container=$($ffprobe "$file" -show_entries format=format_name -of default=noprint_wrappers=1:nokey=1 -v error)
-		ffprobeJSON_File_Info=$($ffprobe -v error -show_format -show_streams -print_format json "$file")
-		container=$(echo $ffprobeJSON_File_Info | jq -r .format.format_name | cut -d, -f1)
-		printf "=> $file : container = " >&2
-		echo $container
+		extension="${video/*./}"
+		echo "file '$video'" >> "$videosListFile"
 	done
+
+	time $ffmpeg -f concat -i "$videosListFile" $remuxOptions "$destFile"
+	rm "$videosListFile"
+	sync
 }
 function videoDelay {
 	test $# -ne 2 && {
