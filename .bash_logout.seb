@@ -2,9 +2,9 @@
 ! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-test "$SSH_CONNECTION" || pkill adb
 unalias which >/dev/null 2>&1
-if ! [ -L ~/.cache ] && [ -d ~/.cache ]; then
+test "$SSH_CONNECTION" || pkill adb
+if $(which df) ~/.cache | egrep -wqi "/(home|users?)";then
 	# Deletes everything in ~/.cache/ except the "fontconfig" cache which is also used by matplotlib
 	if [ $osID != sailfishos ]; then
 		$(which find) ~/.cache/ -type d | \egrep -vw "(.cache/|fontconfig|matplotlib)" | \xargs rm -vfr
