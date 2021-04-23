@@ -166,11 +166,9 @@ function configure {
 		then
 			unset CC
 			cmake .. $@
-			returnCode=$?
 		else
 			unset CC
 			cmake .. -DPREFIX=$prefix -DEPREFIX=$prefix $@
-			returnCode=$?
 		fi
 		returnCode=$?
 		grep ":PATH=.*$prefix" CMakeCache.txt
