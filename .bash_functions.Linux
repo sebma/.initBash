@@ -35,8 +35,8 @@ function connect2SSID {
 function df {
 	local df=$(which df)
 	local dfOptions="-PTh"
-	LANG=C $df $dfOptions $@ | \grep "^Filesystem" 1>&2
-	LANG=C $df $dfOptions $@ | grep -v "^Filesystem"
+	LANG=C $df $dfOptions "$@" | \grep "^Filesystem" 1>&2
+	LANG=C $df $dfOptions "$@" | grep -v "^Filesystem"
 }
 function https2zoomtg {
 	if [ $# != 1 ]
