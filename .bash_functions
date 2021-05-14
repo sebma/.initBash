@@ -1520,7 +1520,7 @@ function sortInPlace {
 	local sort="command sort"
 	for file
 	do
-		$sort -uo "$file" "$file"
+		$sort -uo "${file}" "${file}"
 	done
 }
 function sortM3U {
