@@ -758,7 +758,7 @@ function httpLocalServer {
 	local fqdn=localhost
 	local ip=$(\dig -x +search +short $(hostname))
 	local -i port=1234
-	local python=/usr/bin/python
+	local python="command python"
 
 	case $1 in
 		-h|-help|--h|--help) echo "=> Usage: $FUNCNAME [portNumber|$port]" >&2; return 1 ;;
@@ -770,13 +770,19 @@ function httpLocalServer {
 		return 2
 	fi
 
-	local oldPort=$(\ps -fu $USER | \grep -v awk | awk '/SimpleHTTPServer/{print$NF}')
-	\ps -fu $USER | \grep -v grep | \grep -q SimpleHTTPServer && echo "=> SimpleHTTPServer is already running on http://$fqdn:$oldPort/" || {
-		logfilePrefix=SimpleHTTPServer_$(date +%Y%m%d)
+	local pythonVersion="$($python -V 2>&1 | sed 's/[A-Za-z]* //' | cut -d. -f1)"
+	case $pythonVersion in
+		2) SimpleHTTPServerModuleName=SimpleHTTPServer;;
+		3) SimpleHTTPServerModuleName=http.server;;
+	esac
+
+	local oldPort=$(\ps -fu $USER | \grep -v awk | awk "/$SimpleHTTPServerModuleName/"'{print$NF}')
+	\ps -fu $USER | \grep -v grep | \grep -q $SimpleHTTPServerModuleName && echo "=> $SimpleHTTPServerModuleName is already running on http://$fqdn:$oldPort/" || {
+		logfilePrefix=$SimpleHTTPServerModuleName_$(date +%Y%m%d)
 		mkdir -p ~/log
-		nohup $python -m SimpleHTTPServer $port >~/log/${logfilePrefix}.log 2>&1 &
+		nohup $python -m $SimpleHTTPServerModuleName $port >~/log/${logfilePrefix}.log 2>&1 &
 		test $? = 0 && {
-			echo "=> SimpleHTTPServer started on http://$ip:$port/" >&2
+			echo "=> $SimpleHTTPServerModuleName started on http://$ip:$port/" >&2
 			echo "=> logFile = ~/log/${logfilePrefix}.log" >&2
 		}
 	}
