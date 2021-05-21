@@ -758,7 +758,7 @@ function httpLocalServer {
 	local fqdn=localhost
 	local ip=$(\dig -x +search +short $(hostname))
 	local -i port=1234
-	local python="command python"
+	local python="$(which python)"
 
 	case $1 in
 		-h|-help|--h|--help) echo "=> Usage: $FUNCNAME [portNumber|$port]" >&2; return 1 ;;
