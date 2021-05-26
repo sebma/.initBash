@@ -124,7 +124,7 @@ function addUsersInGroup {
 		sudo adduser $user $lastArg
 	done
 }
-function anyTimeWithTZ2LocalTime {
+function anyTimeWithTZ2LocalTimeZone {
 	local remoteTime=to_be_defined
 	local remoteTZ
 	if [ $# = 0 ];then
