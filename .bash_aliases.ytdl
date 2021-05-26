@@ -10,6 +10,8 @@ alias recordJPLive360p="recordYTLive  93 $JPLive"
 alias recordNCCLive360p="recordYTLive 93 $NCCLive"
 alias recordJPLive480p="recordYTLive  94 $JPLive"
 alias recordNCCLive480p="recordYTLive 94 $NCCLive"
+alias recordNCCLive=recordNCCLive480p
+alias recordJPLive=recordJPLive360p
 alias youtube-dl="LANG=C.UTF-8 command youtube-dl"
 alias ytdl="LANG=C.UTF-8 command youtube-dl"
 ytdlnoconfig="youtube-dl --ignore-config"
