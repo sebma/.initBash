@@ -5,9 +5,11 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 #youtube_dl="eval LANG=C.UTF-8 command youtube-dl" # i.e https://unix.stackexchange.com/questions/505733/ # eval A EVITER
 NCCLive=https://www.youtube.com/user/NewCreationChurch/live
 JPLive=https://www.youtube.com/user/JosephPrinceOnline/live
-alias recordYTLive="timeout -s SIGINT 150m getRestrictedFilenamesFORMAT.sh 94"
-alias recordJPLive="recordYTLive $JPLive"
-alias recordNCCLive="recordYTLive $NCCLive"
+alias recordYTLive="timeout -s SIGINT 150m getRestrictedFilenamesFORMAT.sh"
+alias recordJPLive360p="recordYTLive  93 $JPLive"
+alias recordNCCLive360p="recordYTLive 93 $NCCLive"
+alias recordJPLive480p="recordYTLive  94 $JPLive"
+alias recordNCCLive480p="recordYTLive 94 $NCCLive"
 alias youtube-dl="LANG=C.UTF-8 command youtube-dl"
 alias ytdl="LANG=C.UTF-8 command youtube-dl"
 ytdlnoconfig="youtube-dl --ignore-config"
