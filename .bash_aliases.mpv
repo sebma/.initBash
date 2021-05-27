@@ -42,6 +42,9 @@ alias mpvEnglish="mpv --profile=english"
 alias mpvGerman="mpv --alang=deu --slang=deu"
 alias mpvSpanish="mpv --alang=spa --slang=spa"
 
+alias mpvMiniConf="mpv --profile=miniconf"
+alias mpvDebug="mpv --profile=Debug"
+
 alias youtube-dl="LANG=C.UTF-8 command youtube-dl"
 alias ytdl="LANG=C.UTF-8 command youtube-dl"
 
