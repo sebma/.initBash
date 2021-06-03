@@ -2,7 +2,7 @@
 unalias which >/dev/null 2>&1
 test -z "$initDir" && export initDir=$HOME/.initBash
 
-sebInterpreter=$(ps -o args= $$ | awk '{print gensub("^/.*/","",1,$1)}')
+sebInterpreter=$(ps -o args= $$ | awk '{gsub("^/.*/","",$1);print}')
 ( [ $sebInterpreter = bash ] || [ $sebInterpreter = zsh ] || [ $sebInterpreter = sh ] ) && local=local || local=typeset
 unset sebInterpreter
 
