@@ -137,6 +137,7 @@ tty -s && which ssh-add >/dev/null && {
 				trap 'echo "=> Ignoring this step and continuing the script <$(basename $BASH_SOURCE)> ..." >&2' INT
 				Echo "=> Loading my ssh key from <$(basename $BASH_SOURCE)> ..."
 				tty | egrep -q "tty[0-9]+$" && set -x
+#				timeout -v -k 15s -s SIGKILL 10s ssh-add ~/.ssh/.$UPMC_ID >/dev/null && Echo "=> ssh key successfully loaded." >&2 || Echo "=> Failed loading ssh key." >&2
 				ssh-add ~/.ssh/.$UPMC_ID >/dev/null && Echo "=> ssh key successfully loaded." >&2 || Echo "=> Failed loading ssh key." >&2
 				set +x
 				trap - INT
