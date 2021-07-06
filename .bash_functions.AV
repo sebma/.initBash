@@ -1137,7 +1137,7 @@ function videoInfo {
 			else
 				#Local file
 				[ ! -s "$urlOrFile" ] && echo "=> ERROR: The file <$urlOrFile> is empty or does not exist." >&2 && continue
-				echo "=> The file is local to this machine."
+				echo "=> This file is local to this machine."
 				size=$(\stat -c %s "$urlOrFile" | awk '/[0-9]+/{printf "%8.3f MiB\n",$1/1024^2}')
 				echo "Size: $size"
 				$ffprobe "$urlOrFile" || $ffprobe $ffprobeOptions "$urlOrFile"
