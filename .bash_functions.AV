@@ -1110,7 +1110,7 @@ function videoInfo {
 	which ffprobe >/dev/null && {
 		for urlOrFile
 		do
-			echo "=> urlOrFile = $urlOrFile"
+#			echo "=> urlOrFile = $urlOrFile"
 			if echo "$urlOrFile" | egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://"
 			then
 				#remote stream
@@ -1135,8 +1135,9 @@ function videoInfo {
 					$ffprobe "$urlOrFile"
 				fi
 			else
-				echo "=> The file is local to this machine."
 				#Local file
+				[ ! -s "$urlOrFile" ] && echo "=> ERROR: The file <$urlOrFile> is empty or does not exist." >&2 && continue
+				echo "=> The file is local to this machine."
 				size=$(\stat -c %s "$urlOrFile" | awk '/[0-9]+/{printf "%8.3f MiB\n",$1/1024^2}')
 				echo "Size: $size"
 				$ffprobe "$urlOrFile" || $ffprobe $ffprobeOptions "$urlOrFile"
