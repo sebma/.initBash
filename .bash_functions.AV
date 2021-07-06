@@ -140,7 +140,7 @@ function addSubtitles2media {
 	touch -r "$inputVideo" "$outputVideo"
 	[ $retCode = 0 ] && echo && \mv -vf "$outputVideo" "$inputVideo" && \rm "$@"
 }
-function addRespectiveThumbnail2mp4 {
+function addRespectiveThumbnails4mp4Files {
 	test $# = 0 && {
 		echo "=> Usage: $FUNCNAME mp4File1 mp4File2 mp4File3 ..." >&2
 		return 1
@@ -196,9 +196,11 @@ function addThumbnail2mp4_mp4art {
 
 	local fileName="$1"
 	local timestampFileRef=$(mktemp) && touch -r "$fileName" $timestampFileRef
+	chmod u+w "$fileName"
 	mp4art --remove "$fileName"
-	mp4art --add "$artworkFile" "$fileName"
+	mp4art --overwrite --add "$artworkFile" "$fileName"
 	touch -r $timestampFileRef "$fileName" && \rm $timestampFileRef
+	chmod -w "$fileName"
 	sync
 }
 function addThumbnail2mp4_AtomicParsley {
@@ -217,8 +219,10 @@ function addThumbnail2mp4_AtomicParsley {
 
 	local fileName="$1"
 	local timestampFileRef=$(mktemp) && touch -r "$fileName" $timestampFileRef
+	chmod u+w "$fileName"
 	AtomicParsley "$fileName" --artwork "$artworkFile" --overWrite
 	touch -r $timestampFileRef "$fileName" && \rm $timestampFileRef
+	chmod -w "$fileName"
 	sync
 }
 function addURL2mp4_m4a {
