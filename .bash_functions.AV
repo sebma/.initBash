@@ -221,12 +221,32 @@ function addThumbnail2mp4_AtomicParsley {
 	touch -r $timestampFileRef "$fileName" && \rm $timestampFileRef
 	sync
 }
-function addURL2Audio_Video {
+function addURL2mp4_m4a {
+	test $# = 0 && {
+		echo "=> Usage: $FUNCNAME url fileName" >&2
+		return 1
+	}
+
 	local url=$1
 	local fileName=$2
 	local extension=${fileName/*./}
-#	$ffmpeg -i "$fileName" -map 0 -c copy -metadata description="$url" "${fileName%.*}-NEW.$extension" && mv -vf "${fileName%.*}-NEW.$extension" $fileName
-	[ $extension = mp4 ] || [ $extension = m4a ] && mp4tags -m "$url" "$fileName"
+	timestampFileRef=$(mktemp) && touch -r "$fileName" $timestampFileRef
+	[ $extension = mp4 ] || [ $extension = m4a ] && mp4tags -m "$url" "$fileName" && touch -r $timestampFileRef "$fileName" && \rm $timestampFileRef
+	sync
+}
+function addURL2Audio_Video {
+	test $# = 0 && {
+		echo "=> Usage: $FUNCNAME url fileName" >&2
+		return 1
+	}
+
+	local url=$1
+	local fileName=$2
+	local extension=${fileName/*./}
+	if $ffmpeg -i "$fileName" -map 0 -c copy -metadata description="$url" "${fileName%.*}-NEW.$extension";then
+		touch -r "$fileName" "${fileName%.*}-NEW.$extension"
+		mv -vf "${fileName%.*}-NEW.$extension" $fileName
+	fi
 	sync
 }
 function any216kHzopus {
