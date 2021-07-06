@@ -161,51 +161,51 @@ function addRespectiveThumbnails4mp4Files {
 }
 function addThumbnail2mp4_ffmpeg {
 	test $# = 0 && {
-		echo "=> Usage: $FUNCNAME artworkFile file" >&2
+		echo "=> Usage: $FUNCNAME artworkFile videoFileName" >&2
 		return 1
 	}
 
 	local artworkFile="$1"
 	shift
 
-	local fileName="$1"
-	local timestampFileRef=$(mktemp) && touch -r "$fileName" $timestampFileRef
-	local extension=${fileName/*./}
+	local videoFileName="$1"
+	local timestampFileRef=$(mktemp) && touch -r "$videoFileName" $timestampFileRef
+	local extension=${videoFileName/*./}
 
-	local ffprobeJSON_Info=$($ffprobe -hide_banner -v error -show_format -show_streams -print_format json "$fileName")
+	local ffprobeJSON_Info=$($ffprobe -hide_banner -v error -show_format -show_streams -print_format json "$videoFileName")
 	local embeddedArtworkCodecName=$(echo $ffprobeJSON_Info | jq -r '[ .streams[] | select(.codec_type=="video") ][-1].codec_name')
 	local major_brand=$(echo $ffprobeJSON_Info | jq -r '.format.tags.major_brand')
 	local disposition_stream_specifier=null
 	[ $major_brand = M4A ] && disposition_stream_specifier=v:0 || disposition_stream_specifier=v:1
 
-	echo "[ffmpeg] Adding thumbnail to '$fileName'"
-	$ffmpeg -loglevel repeat+error -i "$fileName" -i "$artworkFile" -map 0 -map 1 -c copy -disposition:$disposition_stream_specifier attached_pic "${fileName/.$extension/_NEW.$extension}"
-	[ $? = 0 ] && set +x && mv -f "${fileName/.$extension/_NEW.$extension}" "$fileName" || set +x
+	echo "[ffmpeg] Adding thumbnail to '$videoFileName'"
+	$ffmpeg -loglevel repeat+error -i "$videoFileName" -i "$artworkFile" -map 0 -map 1 -c copy -disposition:$disposition_stream_specifier attached_pic "${videoFileName/.$extension/_NEW.$extension}"
+	[ $? = 0 ] && set +x && mv -f "${videoFileName/.$extension/_NEW.$extension}" "$videoFileName" || set +x
 
-	touch -r $timestampFileRef "$fileName" && \rm $timestampFileRef
+	touch -r $timestampFileRef "$videoFileName" && \rm $timestampFileRef
 	sync
 }
 function addThumbnail2mp4_mp4art {
 	test $# = 0 && {
-		echo "=> Usage: $FUNCNAME artworkFile file" >&2
+		echo "=> Usage: $FUNCNAME artworkFile videoFile" >&2
 		return 1
 	}
 
 	local artworkFile="$1"
 	shift
 
-	local fileName="$1"
-	local timestampFileRef=$(mktemp) && touch -r "$fileName" $timestampFileRef
-	chmod u+w "$fileName"
-	mp4art --remove "$fileName"
-	mp4art --overwrite --add "$artworkFile" "$fileName"
-	touch -r $timestampFileRef "$fileName" && \rm $timestampFileRef
-	chmod -w "$fileName"
+	local videoFileName="$1"
+	local timestampFileRef=$(mktemp) && touch -r "$videoFileName" $timestampFileRef
+	chmod u+w "$videoFileName"
+	mp4art --remove "$videoFileName"
+	mp4art --overwrite --add "$artworkFile" "$videoFileName"
+	touch -r $timestampFileRef "$videoFileName" && \rm $timestampFileRef
+	chmod -w "$videoFileName"
 	sync
 }
 function addThumbnail2mp4_AtomicParsley {
 	test $# = 0 && {
-		echo "=> Usage: $FUNCNAME artworkFile file" >&2
+		echo "=> Usage: $FUNCNAME artworkFile videoFile" >&2
 		return 1
 	}
 
@@ -217,12 +217,12 @@ function addThumbnail2mp4_AtomicParsley {
 		convert -verbose "$artworkFile" "${artworkFile/.*}_NEW.$artworkExtension" && mv -f "${artworkFile/.*}_NEW.$artworkExtension" "$artworkFile"
 	fi
 
-	local fileName="$1"
-	local timestampFileRef=$(mktemp) && touch -r "$fileName" $timestampFileRef
-	chmod u+w "$fileName"
-	AtomicParsley "$fileName" --artwork "$artworkFile" --overWrite
-	touch -r $timestampFileRef "$fileName" && \rm $timestampFileRef
-	chmod -w "$fileName"
+	local videoFileName="$1"
+	local timestampFileRef=$(mktemp) && touch -r "$videoFileName" $timestampFileRef
+	chmod u+w "$videoFileName"
+	AtomicParsley "$videoFileName" --artwork "$artworkFile" --overWrite
+	touch -r $timestampFileRef "$videoFileName" && \rm $timestampFileRef
+	chmod -w "$videoFileName"
 	sync
 }
 function addURL2mp4_m4a {
