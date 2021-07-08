@@ -6,7 +6,8 @@ sebInterpreter=$(ps -o args= $$ | awk '{gsub("^/.*/","",$1);print$1}')
 ( [ $sebInterpreter = bash ] || [ $sebInterpreter = zsh ] || [ $sebInterpreter = sh ] ) && local=local || local=typeset
 unset sebInterpreter
 
-function Echo { tty -s && echo -e "$@"; }
+#function Echo { tty -s && echo -e "$@"; }
+alias Echo="tty -s && echo -e"
 
 function Debug { test "$debug" -gt 0 && echo "$bold${colors[blue]}$@$normal"; }
 
@@ -101,6 +102,13 @@ fi
 
 \mkdir -pvm 700 ~/.ssh/sockets/
 
+# Restart pulseaudio if not running
+pidof pulseaudio >/dev/null || {
+	Echo "=> Pulseaudio is down, restarting Pulseaudio ..."
+	pulseaudio --start --log-target=syslog
+}
+
+# When connecting through ssh, Removes the configured PulseAudio configuration from the X11 root window.
 env | grep -q SSH_CLIENT && which pax11publish >/dev/null 2>&1 && pax11publish -r
 
 if tty -s #Si c'est une session interactive
