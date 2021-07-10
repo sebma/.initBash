@@ -2,7 +2,15 @@
 ! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-pacmd dump | \grep -q default-sink.*hdmi || pactl set-default-sink alsa_output.pci-0000_03_00.1.hdmi-stereo
+if pacmd dump | \grep -q "default-sink.*analog-stereo";then
+	echo "=> moveAudio2HDMI.sh"
+	moveAudio2HDMI.sh
+	echo
+elif pacmd dump | \grep -q "default-sink.*bluez_sink" && pactl list sinks short | \grep -q "hdmi-stereo\s.*RUNNING";then
+	echo "=> moveAudio2ConnectedBlueToothSink.sh"
+	moveAudio2ConnectedBlueToothSink.sh
+	echo
+fi
 
 set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
