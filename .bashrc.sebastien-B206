@@ -4,9 +4,9 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 
 if tty -s;then
 	if pacmd dump | \grep -q "default-sink.*analog-stereo";then
-		pactl set-default-sink alsa_output.pci-0000_03_00.1.hdmi-stereo
 		echo "=> moveAudio2HDMI.sh"
 		moveAudio2HDMI.sh
+		pactl set-default-sink alsa_output.pci-0000_03_00.1.hdmi-stereo
 		echo
 	elif pacmd dump | \grep -q "default-sink.*bluez_sink" && pactl list sinks short | \grep -q "hdmi-stereo\s.*RUNNING";then
 		echo "=> moveAudio2ConnectedBlueToothSink.sh"
