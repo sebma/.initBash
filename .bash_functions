@@ -1371,6 +1371,20 @@ function pulseaudioRestart {
 function pythonCalc {
 	\python -c "print(${*/^/**})"
 }
+function randomN {
+	test $# -gt 1 || test "$1" = "-h" && {
+		echo "=> Usage: $FUNCNAME [N=100]" >&2
+		return 1
+	}
+	[ $# = 1 ] && local N=$1 || local N=100
+	local b=$((2**15-1))
+	test "$N" -gt $b && {
+		echo "=> [$FUNCNAME] ERROR: N must be lower than 2^15" >&2
+		return 2
+	}
+	local n=$RANDOM
+	echo $((N*n/b))
+}
 function realpathSeb {
 	for path
 	do
@@ -1524,6 +1538,20 @@ function sizeOfRemoteFile {
 	echo "=> total = $total Mo"
  
 	trap - INT
+}
+function sleepRandomMinutes {
+	test $# -gt 1 || test "$1" = "-h" && {
+		echo "=> Usage: $FUNCNAME [N=100]" >&2
+		return 1
+	}
+	[ $# = 1 ] && local N=$1 || local N=10
+	local b=$((2**15-1))
+	test "$N" -gt $b && {
+		echo "=> [$FUNCNAME] ERROR: N must be lower than 2^15" >&2
+		return 2
+	}
+	local random=$(randomN $N)
+	sleep ${random}m
 }
 function sortInPlace {
 	local sort="command sort"
