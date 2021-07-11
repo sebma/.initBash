@@ -1541,7 +1541,7 @@ function sizeOfRemoteFile {
 }
 function sleepRandomMinutes {
 	test $# -gt 1 || test "$1" = "-h" && {
-		echo "=> Usage: $FUNCNAME [N=100]" >&2
+		echo "=> Usage: $FUNCNAME [N=10]" >&2
 		return 1
 	}
 	[ $# = 1 ] && local N=$1 || local N=10
