@@ -1380,6 +1380,7 @@ function randomN {
 	local b=$((2**15-1))
 	test "$N" -gt $b && {
 		echo "=> [$FUNCNAME] ERROR: N must be lower than 2^15" >&2
+		echo 0 # Workaround for the "sleepRandomMinutes" function when not trapping $?
 		return 2
 	}
 	local n=$RANDOM
@@ -1545,13 +1546,8 @@ function sleepRandomMinutes {
 		return 1
 	}
 	[ $# = 1 ] && local N=$1 || local N=10
-	local b=$((2**15-1))
-	test "$N" -gt $b && {
-		echo "=> [$FUNCNAME] ERROR: N must be lower than 2^15" >&2
-		return 2
-	}
 	local random=$(randomN $N)
-	sleep ${random}m
+	[ $? = 0 ] && sleep ${random}m || return $?
 }
 function sortInPlace {
 	local sort="command sort"
