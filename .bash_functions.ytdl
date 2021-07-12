@@ -530,7 +530,7 @@ function ytdlGetVideoIDsFromPlayListURL {
 	}
 
 	local playListURL="$1"
-	local fqdn=$(echo "$playListURL" | sed "s|https?://||" | cut -d/ -f1)
+	local fqdn=$(echo "$playListURL" | cut -d/ -f3)
 	local service=$(echo $fqdn | awk -F. '{print$(NF-1)}')
 	echo $service
 	test "$playListURL" && $ytdlnoconfig  --ignore-errors --flat-playlist -j "$playListURL" | jq -r .id
