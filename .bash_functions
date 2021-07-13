@@ -714,13 +714,19 @@ function grepSection {
 function greplast {
 	grep "$@" | awk 'END{print}'
 }
-function h5ll {
+function h5L {
 	local switch="$1"
 	echo $switch | \grep -q "^-" && shift 1 || switch=""
 	for file
 	do
 		\h5ls -r $switch $file
 	done | \egrep "Group|Attribute:|Dataset|Data:"
+}
+function help {
+	local help="builtin help"
+	local lines=$($help "$@" | wc -l)
+	termLines=$(tput lines)
+	[ $lines -gt $termLines ] && $help "$@" | less || $help "$@"
 }
 function hide {
 	for file
