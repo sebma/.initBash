@@ -10,6 +10,7 @@ trap - INT
 test -d ~/local/lib && test $LD_LIBRARY_PATH && export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:~/local/lib || export LD_LIBRARY_PATH=~/local/lib
 
 cacheLinkName=.cache
+cd $HOME && ls -ld $cacheLinkName
 if [ -e $HOME/$cacheLinkName ];then
 	if ! [ -L $HOME/$cacheLinkName ];then
 		rm -fr /tmp/$USER/$cacheLinkName/
@@ -19,8 +20,8 @@ if [ -e $HOME/$cacheLinkName ];then
 else
 	mkdir -pv /tmp/$USER/$cacheLinkName
 fi
-
-#test $? = 0 && cd $HOME && ln -s /tmp/$USER/$cacheLinkName
+# test $? = 0 && cd $HOME && ls -ld $cacheLinkName && ln -s /tmp/$USER/$cacheLinkName
+ls -ld $cacheLinkName
 
 if tty -s && ls --color >/dev/null 2>&1
 then
