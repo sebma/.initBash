@@ -725,7 +725,7 @@ function h5L {
 function help {
 	local help="builtin help"
 	local lines=$($help "$@" | wc -l)
-	termLines=$(tput lines)
+	local termLines=$(tput lines)
 	[ $lines -gt $termLines ] && $help "$@" | less || $help "$@"
 }
 function hide {
