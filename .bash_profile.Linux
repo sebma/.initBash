@@ -30,7 +30,7 @@ if [ -e $HOME/$cacheLinkName ];then
 			ls -ld $HOME/$cacheLinkName
 
 			mv -v $HOME/$cacheLinkName /tmp/$USER/
-		elif [ -f $HOME/$cacheLinkName ];then
+		else
 			echo "=> COUCOU 4"
 			ls -ld $HOME/$cacheLinkName
 
@@ -40,7 +40,6 @@ if [ -e $HOME/$cacheLinkName ];then
 	else
 		echo "=> COUCOU 5"
 		ls -ld $HOME/$cacheLinkName
-
 		:
 	fi
 else
