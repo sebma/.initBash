@@ -9,23 +9,29 @@ trap - INT
 
 test -d ~/local/lib && test $LD_LIBRARY_PATH && export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:~/local/lib || export LD_LIBRARY_PATH=~/local/lib
 
-set -x
+# set -x
 cacheLinkName=.cache
 cd $HOME
 if [ -e $HOME/$cacheLinkName ];then
+	echo "=> COUCOU 1"
 	if ! [ -L $HOME/$cacheLinkName ];then
+		echo "=> COUCOU 2"
 		rm -fr /tmp/$USER/$cacheLinkName/
 		mkdir -pv /tmp/$USER
 		if [ -d $HOME/$cacheLinkName ];then
+			echo "=> COUCOU 3"
 			mv -v $HOME/$cacheLinkName /tmp/$USER/
 		elif [ -f $HOME/$cacheLinkName ];then
+			echo "=> COUCOU 4"
 			rm -v $HOME/$cacheLinkName
 		fi
 		ln -vs /tmp/$USER/$cacheLinkName
 	else
+		echo "=> COUCOU 5"
 		:
 	fi
 else
+	echo "=> COUCOU 6"
 	mkdir -pv /tmp/$USER/$cacheLinkName
 	ln -vs /tmp/$USER/$cacheLinkName
 fi
