@@ -25,13 +25,13 @@ if [ -e $HOME/$cacheLinkName ];then
 			\rm -v $HOME/$cacheLinkName
 		fi
 
-		ln -vsf /tmp/$USER/$cacheLinkName
+		\ln -vsf /tmp/$USER/$cacheLinkName
 	else
 		:
 	fi
 else
 	mkdir -pv /tmp/$USER/$cacheLinkName
-	ln -vs /tmp/$USER/$cacheLinkName
+	\ln -vsf /tmp/$USER/$cacheLinkName
 fi
 set +x
 
