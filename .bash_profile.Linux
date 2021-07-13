@@ -36,14 +36,17 @@ if [ -e $HOME/$cacheLinkName ];then
 
 			rm -v $HOME/$cacheLinkName
 		fi
-		ln -vs /tmp/$USER/$cacheLinkName
-	else
+
 		echo "=> COUCOU 5"
+		ln -vs /tmp/$USER/$cacheLinkName
+		ls -ld $HOME/$cacheLinkName
+	else
+		echo "=> COUCOU 6"
 		ls -ld $HOME/$cacheLinkName
 		:
 	fi
 else
-	echo "=> COUCOU 6"
+	echo "=> COUCOU 7"
 	ls -ld $HOME/$cacheLinkName
 
 	mkdir -pv /tmp/$USER/$cacheLinkName
