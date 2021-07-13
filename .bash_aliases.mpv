@@ -3,7 +3,7 @@
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 mpv="$(which mpv 2>/dev/null)"
-alias mpv="LANG=en_US.utf8 $mpv $mpvDefaultOptions"
+# alias mpv="LANG=en_US.utf8 $mpv $mpvDefaultOptions"
 mpvnoconfig="mpv --no-config"
 alias mpvnoconfig="$mpvnoconfig"
 
