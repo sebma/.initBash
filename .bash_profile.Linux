@@ -14,12 +14,13 @@ if [ -e $HOME/$cacheLinkName ];then
 	if ! [ -L $HOME/$cacheLinkName ];then
 		rm -fr /tmp/$USER/$cacheLinkName/
 		mkdir -pv /tmp/$USER
-		mv $HOME/$cacheLinkName /tmp/$USER/ && cd $HOME && ln -s /tmp/$USER/$cacheLinkName
+		mv $HOME/$cacheLinkName /tmp/$USER/
 	fi
 else
 	mkdir -pv /tmp/$USER/$cacheLinkName
-	cd $HOME && ln -s /tmp/$USER/$cacheLinkName
 fi
+
+#test $? = 0 && cd $HOME && ln -s /tmp/$USER/$cacheLinkName
 
 if tty -s && ls --color >/dev/null 2>&1
 then
