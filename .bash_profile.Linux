@@ -12,41 +12,26 @@ test -d ~/local/lib && test $LD_LIBRARY_PATH && export LD_LIBRARY_PATH=$LD_LIBRA
 # set -x
 cacheLinkName=.cache
 cd $HOME
-echo "=> COUCOU 0"
-ls -ld $HOME/$cacheLinkName
+#echo "=> COUCOU 0"
+#ls -ld $HOME/$cacheLinkName
 
 if [ -e $HOME/$cacheLinkName ];then
-	echo "=> COUCOU 1"
-
 	if ! [ -L $HOME/$cacheLinkName ];then
-		echo "=> COUCOU 2"
-
 		rm -fr /tmp/$USER/$cacheLinkName/
 		mkdir -pv /tmp/$USER
 		if [ -d $HOME/$cacheLinkName ];then
-			echo "=> COUCOU 3"
-
 			\mv -v $HOME/$cacheLinkName /tmp/$USER/
 		else
-			echo "=> COUCOU 4"
-
 			\rm -v $HOME/$cacheLinkName
 		fi
 
-		ln -vs /tmp/$USER/$cacheLinkName
-
-		echo "=> COUCOU 5"
-		ls -ld $HOME/$cacheLinkName
+		ln -vsf /tmp/$USER/$cacheLinkName
 	else
-		echo "=> COUCOU 6"
 		:
 	fi
 else
 	mkdir -pv /tmp/$USER/$cacheLinkName
 	ln -vs /tmp/$USER/$cacheLinkName
-
-	echo "=> COUCOU 7"
-	ls -ld $HOME/$cacheLinkName
 fi
 set +x
 
