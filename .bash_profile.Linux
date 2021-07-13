@@ -26,11 +26,11 @@ if [ -e $HOME/$cacheLinkName ];then
 		if [ -d $HOME/$cacheLinkName ];then
 			echo "=> COUCOU 3"
 
-			mv -v $HOME/$cacheLinkName /tmp/$USER/
+			\mv -v $HOME/$cacheLinkName /tmp/$USER/
 		else
 			echo "=> COUCOU 4"
 
-			rm -v $HOME/$cacheLinkName
+			\rm -v $HOME/$cacheLinkName
 		fi
 
 		ln -vs /tmp/$USER/$cacheLinkName
