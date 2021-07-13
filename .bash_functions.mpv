@@ -8,7 +8,7 @@ export mpv_Output_Perl_Script="'\$| = 1;s/\n/\r/g if \$_ =~ /AV: /;s/Saving stat
 export HOSTNAME # for mpv auto-profiles conditions
 
 mpv="$(which mpv 2>/dev/null)"
-alias mpv="LANG=en_US.utf8 $mpv $mpvDefaultOptions"
+# alias mpv="LANG=en_US.utf8 $mpv $mpvDefaultOptions"
 mpvnoconfig="mpv --no-config"
 alias mpvnoconfig="$mpvnoconfig"
 
@@ -32,10 +32,9 @@ function mpv {
 	local mpv="$(which mpv)"
 	local mpvOptions="$mpvDefaultOptions"
 
-	for url
-	do
-		LANG=en_US.utf8 $mpv "$mpvOptions" "$url"
-	done
+	moveAudio2FirstConnectedBluetoothDevice
+
+	LANG=en_US.utf8 $mpv "$mpvOptions" "$url"
 }
 function mpv2 {
 	local mpv="$(which mpv)"
