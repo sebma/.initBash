@@ -22,8 +22,8 @@ function cleanMPVStatusLine {
 function moveAudio2FirstConnectedBluetoothDevice {
 	bluezSinkOutput=$(pactl list sinks short | awk '/bluez_sink.*SUSPENDED/{printf$1;exit}')
 	if [ -n "$bluezSinkOutput" ];then # If connected to a bluetooth audio device and the sink is SUSPENDED
-		pactl list sink-inputs short | awk '/protocol-native.c/{print$1}' | while read sink_input;
-		do
+		pactl list sink-inputs short | awk '/protocol-native.c/{print$1}' | while read sink_input;do
+			echo "=> pactl move-sink-input $sink_input $bluezSinkOutput ..."
 			pactl move-sink-input $sink_input $bluezSinkOutput
 		done
 	fi
