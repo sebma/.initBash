@@ -11,6 +11,7 @@ if tty -s;then
 	elif pacmd dump | \grep -q "default-sink.*bluez_sink" && pactl list sinks short | \grep -q "hdmi-stereo\s.*RUNNING";then
 		echo "=> moveAudio2ConnectedBlueToothSink.sh"
 		moveAudio2ConnectedBlueToothSink.sh
+		pactl set-default-sink $(pactl list sinks short | awk '/bluez_sink/{printf$2}')
 		echo
 	fi
 fi
