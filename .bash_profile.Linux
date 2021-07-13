@@ -21,36 +21,33 @@ if [ -e $HOME/$cacheLinkName ];then
 
 	if ! [ -L $HOME/$cacheLinkName ];then
 		echo "=> COUCOU 2"
-		ls -ld $HOME/$cacheLinkName
 
 		rm -fr /tmp/$USER/$cacheLinkName/
 		mkdir -pv /tmp/$USER
 		if [ -d $HOME/$cacheLinkName ];then
 			echo "=> COUCOU 3"
-			ls -ld $HOME/$cacheLinkName
 
 			mv -v $HOME/$cacheLinkName /tmp/$USER/
 		else
 			echo "=> COUCOU 4"
-			ls -ld $HOME/$cacheLinkName
 
 			rm -v $HOME/$cacheLinkName
 		fi
 
-		echo "=> COUCOU 5"
 		ln -vs /tmp/$USER/$cacheLinkName
+
+		echo "=> COUCOU 5"
 		ls -ld $HOME/$cacheLinkName
 	else
 		echo "=> COUCOU 6"
-		ls -ld $HOME/$cacheLinkName
 		:
 	fi
 else
-	echo "=> COUCOU 7"
-	ls -ld $HOME/$cacheLinkName
-
 	mkdir -pv /tmp/$USER/$cacheLinkName
 	ln -vs /tmp/$USER/$cacheLinkName
+
+	echo "=> COUCOU 7"
+	ls -ld $HOME/$cacheLinkName
 fi
 set +x
 
