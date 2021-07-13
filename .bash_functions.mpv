@@ -34,7 +34,7 @@ function mpv {
 
 	moveAudio2FirstConnectedBluetoothDevice
 
-	LANG=en_US.utf8 $mpv "$mpvOptions" "$url"
+	LANG=en_US.utf8 $mpv "$mpvOptions" "$@"
 }
 function mpv2 {
 	local mpv="$(which mpv)"
