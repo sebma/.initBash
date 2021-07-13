@@ -17,7 +17,6 @@ ls -ld $HOME/$cacheLinkName
 
 if [ -e $HOME/$cacheLinkName ];then
 	echo "=> COUCOU 1"
-	ls -ld $HOME/$cacheLinkName
 
 	if ! [ -L $HOME/$cacheLinkName ];then
 		echo "=> COUCOU 2"
