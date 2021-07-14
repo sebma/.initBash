@@ -217,6 +217,34 @@ function processChildren {
         return 2
 	fi
 }
+function psAncestors {
+	local processName
+	test $# != 1 && {
+		echo "=> Usage: $FUNCNAME processName" >&2
+		return 1
+	} || processName=$1
+
+	if ps -C $processName >/dev/null;then
+		pstree -a -h -p -T $(pidof -s $processName) -s
+	else
+		echo "=> WARNING: The process of pid <$ppid> is not here anymore" >&2
+        return 2
+	fi
+}
+function psHeirs {
+	local processName
+	test $# != 1 && {
+		echo "=> Usage: $FUNCNAME processName" >&2
+		return 1
+	} || processName=$1
+
+	if ps -C $processName >/dev/null;then
+		pstree -a -h -p -T $(pidof -s $processName)
+	else
+		echo "=> WARNING: The process of pid <$ppid> is not here anymore" >&2
+        return 2
+	fi
+}
 function processENV_Variables {
 	local processName=$1
 	local -i pid=0
