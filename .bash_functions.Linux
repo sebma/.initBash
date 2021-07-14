@@ -221,7 +221,7 @@ function processENV_Variables {
 	local processName=$1
 	local -i pid=0
 	local varNAME=$2
-	pid=$(\pgrep -f $processName)
+	pid=$(\pidof -s $processName)
 	[ $pid != 0 ] && tr '\0' '\n' < /proc/$pid/environ | egrep -v "^hidden=" | grep -P "^[^\s%]+=" | sort -u | egrep -w "$varNAME"
 }
 function topf {
