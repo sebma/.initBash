@@ -227,7 +227,7 @@ function psAncestors {
 	if ps -C $processName >/dev/null;then
 		pstree -a -h -p -T $(pidof -s $processName) -s
 	else
-		echo "=> WARNING: The process of pid <$ppid> is not here anymore" >&2
+		echo "=> WARNING: The process <$processName> is not here anymore" >&2
         return 2
 	fi
 }
@@ -241,7 +241,7 @@ function psHeirs {
 	if ps -C $processName >/dev/null;then
 		pstree -a -h -p -T $(pidof -s $processName)
 	else
-		echo "=> WARNING: The process of pid <$ppid> is not here anymore" >&2
+		echo "=> WARNING: The process <$processName> is not here anymore" >&2
         return 2
 	fi
 }
