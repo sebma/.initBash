@@ -246,11 +246,21 @@ function psHeirs {
 	fi
 }
 function processENV_Variables {
+	if [ $# != 1 ] && [ $# != 2 ];then
+		echo "=> Usage: $FUNCNAME processName [varNAME]" >&2
+		return 1
+	fi
+
 	local processName=$1
 	local -i pid=0
-	local varNAME=$2
 	pid=$(\pidof -s $processName)
-	[ $pid != 0 ] && tr '\0' '\n' < /proc/$pid/environ | egrep -v "^hidden=" | grep -P "^[^\s%]+=" | sort -u | egrep -w "$varNAME"
+
+	if [ $# = 1 ];then
+		[ $pid != 0 ] && tr '\0' '\n' < /proc/$pid/environ | \egrep -v "^hidden=" | \grep -P "^[^\s%]+=" | sort -u
+	elif [ $# = 2 ];then
+		local varNAME=$2
+		[ $pid != 0 ] && tr '\0' '\n' < /proc/$pid/environ | \egrep -v "^hidden=" | \grep -P "^[^\s%]+=" | sort -u | egrep -w "$varNAME"
+	fi
 }
 function topf {
 	$find . -xdev $findPrunePathsExpression -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | head -n "$1" | numfmt --field 5 --from=iec --to=iec-i --suffix=B | column -t
