@@ -47,7 +47,7 @@ initDir=$HOME/$initDir
 export HISTSIZE=2000
 export HISTFILESIZE=4000
 #export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
-test $HOSTNAME || export HOSTNAME=$(hostname | cut -d. -f1)
+test $HOSTNAME && export HOSTNAME || export HOSTNAME=$(hostname | cut -d. -f1)
 export EDITOR=vim
 export UPMC_ID=3607968
 export UPMC=$UPMC_ID@ssh.ufr-info-p6.jussieu.fr
