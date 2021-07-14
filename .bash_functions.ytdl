@@ -602,7 +602,7 @@ function ytdlUpdate {
 			local ytdlLatestRelease=$(\git ls-remote --tags --refs $ytdlGitURL | awk -F/ '{print$NF}' | sort -rV | head -1)
 			set +o pipefail
 		else
-			ytdlLatestRelease=$(printf "%04d.%02d.%02d" $(echo $ytdlLatestRelease | sed "s/\.[0-9]\+//3g" | tr . " "))
+			ytdlLatestRelease=$(printf "%04d.%02d.%02d" $(echo $ytdlLatestRelease | cut -d. -f1-3 | tr . " "))
 			echo "=> Found the $ytdlLatestRelease version." >&2
 		fi
 
