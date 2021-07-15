@@ -535,7 +535,7 @@ function ytdlGetVideoIDsFromPlayListURL {
 	echo $service
 	test "$playListURL" && $ytdlnoconfig  --ignore-errors --flat-playlist -j "$playListURL" | jq -r .id
 }
-function ytdlGetLiveURL {
+function ytdlGetFirstURL {
 	local youtube_dl=$(which youtube-dl)
 	local url="$1"
 	set -o pipefail
