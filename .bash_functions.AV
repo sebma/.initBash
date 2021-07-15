@@ -625,7 +625,7 @@ function videoDVDInfo {
 	longestTrack=$(\lsdvd -Oy | awk -F ':|,| ' '/longest_track/{print$(NF-1)}')
 	tccat -i $cdr_device -T $longestTrack,-1 2>/dev/null | $ffprobe - 2>&1
 }
-function ffprobeFileOrURL {
+function ffprobe {
 	which ffprobe >/dev/null && {
 		for arg
 		do
