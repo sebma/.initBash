@@ -620,11 +620,6 @@ function containerOfFile {
 function cropdetect {
 	ffmpeg -i "$1" -t 1 -vf cropdetect -f null - 2>&1 | awk '/crop/{line=$NF}END{print line}'
 }
-function videoDVDInfo {
-	cdr_device=/dev/dvd
-	longestTrack=$(\lsdvd -Oy | awk -F ':|,| ' '/longest_track/{print$(NF-1)}')
-	tccat -i $cdr_device -T $longestTrack,-1 2>/dev/null | $ffprobe - 2>&1
-}
 function ffprobe {
 	which ffprobe >/dev/null && {
 		for arg
@@ -1079,6 +1074,11 @@ function videoDelay {
 	local delay=$2
 	local extension=${video/*./}
 	time $ffmpeg -i "$video" -itsoffset $delay -i "$video" -c copy -map 1:v -map 0:a "${video%.*}-FIXED.$extension" #cf. https://superuser.com/questions/982342/in-ffmpeg-how-to-delay-only-the-audio-of-a-mp4-video-without-converting-the-au/983153#983153
+}
+function videoDVDInfo {
+	cdr_device=/dev/dvd
+	longestTrack=$(\lsdvd -Oy | awk -F ':|,| ' '/longest_track/{print$(NF-1)}')
+	tccat -i $cdr_device -T $longestTrack,-1 2>/dev/null | $ffprobe - 2>&1
 }
 function videoGet {
 	ls "$@" >/dev/null || return
