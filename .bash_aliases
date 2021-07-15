@@ -30,6 +30,7 @@ alias 2si='\numfmt  --to=si    --suffix=B --format=%.1f'
 alias 2upper=toupper
 alias Cut='\cut -c 1-$COLUMNS'
 alias Pgreplast="greplast -P"
+alias _2spaces="sed 's/[_-]/ /g'"
 alias acp='\advcp -gpuv'
 alias amv='\advmv -gvi'
 alias any2dos="\perlSed 's/\R/\r\n/g'"
@@ -287,6 +288,7 @@ alias sink-inputs='\pactl list sink-inputs short'
 alias sinks='\pactl list sinks short'
 alias sortip="\sort -nt. -k1,1 -k2,2 -k3,3 -k4,4"
 alias sources="grep -woP '[Ss]ource\s[^{ ]*\"?'"
+alias spaces2_="sed 's/ /_/g'"
 alias speedtestSimple="time \speedtest --simple"
 alias sshStatusLocalForward="command ssh -O check"
 alias sshStopLocalForward="command ssh -O exit"
