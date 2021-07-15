@@ -19,6 +19,7 @@ function buildSourceCode {
 
 	if [ $returnCode = 0 ] && ( [ -s Makefile ] || [ -s makefile ] || [ -s GNUmakefile ] )
 	then
+		echo "=> make ..."
 		if make
 		then
 			test -n "$CC" && echo "=> CC = $CC"
@@ -32,13 +33,16 @@ function buildSourceCode {
 						if git rev-parse --git-dir >/dev/null 2>&1;then
 							checkinstallWithGitRepoInformation
 						else
+							echo "=> sudo checkinstall ..."
 							sudo checkinstall
 						fi
 					else
+						echo "=> sudo $make install ..."
 						sudo $make install
 					fi
 					returnCode=$?
 				else
+					echo "=> make install ..."
 					make install
 					returnCode=$?
 				fi
@@ -165,9 +169,11 @@ function configure {
 		if groups | \egrep -wq "sudo|adm|root" && echo $prefix | grep -q /usr
 		then
 			unset CC
+			echo "=> cmake .. $@"
 			cmake .. $@
 		else
 			unset CC
+			echo "=> cmake .. -DPREFIX=$prefix -DEPREFIX=$prefix $@ ..."
 			cmake .. -DPREFIX=$prefix -DEPREFIX=$prefix $@
 		fi
 		returnCode=$?
@@ -184,9 +190,11 @@ function configure {
 					set -x
 					time ./$autoconfProg $configureArgs || time ./$autoconfProg
 					returnCode=$?
+					set +x
 					break
 				fi
 			done
+			set -x
 			if [ $returnCode = 0 ]
 			then
 				if [ -x ./waf ]
