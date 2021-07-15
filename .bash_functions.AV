@@ -625,6 +625,7 @@ function ffprobe {
 		for arg
 		do
 			echo "$arg" | \egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $ffprobe $ffprobeOptions "$(youtube-dl -gf best -- "$arg")" || $ffprobe $ffprobeOptions "$arg"
+			echo
 		done 2>&1
 	}
 }
