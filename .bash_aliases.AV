@@ -5,7 +5,6 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 alias addCover2mp4=addThumbnail2mp4_AtomicParsley
 alias ffmpeg="time \ffmpeg -hide_banner"
 alias ffplay="\ffplay -hide_banner"
-alias ffprobe="time \ffprobe -hide_banner"
 alias keyFrames="command ffprobe -hide_banner -loglevel error -skip_frame nokey -select_streams v:0 -show_entries frame=pkt_pts_time -of csv=print_section=0"
 alias mp32wavstdout="\mpg123 --wav - "
 alias ogg2wavstdout="\oggdec --output=- "
