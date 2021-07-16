@@ -5,12 +5,17 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 function gitClone {
 	local repoURL=$1
 	local owner=""
-	test $# = 1 && owner=$(basename $(dirname $repoURL)) && mkdir $owner && cd $owner && git clone $repoURL && cd $(basename $repoURL .git)
+	test $# = 1 && owner=$(basename $(dirname $repoURL)) && mkdir -p $owner && cd $owner && git clone $repoURL && cd $(basename $repoURL .git)
 }
 function gitCloneHome {
 	test $# -ge 1 && gitCloneNonEmptyDir $@ $HOME
 }
 function gitCloneNonEmptyDir {
+	test $# != 1 && [ $# != 2 ] && {
+		echo "=> Usage: $FUNCNAME url [dir=.]" >&2
+		return 1
+	}
+
 	local url="$1"
 	local dir="$2"
 	test $dir || dir=.
