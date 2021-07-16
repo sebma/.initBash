@@ -423,7 +423,8 @@ function distribName {
 
 	if [ $osFamily = Linux ]; then
 		if which lsb_release > /dev/null; then
-			osName=$(lsb_release -si | awk '{print tolower($0)}')
+			osName=$(lsb_release -si)
+			osName=${osName,} # Converts 1st letter to lower case cf. man bash | grep -m1 -B4 -A10 ,,
 			[ $osName = "n/a" ] && osName=$(source /etc/os-release && echo $ID)
 		elif [ -s /etc/os-release ]; then
 			osName=$(source /etc/os-release && echo $ID)
