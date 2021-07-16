@@ -214,7 +214,16 @@ function move_Extra_Keys_To_Main_APT_KeyRing {
 }
 function reinstallOrignialPackages {
 	local packagesList=$@
-	test $# != 0 && sudo $apt install -V $(printf "%s/$(lsb_release -sc) " $packagesList)
+	local distribName=$(\lsb_release -si)
+	distribName=${distribName,} # Converts 1st letter to lower case cf. man bash | grep -m1 -B4 -A10 ,,
+	local distribCodeName=$(\lsb_release -sc)
+
+#	test $# != 0 && sudo $apt install -V $(printf "%s/$(lsb_release -sc) " $packagesList)
+	for pkg
+	do
+		version=$(apt-cache policy $pkg| \sed -zr 's/[*]{3}/   /g;s/([0-9]+)\n/\1 /g' | awk "/ppa|:$/{next}/[0-9]+\..*https?:.*$distribName.*$distribCodeName/"'{printf$1;exit}')
+		sudo $apt install -V $pkg=$version
+	done
 }
 function removePackages {
 	#echo "=> regexp = $regexp" >&2
