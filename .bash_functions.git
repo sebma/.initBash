@@ -2,10 +2,20 @@
 ! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
+export myGitHubUser=sebma
 function gitClone {
 	local repoURL=$1
 	local owner=""
-	test $# = 1 && owner=$(basename $(dirname $repoURL)) && project=$(basename $repoURL .git) && mkdir -p $owner && cd $owner && git clone $repoURL && cd $project && git config remote.origin.pushurl git@github.com:sebma/$project && git config remote.origin.pushurl
+	if test $# = 1;then
+		owner=$(basename $(dirname $repoURL))
+		project=$(basename $repoURL .git)
+		mkdir -p $owner && cd $owner 
+		if git clone $repoURL && cd $project;then
+			# Commande a recopier manuellement pour autres les depos. dont la pushurl n'est pas configuree
+			git config remote.origin.pushurl git@github.com:$myGitHubUser/${PWD/*\/}
+			git config remote.origin.pushurl
+		fi
+	fi
 }
 function gitCloneHome {
 	test $# -ge 1 && gitCloneNonEmptyDir $@ $HOME
