@@ -5,7 +5,7 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 function gitClone {
 	local repoURL=$1
 	local owner=""
-	test $# = 1 && owner=$(basename $(dirname $repoURL)) && mkdir -p $owner && cd $owner && git clone $repoURL && cd $(basename $repoURL .git)
+	test $# = 1 && owner=$(basename $(dirname $repoURL)) && project=$(basename $repoURL .git) && mkdir -p $owner && cd $owner && git clone $repoURL && cd $project && git config remote.origin.pushurl git@github.com:sebma/$project && git config remote.origin.pushurl
 }
 function gitCloneHome {
 	test $# -ge 1 && gitCloneNonEmptyDir $@ $HOME
