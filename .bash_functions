@@ -1343,13 +1343,13 @@ function processSPY {
 	watchProcess $@
 }
 function processUsage {
-	local columns="rssize,pmem,pcpu,pid,args"
+	local columns="rssize,user:12,pmem,pcpu,pid,args"
 	local ps=$(which ps)
 #	local headers=$($ps -e -o $columns | grep -v grep.*COMMAND | \grep COMMAND)
-	local headers=" RSS\t       %MEM %CPU  PID   COMMAND"
+	local headers=" RSS\t       USER %MEM %CPU  PID   COMMAND"
 	echo -e "$headers" >&2
 	# "tail -n +1" ignores the SIGPIPE
-	$ps -e -o $columns | sort -nr | cut -c-156 | head -500 | awk '!/COMMAND/{printf "%9.3lf MiB %4.1f%% %4.1f%% %5d %s\n", $1/1024,$2,$3,$4,$5}' | tail -n +1 | head -45
+	$ps -e -o $columns | sort -nr | cut -c-156 | head -500 | awk '!/COMMAND/{printf "%9.3lf MiB %12s %4.1f%% %4.1f%% %5d %s\n", $1/1024,$2,$3,$4,$5,$6}' | tail -n +1 | head -45
 }
 function psSeb { # Les fontions qui avaient le meme nom que les commands sont exportes et visibles dans les bash, c_est dangereux
 	local ps=$(which ps)
@@ -1675,8 +1675,8 @@ function timeprocess {
 	test -n "$pid" && $ps -o pid,etime,cmd -fp $pid
 }
 function totalSize {
-	local column=$1
-	awk "{print \$$column}" | LC_ALL=C numfmt --from=iec | paste -sd+ | bc | numfmt --to=iec-i --suffix=B
+	local column=1
+	awk -v column=$column '{print $column}' | LC_ALL=C numfmt --from=iec | paste -sd+ | bc | numfmt --to=iec-i --suffix=B
 }
 function txt2pdf {
 	for file
