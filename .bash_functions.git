@@ -13,6 +13,7 @@ function gitClone {
 		if git clone $repoURL && cd $project;then
 			# Commande a recopier manuellement pour autres les depos. dont la pushurl n'est pas configuree
 			git config remote.origin.pushurl git@github.com:$myGitHubUser/${PWD/*\/}
+			printf "=> remote.origin.pushurl = "
 			git config remote.origin.pushurl
 		fi
 	fi
