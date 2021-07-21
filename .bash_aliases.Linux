@@ -31,10 +31,10 @@ test "$wiFiInterface" && {
 
 which lspci >/dev/null && {
 	alias lspci="\lspci -nn"
-	alias lspciSimple="\lspci -vmk -nn"
+	alias lspciSimple="\lspci -nnvmk"
 	alias lsgpu="\lspci -nnd ::300"
-	alias northBridge="\lspci -nnvs 0:0.0 | egrep '^00:|Kernel|Subsystem'"
-	alias southBridge="\lspci -d ::601"
+	alias northBridge="\lspci -nns 0:0.0"
+	alias southBridge="\lspci -nnd ::601"
 	alias lsvga=lsgpu
 }
 
