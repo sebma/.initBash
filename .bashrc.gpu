@@ -4,7 +4,7 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 
 if [ $osFamily = Linux ] && which lspci >/dev/null
 then
-	if lspci | grep -qi nvidia
+	if \lspci -nnd ::300 | grep -qi nvidia
 	then
 		alias nvidiaVersion="cat /proc/driver/nvidia/version"
 		alias cudaVersion="nvcc -V"
