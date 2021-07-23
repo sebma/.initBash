@@ -1001,7 +1001,7 @@ function to16_9 {
 	done
 }
 function urlOfVideo {
-	local extension
+	local format_name=unknown
 	for video
 	do
 		format_name="$(videoFormat $video)"
