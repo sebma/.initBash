@@ -1004,11 +1004,11 @@ function urlOfVideo {
 	local extension
 	for video
 	do
-		extension="${video/*./}"
-		case $extension in
-		mp4|m4a|m4b|m4v) tag=description;;
-		webm|mkv) tag=purl;;
-		*) echo "=> The $extension is not supported yet." >&2 && continue;;
+		format_name="$(videoFormat $video)"
+		case $format_name in
+			mov,mp4,m4a,3gp,3g2,mj2) tag=description;;
+			matroska,webm) tag=purl;;
+		*) echo "=> The $format_name is not supported yet." >&2 && continue;;
 		esac
 		echo "=> video = $video"
 		$ffprobe -v error -show_entries format_tags=$tag -of default=noprint_wrappers=1:nokey=1 "$video"
@@ -1080,6 +1080,13 @@ function videoDVDInfo {
 	cdr_device=/dev/dvd
 	longestTrack=$(\lsdvd -Oy | awk -F ':|,| ' '/longest_track/{print$(NF-1)}')
 	tccat -i $cdr_device -T $longestTrack,-1 2>/dev/null | $ffprobe - 2>&1
+}
+function videoFormat {
+	local format_name=unknown
+	for video
+	do
+		$ffprobe -v error -of default=noprint_wrappers=1:nokey=1 -show_entries format=format_name "$video"
+	done
 }
 function videoGet {
 	ls "$@" >/dev/null || return
