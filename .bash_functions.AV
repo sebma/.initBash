@@ -1011,7 +1011,8 @@ function urlOfVideo {
 		*) echo "=> The $format_name is not supported yet." >&2 && continue;;
 		esac
 		[ $# -gt 1 ] && printf "=> video = $video\t url = "
-		$ffprobe -v error -show_entries format_tags=$tag -of default=noprint_wrappers=1:nokey=1 "$video"
+		url=$($ffprobe -v error -show_entries format_tags=$tag -of default=noprint_wrappers=1:nokey=1 "$video")
+		echo $url
 	done
 }
 function urlinfo {
