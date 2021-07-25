@@ -151,7 +151,9 @@ alias headlines='\head -n $((LINES-2))'
 alias hexdump="\hexdump -Cc" || alias hexdump="\od -tx1z"
 alias highlight="\highlight -O ansi --force"
 alias html2json="\pup 'json{}'"
-alias html2xml="\xmllint --html --format --recover --xmlout"
+alias html2xml=html2xml_via_xmllint
+alias html2xml_via_xmllint="\xmllint --html --format --recover --xmlout"
+alias html2xml_via_xmlstarlet="\xmlstarlet format --quiet --html --recover"
 alias htmldecode="perl -MHTML::Entities -pe 'decode_entities(\$_)'"
 alias htmlencode="perl -MHTML::Entities -pe 'encode_entities(\$_)'"
 alias install="\install -pv"
