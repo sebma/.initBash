@@ -629,7 +629,7 @@ function getShellFunctions {
 function getURLTitle {
 	for url
 	do
-		printf "=> $url : " >&2
+		printf "$url # " >&2
 		if which xidel >/dev/null;then
 			xidel -s --css 'head title' "$url"
 		elif which pup >/dev/null;then
