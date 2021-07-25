@@ -242,8 +242,8 @@ function updateRepositoryKeys {
 function website {
 	for pkg
 	do
-		command apt-cache show $pkg | egrep "Homepage:|Package:" | sort -u
-#		open $(command apt-cache show $pkg | egrep "Homepage:" | sort -u)
+		printf "Package: $pkg "
+		command apt-cache show $pkg | grep "Homepage:" | uniq
 	done
 }
 
