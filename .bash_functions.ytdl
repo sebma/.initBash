@@ -130,7 +130,7 @@ function getPlaylistsRestrictedFilenamesFSD {
 			listOfUrls=$(hxwls 2>/dev/null "$playList" | awk -F '&' '/\<(watch|video)\>/{print$1}' | sort -u | paste -sd" ")
 			test $? != 0 && return
 		else
-			fqdn=$(echo "$playList" | sed "s|https?://||" | cut -d/ -f1)
+			fqdn=$(echo "$playList" | sed "s|https\?://||" | cut -d/ -f1)
 			service=$(echo $fqdn | awk -F. '{print$(NF-1)}')
 			listOfUrls=$(time getVideoURLsFromVideoIDs $(ytdlGetVideoIDsFromPlayListURL $playList))
 		fi
@@ -156,7 +156,7 @@ function getPlaylistsRestrictedFilenamesFORMAT {
 			listOfUrls=$(hxwls 2>/dev/null "$playList" | awk -F '&' '/\<(watch|video)\>/{print$1}' | sort -u | paste -sd" ")
 			test $? != 0 && return
 		else
-			fqdn=$(echo "$playList" | sed "s|https?://||" | cut -d/ -f1)
+			fqdn=$(echo "$playList" | sed "s|https\?://||" | cut -d/ -f1)
 			service=$(echo $fqdn | awk -F. '{print$(NF-1)}')
 			listOfUrls=$(time getVideoURLsFromVideoIDs $(ytdlGetVideoIDsFromPlayListURL $playList))
 		fi
@@ -179,7 +179,7 @@ function getPlaylistsRestrictedFilenamesHD {
 		then
 			listOfUrls=$(hxwls 2>/dev/null "$playList" | awk -F '&' '/\<(watch|video)\>/{print$1}' | sort -u | paste -sd" ")
 		else
-			fqdn=$(echo "$playList" | sed "s|https?://||" | cut -d/ -f1)
+			fqdn=$(echo "$playList" | sed "s|https\?://||" | cut -d/ -f1)
 			service=$(echo $fqdn | awk -F. '{print$(NF-1)}')
 			listOfUrls=$(time getVideoURLsFromVideoIDs $(ytdlGetVideoIDsFromPlayListURL $playList))
 		fi
@@ -203,7 +203,7 @@ function getPlaylistsRestrictedFilenamesSD {
 			listOfUrls=$(hxwls 2>/dev/null "$playList" | awk -F '&' '/\<(watch|video)\>/{print$1}' | sort -u | paste -sd" ")
 			test $? != 0 && return
 		else
-			fqdn=$(echo "$playList" | sed "s|https?://||" | cut -d/ -f1)
+			fqdn=$(echo "$playList" | sed "s|https\?://||" | cut -d/ -f1)
 			service=$(echo $fqdn | awk -F. '{print$(NF-1)}')
 			listOfUrls=$(time getVideoURLsFromVideoIDs $(ytdlGetVideoIDsFromPlayListURL $playList))
 		fi
