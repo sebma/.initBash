@@ -631,10 +631,9 @@ function getURLTitle {
 	do
 		printf "=> $url : " >&2
 		if which xidel >/dev/null;then
-			xidel -s -e //title "$url"
+			xidel -s --css 'head title' "$url"
 		elif which pup >/dev/null;then
-			\curl -Ls "$url" | pup --charset utf8 'title text{}'
-#		fi | \recode html..latin9
+			\curl -Ls "$url" | pup --charset utf8 'head title text{}'
 		fi
 	done
 }
