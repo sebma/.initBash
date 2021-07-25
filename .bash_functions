@@ -755,11 +755,12 @@ function html2pdf {
 	open $pdfFiles
 }
 function htmlReIndent {
+	test $# = 1 && [ $1 = - ] && xmllint --html --format - && return
 	for file
 	do
-		xmllint --html --format --htmlout "$file" 2>/dev/null > "${file/.*/.indented.html}"
+		xmllint --html --format "$file" 2>/dev/null > "${file/.*/.indented.html}"
 		[ $? != 0 ] && echo "=> WARNING: xmllint could not re-indent $file." >&2 && continue
-		\mv "${file/.*/.indented.html}".indented "$file"
+		\mv -v "${file/.*/.indented.html}".indented "$file"
 	done | sort -u
 }
 function httpLocalServer {
