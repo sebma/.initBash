@@ -242,7 +242,7 @@ function updateRepositoryKeys {
 function website {
 	for pkg
 	do
-		printf "Package: $pkg "
+		printf "Package: $pkg\t"
 		command apt-cache show $pkg | grep "Homepage:" | uniq
 	done
 }
