@@ -85,8 +85,9 @@ hostname=$HOSTNAME
 test -r $initDir/.bashrc.$osID && Source $initDir/.bashrc.$osID # Pour les OS derives de $osFamily
 
 test -r $initDir/.colors && Source $initDir/.colors
+test -n "$SSH_CLIENT" && sshPrompt=" : ${colors[red]}SSH "
 #PROMPT_COMMAND='echo -ne "\033]0;$USER : $hostname @ $domain / $system : $(date +"%A %d %B %Y %H:%M") $PWD\007"'
-PS1="$user : $blink${colors[red]}$hostname$normal @ $bold${colors[blue]}$domain / $italics${colors[green]}$system : $bold${colors[blue]}\w$normal
+PS1="$user : $blink${colors[red]}$hostname$normal$sshPrompt @ $bold${colors[blue]}$domain / $italics${colors[green]}$system : $bold${colors[blue]}\w$normal
  "
 
 jupyterRuntimeDIR=$(jupyter --runtime-dir 2>/dev/null)
