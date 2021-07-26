@@ -2,7 +2,9 @@
 [ $BASH_VERSINFO = 3 ] && [ -x ~/usr/local/bin/bash ] && exec ~/usr/local/bin/bash -l
 test -z "$initDir" && export initDir=$HOME/.initBash
 ! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
-test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
+test "$debug" -gt 0 && tty -s && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
+
+if tty -s;then function Echo { echo -e "$@"; } else function Echo { : ; } fi
 
 echo $OSTYPE | grep -q android && export osFamily=Android || export osFamily=$(uname -s)
 
@@ -105,12 +107,20 @@ export RSYNC_EXCLUSION=$(printf -- "--exclude %s/ " /dev /sys /run /proc)
 
 if [ $osFamily = Linux ] || [ $osFamily = Darwin ]
 then
-	tty -s && echo
+	Echo
 	if which ssh-agent >/dev/null 2>&1; then
-		if ! env | grep -q SSH_CLIENT; then # Si on est PAS a l autre bout d une connection ssh
-			pgrep -u $USER ssh-agent >/dev/null 2>&1 || { tty -s && echo "=> Starting the ssh-agent for $USER ..." >&2; eval $(ssh-agent -s) >/dev/null; }
+		tty -s && Echo "=> Testing if not logged through ssh i.e if the SSH_CLIENT variable is not set ..." >&2
+		if test -z "$SSH_CLIENT"; then # Si on est PAS a l autre bout d une connection ssh
+			tty -s && Echo "=> Testing if the ssh-agent is loaded ..." >&2
+			if pgrep -u $USER ssh-agent >/dev/null 2>&1;then
+				Echo "=> The ssh-agent is already running." >&2
+			else
+				Echo "=> Starting the ssh-agent for $USER ..." >&2
+				eval $(ssh-agent -s) >/dev/null
+			fi
 		fi
 		pgrep -lfu $USER ssh-agent 2>/dev/null
+		Echo >&2
 	fi
 	
 	#Definition des parametres de proxy dans cpan
