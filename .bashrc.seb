@@ -137,8 +137,8 @@ then
 	grep -qw pdflatex= $HOME/.pdfnup.conf || echo pdflatex=$(which pdflatex) >> $HOME/.pdfnup.conf
 fi
 
-tty -s && which ssh-add >/dev/null && {
-	if ! ssh-add -l 2>/dev/null | grep -q "$UPMC_ID"
+tty -s && { # For interactive shell sessions
+	if which ssh-add >/dev/null && ! ssh-add -l 2>/dev/null | grep -q "$UPMC_ID"
 	then
 		if test -s ~/.ssh/.$UPMC_ID; then
 			if ! env | grep -q SSH_CLIENT; then # Si on est PAS a l autre bout d une connection ssh
@@ -146,7 +146,8 @@ tty -s && which ssh-add >/dev/null && {
 				Echo "=> Loading my ssh key from <$(basename $BASH_SOURCE)> ..."
 				tty | egrep -q "tty[0-9]+$" && set -x
 #				timeout -v -k 15s -s SIGKILL 10s ssh-add ~/.ssh/.$UPMC_ID >/dev/null && Echo "=> ssh key successfully loaded." >&2 || Echo "=> Failed loading ssh key." >&2
-				ssh-add ~/.ssh/.$UPMC_ID >/dev/null && Echo "=> ssh key successfully loaded." >&2 || Echo "=> Failed loading ssh key." >&2
+				ssh-add ~/.ssh/.$UPMC_ID >/dev/null && echo "=> ssh key successfully loaded." >&2 || echo "=> COUCOU: Failed loading ssh key." >&2
+				echo >&2
 				set +x
 				trap - INT
 			fi
