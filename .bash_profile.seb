@@ -114,6 +114,7 @@ then
 			tty -s && Echo "=> Testing if the ssh-agent is loaded ..." >&2
 			if pgrep -u $USER ssh-agent >/dev/null 2>&1;then
 				Echo "=> The ssh-agent is already running." >&2
+				# Connecting to the already ssh-agent if SSH_AGENT_PID and/or SSH_AUTH_SOCK are unset
 				test -z "$SSH_AGENT_PID" && export SSH_AGENT_PID=$(\pgrep -n ssh-agent)
 				test -z "$SSH_AUTH_SOCK" && export SSH_AUTH_SOCK=$(\ls /tmp/ssh-*/agent.$(($SSH_AGENT_PID-1)))
 			else
