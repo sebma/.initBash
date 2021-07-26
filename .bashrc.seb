@@ -8,6 +8,8 @@ unset sebInterpreter
 
 if tty -s;then function Echo { echo -e "$@"; } else function Echo { : ; } fi
 
+Echo "$(date)"
+
 function Debug { test "$debug" -gt 0 && echo "$bold${colors[blue]}$@$normal"; }
 
 function Source { test "$debug" -gt 0 && { time . "$@";echo;true; } || { . "$@" ; } ; }
@@ -121,8 +123,8 @@ then
 	fi
 	trap - INT
 
+	which randverse >/dev/null 2>&1 && randverse
 	echo
-	which randverse >/dev/null 2>&1 && randverse && echo
 fi
 
 if which xdg-mime >/dev/null && [ $osID != sailfishos ]
@@ -170,7 +172,6 @@ which register-python-argcomplete >/dev/null 2>&1 && eval "$(register-python-arg
 
 #[[ -s "$HOME/.rvm/scripts/rvm" ]] && Source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 
-Echo "$(date)\n"
 # pidof cupsd >/dev/null && Echo "=> The cups admin console is available at http://localhost:631/admin\n"
 
 which brew >/dev/null 2>&1 && test -r $initDir/.bashrc.brew && Source $initDir/.bashrc.brew
