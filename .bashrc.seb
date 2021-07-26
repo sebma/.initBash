@@ -123,7 +123,7 @@ then
 	fi
 	trap - INT
 
-	which randverse >/dev/null 2>&1 && randverse
+#	which randverse >/dev/null 2>&1 && randverse
 	echo
 fi
 
