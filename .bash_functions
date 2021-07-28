@@ -354,7 +354,12 @@ function condaSearchThroughChannels {
 }
 function convertion {
 	local lastArg="${@: -1}"
-	units -t "$@" | tr -d "\n";echo " $lastArg"
+	local retCode=unset
+	units -t "$@" | tr -d "\n"
+	retCode=$?
+	echo " $lastArg"
+
+	return $retCode
 }
 function createSshTunnel {
 	test $# -lt 3 && {
