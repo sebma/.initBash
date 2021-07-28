@@ -3,16 +3,15 @@
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 if tty -s;then
-	if pacmd dump | \grep -q "default-sink.*analog-stereo";then
-		echo "=> moveAudio2HDMI.sh"
+	if pacmd dump | \grep -q "default-sink.*bluez_sink" && pactl list sinks short | \grep -q bluez_sink ;then
+		echo "=> moveAudio2ConnectedBlueToothSink.sh ..."
+		moveAudio2ConnectedBlueToothSink.sh
+		echo "=> DONE."
+	elif ! pactl list sinks short | \grep -q "hdmi-stereo.*RUNNING";then
+		echo "=> moveAudio2HDMI.sh ..."
 		moveAudio2HDMI.sh
 		pactl set-default-sink $(pactl list sinks short | awk '/hdmi-stereo/{printf$2}')
-		echo
-	elif pacmd dump | \grep -q "default-sink.*bluez_sink" && pactl list sinks short | \grep -q "hdmi-stereo\s.*RUNNING";then
-		echo "=> moveAudio2ConnectedBlueToothSink.sh"
-		moveAudio2ConnectedBlueToothSink.sh
-		pactl set-default-sink $(pactl list sinks short | awk '/bluez_sink/{printf$2}')
-		echo
+		echo "=> DONE."
 	fi
 fi
 
