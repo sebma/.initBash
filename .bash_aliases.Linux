@@ -55,7 +55,7 @@ alias isUEFI="[ -d /sys/firmware/efi ] && echo 'Session EFI' || echo 'Session no
 alias kwinRestart="\kwin --replace >/dev/null 2>&1 &"
 alias l="ls --color"
 alias lastme='last -w $USER'
-alias lastmeToday='lastme | \grep "$(LC_TIME=C date +%b\ %_d)"'
+alias lastmeToday='lastme | \egrep -e "$(LC_TIME=C date +%b\ %_d)"'
 alias ll="ls -blF --time-style=+'%Y-%m-%d %T'"
 alias llk="ll --block-size=K"
 alias llm="ll --block-size=M"
