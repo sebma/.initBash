@@ -3,14 +3,13 @@
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 if tty -s;then
-	if pacmd dump | \grep -q "default-sink.*bluez_sink" && pactl list sinks short | \grep -q bluez_sink ;then
+	if pactl list sinks short | \grep "bluez_sink.*SUSPENDED" -q;then
 		echo "=> moveAudio2ConnectedBlueToothSink.sh ..."
 		moveAudio2ConnectedBlueToothSink.sh
 		echo "=> DONE."
-	elif ! pactl list sinks short | \grep -q "hdmi-stereo.*RUNNING";then
+	elif pactl list sinks short | \grep "hdmi-stereo.*SUSPENDED" -q;then
 		echo "=> moveAudio2HDMI.sh ..."
 		moveAudio2HDMI.sh
-		pactl set-default-sink $(pactl list sinks short | awk '/hdmi-stereo/{printf$2}')
 		echo "=> DONE."
 	fi
 fi
