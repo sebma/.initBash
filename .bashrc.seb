@@ -197,7 +197,7 @@ fi
 test -r $initDir/.bashrc.gpu && Source $initDir/.bashrc.gpu
 
 # Load machine specific script
-# test -r $initDir/.bashrc.$HOSTNAME && Source $initDir/.bashrc.$HOSTNAME
+test -r $initDir/.bashrc.$HOSTNAME && Source $initDir/.bashrc.$HOSTNAME
 
 #Definitions de mes alias
 test -r $initDir/.bash_aliases && Source $initDir/.bash_aliases
