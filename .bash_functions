@@ -352,6 +352,10 @@ function condaSearchThroughChannels {
 		done
 	done
 }
+function convertion {
+	local lastArg="${@: -1}"
+	units -t "$@" | tr -d "\n";echo " $lastArg"
+}
 function createSshTunnel {
 	test $# -lt 3 && {
 		echo "=> Usage : $FUNCNAME <localPort> <remotePort> <remoteServer> <sshServer>"
