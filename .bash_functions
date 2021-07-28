@@ -355,8 +355,12 @@ function condaSearchThroughChannels {
 function convertion {
 	local lastArg="${@: -1}"
 	local retCode=unset
+
+	set -o pipefail
 	units -t "$@" | tr -d "\n"
 	retCode=$?
+	set +o pipefail
+	units -t "$@" | tr -d "\n"
 	echo " $lastArg"
 
 	return $retCode
