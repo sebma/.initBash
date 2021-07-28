@@ -1669,10 +1669,10 @@ function testURLsFromFILE {
 	done
 }
 function timeprocess {
-	local process=$1
+	local process="$1"
 	local ps=$(which ps)
-	local pid=$(\pgrep -f "$1" | head -1)
-	test -n "$pid" && $ps -o pid,etime,cmd -fp $pid
+	local pid=$(\pgrep -f "$process" | head -1)
+	test -n "$pid" && $ps -o pid,etime,cmd -fp $pid && time while \pgrep -f "$process" >/dev/null; do sleep 1s;done
 }
 function totalSize {
 	local column=1
