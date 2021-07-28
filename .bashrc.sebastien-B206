@@ -3,14 +3,16 @@
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 if tty -s;then
-	if pactl list sinks short | \grep "bluez_sink.*SUSPENDED" -q;then
-		echo "=> moveAudio2ConnectedBlueToothSink.sh ..."
-		moveAudio2ConnectedBlueToothSink.sh
-		echo "=> DONE."
-	elif pactl list sinks short | \grep "hdmi-stereo.*SUSPENDED" -q;then
-		echo "=> moveAudio2HDMI.sh ..."
-		moveAudio2HDMI.sh
-		echo "=> DONE."
+	if pactl list sink-inputs short | \grep protocol -q;then
+		if pactl list sinks short | \grep "bluez_sink.*SUSPENDED" -q;then
+			echo "=> moveAudio2ConnectedBlueToothSink.sh ..."
+			moveAudio2ConnectedBlueToothSink.sh
+			echo "=> DONE."
+		elif pactl list sinks short | \grep "hdmi-stereo.*SUSPENDED" -q;then
+			echo "=> moveAudio2HDMI.sh ..."
+			moveAudio2HDMI.sh
+			echo "=> DONE."
+		fi
 	fi
 fi
 
