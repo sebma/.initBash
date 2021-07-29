@@ -197,6 +197,7 @@ alias lshwBUSINFO='lshw -businfo'
 alias lsqm='dspmq | sed "s/[()]/ /g" | awk "/Running/{print \$2}" | paste -sd" ";echo'
 alias lxterm="\lxterm -sb -fn 9x15"
 alias lzgrep="\lzgrep --color"
+alias man2ps="\man -Tps"
 alias manen=enman
 alias manfile="\man -l"
 alias manfr=frman
