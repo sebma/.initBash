@@ -142,6 +142,10 @@ function mac@ {
 	test $? != 0 && $ip link show help
 	set +o pipefail
 }
+function man2html {
+	local man2html=$(which man2html)
+	$man2html -r $(man -w "$1")
+}
 function mountISO {
 	if [ $# = 0 ];then
 		echo "=> $FUNCNAME isoFile" >&2 
