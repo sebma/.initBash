@@ -158,27 +158,6 @@ function mountISO {
 #	loopBackDevice=$(udisksctl loop-setup -r -f "$1" | awk -F "[ .]" '{print$(NF-1)}')
 #	udisksctl mount -b $loopBackDevice
 }
-function nmRestart {
-	local -r systemType=$( ( strings $(\ps -p 1 -o cmd= | cut -d" " -f1) | \egrep -o "upstart|sysvinit|systemd" || echo unknown ) | head -1)
-	local -r timer=12s
-	if ! env | \grep ^SSH_CONNECTION= -q;then
-		sudo -k
-		if sudo true;then
-			if [ $systemType = systemd ];then
-				sudo systemctl --no-block restart network-manager
-				sleep 0.75s
-				systemctl --no-pager status network-manager
-			elif [ $systemType = upstart ] || [ $systemType = sysvinit ];then
-				sudo service network-manager restart
-			fi
-			echo "=> Waiting $timer for Wi-Fi to connect back again ..."
-			sleep $timer
-			printf "=> WANIP: "
-			\curl -sA "" ipinfo.io/ip 2>/dev/null || \wget -qU "" -O- ipinfo.io/ip
-			echo
-		fi
-	fi
-}
 function open {
 	local openCommand="command xdg-open"
 	[ $# = 0 ] && set -- .
