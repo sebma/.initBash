@@ -1,0 +1,27 @@
+# vim: set ft=sh noet:
+! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
+test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
+
+function nmRestart {
+	local -r systemType=$( ( strings $(\ps -p 1 -o cmd= | cut -d" " -f1) | \egrep -o "upstart|sysvinit|systemd" || echo unknown ) | head -1)
+	local -r timer=12s
+	if ! env | \grep ^SSH_CONNECTION= -q; then
+		if [ $systemType = systemd ]; then
+			systemctl --no-block restart network-manager
+			sleep 0.75s
+			systemctl --no-pager status network-manager
+		else
+			if [ $systemType = upstart ] || [ $systemType = sysvinit ]; then
+				service network-manager restart
+			fi
+		fi
+		echo "=> Waiting $timer for Wi-Fi to connect back again ..."
+		sleep $timer
+		printf "=> WANIP: "
+		\curl -sA "" ipinfo.io/ip 2> /dev/null || \wget -qU "" -O- ipinfo.io/ip
+		echo
+	fi
+}
+
+set +x
+test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
