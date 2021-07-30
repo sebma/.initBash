@@ -2,7 +2,7 @@
 ! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-if groups 2>/dev/null | egrep -wq "sudo|adm|admin|root|wheel" && {
+if groups 2>/dev/null | egrep -wq "sudo|adm|admin|root|wheel";then
 	# You must call these functions wia the "Sudo" function
 function nmRestart {
 	local -r systemType=$( ( strings $(\ps -p 1 -o cmd= | cut -d" " -f1) | \egrep -o "upstart|sysvinit|systemd" || echo unknown ) | head -1)
@@ -24,7 +24,7 @@ function nmRestart {
 		echo
 	fi
 }
-}
+fi
 
 set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
