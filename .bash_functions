@@ -360,7 +360,6 @@ function convertion {
 	units -t "$@" | tr -d "\n"
 	retCode=$?
 	set +o pipefail
-	units -t "$@" | tr -d "\n"
 	echo " $lastArg"
 
 	return $retCode
