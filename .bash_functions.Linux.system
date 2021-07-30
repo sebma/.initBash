@@ -24,6 +24,11 @@ function nmRestart {
 		echo
 	fi
 }
+function partedListALLDisks {
+	for disk in $(\ls /dev/sd{a..z} 2>/dev/null);do
+		parted $disk print "$@"
+	done
+}
 fi
 
 set +x
