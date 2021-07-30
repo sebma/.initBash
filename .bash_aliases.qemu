@@ -4,9 +4,10 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 
 qemu=qemu-system-$arch
 if which $qemu >/dev/null 2>&1;then
+	bridgeInterfaceList=$(\ls /sys/class/net | egrep "br[0-9]" | paste -s)
 	bridgeInterfaceRegExp=$(\ls /sys/class/net | egrep "br[0-9]" | paste -sd "|")
 	which kvm >/dev/null 2>&1 && kvm=kvm || kvm="$qemu -enable-kvm"
-	test -n "$bridgeInterfaceRegExp" && kvmBridge="-net bridge,br=\"$bridgeInterfaceRegExp\""
+	test -n "$bridgeInterfaceRegExp" && kvmBridge=$(printf -- "-net bridge,br=%s " $bridgeInterfaceList)
 #	reDirOption="-redir tcp:2222::22" # deprecated since qemu >=2.9
 	reDirOption="-nic user,hostfwd=tcp::5022-:22"
 	kvmBoot="sudo -b $kvm -m 1G $kvmBridge -net nic,model=virtio $reDirOption"
