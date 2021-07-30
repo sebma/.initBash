@@ -474,8 +474,8 @@ function distribType {
 
 	echo $distribType
 }
-function env {
-	command env $@ | sort
+function envSorted {
+	command env "$@" | sort
 }
 function extractURLsFromFiles {
 	for file
