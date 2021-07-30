@@ -7,8 +7,9 @@ if which $qemu >/dev/null 2>&1;then
 	bridgeInterfaceRegExp=$(\ls /sys/class/net | egrep "br[0-9]" | paste -sd "|")
 	which kvm >/dev/null 2>&1 && kvm=kvm || kvm="$qemu -enable-kvm"
 	test -n "$bridgeInterfaceRegExp" && kvmBridge="-net bridge,br=\"$bridgeInterfaceRegExp\""
-	kvmBoot="sudo -b $kvm -m 1G $kvmBridge -net nic,model=virtio -redir tcp:2222::22"
-	kvmBootWithOldNIC="sudo -b $kvm -m 1G $kvmBridge -net nic,model=pcnet -redir tcp:2222::22"
+	reDirOption="-redir tcp:2222::22"
+	kvmBoot="sudo -b $kvm -m 1G $kvmBridge -net nic,model=virtio $reDirOption"
+	kvmBootWithOldNIC="sudo -b $kvm -m 1G $kvmBridge -net nic,model=pcnet $reDirOption"
 	alias testLiveIso_BIOS="$kvmBoot -cdrom"
 	alias testLiveIso_UEFI="$kvmBoot -bios /usr/share/qemu/OVMF.fd -cdrom"
 	alias testLiveUSB_BIOS="$kvmBoot -hda"
