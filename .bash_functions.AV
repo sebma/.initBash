@@ -1124,7 +1124,7 @@ function videoInfo {
 		local userAgent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3513.1 Safari/537.36"
 		for urlOrFile
 		do
-#			echo "=> urlOrFile = $urlOrFile"
+			echo "=> urlOrFile = $urlOrFile"
 			if echo "$urlOrFile" | egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://"
 			then
 				#remote stream
@@ -1155,6 +1155,7 @@ function videoInfo {
 				echo "Size: $size"
 				$ffprobe "$urlOrFile" || $ffprobe $ffprobeOptions "$urlOrFile"
 			fi
+			echo
 		done 2>&1 | \egrep -vi "^ +(:\s+$|comment|description +: [^/]+$)" | uniq | egrep --color -iw "^$|description.*:/|PURL.*:/|stream|local|urlOrFile|kb/s|Input|Size:|Title:|Duration:|Channel.*:|Stream|Chapter|Invalid|error|bad| no such file|^\[.* not"
 	}
 }
