@@ -1684,7 +1684,7 @@ function timeprocess {
 	local process="$1"
 	local ps=$(which ps)
 	local pid=$(\pgrep -f "$process" | head -1)
-	test -n "$pid" && $ps -o pid,stime,etime,cmd -fp $pid && time while \pgrep -f "$process" >/dev/null; do sleep 1s;done
+	test -n "$pid" && $ps -o pid,lstart,etime,etimes,cmd -fp $pid && time while \pgrep -f "$process" >/dev/null; do sleep 1s;done
 }
 function totalSize {
 	local column=1
