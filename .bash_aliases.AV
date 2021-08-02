@@ -8,7 +8,7 @@ alias ffplay="\ffplay -hide_banner"
 alias keyFrames="command ffprobe -hide_banner -loglevel error -skip_frame nokey -select_streams v:0 -show_entries frame=pkt_pts_time -of csv=print_section=0"
 alias mp32wavstdout="\mpg123 --wav - "
 alias ogg2wavstdout="\oggdec --output=- "
-alias stopLiveRecording='pkill -SIGINT youtube-dl.*/live'
+alias stopYTDLLiveRecording='pkill -SIGINT -o youtube-dl.*/live'
 alias youtube-dl="LANG=C.UTF-8 command youtube-dl"
 alias ytdl="LANG=C.UTF-8 command youtube-dl"
 
