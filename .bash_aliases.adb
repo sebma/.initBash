@@ -23,7 +23,7 @@ alias adbGetExtSDCardMountPoint="$adb shell mount | awk '/emulated|sdcard0/{next
 alias adbGetManufacturer="$getprop ro.product.manufacturer | $dos2unix"
 alias adbGetModel="$getprop ro.product.model | $dos2unix"
 
-alias adbGetWlanInterface="$getprop wifi.interface | $dos2unix"
+alias adbGetWlanInterface="$getprop wifi.interface 2>/dev/null | $dos2unix"
 ! pgrep -f "adb -. " >/dev/null && tty -s && echo "=> Starting the <adb> service ..." && $adb shell echo
 export androidWlanInterface=$(adbGetWlanInterface)
 if [ -n "$androidWlanInterface" ];then
