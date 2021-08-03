@@ -1331,15 +1331,15 @@ function pkill {
 	esac
 
 	if [ $# != 0 ]; then
-		firstArg=$1
+		firstArg="$1"
 		if echo $firstArg | \grep -q -- "-[0-9]"
 		then
 			shift
-			processName=$1
-			test -n "$processName" && $pkill $firstArg $echoOption -fu $USER $@
+			processName="$1"
+			test -n "$processName" && $pkill $firstArg $echoOption -fu $USER "$@"
 		else
-			processName=$1
-			test -n "$processName" && $pkill $echoOption -fu $USER $@
+			processName="$1"
+			test -n "$processName" && $pkill $echoOption -fu $USER "$@"
 		fi
 	else
 		$pkill
