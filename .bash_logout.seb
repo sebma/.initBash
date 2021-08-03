@@ -3,7 +3,7 @@
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 unalias which >/dev/null 2>&1
-test "$SSH_CONNECTION" || pkill adb
+test "$SSH_CONNECTION" || pkill -ef "adb -. "
 if $(which df) ~/.cache | egrep -wqi "/(home|users?)";then
 	if [ $osID != sailfishos ]; then
 		tty -s && echo "=> Removing everything in ~/.cache/ except the <fontconfig> cache which is also used by matplotlib."
