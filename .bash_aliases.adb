@@ -24,7 +24,8 @@ alias adbGetManufacturer="$getprop ro.product.manufacturer | $dos2unix"
 alias adbGetModel="$getprop ro.product.model | $dos2unix"
 
 alias adbGetWlanInterface="$getprop wifi.interface | $dos2unix"
-$adb shell echo >/dev/null 2>&1 && export androidWlanInterface=$(adbGetWlanInterface)
+! pgrep -f "adb -. " >/dev/null && tty -s && echo "=> Starting the <adb> service ..." && $adb shell echo
+export androidWlanInterface=$(adbGetWlanInterface)
 if [ -n "$androidWlanInterface" ];then
 	alias adbGetWlanIP="{ $getprop dhcp.${androidWlanInterface/:*/}.ipaddress | \grep [0-9] || $adb shell ip -o addr show $androidWlanInterface | awk -F ' *|/' '/inet /{print\$4}'; } | $dos2unix"
 	alias adbGetWlanMAC="$adb shell cat /sys/class/net/${androidWlanInterface/:*/}/addres | $dos2unix"
