@@ -46,7 +46,7 @@ alias catFiles="\tail -vn +1"
 alias connect2eduroam="connect2SSID eduroam"
 alias cp='\cp --preserve=timestamps -uv'
 #alias dmesg="\grc less /var/log/dmesg"
-alias dmesg="\dmesg -T"
+alias dmesg="\dmesg -dT"
 alias dmesgErrors="\dmesg -l err,crit,alert,emerg"
 alias dmesgErrorsNWarings="dmesgErrors -l warn"
 alias dnsInfo="( \nmcli -f IP4.DNS,IP6.DNS dev list iface $wiFiInterface || \nmcli -f IP4.DNS,IP6.DNS dev show) 2>/dev/null | grep DNS || egrep -v '^(#|\$)' /etc/resolv.conf"
