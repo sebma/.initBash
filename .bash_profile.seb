@@ -119,7 +119,8 @@ then
 				test -z "$SSH_AUTH_SOCK" && export SSH_AUTH_SOCK=$(\ls /tmp/ssh-*/agent.$(($SSH_AGENT_PID-1)))
 			else
 				Echo "=> Starting the ssh-agent for $USER ..." >&2
-				eval $(ssh-agent -s) >/dev/null
+				eval $(ssh-agent -s)
+				Echo "=> Done" >&2
 			fi
 		fi
 		pgrep -lfu $USER ssh-agent 2>/dev/null
