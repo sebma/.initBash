@@ -9,7 +9,7 @@ if [ "$SHLVL" = 1 ]; then
 	[ -x /usr/bin/clear_console ] && /usr/bin/clear_console -q
 fi
 
-test -f $initDir/.bash_logout.seb && Source $initDir/.bash_logout.seb
+test -f $initDir/.bash_logout.seb && source $initDir/.bash_logout.seb
 
 set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
