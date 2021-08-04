@@ -1,12 +1,11 @@
 # vim: set ft=sh noet:
 unalias which >/dev/null 2>&1
 test -z "$initDir" && export initDir=$HOME/.initBash
+! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
 
 function Debug { test "$debug" -gt 0 && echo "$bold${colors[blue]}$@$normal"; }
 function Source { test "$debug" -gt 0 && { time . "$@";echo;true; } || { . "$@" ; } ; }
 if tty -s;then function Echo { echo -e "$@"; } else function Echo { : ; } fi
-
-! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && Source $initDir/.colors
 
 Debug "=> Running $(basename ${BASH_SOURCE[0]}) ..."
 Echo "$(date)"
