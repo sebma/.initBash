@@ -89,10 +89,11 @@ fi
 
 #printf "=> Server Signature : " >&2;ssh-keygen -lf /etc/ssh/ssh_host_rsa_key >&2
 interface=eth0
-if ip link show $interface >/dev/null 2>&1 && [ -z $DISPLAY ] && tty -s
+if tty -s && ip link show $interface >/dev/null 2>&1 && [ -z $DISPLAY ]
 then
-#	printf "=> $interface MAC@ : " >&2 # permet de differentier le noeud du cluster sur lequel on est connecte
-	ip link show $interface | awk '/ether/{print$(NF-2)}' >&2
+	printf "=> $interface MAC@ : " >&2 # permet de differentier le noeud du cluster sur lequel on est connecte
+	ip link show $interface | awk '/ether/{printf$(NF-2)}' >&2
+	Echo " , this helps identify on which node of the cluster I'm connected to."
 fi
 
 #function Time { [ "$debug" -gt 1 ] && eval time "$@" || eval "$@"; }
