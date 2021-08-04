@@ -116,7 +116,7 @@ alias ejectcd='\eject $CDR_DEVICE'
 alias enman="\man -L en"
 alias erasecd='\cdrecord -v speed=12 blank=fast gracetime=10 -eject'
 alias erasewholecd='\cdrecord -v speed=12 blank=all gracetime=10 -eject'
-alias errors="\egrep -iC2 'error|erreur|java.*exception'"
+alias errors="egrep -wiC2 'err:|:err|error|erreur|java.*exception'"
 alias findFunctions="grep -P '(^| )\w+\(\)|\bfunction\b'"
 alias findSpecialFiles="$find . -xdev '(' -type b -o -type c -o -type p -o -type s ')' -a -ls"
 alias findbin='$find $(echo $PATH | tr : "\n" | \egrep "/(s?bin|shl|py|rb|pl)") /system/{bin,xbin} 2>/dev/null | egrep'
