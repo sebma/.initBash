@@ -143,7 +143,7 @@ tty -s && { # For interactive shell sessions
 	if which ssh-add >/dev/null && ! ssh-add -l 2>/dev/null | grep -q "$UPMC_ID"
 	then
 		if test -s ~/.ssh/.$UPMC_ID; then
-			if ! env | grep -q SSH_CLIENT; then # Si on est PAS a l autre bout d une connection ssh
+			if [ -z "$SSH_CLIENT" ] && ! tty | grep "/dev/tty[0-9]$" -q; then # Si on est PAS a l autre bout d une connection ssh et qu'on est pas sur la console
 				echo "=> Loading my ssh key from <$(basename $BASH_SOURCE)> ..."
 				trap 'echo "=> Ignoring this step and continuing the script <$(basename $BASH_SOURCE)> ..." >&2' INT
 #				tty | egrep -q "tty[0-9]+$" && set -x
