@@ -2,22 +2,21 @@
 unalias which >/dev/null 2>&1
 test -z "$initDir" && export initDir=$HOME/.initBash
 
+function Debug { test "$debug" -gt 0 && echo "$bold${colors[blue]}$@$normal"; }
+function Source { test "$debug" -gt 0 && { time . "$@";echo;true; } || { . "$@" ; } ; }
+if tty -s;then function Echo { echo -e "$@"; } else function Echo { : ; } fi
+
+! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && Source $initDir/.colors
+
+Debug "=> Running $(basename ${BASH_SOURCE[0]}) ..."
+Echo "$(date)"
+
 sebInterpreter=$(ps -o args= $$ | awk '{gsub("^/.*/","",$1);print$1}')
 ( [ $sebInterpreter = bash ] || [ $sebInterpreter = zsh ] || [ $sebInterpreter = sh ] ) && local=local || local=typeset
 unset sebInterpreter
 
-if tty -s;then function Echo { echo -e "$@"; } else function Echo { : ; } fi
-
-Echo "$(date)"
-
-function Debug { test "$debug" -gt 0 && echo "$bold${colors[blue]}$@$normal"; }
-
-function Source { test "$debug" -gt 0 && { time . "$@";echo;true; } || { . "$@" ; } ; }
-
-! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && Source $initDir/.colors
 test "$debug" -gt "2" && set -x
 
-Debug "=> Running $(basename ${BASH_SOURCE[0]}) ..."
 set -o histexpand # Re-enable the history expansion disabled previously by my "echo" alias
 
 #test -n "$bashRCLoaded" && return
