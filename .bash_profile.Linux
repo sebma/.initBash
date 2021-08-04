@@ -1,6 +1,8 @@
 # vim: set ft=sh noet:
 ! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
-test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
+function Debug { test "$debug" -gt 0 && echo "$bold${colors[blue]}$@$normal"; }
+if tty -s;then function Echo { echo -e "$@"; } else function Echo { : ; } fi
+tty -s && Debug "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 test "$debug" -gt 3 && set -x
 
 trap 'echo "=> Ignoring this step and continuing the script <$(basename $BASH_SOURCE)> ..." >&2' INT
