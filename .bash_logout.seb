@@ -22,7 +22,8 @@ fi 2>/dev/null
 # For security reasons
 [ $osFamily = Linux ] && [ $(hostname) != ssh ] && [ -n "$SSH_AGENT_PID" ] && [ $(who | grep -c $USER) -le 2 ] && Echo "=> Stopping the ssh-agent ..." && eval $(ssh-agent -k)
 
-Echo "=> Sleeping 1s before finish ..." && sleep 1.0s
+sleepTimeout=1.0s
+Echo "=> Sleeping $sleepTimeout before finish ..." && sleep $sleepTimeout
 
 set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
