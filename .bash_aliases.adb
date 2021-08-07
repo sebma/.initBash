@@ -2,9 +2,9 @@
 ! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-export adb=$(which adb)
-export dos2unix="$(which tr) -d '\r'"
-export getprop="$adb shell getprop"
+adb=$(which adb)
+dos2unix="$(which tr) -d '\r'"
+getprop="$adb shell getprop"
 alias adb_getprop="$getprop"
 alias adb_getprop_grep="$getprop | $dos2unix | grep -P"
 alias adbCpuInfo="$adb shell cat /proc/cpuinf | $dos2unix"
@@ -22,10 +22,8 @@ alias adbGetDeviceCodeName="$getprop ro.product.device | $dos2unix"
 alias adbGetExtSDCardMountPoint="$adb shell mount | awk '/emulated|sdcard0/{next}/(Removable|storage)\//{if(\$2==\"on\")print\$3;else print\$2} | $dos2unix"
 alias adbGetManufacturer="$getprop ro.product.manufacturer | $dos2unix"
 alias adbGetModel="$getprop ro.product.model | $dos2unix"
-
 alias adbGetWlanInterface="$getprop wifi.interface 2>/dev/null | $dos2unix"
-! pgrep -f "adb -. " >/dev/null && tty -s && echo "=> Starting the <adb> service ..." && $adb shell echo
-export androidWlanInterface=$(adbGetWlanInterface)
+
 if [ -n "$androidWlanInterface" ];then
 	alias adbGetWlanIP="{ $getprop dhcp.${androidWlanInterface/:*/}.ipaddress | \grep [0-9] || $adb shell ip -o addr show $androidWlanInterface | awk -F ' *|/' '/inet /{print\$4}'; } | $dos2unix"
 	alias adbGetWlanMAC="$adb shell cat /sys/class/net/${androidWlanInterface/:*/}/addres | $dos2unix"
