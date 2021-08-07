@@ -168,13 +168,17 @@ which register-python-argcomplete >/dev/null 2>&1 && eval "$(register-python-arg
 
 # pidof cupsd >/dev/null && Echo "=> The cups admin console is available at http://localhost:631/admin\n"
 
-which brew >/dev/null 2>&1 && test -r $initDir/.bashrc.brew && Source $initDir/.bashrc.brew
-which brew >/dev/null 2>&1 && test -r $initDir/.bash_aliases.brew && Source $initDir/.bash_aliases.brew
-which brew >/dev/null 2>&1 && test -r $initDir/.bash_functions.brew && Source $initDir/.bash_functions.brew
 which conda >/dev/null 2>&1 && test -r $initDir/.bashrc.conda && Source $initDir/.bashrc.conda
-which adb >/dev/null 2>&1 && test -r $initDir/.bash_aliases.adb && Source $initDir/.bash_aliases.adb
-which adb >/dev/null 2>&1 && test -r $initDir/.bash_functions.adb && Source $initDir/.bash_functions.adb
 which getprop >/dev/null 2>&1 && test -r $initDir/.bash_aliases.getprop && Source $initDir/.bash_aliases.getprop
+if which brew >/dev/null 2>&1;then
+	test -r $initDir/.bashrc.brew && Source $initDir/.bashrc.brew
+	test -r $initDir/.bash_aliases.brew && Source $initDir/.bash_aliases.brew
+	test -r $initDir/.bash_functions.brew && Source $initDir/.bash_functions.brew
+fi
+if which adb >/dev/null 2>&1 && \pgrep -u $USER -f "adb -. " >/dev/null;then
+	test -r $initDir/.bash_aliases.adb && Source $initDir/.bash_aliases.adb
+	test -r $initDir/.bash_functions.adb && Source $initDir/.bash_functions.adb
+fi
 
 test -r $initDir/.bashrc.$osFamily && Source $initDir/.bashrc.$osFamily
 #test -r $initDir/.bashrc.$osFamily.$HOSTNAME && Source $initDir/.bashrc.$osFamily.$HOSTNAME
