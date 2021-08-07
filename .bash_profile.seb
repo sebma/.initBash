@@ -120,7 +120,7 @@ then
 				test -z "$SSH_AGENT_PID" && export SSH_AGENT_PID=$(\pgrep -u $USER -n ssh-agent)
 				test -z "$SSH_AUTH_SOCK" && export SSH_AUTH_SOCK=$(\ls /tmp/ssh-*/agent.$(($SSH_AGENT_PID-1)))
 			else
-				Echo "=> Starting the ssh-agent for $USER ..." >&2 && eval $(ssh-agent -s) >/dev/null && Echo "=> Done" >&2
+#				Echo "=> Starting the ssh-agent for $USER ..." >&2 && eval $(ssh-agent -s) >/dev/null && Echo "=> Done" >&2
 				:
 			fi
 		fi
@@ -143,8 +143,8 @@ then
 	#my lpr configuration
 	which lpr >/dev/null 2>&1 && test -f $initDir/.bash_profile.lpr && SourceProfile $initDir/.bash_profile.lpr
 
-	! pgrep -f "adb -. " >/dev/null && tty -s && echo "=> Starting the <adb> service ..." && adb shell echo
-	export androidWlanInterface=$(adb shell getprop wifi.interface | tr -d '\r')
+	! pgrep -u $USER -f "adb -. " >/dev/null && tty -s && echo "=> Starting the <adb> service ..." && time adb start-server
+	pgrep -u $USER -f "adb -. " >/dev/null && export androidWlanInterface=$(adb shell getprop wifi.interface 2>/dev/null | tr -d '\r')
 fi
 
 test -r $initDir/.bash_profile.$osFamily && SourceProfile $initDir/.bash_profile.$osFamily
