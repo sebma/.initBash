@@ -244,7 +244,6 @@ alias perlInterpreter="\perl -de ''"
 alias perlScript="\perl -n -ale"
 alias perlSed="\perl -pe"
 alias perlfunc="\perldoc -f"
-alias pgrep='\pgrep -lfu $USER'
 alias phpInterpreter="\php -a"
 alias pic2pdf=jpeg2pdf
 alias pic2pdfA4=jpeg2pdfA4
