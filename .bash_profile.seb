@@ -143,7 +143,7 @@ then
 	#my lpr configuration
 	which lpr >/dev/null 2>&1 && test -f $initDir/.bash_profile.lpr && SourceProfile $initDir/.bash_profile.lpr
 
-	! pgrep -f "adb -. " >/dev/null && tty -s && echo "=> Starting the <adb> service ..." && $adb shell echo
+	! pgrep -f "adb -. " >/dev/null && tty -s && echo "=> Starting the <adb> service ..." && adb shell echo
 	export androidWlanInterface=$(adb shell getprop wifi.interface | tr -d '\r')
 fi
 
