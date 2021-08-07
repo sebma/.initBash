@@ -1386,7 +1386,7 @@ function psSeb { # Les fontions qui avaient le meme nom que les commands sont ex
 function pulseaudioRestart {
 	pulseaudio --kill
 	sleep 1
-	\pidof pulseaudio >/dev/null || pulseaudio --start --log-target=syslog
+	\pgrep -u $USER pulseaudio >/dev/null || pulseaudio --start --log-target=syslog
 }
 function pythonCalc {
 	\python -c "print(${*/^/**})"
