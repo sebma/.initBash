@@ -74,7 +74,7 @@ function checkinstallWithGitRepoInformation {
 	echo
 
 	local pkgname=$(basename -s .git $gitHTTP_URL)
-	local pkgversion=$(\git describe --tags --abbrev=0 | $sed "s/^v|^[Vv]ersion//g;s/^.*-//")
+	local pkgversion=$(\git describe --tags --abbrev=0 | $sed "s/^v|^[Vv]ersion//g;")
 	local pkgsource=$gitHTTP_URL
 	set -x
 	sudo checkinstall --pkgname $pkgname --pkgversion $pkgversion --pkgsource=$pkgsource
