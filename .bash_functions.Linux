@@ -73,6 +73,7 @@ function hw-probeAddNodeToInventory {
 function hw-probeInstall {
 	type sudo >/dev/null 2>&1 && [ $(id -u) != 0 ] && groups | egrep -wq "sudo|adm|admin|root|wheel" && local sudo=$(which sudo) || local sudo=""
 	local distribName=$(distribName)
+	local retCode=0
 	if [ $distribName = ubuntu ]; then
 		local ubuntuSources=/etc/apt/sources.list
 		grep -q universe $ubuntuSources   || $sudo add-apt-repository universe -y
@@ -83,6 +84,7 @@ function hw-probeInstall {
 		apt-cache policy hw-probe | grep -q mikhailnov/hw-probe || $sudo apt update
 		dpkg -l inxi | grep -q ^.i || $sudo apt install -V inxi
 		dpkg -l hw-probe | grep -q ^.i || $sudo apt install -V hw-probe
+		retCode=$?
 	elif [ $distribName = arch ]; then
 		if $sudo echo "";then
 			$sudo pacman -Sy
@@ -94,7 +96,9 @@ function hw-probeInstall {
 			if ! which inxi >/dev/null 2>&1;then
 				cd inxi >/dev/null 2>&1 || { git clone https://aur.archlinux.org/inxi.git;cd inxi; }
 				if git config remote.origin.url | grep -q /inxi;then
-					makepkg -si && sync && which inxi
+					makepkg -si
+					retCode=$?
+					sync
 					cd ->/dev/null
 				else
 					git clone https://aur.archlinux.org/inxi.git
@@ -107,7 +111,9 @@ function hw-probeInstall {
 				cd hw-probe >/dev/null 2>&1 || { git clone https://aur.archlinux.org/hw-probe.git;cd hw-probe; }
 				if git config remote.origin.url | grep -q /hw-probe;then
 					sed -i "/^depends=/s/'edid-decode'//" PKGBUILD
-					makepkg -si && sync && which hw-probe
+					makepkg -si
+					retCode=$?
+					sync
 					cd ->/dev/null
 				else
 					git clone https://aur.archlinux.org/hw-probe.git
@@ -115,6 +121,41 @@ function hw-probeInstall {
 			fi
 		fi
 	fi
+
+	echo
+	which hw-probe >/dev/null 2>&1 && hw-probe -v
+	return $retCode
+}
+function hw-probeInstallFromSource {
+	type sudo >/dev/null 2>&1 && [ $(id -u) != 0 ] && groups | egrep -wq "sudo|adm|admin|root|wheel" && local sudo=$(which sudo) || local sudo=""
+	local distribName=$(distribName)
+	local hw_probeGitREPO=https://github.com/linuxhw/hw-probe
+
+	if which hw-probe >/dev/null 2>&1; then
+		echo "=> INFO [$FUNCNAME] : hw-probe is already installed." 1>&2
+		return 1
+	fi
+
+	if ! which git > /dev/null 2>&1; then
+		echo "=> ERROR [$FUNCNAME] : You must first install <git>." 1>&2
+		return 2
+	fi
+
+	local prevDIR=$PWD
+	local retCode=0
+	mkdir -p ~/git/linuxhw
+	if cd ~/git/linuxhw;then
+		git clone $hw_probeGitREPO
+		if cd hw-probe;then
+			$sudo make install prefix=/usr/local
+			retCode=$?
+			echo
+		fi
+	fi
+
+	cd $prevDIR
+	which hw-probe >/dev/null 2>&1 && hw-probe -v
+	return $retCode
 }
 function isoLabel {
 	for isoFile
