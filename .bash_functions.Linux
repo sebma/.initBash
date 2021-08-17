@@ -380,7 +380,11 @@ function umount.seb {
 	device=$(echo "$device" | \egrep -wq /dev/dm-[0-9]+ && { lsblk -n -o NAME "$device" | awk '{print"/dev/mapper/"$1}'; true; } || echo "$device")
 
 	fsType=$(LC_MESSAGES=C $df -a -T | grep "$device\s" | awk '!/Filesystem/{print$2}')
-	[ $(blkid $device | wc -c) != 0 ] && fsType=$(blkid $device -o value -s TYPE) # If $device is in /etc/blkid.tab
+	if [ $(blkid $device | wc -c) != 0 ];then
+		fsType=$(blkid $device -o value -s TYPE) # If $device is in /etc/blkid.tab
+	else
+		fsType=$(lsblk -n -o FSTYPE $device)
+	fi
 
 	echo "=> Unmounting $device ..." >&2
 	case $fsType in
