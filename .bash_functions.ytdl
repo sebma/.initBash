@@ -584,6 +584,23 @@ function ytdlGetSize {
 		echo $size
 	}
 }
+function ytdlPlaylist2M3U {
+	type jq >/dev/null || { return 1; }
+	local ytdlnoconfig="youtube-dl --ignore-config"
+	[ $# != 0 ] && echo "#EXTM3U"
+	for playList
+	do
+		$ytdlnoconfig -j "$playList" | jq -r '"#EXTINF:-1,"+.title,.webpage_url'
+	done
+}
+function ytdlPlaylist2URLS {
+	type jq >/dev/null || { return 1; }
+	local ytdlnoconfig="youtube-dl --ignore-config"
+	for playList
+	do
+		$ytdlnoconfig -j "$playList" | jq -r '.webpage_url+" # "+.title'
+	done
+}
 function ytdlSDFormats {
 	trap 'rc=130;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
 	local format=""
