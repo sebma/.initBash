@@ -34,6 +34,8 @@ function addpaths {
 TeXLiveDIR=$(\ls -d /usr/local/texlive/*/bin/* 2>/dev/null | egrep "/texlive/[0-9]+/bin/$arch-${osFamily,,}")
 addpaths $TeXLiveDIR
 
+export userAgent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3513.1 Safari/537.36"
+
 which tlmgr >/dev/null 2>&1 && test -r $initDir/.bash_profile.texlive && SourceProfile $initDir/.bash_profile.texlive
 
 export bashProfileLoaded=1
