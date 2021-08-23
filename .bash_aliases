@@ -329,6 +329,7 @@ alias updateYoutube-dl="pip install -U youtube-dl"
 alias uuidGet="\blkid -o value -s UUID"
 alias venv="\python3 -m venv"
 alias vict2c="vim +'setf xml' $LOGDIR/ct2c.log"
+alias vidInfo=videoInfo
 alias view='vim -R'
 alias viewcer="\openssl x509 -noout -text -inform DER -subject -issuer -dates -purpose -nameopt multiline -in"
 alias viewcrt="viewcer"
