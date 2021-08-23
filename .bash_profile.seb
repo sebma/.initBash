@@ -111,9 +111,9 @@ if [ $osFamily = Linux ] || [ $osFamily = Darwin ]
 then
 	Echo
 	if which ssh-agent >/dev/null 2>&1; then
-		tty -s && Echo "=> Testing if not logged through ssh i.e if the SSH_CLIENT variable is not set ..." >&2
+		Echo "=> Testing if not logged through ssh i.e if the SSH_CLIENT variable is not set ..." >&2
 		if test -z "$SSH_CLIENT"; then # Si on est PAS a l autre bout d une connection ssh
-			tty -s && Echo "=> Testing if the ssh-agent is loaded ..." >&2
+			Echo "=> Testing if the ssh-agent is loaded ..." >&2
 			if pgrep -u $USER ssh-agent >/dev/null 2>&1;then
 				Echo "=> The ssh-agent is already running." >&2
 				# Connecting to the already ssh-agent if SSH_AGENT_PID and/or SSH_AUTH_SOCK are unset
