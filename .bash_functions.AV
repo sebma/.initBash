@@ -644,10 +644,11 @@ function ffprobe2Ini {
 	done 2>&1 | cut -c 1-$(tput cols)
 }
 function ffprobe2JSON {
+	local ffprobeUserAgentOption="-user_agent \"$userAgent\""
 	local ffprobeOptions="-v error -show_format -show_streams -of json"
 	for arg
 	do
-		echo "$arg" | \egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $ffprobe $ffprobeOptions "$(youtube-dl -gf best -- "$arg")" || $ffprobe $ffprobeOptions "$arg"
+		echo "$arg" | \egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $ffprobe $ffprobeUserAgentOption $ffprobeOptions "$(youtube-dl -gf best -- "$arg")" || $ffprobe $ffprobeOptions "$arg"
 	done 2>&1 | cut -c 1-$(tput cols)
 }
 function ffprobe2XML {
