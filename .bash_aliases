@@ -156,6 +156,7 @@ alias html2xml_via_xmllint="\xmllint --html --format --recover --xmlout"
 alias html2xml_via_xmlstarlet="\xmlstarlet format --quiet --html --recover"
 alias htmldecode="perl -MHTML::Entities -pe 'decode_entities(\$_)'"
 alias htmlencode="perl -MHTML::Entities -pe 'encode_entities(\$_)'"
+alias imageInfo="\identify -ping -format '=> %f\nFormat: %m\nPixels: %w x %h\nDensity: %x x %y\nImage Resolution Units: %U\n'"
 alias install="\install -pv"
 alias integer="$local -i"
 alias inxi="LC_ALL=C \inxi -z -c2"
@@ -166,10 +167,14 @@ alias is32or64bits='\getconf LONG_BIT'
 alias jpeg2pdf="\convert +density"
 alias jpeg2pdfA4="jpeg2pdf -page A4"
 alias jpeg2pdfA4R="jpeg2pdf -page 842x595"
+alias jpeg2pdfletter="jpeg2pdf -page letter"
+alias jpeg2pdfletterR="jpeg2pdf -page 792x612"
 alias jpegRotate=jpgRotate
 alias jpg2pdf=jpeg2pdf
 alias jpg2pdfA4=jpeg2pdfA4
 alias jpg2pdfA4R=jpeg2pdfA4R
+alias jpg2pdfletter=jpeg2pdfletter
+alias jpg2pdfletterR=jpeg2pdfletterR
 alias killall="\killall -v"
 alias kshOldVersion='strings $(which ksh) | grep Version | tail -2'
 alias kshVersion='ksh -c "echo \$KSH_VERSION" 2>/dev/null'
