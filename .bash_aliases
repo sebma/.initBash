@@ -241,6 +241,11 @@ alias openwrtSupportedRouters="openwrtTOH | awk '/ Router/{for(i=4;i<=5;i++)prin
 alias openwrtTOH="\curl -sIf -o /dev/null https://openwrt.org/_media/toh_dump_tab_separated.gz && \curl -s https://openwrt.org/_media/toh_dump_tab_separated.gz | \gunzip -c"
 alias osFamily='echo $OSTYPE | grep android || uname -s'
 alias page="\head -50"
+alias paperSizeInDots="\paperconf -s -N"
+alias paperSizeInPixels=paperSizeInDots
+alias paperSizeInCM="paperSizeInDots -c"
+alias paperSizeInMM="paperSizeInDots -m"
+alias paperSizeInInches="paperSizeInDots -i"
 alias paperSizesInDots="\paperconf -s -N -a"
 alias paperSizesInPixels=paperSizesInDots
 alias paperSizesInCM="paperSizesInDots -c"
