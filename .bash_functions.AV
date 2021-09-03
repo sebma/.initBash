@@ -1465,7 +1465,7 @@ function webcamInfo {
 			echo
 			v4l2-ctl --list-formats-ext -d $1
 			echo
-			\ffmpeg -hide_banner -list_formats all -i $1
+			\ffmpeg -hide_banner -list_formats all -i $1 2>&1
 		fi
 	fi
 }
