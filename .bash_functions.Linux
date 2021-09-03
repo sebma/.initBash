@@ -215,7 +215,7 @@ function lsbluetooth {
 		\lsusb -d $device "$@"
 	done
 }
-function lswebcam {
+function lswebcams {
 	\lspci | awk 'BEGIN{IGNORECASE=1}/web.*cam|camera/{print$1}' | while read device
 	do
 		\lspci -nns $device "$@"
@@ -224,6 +224,7 @@ function lswebcam {
 	do
 		\lsusb -d $device "$@"
 	done
+	v4l2-ctl --list-devices
 }
 function lswifiNICs {
 	\lspci -nnd ::280 "$@"
