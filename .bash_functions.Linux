@@ -224,6 +224,7 @@ function lswebcams {
 	do
 		\lsusb -d $device "$@"
 	done
+	echo
 	v4l2-ctl --list-devices
 }
 function lswifiNICs {
