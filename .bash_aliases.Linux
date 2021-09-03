@@ -97,7 +97,6 @@ alias topf10='$find . -xdev $findPrunePathsExpression -type f -size +10M -exec l
 alias topf50='$find . -xdev $findPrunePathsExpression -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | head -50 | numfmt --field 5 --from=iec --to=iec-i --suffix=B | column -t'
 alias topf5='$find . -xdev $findPrunePathsExpression -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 |  head -5  | numfmt --field 5 --from=iec --to=iec-i --suffix=B | column -t'
 alias version="\lsb_release -sd"
-alias webcamInfo="\xawtv -hwscan || \v4l2-ctl --list-devices 2>/dev/null"
 alias wifimac="mac@ $wiFiInterface"
 alias wlanmac=wifimac
 alias xdg-dirs='ls $HOME/.config/user-dirs.dirs && grep ^XDG $HOME/.config/user-dirs.dirs'
