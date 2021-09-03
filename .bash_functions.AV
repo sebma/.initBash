@@ -1455,6 +1455,14 @@ function wav2spx {
 		echo "=> ERROR: The file <$inputFile> does not exit or is empty." >&2
 	fi
 }
+function webcamInfo {
+	xawtv -hwscan 2>&1
+	if [ $# = 0 ];then
+		v4l2-ctl -D
+	elif [ $# = 1 ];then
+		ls $1 >/dev/null && v4l2-ctl -D -d $1
+	fi
+}
 function webmAudio2ogg {
 	$local inputFile="$1"
 	if [ -s "$inputFile" ]
