@@ -1456,17 +1456,17 @@ function wav2spx {
 	fi
 }
 function webcamInfo {
-	xawtv -hwscan 2>&1
-	if [ $# = 0 ];then
-		v4l2-ctl -D
-	elif [ $# = 1 ];then
-		if ls $1 >/dev/null;then
-			v4l2-ctl -D -d $1
-			echo
-			v4l2-ctl --list-formats-ext -d $1
-			echo
-			\ffmpeg -hide_banner -list_formats all -i $1 2>&1
-		fi
+	local videoDevice=/dev/video0
+	[ $# = 1 ] && videoDevice=$1
+
+	if ls $videoDevice >/dev/null;then
+		xawtv -hwscan 2>&1
+		echo
+		v4l2-ctl -D -d $videoDevice
+		echo
+		v4l2-ctl --list-formats-ext -d $videoDevice
+		echo
+		\ffmpeg -hide_banner -list_formats all -i $videoDevice 2>&1
 	fi
 }
 function webmAudio2ogg {
