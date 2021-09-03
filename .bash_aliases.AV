@@ -4,6 +4,7 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 
 alias addCover2mp4=addThumbnail2mp4_AtomicParsley
 alias ffmpeg="time \ffmpeg -hide_banner"
+alias ffmpegwebcamInfo="ffmpeg -list_formats all -i"
 alias ffplay="\ffplay -hide_banner"
 alias ffplaywebcam="ffplay -fflags nobuffer -flags low_delay -framedrop"
 alias keyFrames="command ffprobe -hide_banner -loglevel error -skip_frame nokey -select_streams v:0 -show_entries frame=pkt_pts_time -of csv=print_section=0"
