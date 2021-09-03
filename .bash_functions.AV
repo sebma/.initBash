@@ -1460,7 +1460,13 @@ function webcamInfo {
 	if [ $# = 0 ];then
 		v4l2-ctl -D
 	elif [ $# = 1 ];then
-		ls $1 >/dev/null && v4l2-ctl -D -d $1
+		if ls $1 >/dev/null;then
+			v4l2-ctl -D -d $1
+			echo
+			v4l2-ctl --list-formats-ext -d $1
+			echo
+			\ffmpeg -hide_banner -list_formats all -i $1
+		fi
 	fi
 }
 function webmAudio2ogg {
