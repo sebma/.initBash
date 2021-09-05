@@ -34,7 +34,15 @@ function addpaths {
 TeXLiveDIR=$(\ls -d /usr/local/texlive/*/bin/* 2>/dev/null | egrep "/texlive/[0-9]+/bin/$arch-${osFamily,,}")
 addpaths $TeXLiveDIR
 
-export userAgent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3513.1 Safari/537.36"
+export youtube_dl=$(which youtube-dl)
+if [ -n "$youtube_dl" ];then # Recuperation de la variable _USER_AGENT_TPL de youtube-dl pour construire le user agent
+	pythonVersion=$(python3 -V | awk -F "[ .]" '/Python/{printf$2"."$3}')
+	which chromium-browser >/dev/null 2>&1 && chromeVersion=$(chromium-browser --version 2>/dev/null | awk '{printf$2}') || chromeVersion="73.0.3671.2"
+	userAgent="$(awk -F "'" '/_USER_AGENT_TPL\s*=/{print$2}' /usr/local/lib/python$pythonVersion/dist-packages/youtube_dl/utils.py)"
+	export userAgent="$(printf "$userAgent" $chromeVersion)"
+else
+	export userAgent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3513.1 Safari/537.36"
+fi
 
 which tlmgr >/dev/null 2>&1 && test -r $initDir/.bash_profile.texlive && SourceProfile $initDir/.bash_profile.texlive
 
