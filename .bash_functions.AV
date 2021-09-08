@@ -1018,7 +1018,6 @@ function urlOfVideo {
 	done
 }
 function urlinfo {
-	local userAgent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3513.1 Safari/537.36"
 	for url
 	do
 		echo "=> url = $url"
@@ -1122,7 +1121,6 @@ function videoInfo {
 	which ffprobe >/dev/null && {
 		local youtube_dl='command youtube-dl'
 		local ffprobe='command ffprobe -hide_banner'
-		local userAgent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3513.1 Safari/537.36"
 		for urlOrFile
 		do
 			echo "=> urlOrFile = $urlOrFile"
