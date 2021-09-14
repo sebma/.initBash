@@ -133,8 +133,13 @@ alias gateWay="\route -n | awk '/^(0.0.0.0|default)/{print\$2}'"
 alias gateWayFQDN='\dig +short -x $(gateWay)'
 alias gateWayOPEN='open https://$(gateWayFQDN)'
 alias gdmlogout="\gnome-session-quit --force"
-#alias geoip="time ( \curl -sA '' ipinfo.io/json 2>/dev/null || \wget -qU '' -O- ipinfo.io/json ) | jq -r '.city+\" \"+.country'"
-alias geoip="time ( \curl -sLA '' freegeoip.app/json 2>/dev/null || \wget -qU '' -O- freegeoip.app/json ) | jq -r '.city+\" \"+.country_code'"
+alias geoipjson="( \curl -sLA '' freegeoip.app/json 2>/dev/null || \wget -qU '' -O- freegeoip.app/json ) | jq"
+alias geoipjson2="( \curl -sA '' ipinfo.io/json 2>/dev/null || \wget -qU '' -O- ipinfo.io/json ) | jq"
+alias geoipv4="geoipjson2 .ip -r"
+alias geoipv6="geoipjson .ip -r"
+alias geoipAS="geoipjson2 .org -r"
+alias geoipCity="geoipjson '.city+\" \"+.country_code' -r"
+alias geoipHostname="geoipjson2 .hostname -r"
 alias getFS_TYPE="\blkid -o value -s TYPE"
 alias getPip="wget -qO- https://bootstrap.pypa.io/get-pip.py | python"
 alias getUUID="\blkid -o value -s UUID"
@@ -358,8 +363,8 @@ alias vim="LANG=C.UTF-8 \vim" && alias vi=vim
 alias vimatlab="vim +'setf matlab'"
 alias vioctave=vimatlab
 alias vlclocal='DISPLAY=:0 vlc'
-alias wanIP="time \dig -4 +short @resolver1.opendns.com A myip.opendns.com 2>/dev/null || time host -4 -t A myip.opendns.com resolver1.opendns.com | awk '/\<has\>/{print\$NF}'"
-alias wanIPv6="time \dig -6 +short @resolver1.opendns.com AAAA myip.opendns.com 2>/dev/null || time host -6 -t AAAA myip.opendns.com resolver1.opendns.com | awk '/\<has\>/{print\$NF}'"
+alias wanIP="\dig -4 +short @resolver1.opendns.com A myip.opendns.com 2>/dev/null || time host -4 -t A myip.opendns.com resolver1.opendns.com | awk '/\<has\>/{print\$NF}'"
+alias wanIPv6="\dig -6 +short @resolver1.opendns.com AAAA myip.opendns.com 2>/dev/null || time host -6 -t AAAA myip.opendns.com resolver1.opendns.com | awk '/\<has\>/{print\$NF}'"
 alias wavemon="xterm -e wavemon &"
 alias web2pdf='wkhtmltopdf --no-background --outline --header-line --footer-line --header-left [webpage] --footer-left "[isodate] [time]" --footer-right [page]/[toPage]'
 alias wegrep="wgrep -E"
