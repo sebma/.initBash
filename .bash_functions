@@ -943,7 +943,7 @@ function lsicons {
 	for package
 	do
 		listPackageContents $package
-	done | sort -u | egrep "(svg|png)$"
+	done | sort -u | egrep "(jpg|svg|png)$"
 }
 function lslib {
 	for package
