@@ -4,20 +4,23 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 
 #youtube_dl="eval LANG=C.UTF-8 command youtube-dl" # i.e https://unix.stackexchange.com/questions/505733/ # eval A EVITER
 NCC_Channel=https://www.youtube.com/user/NewCreationChurch
-NCCLive=$NCC_Channel/live
+NCC_Live=$NCC_Channel/live
 NCCVideos=$NCC_Channel/videos?sort=dd
 JP_Channel=https://www.youtube.com/user/JosephPrinceOnline
-JPLive=$JP_Channel/live
+JP_Live=$JP_Channel/live
 JPVideos=$JP_Channel/videos?sort=dd
+JP_USA_Channel=https://www.youtube.com/c/JosephPrinceMinistriesUSA
+JP_USA_Live=$JP_USA_Channel/live
+JP_USA_Videos=$JP_USA_Channel/videos?sort=dd
 ytdlURL=https://github.com/ytdl-org/youtube-dl
 ytdlIssues=$ytdlURL/issues
 ytdlReleases=$ytdlURL/releases
 ytdlLatestRelease=$ytdlReleases/latest
 alias recordYTLive="timeout -s SIGINT 150m getRestrictedFilenamesFORMAT.sh"
-alias recordJPLive360p="recordYTLive  93 $JPLive"
-alias recordNCCLive360p="recordYTLive 93 $NCCLive"
-alias recordJPLive480p="recordYTLive  94 $JPLive"
-alias recordNCCLive480p="recordYTLive 94 $NCCLive"
+alias recordJPLive360p="recordYTLive  93 $JP_Live"
+alias recordNCCLive360p="recordYTLive 93 $NCC_Live"
+alias recordJPLive480p="recordYTLive  94 $JP_Live"
+alias recordNCCLive480p="recordYTLive 94 $NCC_Live"
 alias recordNCCLive=recordNCCLive480p
 alias recordJPLive=recordJPLive360p
 alias youtube-dl="LANG=C.UTF-8 command youtube-dl"
