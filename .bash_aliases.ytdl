@@ -5,10 +5,10 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 #youtube_dl="eval LANG=C.UTF-8 command youtube-dl" # i.e https://unix.stackexchange.com/questions/505733/ # eval A EVITER
 NCC_Channel=https://www.youtube.com/user/NewCreationChurch
 NCC_Live=$NCC_Channel/live
-NCCVideos=$NCC_Channel/videos?sort=dd
+NCC_Videos=$NCC_Channel/videos?sort=dd
 JP_Channel=https://www.youtube.com/user/JosephPrinceOnline
 JP_Live=$JP_Channel/live
-JPVideos=$JP_Channel/videos?sort=dd
+JP_Videos=$JP_Channel/videos?sort=dd
 JP_USA_Channel=https://www.youtube.com/c/JosephPrinceMinistriesUSA
 JP_USA_Live=$JP_USA_Channel/live
 JP_USA_Videos=$JP_USA_Channel/videos?sort=dd
