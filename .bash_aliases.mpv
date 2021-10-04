@@ -47,7 +47,7 @@ alias mpvMiniConf="mpv --profile=miniconf"
 alias mpvDebug="mpv --profile=debug"
 
 alias youtube-dl="LANG=C.UTF-8 command youtube-dl"
-alias ytdl="LANG=C.UTF-8 command youtube-dl"
+alias yt-dl="LANG=C.UTF-8 command youtube-dl"
 
 set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"

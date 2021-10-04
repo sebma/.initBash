@@ -673,6 +673,14 @@ function gpgPrint {
 		echo
 	done
 }
+function grepdoc {
+	local pattern="$1"
+	shift
+	for doc
+	do
+		catdoc "$doc" | egrep -H --label="$doc" -i "${pattern}"
+	done
+}
 function grepFunction {
 	test $# -lt 2 && {
 		echo "=> Usage : $FUNCNAME startRegExpPattern fileList" >&2

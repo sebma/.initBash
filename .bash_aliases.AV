@@ -12,7 +12,7 @@ alias mp32wavstdout="\mpg123 --wav - "
 alias ogg2wavstdout="\oggdec --output=- "
 alias stopYTDLLiveRecording='pkill -SIGINT -o youtube-dl.*/live'
 alias youtube-dl="LANG=C.UTF-8 command youtube-dl"
-alias ytdl="LANG=C.UTF-8 command youtube-dl"
+alias yt-dl="LANG=C.UTF-8 command youtube-dl"
 
 set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
