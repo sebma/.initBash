@@ -24,10 +24,10 @@ alias recordNCCLive480p="recordYTLive 94 $NCC_Live"
 alias recordNCCLive=recordNCCLive480p
 alias recordJPLive=recordJPLive360p
 alias youtube-dl="LANG=C.UTF-8 command youtube-dl"
-alias ytdl="LANG=C.UTF-8 command youtube-dl"
+alias yt-dl="LANG=C.UTF-8 command youtube-dl"
 ytdlnoconfig="youtube-dl --ignore-config"
 alias ytdlnoconfig="$ytdlnoconfig"
-alias ytdlVersion="ytdl --version"
+alias ytdlVersion="\youtube-dl --version"
 alias ytdlGetFileName="\youtube-dl --get-filename"
 alias ytdlGetVideoID="\youtube-dl --get-id"
 alias ytdlGetFormatID="\youtube-dl --get-filename -o '%(format_id)s' -f"
