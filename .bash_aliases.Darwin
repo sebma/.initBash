@@ -77,8 +77,9 @@ alias wifiSpeed="airport -I | awk '/lastTxRate/{print\$0\" MBit/s\"}'"
 #alias wifimac="\ifconfig $wiFiInterface | awk '/HWaddr/{print\$1\"\\t\"\$NF}'"
 alias xlock="\/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend"
 alias ytdlInstall="brew install youtube-dl"
-alias ytdlInstall="brew install youtube-dl"
 alias ytdlUpdate="brew upgrade youtube-dl"
+alias ytdlpInstall="brew install yt-dlp"
+alias ytdlpUpdate="brew upgrade yt-dlp"
 
 if groups 2>/dev/null | \egrep -wq "sudo|admin"
 then
