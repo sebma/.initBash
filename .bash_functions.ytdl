@@ -658,6 +658,50 @@ function ytdlUpdate {
 		$sudo $(which pip3) install -U $package
 	fi
 }
+function ytdlpUpdate {
+	local -r isAdmin=$(groups 2>/dev/null | \egrep -wq "sudo|adm|admin|root" && echo true || echo false)
+	if [ $# -gt 1 ];then
+		echo "=> Usage: $FUNCNAME [ytdlGitURL]"
+		return 1
+	elif [ $# = 1 ];then
+		local ytdlGitURL=$1
+	else
+		local ytdlGitURL=https://github.com/yt-dlp/yt-dlp
+		local ytdlPyPI_URL=https://pypi.org/pypi/yt-dlp
+	fi
+
+	local sudo=""
+	if $isAdmin
+	then
+		sudo="command sudo -H"
+	fi
+
+	local package=yt-dlp
+	local yt_dlp=$(which $package)
+	if [ "$yt_dlp" ];then
+		echo "=> Searching for the latest release on $ytdlPyPI_URL ..." >&2
+		local ytdlLatestRelease=$(\curl -Ls $ytdlPyPI_URL/json | jq -r .info.version)
+		if [ -z "$ytdlLatestRelease" ];then
+			set -o pipefail
+			echo "=> Couldn't find the latest release on $ytdlPyPI_URL, checking the $ytdlGitURL repository ..." >&2
+			local ytdlLatestRelease=$(\git ls-remote --tags --refs $ytdlGitURL | awk -F/ '{print$NF}' | sort -rV | head -1)
+			set +o pipefail
+		else
+			ytdlLatestRelease=$(printf "%04d.%02d.%02d" $(echo $ytdlLatestRelease | cut -d. -f1-3 | tr . " "))
+			echo "=> Found the $ytdlLatestRelease version." >&2
+		fi
+
+		local ytdlCurrentRelease=$($yt_dlp --version)
+		if [ "$ytdlLatestRelease" != $ytdlCurrentRelease ];then
+			local ytdlPythonVersion=$($yt_dlp --ignore-config -v 2>&1 | awk -F "[ .]" '/Python version/{printf$4"."$5}')
+			$sudo $(which pip$ytdlPythonVersion) install -U $package
+		else
+			echo "=> [$FUNCNAME] INFO : You already have the latest release, which is $ytdlLatestRelease." >&2
+		fi
+	else
+		$sudo $(which pip3) install -U $package
+	fi
+}
 function ytget {
 	trap 'rc=130;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
 	youtubeURLPrefix=https://www.youtube.com/watch?v=
