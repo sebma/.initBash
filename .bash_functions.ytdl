@@ -631,7 +631,8 @@ function ytdlUpdate {
 		sudo="command sudo -H"
 	fi
 
-	local youtube_dl=$(which youtube-dl)
+	local package=youtube-dl
+	local youtube_dl=$(which $package)
 	if [ "$youtube_dl" ];then
 		echo "=> Searching for the latest release on $ytdlPyPI_URL ..." >&2
 		local ytdlLatestRelease=$(\curl -Ls $ytdlPyPI_URL/json | jq -r .info.version)
@@ -649,12 +650,12 @@ function ytdlUpdate {
 		local ytdlCurrentRelease=$($youtube_dl --version)
 		if [ "$ytdlLatestRelease" != $ytdlCurrentRelease ];then
 			local ytdlPythonVersion=$($youtube_dl --ignore-config -v 2>&1 | awk -F "[ .]" '/Python version/{printf$4"."$5}')
-			$sudo $(which pip$ytdlPythonVersion) install -U youtube-dl
+			$sudo $(which pip$ytdlPythonVersion) install -U $package
 		else
 			echo "=> [$FUNCNAME] INFO : You already have the latest release, which is $ytdlLatestRelease." >&2
 		fi
 	else
-		$sudo $(which pip3) install -U youtube-dl
+		$sudo $(which pip3) install -U $package
 	fi
 }
 function ytget {
