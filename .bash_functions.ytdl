@@ -523,7 +523,19 @@ function ytdlFormats {
 
 	local filterFormats="."
 	echo $1 | grep -q -- "^--" && { filterFormats=${1:2};shift; }
-	time youtube-dl -F "$@" | egrep -vw "information|automatic captions|Available formats|Checking .* video format URL" | \egrep "$filterFormats|Downloading|format code  extension  resolution note"
+	time youtube-dl -F "$@" | egrep -vw "information|manifest|android player|automatic captions|Available formats|Checking .* video format URL" | \egrep "$filterFormats|Downloading|format code  extension  resolution note"
+	trap - INT
+}
+function ytdlpFormats {
+	trap 'rc=130;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
+	test $# = 0 && {
+		echo "=> Usage: $FUNCNAME [--filterFormats] url1 url2 ..." >&2
+		return 1
+	}
+
+	local filterFormats="."
+	echo $1 | grep -q -- "^--" && { filterFormats=${1:2};shift; }
+	time yt-dlp -F "$@" | egrep -vw "information|manifest|android player|automatic captions|Available formats|Checking .* video format URL" | \egrep "$filterFormats|Downloading|format code  extension  resolution note"
 	trap - INT
 }
 function ytdlGetFormat {
