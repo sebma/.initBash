@@ -12,10 +12,17 @@ JP_Videos=$JP_Channel/videos?sort=dd
 JP_USA_Channel=https://www.youtube.com/c/JosephPrinceMinistriesUSA
 JP_USA_Live=$JP_USA_Channel/live
 JP_USA_Videos=$JP_USA_Channel/videos?sort=dd
+# youtube-dl
 ytdlURL=https://github.com/ytdl-org/youtube-dl
 ytdlIssues=$ytdlURL/issues
 ytdlReleases=$ytdlURL/releases
 ytdlLatestRelease=$ytdlReleases/latest
+# yt-dlp
+ytdlpURL=https://github.com/yt-dlp/yt-dlp
+ytdlpIssues=$ytdlURL/issues
+ytdlpReleases=$ytdlURL/releases
+ytdlpLatestRelease=$ytdlReleases/latest
+
 alias recordYTLive="timeout -s SIGINT 150m getRestrictedFilenamesFORMAT.sh"
 alias recordJPLive360p="recordYTLive  93 $JP_Live"
 alias recordNCCLive360p="recordYTLive 93 $NCC_Live"
@@ -33,6 +40,7 @@ alias ytdlGetFileName="\youtube-dl --get-filename"
 alias ytdlGetVideoID="\youtube-dl --get-id"
 alias ytdlGetFormatID="\youtube-dl --get-filename -o '%(format_id)s' -f"
 alias ytdlLatestRelease='\git ls-remote --tags --refs $ytdlURL | awk -F/ "{print\$NF}" | sort -rV | head -1'
+alias ytdlpLatestRelease='\git ls-remote --tags --refs $ytdlpURL | awk -F/ "{print\$NF}" | sort -rV | head -1'
 alias ytdlOpenIssues="open $ytdlURL/issues"
 alias ytdlOpenReleases="open $ytdlURL/releases"
 alias ytdlOpenLatestRelease="open $ytdlURL/releases/latest"
