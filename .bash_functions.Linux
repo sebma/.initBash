@@ -215,6 +215,13 @@ function lsgroup {
 		printf "%s:" $group;awk -F: "/$group:/"'{gsub(","," ");print$NF}' /etc/group
 	done
 }
+function lsprinters {
+#	\lspci -nnd ::280 "$@"
+	\lsusb -v 2>/dev/null | awk 'BEGIN{IGNORECASE=1}/^Bus/{id=$6}/\<Printer\>/{print id}' | uniq | while read device
+	do
+		\lsusb -d $device "$@"
+	done
+}
 function lswebcams {
 	\lspci | awk 'BEGIN{IGNORECASE=1}/web.*cam|camera/{print$1}' | while read device
 	do
