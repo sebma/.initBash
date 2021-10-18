@@ -192,6 +192,16 @@ function locate {
 	groups 2>/dev/null | \egrep -wq "sudo|admin" && locateOptions="-e" || locateOptions="--database $HOME/.local/lib/mlocate/mlocate.db -e"
 	echo "$@" | \grep -q "\-[a-z]*r" && $locate $locateOptions "$@" || $locate $locateOptions -i --regex "${@}"
 }
+function lsbluetooth {
+	\lspci | awk '/Bluetooth/{print$1}' | while read device
+	do
+		\lspci -nns $device "$@"
+	done
+	\lsusb -v 2>/dev/null | awk '/^Bus/{id=$6}/\<Bluetooth\>/{print id}' | uniq | while read device
+	do
+		\lsusb -d $device "$@"
+	done
+}
 function lseth {
 	\lspci -nnd ::200 "$@"
 	\lsusb | awk '/\<Ethernet\>/{print$6}' | while read device
@@ -203,16 +213,6 @@ function lsgroup {
 	for group
 	do
 		printf "%s:" $group;awk -F: "/$group:/"'{gsub(","," ");print$NF}' /etc/group
-	done
-}
-function lsbluetooth {
-	\lspci | awk '/Bluetooth/{print$1}' | while read device
-	do
-		\lspci -nns $device "$@"
-	done
-	\lsusb -v 2>/dev/null | awk '/^Bus/{id=$6}/\<Bluetooth\>/{print id}' | uniq | while read device
-	do
-		\lsusb -d $device "$@"
 	done
 }
 function lswebcams {
