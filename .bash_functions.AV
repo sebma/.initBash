@@ -1072,7 +1072,7 @@ set +x
 	rm -vf "$videosListFile"
 	sync
 }
-function videoConcatFFMPEG_WithLoss {
+function videoConcatFFMPEG_WithLoss_concat_demuxer {
 	if [ $# -lt 3 ]
 	then
 		echo "=> Usage: $FUNCNAME destFile video1 video2 ..." >&2
@@ -1087,13 +1087,39 @@ function videoConcatFFMPEG_WithLoss {
 	[ $extension = mp4 ] && local mp4Options="-movflags +frag_keyframe"
 	for video
 	do
-		extension="${video/*./}"
 		echo "file '$video'" >> "$videosListFile"
 		let indexOfFiles+=1
 	done
 
 set -x
 	time $ffmpeg -f concat -i "$videosListFile" $(printf -- "-map %d " {1..$indexOfFiles}) $mp4Options "$destFile"
+set +x
+	rm -vf "$videosListFile"
+	sync
+}
+function videoConcatFFMPEG_WithLoss_concat_filter {
+	if [ $# -lt 3 ]
+	then
+		echo "=> Usage: $FUNCNAME destFile video1 video2 ..." >&2
+		return 1
+	fi
+
+	local destFile="$1"
+	local extension="${destFile/*./}"
+	shift
+	local videosListFile="$(mktemp -p .)"
+	local indexOfFiles=0
+	[ $extension = mp4 ] && local mp4Options="-movflags +frag_keyframe"
+	local filter_complex=""
+	for video
+	do
+		filter_complex+="[$indexOfFiles:v] [$indexOfFiles:a] "
+		let indexOfFiles+=1
+	done
+	filter_complex+="concat=n=$indexOfFiles:v=1:a=1 [v] [a]"
+
+set -x
+	time $ffmpeg $(printf -- "-i %s " "$@") -filter_complex "$filter_complex" -map "[v]" -map "[a]" $mp4Options "$destFile"
 set +x
 	rm -vf "$videosListFile"
 	sync
