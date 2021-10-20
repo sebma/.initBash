@@ -1048,7 +1048,7 @@ function videoCodecOfFile {
 		echo $videoCodec
 	done
 }
-function videoConcatFFMPEG {
+function videoConcatFFMPEG_Losslessly {
 	if [ $# -lt 3 ]
 	then
 		echo "=> Usage: $FUNCNAME destFile video1 video2 ..." >&2
@@ -1064,7 +1064,31 @@ function videoConcatFFMPEG {
 		echo "file '$video'" >> "$videosListFile"
 	done
 
+set -x
 	time $ffmpeg -f concat -i "$videosListFile" $remuxOptions "$destFile"
+set +x
+	rm -vf "$videosListFile"
+	sync
+}
+function videoConcatFFMPEG_WithLoss {
+	if [ $# -lt 3 ]
+	then
+		echo "=> Usage: $FUNCNAME destFile video1 video2 ..." >&2
+		return 1
+	fi
+
+	destFile="$1"
+	shift
+	videosListFile="$(mktemp -p .)"
+	for video
+	do
+		extension="${video/*./}"
+		echo "file '$video'" >> "$videosListFile"
+	done
+
+set -x
+	time $ffmpeg -f concat -i "$videosListFile" -map 0 "$destFile"
+set +x
 	rm -vf "$videosListFile"
 	sync
 }
