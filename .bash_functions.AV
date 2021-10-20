@@ -1055,17 +1055,19 @@ function videoConcatFFMPEG_Losslessly {
 		return 1
 	fi
 
-	destFile="$1"
+	local destFile="$1"
 	shift
-	videosListFile="$(mktemp -p .)"
+	local videosListFile="$(mktemp -p .)"
+	local indexOfFiles=-1
 	for video
 	do
 		extension="${video/*./}"
 		echo "file '$video'" >> "$videosListFile"
+		let indexOfFiles+=1
 	done
 
 set -x
-	time $ffmpeg -f concat -i "$videosListFile" $remuxOptions "$destFile"
+	time $ffmpeg -f concat -i "$videosListFile" -c copy $(printf -- "-map %d " {1..$indexOfFiles}) "$destFile"
 set +x
 	rm -vf "$videosListFile"
 	sync
@@ -1077,17 +1079,21 @@ function videoConcatFFMPEG_WithLoss {
 		return 1
 	fi
 
-	destFile="$1"
+	local destFile="$1"
+	local extension="${destFile/*./}"
 	shift
-	videosListFile="$(mktemp -p .)"
+	local videosListFile="$(mktemp -p .)"
+	local indexOfFiles=-1
+	[ $extension = mp4 ] && local mp4Options="-movflags +frag_keyframe"
 	for video
 	do
 		extension="${video/*./}"
 		echo "file '$video'" >> "$videosListFile"
+		let indexOfFiles+=1
 	done
 
 set -x
-	time $ffmpeg -f concat -i "$videosListFile" -map 0 "$destFile"
+	time $ffmpeg -f concat -i "$videosListFile" $(printf -- "-map %d " {1..$indexOfFiles}) $mp4Options "$destFile"
 set +x
 	rm -vf "$videosListFile"
 	sync
