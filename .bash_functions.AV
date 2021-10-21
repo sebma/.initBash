@@ -1107,7 +1107,6 @@ function videoConcatFFMPEG_WithLoss_concat_filter {
 	local destFile="$1"
 	local extension="${destFile/*./}"
 	shift
-	local videosListFile="$(mktemp -p .)"
 	local indexOfFiles=0
 	[ $extension = mp4 ] && local mp4Options="-movflags +frag_keyframe"
 	local filter_complex=""
@@ -1121,7 +1120,6 @@ function videoConcatFFMPEG_WithLoss_concat_filter {
 set -x
 	time $ffmpeg $(printf -- "-i %s " "$@") -filter_complex "$filter_complex" -map "[v]" -map "[a]" $mp4Options "$destFile"
 set +x
-	rm -vf "$videosListFile"
 	sync
 }
 function videoDelay {
