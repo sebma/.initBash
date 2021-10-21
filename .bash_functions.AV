@@ -1048,7 +1048,7 @@ function videoCodecOfFile {
 		echo $videoCodec
 	done
 }
-function videoConcatFFMPEG_Losslessly {
+function videoConcatFFMPEG_Losslessly-concat_demuxer {
 	if [ $# -lt 3 ]
 	then
 		echo "=> Usage: $FUNCNAME destFile video1 video2 ..." >&2
@@ -1072,7 +1072,7 @@ set +x
 	rm -vf "$videosListFile"
 	sync
 }
-function videoConcatFFMPEG_WithLoss_concat_demuxer {
+function videoConcatFFMPEG_WithLoss-concat_demuxer {
 	if [ $# -lt 3 ]
 	then
 		echo "=> Usage: $FUNCNAME destFile video1 video2 ..." >&2
@@ -1097,7 +1097,7 @@ set +x
 	rm -vf "$videosListFile"
 	sync
 }
-function videoConcatFFMPEG_WithLoss_concat_filter {
+function videoConcatFFMPEG_WithLoss-concat_filter {
 	if [ $# -lt 3 ]
 	then
 		echo "=> Usage: $FUNCNAME destFile video1 video2 ..." >&2
