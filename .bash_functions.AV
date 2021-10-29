@@ -620,7 +620,7 @@ function containerOfFile {
 function cropdetect {
 	ffmpeg -i "$1" -t 1 -vf cropdetect -f null - 2>&1 | awk '/crop/{line=$NF}END{print line}'
 }
-function ffprobe {
+function ffprobeSummary {
 	which ffprobe >/dev/null && {
 		for arg
 		do
