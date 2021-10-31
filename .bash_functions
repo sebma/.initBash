@@ -772,7 +772,9 @@ function html2pdf {
 		pdfFiles+="$pdfFileName "
 		wkhtmltopdf --no-background --outline --header-line --footer-line --header-left [webpage] --footer-left "[isodate] [time]" --footer-right [page]/[toPage] "$url_or_file" "$pdfFileName"
 	done
+
 	echo "=> OutputFile = $pdfFileName"
+	echo
 	open $pdfFiles
 }
 function htmlReIndent {
