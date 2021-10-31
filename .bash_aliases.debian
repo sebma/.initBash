@@ -43,6 +43,7 @@ alias listPPAs=$'awk -F "[ /]" \'/^deb .*launchpad.net/{print"ppa:"$5"/"$6}\' /e
 alias lsPPAs=listPPAs
 alias update="time sudo $apt update;$apt list --upgradable"
 alias upgradable="$apt list --upgradable"
+alias webpage=website
 
 LANGUAGE=$LANGUAGE_OLD
 
