@@ -522,7 +522,7 @@ function ytdlFormats {
 	}
 
 	local filterFormats="."
-	echo $1 | grep -q -- "^--" && { filterFormats=${1:2};shift; }
+	echo $1 | \grep -q -- "^--" && { filterFormats=${1:2};shift; }
 	time youtube-dl -F "$@" | egrep -vw "information|manifest|android player|automatic captions|Available formats|Checking .* video format URL" | \egrep "$filterFormats|Downloading|format code  extension  resolution note"
 	trap - INT
 }
@@ -534,7 +534,7 @@ function ytdlpFormats {
 	}
 
 	local filterFormats="."
-	echo $1 | grep -q -- "^--" && { filterFormats=${1:2};shift; }
+	echo $1 | \grep -q -- "^--" && { filterFormats=${1:2};shift; }
 	time yt-dlp -F "$@" | egrep -vw "information|manifest|android player|automatic captions|Available formats|Checking .* video format URL" | \egrep "$filterFormats|Downloading|format code  extension  resolution note"
 	trap - INT
 }
