@@ -903,6 +903,7 @@ function opus2opus {
 			echo "==> outputFile = $outputFile"
 			if [ ! -s "$outputFile" ]; then
 				sampling=$(perl -e "{print $sampling*1000}")
+#				time $ffmpeg $ffmpegOptions -i "$inputFile" -ar $sampling -vn -sn -f wav - | opusenc - --bitrate $bitrate "$outputFile"
 set -x
 				time opusdec --force-wav --rate $sampling "$inputFile" - | opusenc - --bitrate $bitrate "$outputFile"
 set +x
