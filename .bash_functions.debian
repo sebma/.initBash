@@ -47,6 +47,7 @@ function apt-cache {
 	esac
 }
 function aptCachePolicy2LaunchpadPPAURLs {
+	local pkg=""
 	for pkg
 	do
 		apt-cache policy $pkg | awk '/launchpad.net/{print$2}' | awk -v pkg=$pkg -F/ 'BEGIN{OFS=FS}{printf pkg" ppa:"$4"/"$5" ";sub("ppa.","",$3);$4="~"$4"/+archive";tmp=$5;$5=$6;$6=tmp;print}'
@@ -195,6 +196,13 @@ function fixAptKeys {
 }
 function isInstalled {
 	test $1 && dpkg -l $1 | grep -q ^.i
+}
+function listFiles2LaunchpadPPAURLs {
+	local listFile=""
+	for listFile
+	do
+		sed -n "s/^# //;/deb /p" $listFile | awk '/launchpad.net/{print$2}' | awk -v listFile=$listFile -F/ 'BEGIN{OFS=FS}{printf listFile" ppa:"$4"/"$5" ";sub("ppa.","",$3);$4="~"$4"/+archive";tmp=$5;$5=$6;$6=tmp;print}'
+	done | uniq | column -t
 }
 function lsPackagesFromRepo {
 	local architecture=$(dpkg-architecture -q DEB_HOST_ARCH 2>/dev/null || dpkg-architecture | awk -F"=" '/DEB_HOST_ARCH\>/{print$2}')
