@@ -133,7 +133,7 @@ function anyTimeWithTZ2LocalTimeZone {
 	elif [ $# = 1 ];then
 		case $1 in
 			-h|--h|-help|--help) echo "=> Usage : $FUNCNAME remoteTime [remoteTZ]" >&2;return 1;;
-			*) remoteTime=$1
+			*) remoteTime=$1;;
 		esac
 	else
 		remoteTime=$1
@@ -1387,7 +1387,29 @@ function pkill {
 		$pkill
 	fi
 }
+function printLastLines {
+	local pattern=to_be_defined
+	local remoteTZ
+	if [ $# = 0 ];then
+		echo "=> Usage : $FUNCNAME pattern file" >&2
+		return 1
+	elif [ $# = 1 ];then
+		case $1 in
+			-h|--h|-help|--help) echo "=> Usage : $FUNCNAME pattern file" >&2;return 1;;
+		esac
+	else
+		pattern="$1"
+		file="$2"
+	fi
+
+	tac "$file" | sed "/$pattern/q" | tac
+}
 function printrv {
+	[ $# = 0 ] && {
+		echo "=> Print odd pages in reverse order : $FUNCNAME document"
+		return 1
+	}
+
 	lp -o page-set=odd -o outputorder=reverse $1
 	echo "=> Press enter once you have flipped the pages in the printer ..."
 	read
