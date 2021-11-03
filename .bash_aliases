@@ -43,7 +43,7 @@ alias audioInfo="\mplayer -identify -vo null -ao null -frames 0"
 alias audioRenameFromTags=renameFromTags
 alias bc="\bc -l"
 alias binxi="\binxi -c17 -z"
-alias binxiSummary="binxi -Fm -v3"
+alias binxiSummary="binxi -Fmd -v3"
 alias bthctl=bluetoothctl
 alias brewUnInstall='\bash -c "$(\curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall.sh)"'
 alias brewUpdate="time \brew update -v"
@@ -167,7 +167,7 @@ alias imageInfo="\identify -ping -format '=> %f\nFormat: %m\nPixels: %w x %h\nDe
 alias install="\install -pv"
 alias integer="$local -i"
 alias inxi="LC_ALL=C \inxi -z -c2"
-alias inxiSummary="inxi -Fm -v3"
+alias inxiSummary="inxi -Fmd -v3"
 alias ip@=lanip
 alias ipNeighbours="ip neighbour | column -t"
 alias is32or64bits='\getconf LONG_BIT'
