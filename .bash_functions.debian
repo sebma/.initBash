@@ -213,6 +213,7 @@ function lsPackagesFromRepo {
 		return 1
 	else
 		repo="${1/ppa:/}"
+		repo="${repo/\//_}"
 	fi
 
 	aptitude search -F '%p' "?origin($repo) ( ?architecture($architecture) | ?architecture(all) ) ?installed" || \grep -h -P -o "^Package: \K.*" /var/lib/apt/lists/*$repo*_*Packages | sort -u || grep-dctrl -n -sPackage . /var/lib/apt/lists/*$repo*_*Packages | sort -u
