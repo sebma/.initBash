@@ -47,7 +47,6 @@ alias binxiSummary="binxi -Fmd -v3"
 alias bthctl=bluetoothctl
 alias brewUnInstall='\bash -c "$(\curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall.sh)"'
 alias brewUpdate="time \brew update -v"
-alias bsu='chmod +r $XAUTHORITY;cd $BEA_HOME/utils/bsu; ./bsu.sh'
 alias burnaudiocd='\burnclone'
 alias burncdrw='\cdrecord -v -dao driveropts=burnfree fs=14M speed=12 gracetime=10 -eject'
 alias burnclone='\cdrecord -v -clone -raw driveropts=burnfree fs=14M speed=16 gracetime=10 -eject -overburn'
