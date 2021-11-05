@@ -71,8 +71,11 @@ else
 fi
 
 trap 'echo "=> Ignoring this step and continuing the script <$(basename $BASH_SOURCE)> ..." >&2' INT
+
 setxkbmap -layout fr >/dev/null 2>&1
-groups 2>/dev/null | egrep -wq "sudo|admin" && xhost SI:localuser:root >/dev/null 2>&1 #Permet a root de lancer des applis graphiques
+
+test -z "$XAUTHORITY" && export XAUTHORITY=$HOME/.Xauthority # If "X11 connection rejected because of wrong authentication"
+groups 2>/dev/null | egrep -wq "sudo|admin" && xhost SI:localuser:root >/dev/null 2>&1 #Permet a root de lancer des applis graphiques via sudo
 trap - INT
 
 groups 2>/dev/null | egrep -wq "sudo|admin" || \mkdir -p ~/.local/lib/mlocate/ ~/.local/share/applications/ 2>/dev/null
