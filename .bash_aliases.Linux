@@ -120,8 +120,6 @@ then
 	alias lvresize="\lvresize -r"
 	alias pvs="\pvs -v"
 	alias pgrep="\pgrep -lf"
-	alias pip2Install="curl -s https://bootstrap.pypa.io/get-pip.py | sudo -H python2"
-	alias pip3Install="curl -s https://bootstrap.pypa.io/get-pip.py | sudo -H python3"
 	alias pip2Update="\sudo -H $(which pip2) install -U pip || \sudo -H $(which pip) install U pip"
 	alias pip3Update="\sudo -H $(which pip3) install -U pip || \sudo -H $(which pip) install -U pip"
 	alias restart_nm="nmRestart"
