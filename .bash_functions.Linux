@@ -279,6 +279,22 @@ function open {
 		$openCommand "$file" 2>&1 | \egrep -v "MBuntu-Y-For-Unity"
 	done
 }
+function pip2Install {
+	if [ $(distribType) = debian ];then
+		for pkg in "";do
+			dpkg -l $pkg | grep ^i || echo "=> You need to install <$pkg>"
+		done
+	fi
+	\curl -Ls https://bootstrap.pypa.io/pip/2.7/get-pip.py | sudo -H python3
+}
+function pip3Install {
+	if [ $(distribType) = debian ];then
+		for pkg in python3-distutils;do
+			dpkg -l $pkg | grep ^i || echo "=> You need to install <$pkg>"
+		done
+	fi
+	\curl -Ls https://bootstrap.pypa.io/get-pip.py | sudo -H python3
+}
 function ppidof {
 	local regExp="$1"
 	\ps -o ppid= $(\pidof "$regExp")
