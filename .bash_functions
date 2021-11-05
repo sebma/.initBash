@@ -1356,10 +1356,8 @@ function pip3 {
 	pip $@
 }
 function piphelp {
-	pip help $1 | less
-}
-function piphelp {
-	pip help $1 | less
+	local pip=$(which pip 2>/dev/null)
+	test -n "$pip" && $pip help $1 | less
 }
 function pkill {
 	local firstArg=$1
