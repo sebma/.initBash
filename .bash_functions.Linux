@@ -280,20 +280,24 @@ function open {
 	done
 }
 function pip2Install {
-	if [ $(distribType) = debian ];then
-		for pkg in "";do
-			dpkg -l $pkg | grep ^i || echo "=> You need to install <$pkg>"
-		done
+	if ! which pip2 >/dev/null;then
+		if [ $(distribType) = debian ];then
+			for pkg in "";do
+				:
+			done
+		fi
+		\curl -Ls https://bootstrap.pypa.io/pip/2.7/get-pip.py | sudo -H python3
 	fi
-	\curl -Ls https://bootstrap.pypa.io/pip/2.7/get-pip.py | sudo -H python3
 }
 function pip3Install {
-	if [ $(distribType) = debian ];then
-		for pkg in python3-distutils;do
-			dpkg -l $pkg | grep ^i || echo "=> You need to install <$pkg>"
-		done
+	if ! which pip3 >/dev/null;then
+		if [ $(distribType) = debian ];then
+			for pkg in python3-distutils;do
+				dpkg -l $pkg | \grep ^i -q || echo "=> You need to install <$pkg>"
+			done
+		fi
+		\curl -Ls https://bootstrap.pypa.io/get-pip.py | sudo -H python3
 	fi
-	\curl -Ls https://bootstrap.pypa.io/get-pip.py | sudo -H python3
 }
 function ppidof {
 	local regExp="$1"
