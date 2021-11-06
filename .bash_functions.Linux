@@ -244,7 +244,8 @@ function lswifiNICs {
 function lvs {
 	local sudo=""
 	type sudo >/dev/null 2>&1 && [ $(id -u) != 0 ] && groups | egrep -wq "sudo|adm|admin|root|wheel" && sudo=$(which sudo)
-	$sudo $(which lvs) -v "$@" | awk '{printf"  %-16s%-36s%5d %-10s%9s%4d%4d%5d%5d %s\\n",$1,$2,$3,$4,$5,$6,$7,$8,$9,$NF}'
+	$sudo $(which lvs) -v "$@" | awk  '/LG.*VG/{printf"  %-22s%-42s%5s %-10s%9s%4s%4s%5s%5s %s\n",$1,$2,$3,$4,$5,$6,$7,$8,$9,$NF}' # Header only
+	$sudo $(which lvs) -v "$@" | awk '!/LG.*VG/{printf"  %-22s%-42s%5d %-10s%9s%4d%4d%5d%5d %s\n",$1,$2,$3,$4,$5,$6,$7,$8,$9,$NF}'
 }
 function mac@ {
 	set -o pipefail
