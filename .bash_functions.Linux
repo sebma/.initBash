@@ -197,14 +197,14 @@ function lsbluetooth {
 	do
 		\lspci -nns $device "$@"
 	done
-	\lsusb -v 2>/dev/null | awk '/^Bus/{id=$6}/\<Bluetooth\>/{print id}' | uniq | while read device
+	\lsusb -v 2>/dev/null | awk '/^Bus/{id=$6}/Bluetooth/{print id}' | uniq | while read device # see https://stackoverflow.com/q/69860894/5649639
 	do
 		\lsusb -d $device "$@"
 	done
 }
 function lseth {
 	\lspci -nnd ::200 "$@"
-	\lsusb | awk '/\<Ethernet\>/{print$6}' | while read device
+	\lsusb | awk 'BEGIN{IGNORECASE=1}/Ethernet/{print$6}' | while read device # see https://stackoverflow.com/q/69860894/5649639
 	do
 		\lsusb -d $device "$@"
 	done
@@ -217,7 +217,7 @@ function lsgroup {
 }
 function lsprinters {
 #	\lspci -nnd ::280 "$@"
-	\lsusb -v 2>/dev/null | awk 'BEGIN{IGNORECASE=1}/^Bus/{id=$6}/\<Printer\>/{print id}' | uniq | while read device
+	\lsusb -v 2>/dev/null | awk 'BEGIN{IGNORECASE=1}/^Bus/{id=$6}/Printer/{print id}' | uniq | while read device # see https://stackoverflow.com/q/69860894/5649639
 	do
 		\lsusb -d $device "$@"
 	done
@@ -227,7 +227,7 @@ function lswebcams {
 	do
 		\lspci -nns $device "$@"
 	done
-	\lsusb -v 2>/dev/null | awk 'BEGIN{IGNORECASE=1}/^Bus/{id=$6}/\<web.*cam|camera\>/{print id}' | uniq | while read device
+	\lsusb -v 2>/dev/null | awk 'BEGIN{IGNORECASE=1}/^Bus/{id=$6}/web.*cam|camera/{print id}' | uniq | while read device # see https://stackoverflow.com/q/69860894/5649639
 	do
 		\lsusb -d $device "$@"
 	done
@@ -236,7 +236,7 @@ function lswebcams {
 }
 function lswifiNICs {
 	\lspci -nnd ::280 "$@"
-	\lsusb -v 2>/dev/null | awk 'BEGIN{IGNORECASE=1}/^Bus/{id=$6}/\<WLAN\>|802.11|wireless [abgn]|AC1200/{print id}' | uniq | while read device
+	\lsusb -v 2>/dev/null | awk 'BEGIN{IGNORECASE=1}/^Bus/{id=$6}/WLAN|802.11|wireless [abgn]|AC1200/{print id}' | uniq | while read device # see https://stackoverflow.com/q/69860894/5649639
 	do
 		\lsusb -d $device "$@"
 	done
