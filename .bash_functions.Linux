@@ -244,10 +244,6 @@ function lswifiNICs {
 function lvs {
 	local sudo=""
 	type sudo >/dev/null 2>&1 && [ $(id -u) != 0 ] && groups | egrep -wq "sudo|adm|admin|root|wheel" && sudo=$(which sudo)
-#	local VG_MaxLength=$($sudo vgs -o vgname | awk '!/VG\s+$/{print length($1)+1}' | sort -n | tail -1)
-#	local LV_MaxLength=$($sudo lvs -o lvname | awk '!/LV\s+$/{print length($1)+1}' | sort -n | tail -1)
-#	$sudo $(which lvs) -v "$@" | awk  "/LV.*VG.*Attr.*LSize/{printf\"  %-${LV_MaxLength}s%-${VG_MaxLength}s%5s %-10s%9s%4s%4s%5s%5s %s\n\",\$1,\$2,\$3,\$4,\$5,\$6,\$7,\$8,\$9,\$NF}" # Header only
-#	$sudo $(which lvs) -v "$@" | awk "!/LV.*VG.*Attr.*LSize/{printf\"  %-${LV_MaxLength}s%-${VG_MaxLength}s%5s %-10s%9s%4s%4s%5s%5s %s\n\",\$1,\$2,\$3,\$4,\$5,\$6,\$7,\$8,\$9,\$NF}" # Header only
 	$sudo lvs -o lvname,vgname,seg_count,attr,lvsize,lv_major,lv_minor,lv_kernel_major,lv_kernel_minor,lv_uuid "$@"
 }
 function mac@ {
