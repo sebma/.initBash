@@ -676,10 +676,10 @@ function ytdlpUpdate {
 		echo "=> Usage: $FUNCNAME [ytdlGitURL]"
 		return 1
 	elif [ $# = 1 ];then
-		local ytdlGitURL=$1
+		local ytdlpGitURL=$1
 	else
-		local ytdlGitURL=https://github.com/yt-dlp/yt-dlp
-		local ytdlPyPI_URL=https://pypi.org/pypi/yt-dlp
+		local ytdlpGitURL=https://github.com/yt-dlp/yt-dlp
+		local ytdlpPyPI_URL=https://pypi.org/pypi/yt-dlp
 	fi
 
 	local sudo=""
@@ -691,24 +691,24 @@ function ytdlpUpdate {
 	local package=yt-dlp
 	local yt_dlp=$(which $package)
 	if [ "$yt_dlp" ];then
-		echo "=> Searching for the latest release on $ytdlPyPI_URL ..." >&2
-		local ytdlLatestRelease=$(\curl -Ls $ytdlPyPI_URL/json | jq -r .info.version)
-		if [ -z "$ytdlLatestRelease" ];then
+		echo "=> Searching for the latest release on $ytdlpPyPI_URL ..." >&2
+		local ytdlpLatestRelease=$(\curl -Ls $ytdlpPyPI_URL/json | jq -r .info.version)
+		if [ -z "$ytdlpLatestRelease" ];then
 			set -o pipefail
-			echo "=> Couldn't find the latest release on $ytdlPyPI_URL, checking the $ytdlGitURL repository ..." >&2
-			local ytdlLatestRelease=$(\git ls-remote --tags --refs $ytdlGitURL | awk -F/ '{print$NF}' | sort -rV | head -1)
+			echo "=> Couldn't find the latest release on $ytdlpPyPI_URL, checking the $ytdlpGitURL repository ..." >&2
+			local ytdlpLatestRelease=$(\git ls-remote --tags --refs $ytdlpGitURL | awk -F/ '{print$NF}' | sort -rV | head -1)
 			set +o pipefail
 		else
-			ytdlLatestRelease=$(printf "%04d.%02d.%02d" $(echo $ytdlLatestRelease | cut -d. -f1-3 | tr . " "))
-			echo "=> Found the $ytdlLatestRelease version." >&2
+			ytdlpLatestRelease=$(printf "%04d.%02d.%02d" $(echo $ytdlpLatestRelease | cut -d. -f1-3 | tr . " "))
+			echo "=> Found the $ytdlpLatestRelease version." >&2
 		fi
 
-		local ytdlCurrentRelease=$($yt_dlp --version)
-		if [ "$ytdlLatestRelease" != $ytdlCurrentRelease ];then
+		local ytdlpCurrentRelease=$($yt_dlp --version)
+		if [ "$ytdlpLatestRelease" != $ytdlpCurrentRelease ];then
 			local ytdlPythonVersion=$($yt_dlp --ignore-config -v 2>&1 | awk -F "[ .]" '/Python version/{printf$4"."$5}')
 			$sudo $(which pip$ytdlPythonVersion) install -U $package
 		else
-			echo "=> [$FUNCNAME] INFO : You already have the latest release, which is $ytdlLatestRelease." >&2
+			echo "=> [$FUNCNAME] INFO : You already have the latest release, which is $ytdlpLatestRelease." >&2
 		fi
 	else
 		$sudo $(which pip3) install -U $package
