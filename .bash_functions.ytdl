@@ -626,7 +626,6 @@ function ytdlSDFormats {
 	trap - INT
 }
 function ytdlUpdate {
-	local -r isAdmin=$(groups 2>/dev/null | \egrep -wq "sudo|adm|admin|root" && echo true || echo false)
 	if [ $# -gt 1 ];then
 		echo "=> Usage: $FUNCNAME [ytdlGitURL]"
 		return 1
@@ -638,6 +637,7 @@ function ytdlUpdate {
 	fi
 
 	local sudo=""
+	local -r isAdmin=$(groups 2>/dev/null | \egrep -wq "sudo|adm|admin|root" && echo true || echo false)
 	if $isAdmin
 	then
 		sudo="command sudo -H"
@@ -655,7 +655,11 @@ function ytdlUpdate {
 			local ytdlLatestRelease=$(\git ls-remote --tags --refs $ytdlGitURL | awk -F/ '{print$NF}' | sort -rV | head -1)
 			set +o pipefail
 		else
-			ytdlLatestRelease=$(printf "%04d.%02d.%02d" $(echo $ytdlLatestRelease | cut -d. -f1-3 | tr . " "))
+			if echo $ytdlLatestRelease | cut -d. -f4 | \grep . -q;then
+				ytdlLatestRelease=$(printf "%04d.%02d.%02d.%d" $(echo $ytdlLatestRelease | cut -d. -f1-4 | tr . " "))
+			else
+				ytdlLatestRelease=$(printf "%04d.%02d.%02d" $(echo $ytdlLatestRelease | cut -d. -f1-3 | tr . " "))
+			fi
 			echo "=> Found the $ytdlLatestRelease version." >&2
 		fi
 
@@ -671,7 +675,6 @@ function ytdlUpdate {
 	fi
 }
 function ytdlpUpdate {
-	local -r isAdmin=$(groups 2>/dev/null | \egrep -wq "sudo|adm|admin|root" && echo true || echo false)
 	if [ $# -gt 1 ];then
 		echo "=> Usage: $FUNCNAME [ytdlGitURL]"
 		return 1
@@ -683,6 +686,7 @@ function ytdlpUpdate {
 	fi
 
 	local sudo=""
+	local -r isAdmin=$(groups 2>/dev/null | \egrep -wq "sudo|adm|admin|root" && echo true || echo false)
 	if $isAdmin
 	then
 		sudo="command sudo -H"
@@ -699,7 +703,11 @@ function ytdlpUpdate {
 			local ytdlpLatestRelease=$(\git ls-remote --tags --refs $ytdlpGitURL | awk -F/ '{print$NF}' | sort -rV | head -1)
 			set +o pipefail
 		else
-			ytdlpLatestRelease=$(printf "%04d.%02d.%02d" $(echo $ytdlpLatestRelease | cut -d. -f1-3 | tr . " "))
+			if echo $ytdlpLatestRelease | cut -d. -f4 | \grep . -q;then
+				ytdlpLatestRelease=$(printf "%04d.%02d.%02d.%d" $(echo $ytdlpLatestRelease | cut -d. -f1-4 | tr . " "))
+			else
+				ytdlpLatestRelease=$(printf "%04d.%02d.%02d" $(echo $ytdlpLatestRelease | cut -d. -f1-3 | tr . " "))
+			fi
 			echo "=> Found the $ytdlpLatestRelease version." >&2
 		fi
 
