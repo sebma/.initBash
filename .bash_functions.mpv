@@ -31,9 +31,11 @@ function moveAudio2FirstConnectedBluetoothDevice {
 function mpv {
 	local mpv="$(which mpv)"
 	local mpvOptions="$mpvDefaultOptions"
+	local DISPLAY=$DISPLAY
 
 	moveAudio2FirstConnectedBluetoothDevice
 
+	test "$SSH_CONNECTION" && hostname | grep -qi b206$ && DISPLAY=:0
 	LANG=en_US.utf8 $mpv $mpvOptions "$@"
 }
 function mpv2 {
@@ -45,7 +47,7 @@ function mpv2 {
 		domain=$(echo "$url" | sed "s/https?:..//" | awk -F. '{print$(NF-1)}')
 		case $domain in
 			dailymotion)
-				ytdl_format=$(ytdlnoconfig -F="$url" | awk '/^hls/{last=$1}END{print last}')
+				ytdl_format=$(ytdlpnoconfig -F="$url" | awk '/^hls/{last=$1}END{print last}')
 				mpvOptions="--ytdl-format=$ytdl_format $mpvOptions"
 			;;
 			*) ;;
