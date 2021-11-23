@@ -25,7 +25,7 @@ alias keyboardRestart='systemctl --user restart maliit-server.service;systemctl 
 alias la='ls -A'
 alias notesGrep='sqlite3 ~/.local/share/jolla-notes/QML/OfflineStorage/Databases/8b63c31a7656301b3f7bcbbfef8a2b6f.sqlite "select body from notes;" | grep'
 alias notesSearch=notesGrep
-alias model='ssu status | awk -F "[ )]" /model/'\''{print$(NF-4)" "$(NF-1)}'\'''
+alias model=$'ssu status | awk -F "[ )]" \'/model/{print$(NF-4)" "$(NF-1)}\''
 #groups | egrep -wq "admin|sudo" && alias pipInstall="curl -fsSL https://bootstrap.pypa.io/get-pip.py | sudo -H python"  || alias pipInstall="curl -fsSL https://bootstrap.pypa.io/get-pip.py | python"
 #groups | egrep -wq "admin|sudo" && alias pip3Install="curl -fsSL https://bootstrap.pypa.io/get-pip.py | sudo -H python3" || alias pip3Install="curl -fsSL https://bootstrap.pypa.io/get-pip.py | python3"
 groups | egrep -wq "admin|sudo" && alias pipInstall="sudo -H easy_install pip"  || alias pipInstall="easy_install --user pip"
