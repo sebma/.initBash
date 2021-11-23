@@ -2,7 +2,7 @@
 ! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-( [ $osID = ubuntu ] || [ $osID = debian ] ) && alias codeName='awk -F"[()]" '\''/VERSION=/{print$(NF-1)}'\'' /etc/os-release' && export codeName=$(\lsb_release -sc)
+( [ $osID = ubuntu ] || [ $osID = debian ] ) && alias codeName=$'awk -F"[()]" \'/VERSION=/{print$(NF-1)}\' /etc/os-release' && export codeName=$(\lsb_release -sc)
 
 set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
