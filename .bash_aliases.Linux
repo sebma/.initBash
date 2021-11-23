@@ -95,7 +95,7 @@ alias suspend="\systemctl suspend && exit"
 #alias topf10='$find . -xdev $findPrunePathsExpression -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | head -10 | awk '\''{total+=$5;print}END{print"=> total = "total" MiB"}'\'' | column -t'
 #alias topf50='$find . -xdev $findPrunePathsExpression -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | head -50 | awk '\''{total+=$5;print}END{print"=> total = "total" MiB"}'\'' | column -t'
 #alias topf5='$find . -xdev $findPrunePathsExpression -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 |  head -5 | awk '\''{total+=$5;print}END{print"=> total = "total" MiB"}'\'' | column -t'
-alias totalLVSize='awk '\''/LV_/{total+=gensub("g$","",1,$4)}END{print"=> Total = "total}'\'''
+alias totalLVSize=$'awk \'/LV_/{total+=gensub("g$","",1,$4)}END{print"=> Total = "total}\''
 alias topf10='$find . -xdev $findPrunePathsExpression -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | head -10 | numfmt --field 5 --from=iec --to=iec-i --suffix=B | column -t'
 alias topf50='$find . -xdev $findPrunePathsExpression -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | head -50 | numfmt --field 5 --from=iec --to=iec-i --suffix=B | column -t'
 alias topf5='$find . -xdev $findPrunePathsExpression -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 |  head -5  | numfmt --field 5 --from=iec --to=iec-i --suffix=B | column -t'
