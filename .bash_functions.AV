@@ -389,26 +389,26 @@ done
 function any2opus {
 	set +x
 	test $# = 0 && {
-		echo "=> Usage: $FUNCNAME [-b 64k] [-s 48k] audioFile" >&2
+		echo "=> Usage: $FUNCNAME [-b bitrate in kbps|64k] [-s frequency in kHz|same as input by default] audioFile" >&2
 		return 1
 	}
 
 	local bitrate=64k
-	local sampling=48k
+	local sampling=""
 	echo $1 | \grep -q -- "^-b" && bitrate=$2  && shift 2
 	echo $1 | \grep -q -- "^-s" && sampling=$2 && shift 2
-	sampling=${sampling/k/}
+	bitrate=${bitrate/bps/}
+	test -n "$sampling" && sampling=${sampling/k/} && sampling=${sampling/Hz/}
 
 	for inputFile in "$@"
 	do
 		if [ -s "$inputFile" ]; then
 			echo "=> inputFile = <$inputFile>"
-			outputFile="${inputFile%.*}-${bitrate}bps-${sampling}kHz.ogg"
-			echo "==> outputFile = $outputFile"
+			test -n "$sampling" && outputFile="${inputFile%.*}-${bitrate}bps-${sampling}kHz_opus.oga" || outputFile="${inputFile%.*}-${bitrate}bps_opus.oga"
 			if [ ! -s "$outputFile" ]; then
-				sampling=$(perl -e "{print $sampling*1000}")
+				test -n "$sampling" && { sampling=$(perl -e "{print $sampling*1000}"); samplingOption="-ar $sampling"; }
 set -x
-				time $ffmpeg $ffmpegOptions -i "$inputFile" -ar $sampling -vn -sn -f wav - | opusenc - --bitrate $bitrate "$outputFile"
+				time $ffmpeg $ffmpegOptions -i "$inputFile" $samplingOption -vn -sn -f wav - | opusenc - --bitrate $bitrate "$outputFile"
 set +x
 				sync
 				touch -r "$inputFile" "$outputFile"
