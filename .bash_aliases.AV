@@ -12,7 +12,7 @@ alias ffprobe="time \ffprobe -hide_banner"
 alias keyFrames="command ffprobe -hide_banner -loglevel error -skip_frame nokey -select_streams v:0 -show_entries frame=pkt_pts_time -of csv=print_section=0"
 alias mp32wavstdout="\mpg123 --wav - "
 alias ogg2wavstdout="\oggdec --output=- "
-alias recordScreenNoAudio=$'time $ffmpeg -video_size $(xwininfo -root | awk \'/-geometry/{sub("+.*$","",$2);printf$2}\') -f x11grab -i $DISPLAY.0'
+alias recordScreenNoAudio=$'time $ffmpeg -video_size $(xrandr | awk \'/\*/{print$1}\') -f x11grab -i $DISPLAY.0'
 alias screenRecordNoAudio=recordScreenNoAudio
 alias recordScreen="recordScreenNoAudio -f pulse -i default"
 alias screenRecord=recordScreen
