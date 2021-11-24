@@ -403,7 +403,6 @@ function any2opus {
 	for inputFile in "$@"
 	do
 		if [ -s "$inputFile" ]; then
-			echo "=> inputFile = <$inputFile>"
 			test -n "$sampling" && outputFile="${inputFile%.*}-${bitrate}bps-${sampling}kHz_opus.oga" || outputFile="${inputFile%.*}-${bitrate}bps_opus.oga"
 			if [ ! -s "$outputFile" ]; then
 				test -n "$sampling" && { sampling=$(perl -e "{print $sampling*1000}"); reSamplingOption="-ar $sampling"; }
