@@ -13,7 +13,9 @@ alias keyFrames="command ffprobe -hide_banner -loglevel error -skip_frame nokey 
 alias mp32wavstdout="\mpg123 --wav - "
 alias ogg2wavstdout="\oggdec --output=- "
 alias recordScreenNoAudio=$'time $ffmpeg -video_size $(xwininfo -root | awk \'/-geometry/{sub("+.*$","",$2);printf$2}\') -f x11grab -i $DISPLAY.0'
-alias recordScreenWithAudio="recordScreenNoAudio -f pulse -i default"
+alias screenRecordNoAudio=recordScreenNoAudio
+alias recordScreen="recordScreenNoAudio -f pulse -i default"
+alias screenRecord=recordScreen
 alias stopYTDLLiveRecording='pkill -SIGINT -o youtube-dl.*/live'
 alias youtube-dl="LANG=C.UTF-8 command youtube-dl"
 alias yt-dl="LANG=C.UTF-8 command youtube-dl"
