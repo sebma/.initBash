@@ -387,7 +387,6 @@ do
 done
 }
 function any2opus {
-	set +x
 	test $# = 0 && {
 		echo "=> Usage: $FUNCNAME [-b bitrate in kbps|64k] [-s frequency in kHz|same as input by default] audioFile" >&2
 		return 1
@@ -395,6 +394,7 @@ function any2opus {
 
 	local bitrate=64k
 	local sampling=""
+	local reSamplingOption=""
 	echo $1 | \grep -q -- "^-b" && bitrate=$2  && shift 2
 	echo $1 | \grep -q -- "^-s" && sampling=$2 && shift 2
 	bitrate=${bitrate/bps/}
