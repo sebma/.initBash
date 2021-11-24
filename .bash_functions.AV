@@ -387,6 +387,42 @@ do
 done
 }
 function any2opus {
+	set +x
+	test $# = 0 && {
+		echo "=> Usage: $FUNCNAME [-b 64k] [-s 48k] audioFile" >&2
+		return 1
+	}
+
+	local bitrate=64k
+	local sampling=48k
+	echo $1 | \grep -q -- "^-b" && bitrate=$2  && shift 2
+	echo $1 | \grep -q -- "^-s" && sampling=$2 && shift 2
+	sampling=${sampling/k/}
+
+	for inputFile in "$@"
+	do
+		if [ -s "$inputFile" ]; then
+			echo "=> inputFile = <$inputFile>"
+			outputFile="${inputFile%.*}-${bitrate}bps-${sampling}kHz.opus"
+			echo "==> outputFile = $outputFile"
+			if [ ! -s "$outputFile" ]; then
+				sampling=$(perl -e "{print $sampling*1000}")
+set -x
+				time $ffmpeg $ffmpegOptions -i "$inputFile" -ar $sampling -vn -sn -f wav - | opusenc - --bitrate $bitrate "$outputFile"
+set +x
+				sync
+				touch -r "$inputFile" "$outputFile"
+				echo "=> outputFile = <$outputFile>"
+			else
+				echo "=> ERROR: The file <$outputFile> already exits." 1>&2
+				continue
+			fi
+		else
+			echo "=> ERROR: The file <$inputFile> does not exit or is empty." 1>&2
+		fi
+	done
+}
+function any2opusOLD {
 #	local inputFile="$1"
 for inputFile
 do
@@ -410,6 +446,54 @@ do
 	fi
 done
 }
+function any2opus16kbps {
+#	local inputFile="$1"
+for inputFile
+do
+	if [ -s "$inputFile" ]
+	then
+		echo "=> inputFile = <$inputFile>"
+		outputFile="${inputFile%.*}_16kbps.opus"
+		echo "==> outputFile = $outputFile"
+		if [ ! -s "$outputFile" ]
+		then
+			time $ffmpeg -i "$inputFile" -vn -sn -f wav - | opusenc - --bitrate 16 "$outputFile"
+			sync
+			touch -r "$inputFile" "$outputFile"
+			echo "=> outputFile = <$outputFile>"
+		else
+			echo "=> ERROR: The file <$outputFile> already exits." >&2
+			continue
+		fi
+	else
+		echo "=> ERROR: The file <$inputFile> does not exit or is empty." >&2
+	fi
+done
+}
+function any2opus20kbps {
+#	local inputFile="$1"
+for inputFile
+do
+	if [ -s "$inputFile" ]
+	then
+		echo "=> inputFile = <$inputFile>"
+		outputFile="${inputFile%.*}_20kbps.opus"
+		echo "==> outputFile = $outputFile"
+		if [ ! -s "$outputFile" ]
+		then
+			time $ffmpeg -i "$inputFile" -vn -sn -f wav - | opusenc - --bitrate 20 "$outputFile"
+			sync
+			touch -r "$inputFile" "$outputFile"
+			echo "=> outputFile = <$outputFile>"
+		else
+			echo "=> ERROR: The file <$outputFile> already exits." >&2
+			continue
+		fi
+	else
+		echo "=> ERROR: The file <$inputFile> does not exit or is empty." >&2
+	fi
+done
+}
 function any2opus32kbps {
 #	local inputFile="$1"
 for inputFile
@@ -417,7 +501,7 @@ do
 	if [ -s "$inputFile" ]
 	then
 		echo "=> inputFile = <$inputFile>"
-		outputFile="${inputFile%.*}.opus"
+		outputFile="${inputFile%.*}_32kbps.opus"
 		echo "==> outputFile = $outputFile"
 		if [ ! -s "$outputFile" ]
 		then
@@ -441,7 +525,7 @@ do
 	if [ -s "$inputFile" ]
 	then
 		echo "=> inputFile = <$inputFile>"
-		outputFile="${inputFile%.*}.opus"
+		outputFile="${inputFile%.*}_42kbps.opus"
 		echo "==> outputFile = $outputFile"
 		if [ ! -s "$outputFile" ]
 		then
@@ -465,7 +549,7 @@ do
 	if [ -s "$inputFile" ]
 	then
 		echo "=> inputFile = <$inputFile>"
-		outputFile="${inputFile%.*}.opus"
+		outputFile="${inputFile%.*}_64kbps.opus"
 		echo "==> outputFile = $outputFile"
 		if [ ! -s "$outputFile" ]
 		then
