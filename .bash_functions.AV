@@ -407,7 +407,7 @@ function any2opus {
 			test -n "$sampling" && outputFile="${inputFile%.*}-${bitrate}bps-${sampling}kHz_opus.oga" || outputFile="${inputFile%.*}-${bitrate}bps_opus.oga"
 			if [ ! -s "$outputFile" ]; then
 				test -n "$sampling" && { sampling=$(perl -e "{print $sampling*1000}"); reSamplingOption="-ar $sampling"; }
-#				time $ffmpeg $ffmpegOptions -i "$inputFile" $reSamplingOption -vn -sn -f wav - | opusenc - --bitrate $bitrate "$outputFile"
+#				time $ffmpeg $ffmpegOptions -i "$inputFile" $reSamplingOption -vn -sn -f wav - | opusenc - --vbr --bitrate $bitrate "$outputFile"
 set -x
 				time $ffmpeg $ffmpegOptions -i "$inputFile" $reSamplingOption -vn -c:a libopus -b:a $bitrate -vbr on "$outputFile"
 set +x
