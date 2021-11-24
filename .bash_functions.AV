@@ -439,7 +439,7 @@ function any2opusVBR {
 	for inputFile in "$@"
 	do
 		if [ -s "$inputFile" ]; then
-			test -n "$sampling" && outputFile="${inputFile%.*}-${bitrate}bps-${sampling}kHz_opus.oga" || outputFile="${inputFile%.*}-${bitrate}bps_opus.oga"
+			test -n "$sampling" && outputFile="${inputFile%.*}-${bitrate}bps-${sampling}kHz_opus-VBR.oga" || outputFile="${inputFile%.*}-${bitrate}bps_opus-VBR.oga"
 			if [ ! -s "$outputFile" ]; then
 				test -n "$sampling" && { sampling=$(perl -e "{print $sampling*1000}"); reSamplingOption="-ar $sampling"; }
 set -x
