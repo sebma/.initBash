@@ -19,9 +19,9 @@ ytdlReleases=$ytdlURL/releases
 ytdlLatestRelease=$ytdlReleases/latest
 # yt-dlp
 ytdlpURL=https://github.com/yt-dlp/yt-dlp
-ytdlpIssues=$ytdlURL/issues
-ytdlpReleases=$ytdlURL/releases
-ytdlpLatestRelease=$ytdlReleases/latest
+ytdlpIssues=$ytdlpURL/issues
+ytdlpReleases=$ytdlpURL/releases
+ytdlpLatestRelease=$ytdlpReleases/latest
 
 alias recordYTLive="timeout -s SIGINT 150m getRestrictedFilenamesFORMAT.sh"
 alias recordJPLive360p="recordYTLive  93 $JP_Live"
