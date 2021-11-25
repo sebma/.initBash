@@ -381,7 +381,7 @@ function text2man {
 		prefix="${file/.*/}"
 		title="${prefix^^}"
 		echo "=> Converting $file to a manpage ..."
-		txt2man -t "$title" -s 1 "$file" | \gzip -9 > "${file/txt/1}.gz"
+		txt2man -t "$title" -s 1 "$file" | \gzip -9 > "$prefix.1.gz"
 	done
 }
 function topf {
