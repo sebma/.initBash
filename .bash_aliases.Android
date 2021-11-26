@@ -5,13 +5,18 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 
 export find="$(which find)"
 
-unalias ps
+alias ps >/dev/null 2>&1 && unalias ps
 alias androidVersion='echo "=> Android Version: $(getprop ro.build.version.release)"'
 alias androidSDK='echo "=> Android SDK: $(getprop ro.build.version.sdk)"'
+alias df="\df -Ph"
 alias grep="grep --color"
 alias egrep="grep -E"
 unalias less
+alias l="ls"
+alias la="ls -a"
 alias ll="ls -lF"
+alias lla="ls -alF"
+alias llah="ls -alhF"
 alias topd10="topd10"
 alias topd5="topd5"
 alias topd="\du -cxmd 1 2>/dev/null | grep -v '\s*\.$' | sort -nr | head -n"
