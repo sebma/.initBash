@@ -26,6 +26,7 @@ then
 			export escapeChar=$'\033'
 		fi
 	else
+		echo "=> You must install the tput utility if you want the bash prompt colors." >&2
 		[ $BASH_VERSINFO -ge 4 ] && export escapeChar=$'\e' || export escapeChar=$'\033'
 		export normal=${escapeChar}'[m'
 	fi
