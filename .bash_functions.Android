@@ -44,7 +44,7 @@ function androidCodeName {
 		70|71) androidCodeName+=Nougat;;
 		80|81) androidCodeName+=Oreo;;
 		90) androidCodeName+=Pie;;
-		100) androidCodeName+=ToBeReleased;;
+		[1-9][0-9][0-9]) androidCodeName+=NoCodename;;
 		*) androidCodeName=${colors[red]}unknown;;
 		esac
 	}
