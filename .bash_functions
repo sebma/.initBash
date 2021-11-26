@@ -1127,12 +1127,15 @@ function packageManager {
 		redhat) pkgManager="rpm";;
 		Darwin) which brew >/dev/null 2>&1 && pkgManager="brew";;
 		*)
-			local pkgTool=$(which dpkg rpm 2>/dev/null | awk -F/ '{print$NF}')
-			case $pkgTool in
-				dpkg) pkgManager="deb";;
-				rpm) pkgManager="rpm";;
-				*) pkgManager=unknown;;
-			esac
+			local pkgTools=$(which dpkg rpm 2>/dev/null | awk -F/ '{print$NF}')
+			for pkgTool in $pkgTools
+			do
+				case $pkgTool in
+					dpkg) pkgManager="deb";;
+					rpm) pkgManager="rpm";;
+					*) pkgManager=unknown;;
+				esac
+			done
 			;;
 	esac
 	echo $pkgManager
