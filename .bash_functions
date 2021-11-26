@@ -1126,7 +1126,14 @@ function packageManager {
 		debian) pkgManager="deb";;
 		redhat) pkgManager="rpm";;
 		Darwin) which brew >/dev/null 2>&1 && pkgManager="brew";;
-		*) pkgManager=unknown;;
+		*)
+			local pkgTool=$(which dpkg rpm 2>/dev/null | while read line; do basename $line;done)
+			case $pkgTool in
+				dpkg) pkgManager="deb";;
+				rpm) pkgManager="rpm";;
+				*) pkgManager=unknown;;
+			esac
+			;;
 	esac
 	echo $pkgManager
 }
