@@ -3,8 +3,8 @@
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 getprop | grep -q ro.build.version.release && {
-export getprop="$(which getprop)"
-export setprop="$(which setprop)"
+export getprop="$(type -P getprop)"
+export setprop="$(type -P setprop)"
 type pm >/dev/null 2>&1 && alias findPackages="pm list packages -f -i"
 alias getADBTcpPort="$getprop service.adb.tcp.port"
 alias getAndroidCodeName="$getprop ro.build.version.codename"
