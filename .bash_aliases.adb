@@ -2,8 +2,8 @@
 ! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-adb=$(which adb)
-dos2unix="$(which tr) -d '\r'"
+adb=$(type -P adb)
+dos2unix="$(type -P tr) -d '\r'"
 getprop="$adb shell getprop"
 alias adb_getprop="$getprop"
 alias adb_getprop_grep="$getprop | $dos2unix | grep -P"
