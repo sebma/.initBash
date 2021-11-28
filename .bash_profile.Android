@@ -2,7 +2,10 @@
 ! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-command -v termux-chroot >/dev/null 2>&1 && termux-chroot bash -l
+#command -v termux-chroot >/dev/null 2>&1 && termux-chroot bash -l
+echo "=> \$0 = $0"
+echo "=> \${BASH_SOURCE[0]} = ${BASH_SOURCE[0]}"
+echo "=> \${BASH_SOURCE[*]} = ${BASH_SOURCE[*]}"
 test -z "$USER" && export USER=$(whoami) && export LOGNAME=$USER
 pgrep sshd >/dev/null || sshd
 command -v termux-info >/dev/null 2>&1 && export sudo=""
