@@ -2,7 +2,7 @@
 ! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-test -n "$USER" && export USER=$(whoami)
+test -z "$USER" && export USER=$(whoami)
 pgrep sshd >/dev/null || sshd
 command -v termux-info >/dev/null 2>&1 && export sudo=""
 Echo "=> packageManager :"
