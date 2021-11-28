@@ -2,8 +2,8 @@
 ! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-export adb=$(which adb)
-export dos2unix="$(which tr) -d '\r'"
+export adb=$(type -P adb)
+export dos2unix="$(type -P tr) -d '\r'"
 export getprop="$adb shell getprop"
 
 function adbDisablePackages {
