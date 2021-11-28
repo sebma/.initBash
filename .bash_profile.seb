@@ -36,16 +36,22 @@ function addpaths {
 TeXLiveDIR=$(\ls -d /usr/local/texlive/*/bin/* 2>/dev/null | egrep "/texlive/[0-9]+/bin/$arch-${osFamily,,}")
 addpaths $TeXLiveDIR
 
+set -x
 export youtube_dl=$(which youtube-dl)
+set +x
 if [ -n "$youtube_dl" ];then # Recuperation de la variable _USER_AGENT_TPL de youtube-dl pour construire le user agent
 	pythonVersion=$(python3 -V | awk -F "[ .]" '/Python/{printf$2"."$3}')
+set -x
 	which chromium-browser >/dev/null 2>&1 && chromeVersion=$(chromium-browser --version 2>/dev/null | awk '{printf$2}') || chromeVersion="73.0.3671.2"
+set +x
 	test -r /usr/local/lib/python$pythonVersion/dist-packages/youtube_dl/utils.py && userAgent="$(awk -F "'" '/_USER_AGENT_TPL\s*=/{print$2}' /usr/local/lib/python$pythonVersion/dist-packages/youtube_dl/utils.py)" && export userAgent="$(printf "$userAgent" $chromeVersion)"
 else
 	export userAgent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3513.1 Safari/537.36"
 fi
 
+set -x
 which tlmgr >/dev/null 2>&1 && test -r $initDir/.bash_profile.texlive && SourceProfile $initDir/.bash_profile.texlive
+set +x
 
 export bashProfileLoaded=1
 
@@ -71,7 +77,9 @@ export myDefault_sshOptions="-A -Y"
 export JOLLA=nemo@jolla-wlan
 #export HOMEBREW_TEMP=$HOME/tmp
 export HOMEBREW_NO_GITHUB_API=1
+set -x
 which go >/dev/null 2>&1 && test -z "$GOPATH" && export GOPATH=$HOME/go
+set +x
 export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:~/gnu/lib/pkgconfig:~/local/lib/pkgconfig
 PERL5LIB="$HOME/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
 PERL_LOCAL_LIB_ROOT="$HOME/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
@@ -99,7 +107,9 @@ jussieu|enst)
 	;;
 esac
 
+set -x
 export ssh=$(which ssh)
+set +x
 
 #Si le proxy est joignable
 if [ $domain != localhost ] && nc -v -z -w 4 $proxyName $proxyPort >/dev/null 2>&1
@@ -112,7 +122,9 @@ if test -n "$http_proxy"; then
 	export dnsSuffix=$(basename $http_proxy | cut -d. -f2- | cut -d: -f1)
 fi
 
+set -x
 which gnuplot >/dev/null 2>&1 && export GNUTERM=qt
+set +x
 
 export RSYNC_SKIP_COMPRESS_LIST="7z/aac/avi/bz2/deb/flv/gz/iso/jpeg/jpg/mkv/mov/m4a/mp2/mp3/mp4/mpeg/mpg/oga/ogg/ogm/ogv/webm/rpm/tbz/tgz/z/zip"
 export RSYNC_EXCLUSION=$(printf -- "--exclude %s/ " /dev /sys /run /proc)
@@ -121,7 +133,9 @@ export RSYNC_EXCLUSION=$(printf -- "--exclude %s/ " /dev /sys /run /proc)
 if [ $osFamily = Linux ] || [ $osFamily = Darwin ]
 then
 	Echo
+set -x
 	if which ssh-agent >/dev/null 2>&1; then
+set +x
 #		Echo "=> Testing if not logged through ssh i.e if the SSH_CLIENT variable is not set ..." >&2
 		if test -z "$SSH_CLIENT"; then # Si on est PAS a l autre bout d une connection ssh
 			Echo "=> Testing if the ssh-agent is loaded ..." >&2
@@ -147,12 +161,16 @@ then
 	fi
 
 	#my locale configuration
+set -x
 	which locale >/dev/null 2>&1 && test -e $initDir/.bash_profile.locale && SourceProfile $initDir/.bash_profile.locale
+set +x
 	#GDM_LANG=fr_FR.UTF-8
 	export GDM_LANG=$LANG
 
 	#my lpr configuration
+set -x
 	which lpr >/dev/null 2>&1 && test -f $initDir/.bash_profile.lpr && SourceProfile $initDir/.bash_profile.lpr
+set +x
 
 #	! pgrep -u $USER -f "adb -. " >/dev/null && tty -s && echo "=> Starting the <adb> service ..." && time adb start-server
 	pgrep -u $USER -f "adb -. " >/dev/null && export androidWlanInterface=$(adb shell getprop wifi.interface 2>/dev/null | tr -d '\r')
@@ -162,16 +180,24 @@ echo "=> Running .bash_profile.$osFamily ..."
 test -r $initDir/.bash_profile.$osFamily && SourceProfile $initDir/.bash_profile.$osFamily
 
 if [ $osFamily != Darwin ] && [ $osFamily != Linux ]; then
+set -x
 	which lsb_release >/dev/null 2>&1 && export system="$(lsb_release -sd | awk -F '"' '{print$(NF-1)}')" || export system=$(echo $HOSTTYPE-$OSTYPE | sed "s/arm[^-]*-/arm-/")
+set +x
 fi
 
+set -x
 which matlab >/dev/null 2>&1 && test -r $initDir/.bash_profile.matlab && SourceProfile $initDir/.bash_profile.matlab
+set +x
 brew=$(\ls ~/.linuxbrew/bin/brew /home/linuxbrew/.linuxbrew/bin/brew 2>/dev/null | head -1)
 set -o | grep -q xtrace.*on && xtrace="set -o xtrace"
 set +x
 test -x "$brew" && test -r $initDir/.bash_profile.brew && SourceProfile $initDir/.bash_profile.brew
 $xtrace
+set -x
 which hub >/dev/null 2>&1 && eval "$(hub alias -s)"
+set +x
+
+set +x
 
 test "$debug" -lt 3 && set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
