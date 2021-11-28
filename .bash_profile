@@ -9,7 +9,7 @@
 #umask 022
 scriptDir=$(cd $(dirname $BASH_SOURCE);pwd);test $HOME = / && export HOME=$scriptDir ; cd #Pour les cas tordus ou HOME pointerai sur "/", par example sur les certains telephones Android
 
-echo "=> \${BASH_SOURCE[*]} = ${BASH_SOURCE[*]}";echo
+tty -s && { echo;echo "=> \${BASH_SOURCE[*]} = ${BASH_SOURCE[*]}";echo; }
 export initDir=$HOME/.initBash
 set | grep -q "^colors=" || source $initDir/.colors
 test "$debug" || debug=0
