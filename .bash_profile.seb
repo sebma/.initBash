@@ -5,7 +5,9 @@ test -z "$initDir" && export initDir=$HOME/.initBash
 
 function Debug { test "$debug" -gt 0 && echo "$bold${colors[blue]}$@$normal"; }
 if tty -s;then function Echo { echo -e "$@"; } else function Echo { : ; } fi
+if tty -s;then function Printf { printf "$@"; } else function Printf { : ; } fi
 
+Echo "=> \${BASH_SOURCE[*]} = ${BASH_SOURCE[*]}"
 tty -s && Debug "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 echo $OSTYPE | grep -q android && export osFamily=Android || export osFamily=$(uname -s)
@@ -157,7 +159,6 @@ then
 fi
 
 echo "=> Running .bash_profile.$osFamily ..."
-echo "=> \${BASH_SOURCE[*]} = ${BASH_SOURCE[*]}"
 test -r $initDir/.bash_profile.$osFamily && SourceProfile $initDir/.bash_profile.$osFamily
 
 if [ $osFamily != Darwin ] && [ $osFamily != Linux ]; then
