@@ -2001,5 +2001,7 @@ function xsetResolution {
 	fi
 }
 
+echo "=> END of ${BASH_SOURCE/*\//}."
+
 set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
