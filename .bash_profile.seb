@@ -157,6 +157,7 @@ then
 fi
 
 echo "=> Running .bash_profile.$osFamily ..."
+echo "=> \${BASH_SOURCE[*]} = ${BASH_SOURCE[*]}"
 test -r $initDir/.bash_profile.$osFamily && SourceProfile $initDir/.bash_profile.$osFamily
 
 if [ $osFamily != Darwin ] && [ $osFamily != Linux ]; then
