@@ -156,6 +156,7 @@ then
 	pgrep -u $USER -f "adb -. " >/dev/null && export androidWlanInterface=$(adb shell getprop wifi.interface 2>/dev/null | tr -d '\r')
 fi
 
+echo "=> Running .bash_profile.$osFamily ..."
 test -r $initDir/.bash_profile.$osFamily && SourceProfile $initDir/.bash_profile.$osFamily
 
 if [ $osFamily != Darwin ] && [ $osFamily != Linux ]; then
