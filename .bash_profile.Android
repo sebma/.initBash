@@ -5,9 +5,9 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 test -n "$USER" && export USER=$(whoami)
 pgrep sshd >/dev/null || sshd
 command -v termux-info >/dev/null 2>&1 && export sudo=""
-printf "=> packageManager :"
+Echo "=> packageManager :"
 packageManager
-echo
+Echo
 
 set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
