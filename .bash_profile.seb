@@ -7,7 +7,7 @@ function Debug { test "$debug" -gt 0 && echo "$bold${colors[blue]}$@$normal"; }
 if tty -s;then function Echo { echo -e "$@"; } else function Echo { : ; } fi
 if tty -s;then function Printf { printf "$@"; } else function Printf { : ; } fi
 
-Echo "=> \${BASH_SOURCE[*]} = ${BASH_SOURCE[*]}"
+Echo "\n=> \${BASH_SOURCE[*]} = ${BASH_SOURCE[*]}\n"
 tty -s && Debug "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 echo $OSTYPE | grep -q android && export osFamily=Android || export osFamily=$(uname -s)
