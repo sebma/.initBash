@@ -2,6 +2,8 @@
 ! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
+Echo "\n=> \${BASH_SOURCE[*]} = ${BASH_SOURCE[*]}\n"
+
 function gpartedNoUdisks2Inhibit {
 	gpartedLaunchLog=gparted_launch_error_$$.log
 	[ $(id -u) != 0 ] && sudo="sudo" && sudoBackground="sudo -b"
