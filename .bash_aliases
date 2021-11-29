@@ -3,7 +3,7 @@
 ! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-export find="$(which find)"
+export find="$(type -P find)"
 #alias processUsage="printf ' RSS\t       %%MEM %%CPU  COMMAND\n';\ps -e -o rssize,pmem,pcpu,args | sort -nr | cut -c-156 | head -500 | awk '{printf \"%9.3lf MiB %4.1f%% %4.1f%% %s\n\", \$1/1024, \$2,\$3,\$4}' | head"
 #alias ssh="\ssh -A -Y -C"
 #sdiff -v 2>/dev/null | grep -qw GNU && alias sdiff='\sdiff -Ww $(tput cols 2>/dev/null)' || alias sdiff='\sdiff -w $(tput cols 2>/dev/null)'
