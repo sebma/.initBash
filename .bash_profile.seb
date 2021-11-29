@@ -3,7 +3,7 @@
 test -z "$initDir" && export initDir=$HOME/.initBash
 ! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
 
-command -v termux-chroot >/dev/null 2>&1 && command -v bash 2>/dev/null | grep termux -q && termux-chroot
+#command -v termux-chroot >/dev/null 2>&1 && command -v bash 2>/dev/null | grep termux -q && termux-chroot
 
 function Debug { test "$debug" -gt 0 && echo "$bold${colors[blue]}$@$normal"; }
 if tty -s;then function Echo { echo -e "$@"; } else function Echo { : ; } fi
