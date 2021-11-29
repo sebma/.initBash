@@ -5,7 +5,7 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 
 #trap 'rc=130;set +x;echo "=> ${BASH_SOURCE[0]}: CTRL+C Interruption trapped.">&2;return $rc' INT
 
-Echo "\n=> \${BASH_SOURCE[*]} = ${BASH_SOURCE[*]}\n"
+test "$debug" -gt 0 && Echo "\n=> \${BASH_SOURCE[*]} = ${BASH_SOURCE[*]}\n"
 
 \which youtube-dl >/dev/null 2>&1 || { echo "=> ERROR: <youtube-dl> is not installed,  type \"sudo -H $(type -P pip3) install -U youtube-dl\" to install it" >&2; return 1; }
 
