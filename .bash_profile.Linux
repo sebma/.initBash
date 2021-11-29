@@ -50,7 +50,7 @@ cd - >/dev/null
 #Cleanup previous XFCE Sessions
 rm -f ~/$cacheLinkName/sessions/xf*
 
-if [ -e /etc/os-release ]
+if [ -e /etc/os-release ] && [ -z "$system" ]
 then
 	if grep -q ID=sailfishos /etc/os-release
 	then
