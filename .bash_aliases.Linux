@@ -22,7 +22,7 @@ findExcludedPathList="./proc ./sys ./dev"
 findPrunePathsExpression="( -type d -a ( -name .git $(printf -- " -o -path %s" $findExcludedPathList) ) ) -prune -o"
 duExcludedPathList="./proc ./sys ./dev"
 excludePathsDuExpression=$(printf -- "--exclude %s " $duExcludedPathList)
-export find="$(which find)"
+export find="$(type -P find)"
 
 test "$wiFiInterface" && {
 	alias wifiSpeed="\iwlist $wiFiInterface bitrate;\iw dev $wiFiInterface link"
