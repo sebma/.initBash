@@ -130,7 +130,7 @@ function build_in_usr_local_DEBIAN {
 }
 function configure {
 	local basicCompiler=$(type -P $(echo $HOSTTYPE-$OSTYPE-gcc | sed "s/armv[^-]*-/arm-/"))
-	test $CC || [ -z "$basicCompiler" ] || export CC=$(\ls ${basicCompiler}-? | awk -F/ 'END{print$NF}')
+	test $CC || [ -z "$basicCompiler" ] || export CC=$(\ls ${basicCompiler}{-?,} 2>/dev/null | awk -F/ 'END{print$NF}')
 	local defaultBuildOptions=""
 	local project=$(basename $PWD)
 	local returnCode=0
