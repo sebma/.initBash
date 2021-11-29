@@ -1334,13 +1334,18 @@ function pingSeb {
 function pip {
 	local caller=${FUNCNAME[1]}
 	test $caller || caller="pip"
-	which $caller >/dev/null || { echo "$0: ERROR $caller is not installed">&2;return 1; }
+	if type -P $caller >/dev/null;then
+		local callerPath=$(type -P $caller)
+	else
+		echo "$0: ERROR $caller is not installed" >&2
+		return 1
+	fi
 	firstArg=$1
 	if   [ "$firstArg" = install ]
 	then
 		if groups | egrep -wq "sudo|admin"
 		then
-			\sudo -H $(which $caller) $@
+			\sudo -H $callerPath $@
 		else
 			command $caller $@ --user
 		fi
@@ -1348,7 +1353,7 @@ function pip {
 	then
 		if groups | egrep -wq "sudo|admin"
 		then
-			\sudo -H $(which $caller) $@
+			\sudo -H $callerPath $@
 		else
 			command $caller $@
 		fi
@@ -1360,15 +1365,15 @@ function pip {
 	fi
 }
 function pip2 {
-	which pip2 >/dev/null || { echo "-$0: pip2: command not found">&2;return 1; }
+	type -P pip2 >/dev/null || { echo "-$0: pip2: command not found">&2;return 1; }
 	pip $@
 }
 function pip3 {
-	which pip3 >/dev/null || { echo "-$0: pip3: command not found">&2;return 1; }
+	type -P pip3 >/dev/null || { echo "-$0: pip3: command not found">&2;return 1; }
 	pip $@
 }
 function piphelp {
-	local pip=$(which pip 2>/dev/null)
+	local pip=$(type -P pip 2>/dev/null)
 	test -n "$pip" && $pip help $1 | less
 }
 function pkill {
