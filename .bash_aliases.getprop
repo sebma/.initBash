@@ -10,7 +10,7 @@ type pm >/dev/null 2>&1 && {
 	alias disablePackage="pm disable"
 	alias enablePackage="pm enable"
 }
-alias getExtSDCardMountPoint=$'mount | awk \'/emulated|sdcard0/{next}/(Removable|storage)\//{if($2=="on")print$3;else print$2}\''
+alias getExtSDCardMountPoint=$'mount | awk \'/emulated|sdcard0|self/{next}/(Removable|storage)\//{if($2=="on")print$3;else print$2}\''
 
 alias getADBTcpPort="$getprop service.adb.tcp.port"
 alias getAndroidCodeName="$getprop ro.build.version.codename"
