@@ -36,7 +36,7 @@ function connect2SSID {
 	set +x
 }
 function df {
-	local df=$(which df)
+	local df=$(type -P df)
 	local dfOptions="-PTh"
 	LANG=C $df $dfOptions "$@" | \grep "^Filesystem" 1>&2
 	LANG=C $df $dfOptions "$@" | grep -v "^Filesystem"
@@ -58,7 +58,7 @@ function https2zoomtg {
 }
 function hw-probeAddNodeToInventory {
 	local inventoryID=null
-	if ! which hw-probe >/dev/null 2>&1;then
+	if ! type -P hw-probe >/dev/null 2>&1;then
 		echo "=> ERROR [$FUNCNAME] : You must first install <hw-probe>." >&2
 		return 1
 	fi
@@ -73,7 +73,7 @@ function hw-probeAddNodeToInventory {
 	sudo -E \hw-probe -all -upload -i $inventoryID && echo "=> INFO: Check your email to add confirm adding the new node to your inventory : https://linux-hardware.org/index.php?view=computers&inventory=$inventoryID" >&2
 }
 function hw-probeInstall {
-	type sudo >/dev/null 2>&1 && [ $(id -u) != 0 ] && groups | egrep -wq "sudo|adm|admin|root|wheel" && local sudo=$(which sudo) || local sudo=""
+	type sudo >/dev/null 2>&1 && [ $(id -u) != 0 ] && groups | egrep -wq "sudo|adm|admin|root|wheel" && local sudo=$(type -P sudo) || local sudo=""
 	local distribName=$(distribName)
 	local retCode=0
 	if [ $distribName = ubuntu ]; then
@@ -92,10 +92,10 @@ function hw-probeInstall {
 			$sudo pacman -Sy
 			$sudo pacman -Fy
 
-			which fakeroot >/dev/null 2>&1 || $sudo pacman -S fakeroot
-			which strip >/dev/null 2>&1 || $sudo pacman -S binutils
+			type -P fakeroot >/dev/null 2>&1 || $sudo pacman -S fakeroot
+			type -P strip >/dev/null 2>&1 || $sudo pacman -S binutils
 
-			if ! which inxi >/dev/null 2>&1;then
+			if ! type -P inxi >/dev/null 2>&1;then
 				cd inxi >/dev/null 2>&1 || { git clone https://aur.archlinux.org/inxi.git;cd inxi; }
 				if git config remote.origin.url | grep -q /inxi;then
 					makepkg -si
@@ -107,9 +107,9 @@ function hw-probeInstall {
 				fi
 			fi
 
-			which make >/dev/null 2>&1 || $sudo pacman -S make
+			type -P make >/dev/null 2>&1 || $sudo pacman -S make
 
-			if ! which hw-probe >/dev/null 2>&1;then
+			if ! type -P hw-probe >/dev/null 2>&1;then
 				cd hw-probe >/dev/null 2>&1 || { git clone https://aur.archlinux.org/hw-probe.git;cd hw-probe; }
 				if git config remote.origin.url | grep -q /hw-probe;then
 					sed -i "/^depends=/s/'edid-decode'//" PKGBUILD
@@ -125,20 +125,20 @@ function hw-probeInstall {
 	fi
 
 	echo
-	which hw-probe >/dev/null 2>&1 && hw-probe -v
+	type -P hw-probe >/dev/null 2>&1 && hw-probe -v
 	return $retCode
 }
 function hw-probeInstallFromSource {
-	type sudo >/dev/null 2>&1 && [ $(id -u) != 0 ] && groups | egrep -wq "sudo|adm|admin|root|wheel" && local sudo=$(which sudo) || local sudo=""
+	type sudo >/dev/null 2>&1 && [ $(id -u) != 0 ] && groups | egrep -wq "sudo|adm|admin|root|wheel" && local sudo=$(type -P sudo) || local sudo=""
 	local distribName=$(distribName)
 	local hw_probeGitREPO=https://github.com/linuxhw/hw-probe
 
-	if which hw-probe >/dev/null 2>&1; then
+	if type -P hw-probe >/dev/null 2>&1; then
 		echo "=> INFO [$FUNCNAME] : hw-probe is already installed." 1>&2
 		return 1
 	fi
 
-	if ! which git > /dev/null 2>&1; then
+	if ! type -P git > /dev/null 2>&1; then
 		echo "=> ERROR [$FUNCNAME] : You must first install <git>." 1>&2
 		return 2
 	fi
@@ -158,7 +158,7 @@ function hw-probeInstallFromSource {
 
 	sync
 	cd $prevDIR
-	which hw-probe >/dev/null 2>&1 && hw-probe -v
+	type -P hw-probe >/dev/null 2>&1 && hw-probe -v
 	return $retCode
 }
 function isoLabel {
@@ -169,7 +169,7 @@ function isoLabel {
 }
 function lanIP {
 	set -o pipefail
-	local ip=$(which ip)
+	local ip=$(type -P ip)
 	if $ip -4 -brief addr >/dev/null 2>&1;then
 		$ip -4 -brief addr show "$@"
 	else
@@ -180,7 +180,7 @@ function lanIP {
 }
 function lanIPv6 {
 	set -o pipefail
-	local ip=$(which ip)
+	local ip=$(type -P ip)
 	if $ip -6 -brief addr >/dev/null 2>&1;then
 		$ip -6 -brief addr show "$@"
 	else
@@ -245,12 +245,12 @@ function lswifiNICs {
 }
 function lvs {
 	local sudo=""
-	type sudo >/dev/null 2>&1 && [ $(id -u) != 0 ] && groups | egrep -wq "sudo|adm|admin|root|wheel" && sudo=$(which sudo)
+	type sudo >/dev/null 2>&1 && [ $(id -u) != 0 ] && groups | egrep -wq "sudo|adm|admin|root|wheel" && sudo=$(type -P sudo)
 	$sudo lvs -o lvname,vgname,seg_count,attr,lvsize,lv_major,lv_minor,lv_kernel_major,lv_kernel_minor,lv_uuid "$@"
 }
 function mac@ {
 	set -o pipefail
-	local ip=$(which ip)
+	local ip=$(type -P ip)
 	if $ip -brief addr >/dev/null 2>&1;then
 		$ip -brief link show "$@"
 	else
@@ -260,7 +260,7 @@ function mac@ {
 	set +o pipefail
 }
 function man2html {
-	local man2html=$(which man2html)
+	local man2html=$(type -P man2html)
 	$man2html -r $(man -w "$1")
 }
 function mountISO {
@@ -284,7 +284,7 @@ function open {
 	done
 }
 function pip2Install {
-	if ! which pip2 >/dev/null;then
+	if ! type -P pip2 >/dev/null;then
 		if [ $(distribType) = debian ];then
 			for pkg in "";do
 				:
@@ -294,7 +294,7 @@ function pip2Install {
 	fi
 }
 function pip3Install {
-	if ! which pip3 >/dev/null;then
+	if ! type -P pip3 >/dev/null;then
 		if [ $(distribType) = debian ];then
 			for pkg in python3-distutils;do
 				dpkg -l $pkg | \grep ^i -q || echo "=> You need to install <$pkg>"
@@ -396,7 +396,7 @@ function umount.seb {
 	set -- ${@%/}  # Remove trailing "/" from all arguments
 	local dir_or_device="$1"
 	local device mountDIR mountDIR_ROOT fsType=unknown
-	local df=$(which df)
+	local df=$(type -P df)
 
 	if [ $# == 0 ]
 	then
@@ -441,10 +441,10 @@ function umount.seb {
 	echo "=> Unmounting $device ..." >&2
 	case $fsType in
 		iso9660) command udisksctl unmount -b $device;udisksctl loop-delete -b $device ;;
-		fuseblk|exfat) command umount.udisks2 "$@"  || command umount.udisks "$@" || udisksctl unmount -b $device || udisksctl unmount -b $device -f || { sudo -k $(which umount) -v "$@"; } ;;
+		fuseblk|exfat) command umount.udisks2 "$@"  || command umount.udisks "$@" || udisksctl unmount -b $device || udisksctl unmount -b $device -f || { sudo -k $(type -P umount) -v "$@"; } ;;
 		fuse.*) fusermount -u "$mountDIR";;
 		unknown) echo "=> $FUNCNAME : ERROR : This filesystem is of an <unknown> type." >&2; return 3;;
-		*) command umount -v "$@" || command umount.udisks2 "$@"  || command umount.udisks "$@" || udisksctl unmount -b $device || udisksctl unmount -b $device -f || { sudo -k $(which umount) -v "$@"; } ;;
+		*) command umount -v "$@" || command umount.udisks2 "$@"  || command umount.udisks "$@" || udisksctl unmount -b $device || udisksctl unmount -b $device -f || { sudo -k $(type -P umount) -v "$@"; } ;;
 	esac
 	rcCode=$?
 	mountDIR_ROOT="$(echo "$mountDIR" | cut -d/ -f-2)"
@@ -466,7 +466,7 @@ function umountISO {
 }
 function watchProcess {
 	local pidList=""
-	local ps=$(which ps)
+	local ps=$(type -P ps)
 	mkdir -p ~/log
 	test $# = 1 && while true
 	do
@@ -479,9 +479,9 @@ function watchProcess {
 function wifi5GHzCapable {
 	local true_OR_false=false
 	local wifiPhysicalDevice=$(\ls /sys/class/ieee80211 | head -1)
-	if [ -n "$wifiPhysicalDevice" ] && which iw >/dev/null 2>&1;then
+	if [ -n "$wifiPhysicalDevice" ] && type -P iw >/dev/null 2>&1;then
 		iw phy $wifiPhysicalDevice info | \egrep -q '5[0-9]{3} MHz' && true_OR_false=true || true_OR_false=false
-	elif which iwlist >/dev/null 2>&1;then
+	elif type -P iwlist >/dev/null 2>&1;then
 		iwlist $wiFiInterface frequency 2>&1 | grep "no frequency information" || iwlist $wiFiInterface frequency | \grep -q '5\..* GHz' && true_OR_false=true || true_OR_false=false
 	fi
 	echo $true_OR_false
@@ -504,9 +504,9 @@ function wifiCapabilities {
 		return 1
 	}
 
-	[ -n "$wifiPhysicalDevice" ] && which iw >/dev/null 2>&1 && echo "=> Wifi physical device capabilities :" && iw phy $wifiPhysicalDevice info | more
+	[ -n "$wifiPhysicalDevice" ] && type -P iw >/dev/null 2>&1 && echo "=> Wifi physical device capabilities :" && iw phy $wifiPhysicalDevice info | more
 
-	if which iwlist >/dev/null 2>&1;then
+	if type -P iwlist >/dev/null 2>&1;then
 		echo "========================================================================"
 		iwlist $wiFiInterface bitrate || sudo iwlist $wiFiInterface bitrate
 		iwlist $wiFiInterface encryption || sudo iwlist $wiFiInterface encryption
@@ -545,7 +545,7 @@ function wifiInfos {
 		iw dev $wiFiInterface link || sudo iw dev $wiFiInterface link
 	fi | more
 
-	if which iwlist >/dev/null 2>&1;then
+	if type -P iwlist >/dev/null 2>&1;then
 		echo "========================================================================"
 		iwlist $wiFiInterface bitrate
 		iwlist $wiFiInterface encryption
@@ -555,7 +555,7 @@ function wifiInfos {
 function wifiList {
 	local wiFiInterface=$(lswiFiInterfaces | head -1)
 	if [ -n "$wiFiInterface" ]; then
-		if which nmcli >/dev/null; then
+		if type -P nmcli >/dev/null; then
 			nmcliVersion=$(nmcli -v | awk -F"[. ]" '/version/{printf"%d.%d%02d\n", $4, $5, $6}')
 			echo "=> Rescanning WiFi networks ..."
 			\nmcli dev wifi rescan && sleep 2
@@ -563,7 +563,7 @@ function wifiList {
 			\nmcli -f ssid,bssid,mode,freq,rate,signal,security,active dev wifi list | grep -v 'SSID' 
 		elif iw dev 2>/dev/null | grep -q Interface;then
 			sudo iw dev $wiFiInterface scan | \grep SSID
-		elif which iwlist >/dev/null 2>&1; then
+		elif type -P iwlist >/dev/null 2>&1; then
 			sudo iwlist $wiFiInterface scan | \grep SSID
 		fi
 	fi
