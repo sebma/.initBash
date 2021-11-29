@@ -215,6 +215,10 @@ case $OSTYPE in
 		which toybox >/dev/null 2>&1 && test -r $initDir/.bash_aliases.toybox && Source $initDir/.bash_aliases.toybox
 		;;
 	linux-android)
+		if type -P termux-info >/dev/null;then
+			test -r $initDir/.bash_aliases.Linux && Source $initDir/.bash_aliases.Linux
+			test -r $initDir/.bash_functions.Linux && Source $initDir/.bash_functions.Linux
+		fi
 		;;
 esac
 
