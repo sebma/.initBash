@@ -5,7 +5,12 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 export getprop="$(type -P getprop)"
 export setprop="$(type -P setprop)"
 
-type pm >/dev/null 2>&1 && alias findPackages="pm list packages -f -i"
+type pm >/dev/null 2>&1 && {
+	alias findPackages="pm list packages -f -i"
+	alias disablePackage="pm disable"
+	alias enablePackage="pm enable"
+}
+alias getExtSDCardMountPoint=$'mount | awk \'/emulated|sdcard0/{next}/(Removable|storage)\//{if($2=="on")print$3;else print$2}\''
 
 alias getADBTcpPort="$getprop service.adb.tcp.port"
 alias getAndroidCodeName="$getprop ro.build.version.codename"
@@ -17,6 +22,7 @@ alias getBrand="$getprop ro.product.brand"
 alias getDeviceCodeName="$getprop ro.product.device"
 alias getManufacturer="$getprop ro.product.manufacturer"
 alias getModel="$getprop ro.product.model"
+alias getSerial="$getprop ro.serialno"
 
 export androidDeviceNetworkInterface=$($getprop wifi.interface | grep -v wifi.interface 2>/dev/null)
 if [ -n "$androidDeviceNetworkInterface" ];then
