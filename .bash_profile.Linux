@@ -70,15 +70,19 @@ else
 	export system=$(echo $HOSTTYPE-$OSTYPE | sed "s/arm[^-]*-/arm-/")
 fi
 
-trap 'echo "=> Ignoring this step and continuing the script <$(basename $BASH_SOURCE)> ..." >&2' INT
-
 setxkbmap -layout fr >/dev/null 2>&1
 
+if [ $(id -u) != 0 ] && groups 2>/dev/null | egrep -wq "sudo|adm|admin|root|wheel";then
+	sudo=$(type -P sudo)
+else
+	\mkdir -p ~/.local/lib/mlocate/ ~/.local/share/applications/ 2>/dev/null
+fi
+
 test -z "$XAUTHORITY" && export XAUTHORITY=$HOME/.Xauthority # If "X11 connection rejected because of wrong authentication", read https://stackoverflow.com/a/56661420/5649639
+trap 'echo "=> Ignoring this step and continuing the script <$(basename $BASH_SOURCE)> ..." >&2' INT
 groups 2>/dev/null | egrep -wq "sudo|admin" && xhost SI:localuser:root >/dev/null 2>&1 #Permet a root de lancer des applis graphiques via sudo
 trap - INT
 
-groups 2>/dev/null | egrep -wq "sudo|admin" || \mkdir -p ~/.local/lib/mlocate/ ~/.local/share/applications/ 2>/dev/null
 [ $TERM = linux ] && setterm -blength 0
 
 #Choix d'une splash image grub aleatoire
