@@ -5,7 +5,7 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 Printf "=> packageManager : "
 packageManager
 Echo
-test "$(packageManager)" = deb && source $initDir/
+test "$(packageManager)" = deb && source $initDir/.bash_aliases.debian
 
 set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
