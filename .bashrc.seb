@@ -171,7 +171,7 @@ which register-python-argcomplete >/dev/null 2>&1 && eval "$(register-python-arg
 # pidof cupsd >/dev/null && Echo "=> The cups admin console is available at http://localhost:631/admin\n"
 
 which conda >/dev/null 2>&1 && test -r $initDir/.bashrc.conda && Source $initDir/.bashrc.conda
-which getprop >/dev/null 2>&1 && test -r $initDir/.bash_aliases.getprop && Source $initDir/.bash_aliases.getprop
+getprop 2>/dev/null | grep ro.build.version.release -q && test -r $initDir/.bash_aliases.getprop && Source $initDir/.bash_aliases.getprop
 if which brew >/dev/null 2>&1;then
 	test -r $initDir/.bashrc.brew && Source $initDir/.bashrc.brew
 	test -r $initDir/.bash_aliases.brew && Source $initDir/.bash_aliases.brew
