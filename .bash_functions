@@ -5,7 +5,7 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 Source $initDir/.bash_functions.build
 Source $initDir/.bash_functions.AV
 
-Echo "\n=> \${BASH_SOURCE[*]} = ${BASH_SOURCE[*]}\n"
+test "$debug" -gt 0 && Echo "\n=> \${BASH_SOURCE[*]} = ${BASH_SOURCE[*]}\n"
 
 function EchoSpecialCharacters {
 	local rc=$?
@@ -2000,8 +2000,6 @@ function xsetResolution {
 		\xrandr --output $output --mode $newResolution
 	fi
 }
-
-echo "=> END of ${BASH_SOURCE/*\//}."
 
 set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
