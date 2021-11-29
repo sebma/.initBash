@@ -70,7 +70,7 @@ function hw-probeAddNodeToInventory {
 		echo "=> $FUNCNAME [inventoryID]" >&2
 		return 2
 	fi
-	sudo -E \hw-probe -all -upload -i $inventoryID && echo "=> INFO: Check your email to add confirm adding the new node to your inventory : https://linux-hardware.org/index.php?view=computers&inventory=$inventoryID" >&2
+	$sudo -E \hw-probe -all -upload -i $inventoryID && echo "=> INFO: Check your email to add confirm adding the new node to your inventory : https://linux-hardware.org/index.php?view=computers&inventory=$inventoryID" >&2
 }
 function hw-probeInstall {
 	type sudo >/dev/null 2>&1 && [ $(id -u) != 0 ] && groups | egrep -wq "sudo|adm|admin|root|wheel" && local sudo=$(type -P sudo) || local sudo=""
