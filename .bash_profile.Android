@@ -4,7 +4,6 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 
 pgrep sshd >/dev/null || sshd
 
-#command -v termux-chroot >/dev/null 2>&1 && which bash 2>/dev/null | grep termux -q && termux-chroot bash -l
 test "$debug" -gt 0 && Echo "\n=> \${BASH_SOURCE[*]} = ${BASH_SOURCE[*]}\n"
 test -z "$USER" && export USER=$(whoami) && export LOGNAME=$USER
 command -v termux-info >/dev/null 2>&1 && export sudo=""
