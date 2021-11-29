@@ -1120,8 +1120,8 @@ function os {
 				os=$(\sed -n 's/\\[nl]//g;1p' /etc/issue)
 			fi
 			;;
-		*android) type -P getprop >/dev/null && os="Android $(getprop ro.build.version.release)" || os=unknow ;;
-		*) os=unknow;;
+		Android) type -P getprop >/dev/null && os="Android $(getprop ro.build.version.release)" || os=unknown ;;
+		*) os=unknown ;;
 	esac
 	echo $os
 }
