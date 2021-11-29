@@ -4,13 +4,13 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 
 test "$debug" -gt 0 && Echo "\n=> \${BASH_SOURCE[*]} = ${BASH_SOURCE[*]}\n"
 
-which nproc >/dev/null 2>&1 && nproc=$(nproc) || nproc=$(getconf _NPROCESSORS_ONLN)
+type -P nproc >/dev/null 2>&1 && nproc=$(nproc) || nproc=$(getconf _NPROCESSORS_ONLN)
 myMakeOptions="-j$nproc"
-test "$make" || { which remake >/dev/null 2>&1 && export make="$(type -P remake) $myMakeOptions" || export make="$(type -P make) $myMakeOptions"; }
-test "$install" || { which checkinstall >/dev/null 2>&1 && export install="$(type -P checkinstall)" || export install="make install"; }
+test "$make" || { type -P remake >/dev/null 2>&1 && export make="$(type -P remake) $myMakeOptions" || export make="$(type -P make) $myMakeOptions"; }
+test "$install" || { type -P checkinstall >/dev/null 2>&1 && export install="$(type -P checkinstall)" || export install="make install"; }
 
 function buildSourceCode {
-	local basicCompiler=$(which $(echo $HOSTTYPE-$OSTYPE-gcc | sed "s/armv[^-]*-/arm-/"))
+	local basicCompiler=$(type -P $(echo $HOSTTYPE-$OSTYPE-gcc | sed "s/armv[^-]*-/arm-/"))
 	test $CC || [ -z "$basicCompiler" ] || export CC=$(\ls ${basicCompiler}-? | awk -F/ 'END{print$NF}')
 	local host=$(echo "$@" | grep -oP -- "--host=\K\S+")
 	local defaultBuildOptions=""
@@ -30,7 +30,7 @@ function buildSourceCode {
 				returnCode=$?
 				if groups | \egrep -wq "sudo|adm|root"
 				then
-					if which checkinstall >/dev/null
+					if type -P checkinstall >/dev/null
 					then
 						if git rev-parse --git-dir >/dev/null 2>&1;then
 							checkinstallWithGitRepoInformation
@@ -65,8 +65,8 @@ function buildSourceCode {
 	return $returnCode
 }
 function checkinstallWithGitRepoInformation {
-	[ $osFamily = Darwin ] && local sed="$(which sed) -E"
-	[ $osFamily = Linux ]  && local sed="$(which sed) -r"
+	[ $osFamily = Darwin ] && local sed="$(type -P sed) -E"
+	[ $osFamily = Linux ]  && local sed="$(type -P sed) -r"
 	local gitHTTP_URL=$(\git config --get remote.origin.url | $sed "s|^git@|https://|;s|(\.\w+):|\1/|")
 
 	echo "=> Running $FUNCNAME ..."
@@ -129,7 +129,7 @@ function build_in_usr_local_DEBIAN {
 	test -s GNUmakefile && time $make && sudo checkinstall
 }
 function configure {
-	local basicCompiler=$(which $(echo $HOSTTYPE-$OSTYPE-gcc | sed "s/armv[^-]*-/arm-/"))
+	local basicCompiler=$(type -P $(echo $HOSTTYPE-$OSTYPE-gcc | sed "s/armv[^-]*-/arm-/"))
 	test $CC || [ -z "$basicCompiler" ] || export CC=$(\ls ${basicCompiler}-? | awk -F/ 'END{print$NF}')
 	local defaultBuildOptions=""
 	local project=$(basename $PWD)
@@ -163,7 +163,7 @@ function configure {
 	configureArgs="--prefix=$prefix --exec-prefix=$prefix $defaultBuildOptions $@"
 	echo "=> pwd = $PWD"
 	echo "=> prefix = $prefix"
-	\grep -w url ./.git/config && which git >/dev/null 2>&1 && git pull
+	\grep -w url ./.git/config && type -P git >/dev/null 2>&1 && git pull
 	if [ -f CMakeLists.txt ]
 	then
 		mkdir -p build
@@ -240,7 +240,7 @@ function make {
 		time CFLAGS="-g" $make $@
 	else
 		\mkdir ../bin 2>/dev/null
-		if which gcc >/dev/null 2>&1
+		if type -P gcc >/dev/null 2>&1
 		then
 			for file
 			do
