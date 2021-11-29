@@ -11,7 +11,7 @@ test "$install" || { type -P checkinstall >/dev/null 2>&1 && export install="$(t
 
 function buildSourceCode {
 	local basicCompiler=$(type -P $(echo $HOSTTYPE-$OSTYPE-gcc | sed "s/armv[^-]*-/arm-/"))
-	test $CC || [ -z "$basicCompiler" ] || export CC=$(\ls ${basicCompiler}-? | awk -F/ 'END{print$NF}')
+	test $CC || [ -z "$basicCompiler" ] || export CC=$(\ls ${basicCompiler}{-?,} 2>/dev/null | awk -F/ 'END{print$NF}')
 	local host=$(echo "$@" | grep -oP -- "--host=\K\S+")
 	local defaultBuildOptions=""
 	local returnCode=0
