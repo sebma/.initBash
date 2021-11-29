@@ -505,7 +505,8 @@ function wifiCapabilities {
 		return 1
 	}
 
-	[ -n "$wifiPhysicalDevice" ] && type -P iw >/dev/null 2>&1 && echo "=> Wifi physical device capabilities :" && iw phy $wifiPhysicalDevice info | more
+	{
+	[ -n "$wifiPhysicalDevice" ] && type -P iw >/dev/null 2>&1 && echo "=> Wifi physical device capabilities :" && iw phy $wifiPhysicalDevice info
 
 	if type -P iwlist >/dev/null 2>&1;then
 		echo "========================================================================"
@@ -514,7 +515,8 @@ function wifiCapabilities {
 		iwlist $wiFiInterface frequency
 		iwlist $wiFiInterface event
 		iwlist $wiFiInterface retry
-	fi | more
+	fi
+	} | \less
 }
 function wifiInfos {
 	export LANG=C
@@ -532,6 +534,7 @@ function wifiInfos {
 		return 1
 	}
 
+	{
 	if iw dev 2>/dev/null | grep -q Interface;then
 		echo "=> Connected Wifi information :"
 		iw dev $wiFiInterface info
@@ -544,7 +547,7 @@ function wifiInfos {
 
 		echo "=> Connected network link status :"
 		iw dev $wiFiInterface link || sudo iw dev $wiFiInterface link
-	fi | more
+	fi
 
 	if type -P iwlist >/dev/null 2>&1;then
 		echo "========================================================================"
@@ -552,7 +555,8 @@ function wifiInfos {
 		iwlist $wiFiInterface frequency
 		iwlist $wiFiInterface encryption
 		test "$1" = "-v" && iwlist $wiFiInterface scan | more
-	fi | more
+	fi
+	} | \less
 }
 function wifiList {
 	local wiFiInterface=$(lswiFiInterfaces | head -1)
@@ -563,10 +567,10 @@ function wifiList {
 			\nmcli dev wifi rescan && sleep 2
 			\nmcli -f ssid,bssid,mode,freq,rate,signal,security,active dev wifi list | \grep 'SSID' >&2 # Print nmcli headers
 			\nmcli -f ssid,bssid,mode,freq,rate,signal,security,active dev wifi list | grep -v 'SSID' 
-		elif iw dev 2>/dev/null | grep -q Interface;then
-			sudo iw dev $wiFiInterface scan | \grep SSID
+		elif iw dev 2>/dev/null | \grep -q Interface;then
+			$sudo iw dev $wiFiInterface scan | \grep SSID
 		elif type -P iwlist >/dev/null 2>&1; then
-			sudo iwlist $wiFiInterface scan | \grep SSID
+			$sudo iwlist $wiFiInterface scan | \grep SSID
 		fi
 	fi
 }
