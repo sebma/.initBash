@@ -9,11 +9,11 @@
 #umask 022
 scriptDir=$(cd $(dirname $BASH_SOURCE);pwd);test $HOME = / && export HOME=$scriptDir ; cd #Pour les cas tordus ou HOME pointerai sur "/", par example sur les certains telephones Android
 
-tty -s && { echo;echo "=> \${BASH_SOURCE[*]} = ${BASH_SOURCE[*]}";echo; }
 export initDir=$HOME/.initBash
 set | grep -q "^colors=" || source $initDir/.colors
 test "$debug" || debug=0
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
+tty -s && test "$debug" -gt 0 && { echo;echo "=> \${BASH_SOURCE[*]} = ${BASH_SOURCE[*]}";echo; }
 
 test -f $initDir/.bash_profile.seb && source $initDir/.bash_profile.seb
 
