@@ -163,7 +163,9 @@ fi
 test -r $initDir/.bash_profile.$osFamily && SourceProfile $initDir/.bash_profile.$osFamily
 
 if [ $osFamily != Darwin ] && [ $osFamily != Linux ]; then
-	which lsb_release >/dev/null 2>&1 && export system="$(lsb_release -sd | awk -F '"' '{print$(NF-1)}')" || export system=$(echo $HOSTTYPE-$OSTYPE | sed "s/arm[^-]*-/arm-/")
+	if [ -z "$system" ];then
+		which lsb_release >/dev/null 2>&1 && export system="$(lsb_release -sd | awk -F '"' '{print$(NF-1)}')" || export system=$(echo $HOSTTYPE-$OSTYPE | sed "s/arm[^-]*-/arm-/")
+	fi
 fi
 
 which matlab >/dev/null 2>&1 && test -r $initDir/.bash_profile.matlab && SourceProfile $initDir/.bash_profile.matlab
