@@ -479,8 +479,8 @@ function watchProcess {
 }
 function wifi5GHzCapable {
 	local true_OR_false=false
-	local wifiPhysicalDevice=$(\ls /sys/class/ieee80211 | head -1)
-	if [ -n "$wifiPhysicalDevice" ] && type -P iw >/dev/null 2>&1;then
+	local wifiPhysicalDevice=$(\ls /sys/class/ieee80211 2>/dev/null | head -1)
+	if [ -n "$wifiPhysicalDevice" ] && type -P iw >/dev/null 2>&1 && iw phy >/dev/null 2>&1;then
 		iw phy $wifiPhysicalDevice info | \egrep -q '5[0-9]{3} MHz' && true_OR_false=true || true_OR_false=false
 	elif type -P iwlist >/dev/null 2>&1;then
 		iwlist $wiFiInterface frequency 2>&1 | grep "no frequency information" || iwlist $wiFiInterface frequency | \grep -q '5\..* GHz' && true_OR_false=true || true_OR_false=false
@@ -490,7 +490,7 @@ function wifi5GHzCapable {
 }
 function wifiCapabilities {
 	export LANG=C
-	local wifiPhysicalDevice=$(\ls /sys/class/ieee80211 | head -1)
+	local wifiPhysicalDevice=$(\ls /sys/class/ieee80211 2>/dev/null | head -1)
 	local wiFiInterface
 	if [ $osFamily = Darwin ]
 	then
