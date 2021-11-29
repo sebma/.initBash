@@ -13,7 +13,7 @@ alias adbGetPropGrep="$getprop | $dos2unix | grep -P"
 alias adbCpuInfo="$adb shell cat /proc/cpuinfo | $dos2unix"
 alias adbMemInfo="$adb shell cat /proc/meminfo | $dos2unix"
 alias adbBuildInfo="$adb shell cat /system/build.pro | $dos2unix"
-alias adbGetExtSDCardMountPoint="$adb "$'shell mount | awk \'/emulated|sdcard0/{next}/(Removable|storage)\//{if($2=="on")print$3;else print$2}\''" | $dos2unix"
+alias adbGetExtSDCardMountPoint="$adb "$'shell mount | awk \'/emulated|sdcard0|self/{next}/(Removable|storage)\//{if($2=="on")print$3;else print$2}\''" | $dos2unix"
 
 alias adbDisablePackage="$adb shell pm disable"
 alias adbEnablePackage="$adb shell pm enable"
