@@ -2,10 +2,11 @@
 ! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-getprop | grep -q ro.build.version.release && {
 export getprop="$(type -P getprop)"
 export setprop="$(type -P setprop)"
+
 type pm >/dev/null 2>&1 && alias findPackages="pm list packages -f -i"
+
 alias getADBTcpPort="$getprop service.adb.tcp.port"
 alias getAndroidCodeName="$getprop ro.build.version.codename"
 alias getAndroidSDK="$getprop ro.build.version.sdk"
@@ -16,6 +17,7 @@ alias getBrand="$getprop ro.product.brand"
 alias getDeviceCodeName="$getprop ro.product.device"
 alias getManufacturer="$getprop ro.product.manufacturer"
 alias getModel="$getprop ro.product.model"
+
 export androidDeviceNetworkInterface=$($getprop wifi.interface | grep -v wifi.interface 2>/dev/null)
 if [ -n "$androidDeviceNetworkInterface" ];then
 	alias getNetworkInterface='echo $androidDeviceNetworkInterface'
@@ -24,6 +26,6 @@ fi
 
 alias getSerial="$getprop ro.serialno"
 alias setADBTcpPort="$setprop service.adb.tcp.port"
-}
+
 set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
