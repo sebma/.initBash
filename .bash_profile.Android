@@ -4,7 +4,9 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 test "$debug" -gt 0 && Echo "\n=> \${BASH_SOURCE[*]} = ${BASH_SOURCE[*]}\n"
 
 #pgrep sshd >/dev/null || sshd # Moved sshd startup to ~/.termux/boot/start-sshd Read here: https://wiki.termux.com/wiki/Termux:Boot
+[ $debug = 1 ] && echo "=> system = <$system>."
 type -P getprop >/dev/null && export system="Android $(getprop ro.build.version.release)"
+[ $debug = 1 ] && echo "=> system = <$system>."
 test -z "$USER" && export USER=$(whoami) && export LOGNAME=$USER
 type -P termux-info >/dev/null && export sudo=""
 
