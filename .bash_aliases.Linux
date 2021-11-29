@@ -9,7 +9,9 @@ lswiFiInterfaces() {
 		:
 	elif \ls -d /sys/class/net/*/wireless 2>/dev/null | awk -F/ '{print$5}';then
 		:
-	fi | egrep -v "p2p[0-9]"
+	elif [ "$osFamily" = Android ];then
+		$getprop wifi.interface
+	fi | \egrep -v "p2p[0-9]"
 	set +o pipefail
 }
 
