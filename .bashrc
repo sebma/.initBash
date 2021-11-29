@@ -1,11 +1,11 @@
 # ~/.bashrc: executed by bash(1) for non-login shells.
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
-tty -s && { echo;echo "=> \${BASH_SOURCE[*]} = ${BASH_SOURCE[*]}";echo; }
 test -z "$initDir" && export initDir=$HOME/.initBash
 ! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
 test -z "$debug" && export debug=0
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
+tty -s && test "$debug" -gt 0 && { echo;echo "=> \${BASH_SOURCE[*]} = ${BASH_SOURCE[*]}";echo; }
 
 #test -z "$bashProfileLoaded" && source .profile
 if [ -n "$BASH_VERSION" ]; then
