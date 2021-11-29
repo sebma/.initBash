@@ -1107,20 +1107,23 @@ function odfInfo {
 	done
 }
 function os {
+	local os=not_yet_defined
 	case $osFamily in
 		Darwin)
-			sw_vers >/dev/null 2>&1 && echo $(sw_vers -productName) $(sw_vers -productVersion) || system_profiler SPSoftwareDataType || defaults read /System/Library/CoreServices/SystemVersion ProductVersion ;;
+			sw_vers >/dev/null 2>&1 && os="$($(sw_vers -productName) $(sw_vers -productVersion))" || os=$(system_profiler SPSoftwareDataType) || os=$(defaults read /System/Library/CoreServices/SystemVersion ProductVersion) ;;
 		Linux)
 			if [ -s /etc/os-release ]; then
-				( source /etc/os-release && echo $PRETTY_NAME )
+				source /etc/os-release && os=$PRETTY_NAME
 			elif which lsb_release >/dev/null 2>&1; then
-				\lsb_release -scd | paste -sd" ";echo
+				os=$(\lsb_release -scd | paste -sd" ")
 			else
-				\sed -n 's/\\[nl]//g;1p' /etc/issue
+				os=$(\sed -n 's/\\[nl]//g;1p' /etc/issue)
 			fi
 			;;
-		*) ;;
+		*android) type -P getprop >/dev/null && os="Android $(getprop ro.build.version.release)" || os=unknow ;;
+		*) os=unknow;;
 	esac
+	echo $os
 }
 function packageManager {
 	local pkgManager
