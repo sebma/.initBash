@@ -2,7 +2,7 @@
 ! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-Echo "\n=> \${BASH_SOURCE[*]} = ${BASH_SOURCE[*]}\n"
+test "$debug" -gt 0 && Echo "\n=> \${BASH_SOURCE[*]} = ${BASH_SOURCE[*]}\n"
 
 which nproc >/dev/null 2>&1 && nproc=$(nproc) || nproc=$(getconf _NPROCESSORS_ONLN)
 myMakeOptions="-j$nproc"
