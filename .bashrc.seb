@@ -8,7 +8,7 @@ function Source { test "$debug" -gt 0 && { time . "$@";echo;true; } || { . "$@" 
 if tty -s;then function Echo { echo -e "$@"; } else function Echo { : ; } fi
 if tty -s;then function Printf { printf "$@"; } else function Printf { : ; } fi
 
-Echo "\n=> \${BASH_SOURCE[*]} = ${BASH_SOURCE[*]}\n"
+test "$debug" -gt 0 && Echo "\n=> \${BASH_SOURCE[*]} = ${BASH_SOURCE[*]}\n"
 Debug "=> Running $(basename ${BASH_SOURCE[0]}) ..."
 Echo "$(date)"
 
