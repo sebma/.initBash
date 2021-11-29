@@ -549,6 +549,7 @@ function wifiInfos {
 	if type -P iwlist >/dev/null 2>&1;then
 		echo "========================================================================"
 		iwlist $wiFiInterface bitrate
+		iwlist $wiFiInterface frequency
 		iwlist $wiFiInterface encryption
 		test "$1" = "-v" && iwlist $wiFiInterface scan | more
 	fi | more
