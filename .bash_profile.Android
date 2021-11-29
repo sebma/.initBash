@@ -1,10 +1,9 @@
 # vim: set ft=sh noet:
 ! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
-
-pgrep sshd >/dev/null || sshd
-
 test "$debug" -gt 0 && Echo "\n=> \${BASH_SOURCE[*]} = ${BASH_SOURCE[*]}\n"
+
+#pgrep sshd >/dev/null || sshd # Moved sshd startup to ~/.termux/boot/start-sshd Read here: https://wiki.termux.com/wiki/Termux:Boot
 test -z "$USER" && export USER=$(whoami) && export LOGNAME=$USER
 command -v termux-info >/dev/null 2>&1 && export sudo=""
 
