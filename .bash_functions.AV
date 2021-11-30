@@ -732,8 +732,8 @@ function mp32opus {
 #	time $ffmpeg -i "$file" $@ "${file%.*}.opus"
 	for file
 	do
-		time $ffmpeg -i "$file" "${file%.*}.opus"
-		touch -r "$file" "${file%.*}.opus"
+		time $ffmpeg -i "$file" -c:a libopus -q:v 10 -vsync 2 "${file%.*}.ogg"
+		touch -r "$file" "${file%.*}.ogg"
 		sync
 	done
 }
