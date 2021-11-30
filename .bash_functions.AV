@@ -733,7 +733,7 @@ function mp32opus {
 	for file
 	do
 set -x
-		time $ffmpeg -i "$file" -map 0:a -map 0:v:0? -c:a libopus -c:v libtheora -q:v 10 -r:v 1 "${file%.*}.ogg"
+		time $ffmpeg $ffmpegOptions -i "$file" -map 0:a -map 0:v:0? -c:a libopus -c:v libtheora -q:v 10 -r:v 1 "${file%.*}.ogg"
 set +x
 		touch -r "$file" "${file%.*}.ogg"
 		sync
