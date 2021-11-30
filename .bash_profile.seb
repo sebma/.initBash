@@ -162,9 +162,15 @@ fi
 
 test -r $initDir/.bash_profile.$osFamily && SourceProfile $initDir/.bash_profile.$osFamily
 
-if [ $osFamily != Darwin ] && [ $osFamily != Linux ]; then
+if [ "$osFamily" != Darwin ] && [ "$osFamily" != Linux ]; then
 	if [ -z "$system" ];then
-		which lsb_release >/dev/null 2>&1 && declare -xr system="$(lsb_release -sd | awk -F '"' '{print$(NF-1)}')" || declare -xr system=$(echo $HOSTTYPE-$OSTYPE | sed "s/arm[^-]*-/arm-/")
+		if which lsb_release >/dev/null 2>&1;then
+			declare -xr system="$(lsb_release -sd | awk -F '"' '{print$(NF-1)}')"
+		elif [ "$osFamily" = Android ] && type -P getprop >/dev/null
+			declare -xr system="$osFamily $(getprop ro.build.version.release)"
+		else
+			declare -xr system=$(echo $HOSTTYPE-$OSTYPE | sed "s/arm[^-]*-/arm-/")
+		fi
 	fi
 fi
 
