@@ -55,20 +55,20 @@ if [ -e /etc/os-release ] && [ -z "$system" ]
 then
 	if grep -q ID=sailfishos /etc/os-release
 	then
-		export system=$(Source /etc/os-release && echo "$NAME $VERSION_ID")
+		declare -xr system=$(Source /etc/os-release && echo "$NAME $VERSION_ID")
 	elif which lsb_release >/dev/null 2>&1 
 	then
-		export system="$( ( \lsb_release -sd | grep "[0-9.]" || \lsb_release -sir ) | paste -sd' ')"
+		declare -xr system="$( ( \lsb_release -sd | grep "[0-9.]" || \lsb_release -sir ) | paste -sd' ')"
 	else
 		ID=$(source /etc/os-release && echo $ID )
 		case $ID in
-			debian) export system="$(Source /etc/os-release && echo $PRETTY_NAME | sed "s/[0-9]\+/$(cat /etc/debian_version)/")" ;;
-			ubuntu) export system="$(Source /etc/os-release && echo $PRETTY_NAME)" ;;
+			debian) declare -xr system="$(Source /etc/os-release && echo $PRETTY_NAME | sed "s/[0-9]\+/$(cat /etc/debian_version)/")" ;;
+			ubuntu) declare -xr system="$(Source /etc/os-release && echo $PRETTY_NAME)" ;;
 		esac
 	fi
 	# test -r $initDir/.bash_profile.$osID && SourceProfile $initDir/.bash_profile.$osID
 else
-	export system=$(echo $HOSTTYPE-$OSTYPE | sed "s/arm[^-]*-/arm-/")
+	declare -xr system=$(echo $HOSTTYPE-$OSTYPE | sed "s/arm[^-]*-/arm-/")
 fi
 
 setxkbmap -layout fr >/dev/null 2>&1
