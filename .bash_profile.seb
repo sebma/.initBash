@@ -164,7 +164,7 @@ test -r $initDir/.bash_profile.$osFamily && SourceProfile $initDir/.bash_profile
 
 if [ $osFamily != Darwin ] && [ $osFamily != Linux ]; then
 	if [ -z "$system" ];then
-		which lsb_release >/dev/null 2>&1 && export system="$(lsb_release -sd | awk -F '"' '{print$(NF-1)}')" || export system=$(echo $HOSTTYPE-$OSTYPE | sed "s/arm[^-]*-/arm-/")
+		which lsb_release >/dev/null 2>&1 && declare -xr system="$(lsb_release -sd | awk -F '"' '{print$(NF-1)}')" || declare -xr system=$(echo $HOSTTYPE-$OSTYPE | sed "s/arm[^-]*-/arm-/")
 	fi
 fi
 
