@@ -3,9 +3,9 @@
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 addpaths $HOME/jolla/bin $HOME/jolla/shl
-test "$hostname" || declare -xr hostname=$(hostname) # Pour SailFishOS
-test "$system" || declare -xr system=$(version | awk '{print $1" "$2" "$3}')
-test "$domain" || declare -xr domain=local
+test -n "$hostname" || declare -gxr hostname=$(hostname) # Pour SailFishOS
+test -n "$system" || declare -gxr system=$(version | awk '{print $1" "$2" "$3}')
+test -n "$domain" || declare -gxr domain=local
 
 #blkid -o value -s UUID /dev/mmcblk1p1
 SDMountPoint=$(df | awk '/ .media.sdcard/{print$NF}')
