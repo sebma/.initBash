@@ -16,17 +16,17 @@ tty -s && test "$debug" -gt 0 && { echo;echo "=> \${BASH_SOURCE[*]} = ${BASH_SOU
 
 test -f $initDir/.bash_profile.seb && source $initDir/.bash_profile.seb
 
+#[ -n "$ZSH_VERSION" ] && emulate -l bash
+
 #umask 022
 
 # if running bash
 if [ -n "$BASH_VERSION" ]; then
 	# include .bashrc if it exists
-	if [ -f "$initDir/.bashrc" ]; then
-		source "$initDir/.bashrc"
+	if [ -f "$HOME/.bashrc" ]; then
+		. "$HOME/.bashrc"
 	fi
 fi
-
-#[ -n "$ZSH_VERSION" ] && emulate -l bash
 
 # set PATH so it includes user's private bin if it exists
 if [ -d "$HOME/bin" ] ; then
