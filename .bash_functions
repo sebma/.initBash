@@ -550,8 +550,8 @@ function findHumanReadable {
 	fi
 }
 function findLoops {
-	local find="$(which find)"
-	echo $OSTYPE | grep -q android && local osFamily=Android || local osFamily=$(uname -s)
+	local find="$(type -P find)"
+	echo $OSTYPE | \grep android -q && local osFamily=Android || local osFamily=$(uname -s)
 	[ $osFamily = Darwin ] && find=gfind
 	time $find "$@" -xdev -follow -printf ""
 }
