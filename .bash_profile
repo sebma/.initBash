@@ -1,3 +1,9 @@
+test "$HOME" = / && export HOME=$(cd $(dirname $BASH_SOURCE);pwd) && cd #Pour les cas tordus ou HOME pointerai sur "/", par example sur les certains telephones Android apres un "adb shell"
+test -n "$debug" || debug=0
+test "$debug" -gt 0 && tty -s && echo "=> Running $(basename ${BASH_SOURCE[0]})$normal ..."
+
+test -f $HOME/.initBash/.bash_profile.seb && source $HOME/.initBash/.bash_profile.seb
+
 # ~/.profile: executed by the command interpreter for login shells.
 # This file is not read by bash(1), if ~/.bash_profile or ~/.bash_login
 # exists.
@@ -6,18 +12,6 @@
 
 # the default umask is set in /etc/profile; for setting the umask
 # for ssh logins, install and configure the libpam-umask package.
-scriptDir=$(cd $(dirname $BASH_SOURCE);pwd);test $HOME = / && export HOME=$scriptDir ; cd #Pour les cas tordus ou HOME pointerai sur "/", par example sur les certains telephones Android
-
-export initDir=$HOME/.initBash
-set | grep -q "^colors=" || source $initDir/.colors
-test "$debug" || debug=0
-test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
-tty -s && test "$debug" -gt 0 && { echo;echo "=> \${BASH_SOURCE[*]} = ${BASH_SOURCE[*]}";echo; }
-
-test -f $initDir/.bash_profile.seb && source $initDir/.bash_profile.seb
-
-#[ -n "$ZSH_VERSION" ] && emulate -l bash
-
 #umask 022
 
 # if running bash
