@@ -161,16 +161,20 @@ then
 fi
 
 test -r $initDir/.bash_profile.$osFamily && SourceProfile $initDir/.bash_profile.$osFamily
+test "$debug" -gt 0 && echo "=> BACK to $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
 
-if [ "$osFamily" != Darwin ] && [ "$osFamily" != Linux ]; then
+[ $debug = 1 ] && echo "=> system = <$system>."
+if [ "$osFamily" != Darwin ] && [ "$osFamily" != Linux ] && [ "$osFamily" != Android ] ; then
 	if [ -z "$system" ];then
-		if which lsb_release >/dev/null 2>&1;then
-			declare -xr system="$(lsb_release -sd | awk -F '"' '{print$(NF-1)}')"
+		[ $debug = 1 ] && echo "=> system = <$system>."
+		if type -P lsb_release >/dev/null;then 
+			declare -gxr system="$(lsb_release -sd | awk -F '"' '{print$(NF-1)}')"
 		elif type -P getprop >/dev/null;then
-			declare -xr system="$osFamily $(getprop ro.build.version.release)"
+			declare -gxr system="$osFamily $(getprop ro.build.version.release)"
 		else
-			declare -xr system=$(echo $HOSTTYPE-$OSTYPE | sed "s/arm[^-]*-/arm-/")
+			declare -gxr system=$(echo $HOSTTYPE-$OSTYPE | sed "s/arm[^-]*-/arm-/")
 		fi
+		[ $debug = 1 ] && echo "=> system = <$system>."
 	fi
 fi
 
