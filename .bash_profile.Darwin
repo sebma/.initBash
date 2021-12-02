@@ -4,7 +4,7 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 
 trap 'echo "=> Ignoring this step and continuing the script <$(basename $BASH_SOURCE)> ..." >&2' INT
 
-declare -xr system="$(sw_vers -productName) $(sw_vers -productVersion)"
+test -n "$system" || declare -gxr system="$(sw_vers -productName) $(sw_vers -productVersion)"
 duExcludedPathList="./proc ./sys ./dev"
 excludePathsDuExpression=$(printf -- "--exclude %s " $duExcludedPathList)
 findExcludedPathList="./proc ./sys ./dev"
