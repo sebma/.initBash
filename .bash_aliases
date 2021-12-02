@@ -8,18 +8,10 @@ export find="$(type -P find)"
 #alias ssh="\ssh -A -Y -C"
 #sdiff -v 2>/dev/null | grep -qw GNU && alias sdiff='\sdiff -Ww $(tput cols 2>/dev/null)' || alias sdiff='\sdiff -w $(tput cols 2>/dev/null)'
 
-#alias findLoops='$find . -follow -printf "" 2>&1 | egrep -w "loop|denied"'
-#alias lsb_release="\lsb_release -idrc"
 #alias reset="\reset;\printf '\33c\e[3J'"
 #which vim >/dev/null && alias vim="LANG=$(locale -a 2>/dev/null | egrep -i '(fr_fr|en_us|en_uk).*utf' | sort -r | head -1) \vim" && alias vi=vim
-#alias arp="\arp -n"
-#alias cp2FAT32="rsync --size-only"
-#alias html2json="\xidel -s --output-format=json-wrapped -e //html"
-#alias tolowerPerl="\perl -pe 'tr/A-Z/a-z/'"
-#alias tolowerSed="sed 's/.*/\L&/'"
-#alias toupperPerl="\perl -pe 'tr/a-z/A-Z/'"
-#alias toupperSed="sed 's/.*/\U&/'"
 #alias wget='wget2 || wget1'
+
 alias .....="cd ../../../.."
 alias ....="cd ../../.."
 alias ...="cd ../.."
@@ -157,6 +149,7 @@ alias headlines='\head -n $((LINES-2))'
 alias hexdump="\hexdump -Cc" || alias hexdump="\od -tx1z"
 alias highlight="\highlight -O ansi --force"
 alias html2json="\pup 'json{}'"
+alias html2jsonXIDEL="\xidel -s --output-format=json-wrapped -e //html"
 alias html2xml=html2xml_via_xmllint
 alias html2xml_via_xmllint="\xmllint --html --format --recover --xmlout"
 alias html2xml_via_xmlstarlet="\xmlstarlet format --quiet --html --recover"
@@ -328,11 +321,15 @@ alias thunderbirdUnlock='\ps -C thunderbird >/dev/null || rm ~/.thunderbird/defa
 alias timestamp='\date +"%Y%m%d_%HH%M"'
 alias today="$find . -type f -ctime -1"
 alias tolower="awk '{print tolower(\$0)}'"
+alias tolowerPerl="\perl -pe 'tr/A-Z/a-z/'"
+alias tolowerSed="sed 's/.*/\L&/'"
 alias topd10="topd $((10+1))"
 alias topd5="topd $((5+1))"
 alias topd="\du -cxhd 1 2>/dev/null | grep -v '\s*\.$' | sort -hr | head -n"
 alias topdlines='topd $(($LINES-2))'
 alias toupper="awk '{print toupper(\$0)}'"
+alias toupperPerl="\perl -pe 'tr/a-z/A-Z/'"
+alias toupperSed="sed 's/.*/\U&/'"
 alias traceroute="\traceroute -I"
 alias ulogerrors="egrep -iB4 -A1 'error|erreur|Err: [^0]'"
 alias ulogtodayerrors="egrep -iB4 -A1 'error|erreur|Err: [^0]' $ulog"
