@@ -6,7 +6,6 @@
 
 # the default umask is set in /etc/profile; for setting the umask
 # for ssh logins, install and configure the libpam-umask package.
-#umask 022
 scriptDir=$(cd $(dirname $BASH_SOURCE);pwd);test $HOME = / && export HOME=$scriptDir ; cd #Pour les cas tordus ou HOME pointerai sur "/", par example sur les certains telephones Android
 
 export initDir=$HOME/.initBash
@@ -16,6 +15,8 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 tty -s && test "$debug" -gt 0 && { echo;echo "=> \${BASH_SOURCE[*]} = ${BASH_SOURCE[*]}";echo; }
 
 test -f $initDir/.bash_profile.seb && source $initDir/.bash_profile.seb
+
+#umask 022
 
 # if running bash
 if [ -n "$BASH_VERSION" ]; then
@@ -29,7 +30,12 @@ fi
 
 # set PATH so it includes user's private bin if it exists
 if [ -d "$HOME/bin" ] ; then
-	echo $PATH | grep -wq "$HOME/bin" || PATH="$HOME/bin:$PATH"
+	PATH="$HOME/bin:$PATH"
+fi
+
+# set PATH so it includes user's private bin if it exists
+if [ -d "$HOME/.local/bin" ] ; then
+	PATH="$HOME/.local/bin:$PATH"
 fi
 
 test "$debug" -lt 3 && set +x
