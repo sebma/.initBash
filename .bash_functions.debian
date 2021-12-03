@@ -193,7 +193,9 @@ function fixAptKeys {
 		printf "=> Pre-deleting <$key> just in case ... "
 		sudo apt-key del $key
 		echo "=> Adding <$key> ..."
+		set -x
 		sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys $key
+		set +x
 	done
 	[ $nbKeysAdded != 0 ] && echo "=> New keys were added so resynchronizing the package index files from their sources ..." && sudo apt-get update
 
