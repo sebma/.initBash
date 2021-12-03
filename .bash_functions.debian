@@ -182,15 +182,20 @@ EOF
 	fi
 }
 function fixAptKeys {
+	local nbKeysAdded=0
 	LANG=C apt-key list | awk -F"/| *" '/expired/{print"sudo apt-key del "$3}' | sh -x
 	time (sudo apt-get update 2>/tmp/keymissing; cat /tmp/keymissing)
 	for key in $(awk '/Release:.*not available: NO_PUBKEY/{print substr($NF,9)}' /tmp/keymissing | sort -u)
 	do
+		let nbKeysAdded+=1
 		echo
 		echo "=> Processing key: $key"
+		printf"=> Pre-deleting <$key> just in case ... "
 		sudo apt-key del $key
+		echo "=> Adding <$key> ..."
 		sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys $key
 	done
+	[ $nbKeysAdded != 0 ] && echo "=> New keys were added so resynchronizing the package index files from their sources ..." && sudo apt-get update
 
 	for keyFile in $(awk '/gpg: keyblock resource .*resource limit/{print gensub("\`|.:","","g",$4)" "}' /tmp/keymissing)
 	do
