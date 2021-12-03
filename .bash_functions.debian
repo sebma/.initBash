@@ -190,7 +190,7 @@ function fixAptKeys {
 		let nbKeysAdded+=1
 		echo
 		echo "=> Processing key: $key"
-		printf"=> Pre-deleting <$key> just in case ... "
+		printf "=> Pre-deleting <$key> just in case ... "
 		sudo apt-key del $key
 		echo "=> Adding <$key> ..."
 		sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys $key
