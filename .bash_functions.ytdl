@@ -639,7 +639,7 @@ function ytdlUpdate {
 	fi
 
 	local sudo=""
-	local -r isAdmin=$(groups 2>/dev/null | \egrep -wq "sudo|adm|admin|root" && echo true || echo false)
+	local -r isAdmin=$(groups 2>/dev/null | \egrep -wq "sudo|adm|admin|root|wheel" && echo true || echo false)
 	if $isAdmin
 	then
 		sudo="command sudo -H"
@@ -688,7 +688,7 @@ function ytdlpUpdate {
 	fi
 
 	local sudo=""
-	local -r isAdmin=$(groups 2>/dev/null | \egrep -wq "sudo|adm|admin|root" && echo true || echo false)
+	local -r isAdmin=$(groups 2>/dev/null | \egrep -wq "sudo|adm|admin|root|wheel" && echo true || echo false)
 	if $isAdmin
 	then
 		sudo="command sudo -H"
