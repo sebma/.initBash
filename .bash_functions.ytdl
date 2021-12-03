@@ -670,7 +670,7 @@ function ytdlUpdate {
 			local ytdlPythonVersion=$($youtube_dl --ignore-config -v 2>&1 | awk -F "[ .]" '/Python version/{printf$4"."$5}')
 			$sudo $(type -P pip$ytdlPythonVersion) install -U $package
 		else
-			echo "=> [$FUNCNAME] INFO : You already have the latest release, type -P is $ytdlLatestRelease." >&2
+			echo "=> [$FUNCNAME] INFO : You already have the latest release, which is $ytdlLatestRelease." >&2
 		fi
 	else
 		$sudo $(type -P pip3) install -U $package
@@ -718,7 +718,7 @@ function ytdlpUpdate {
 			local ytdlPythonVersion=$($yt_dlp --ignore-config -v 2>&1 | awk -F "[ .]" '/Python version/{printf$4"."$5}')
 			$sudo $(type -P pip$ytdlPythonVersion) install -U $package
 		else
-			echo "=> [$FUNCNAME] INFO : You already have the latest release, type -P is $ytdlpLatestRelease." >&2
+			echo "=> [$FUNCNAME] INFO : You already have the latest release, which is $ytdlpLatestRelease." >&2
 		fi
 	else
 		$sudo $(type -P pip3) install -U $package
