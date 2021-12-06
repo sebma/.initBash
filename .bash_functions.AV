@@ -260,6 +260,7 @@ function addURL2Audio_Video {
 }
 function any216kHzopus {
 #	local inputFile="$1"
+	local outputFile=""
 for inputFile
 do
 	if [ -s "$inputFile" ]
@@ -284,6 +285,7 @@ done
 }
 function any2aac {
 #	local inputFile="$1"
+	local outputFile=""
 for inputFile
 do
 	if [ -s "$inputFile" ]
@@ -308,6 +310,7 @@ done
 }
 function any2aac_HE_AAC_VBR {
 #	local inputFile="$1"
+	local outputFile=""
 for inputFile
 do
 	if [ -s "$inputFile" ]
@@ -337,6 +340,7 @@ done
 }
 function any2m4a {
 #	local inputFile="$1"
+	local outputFile=""
 for inputFile
 do
 	if [ -s "$inputFile" ]
@@ -361,6 +365,7 @@ done
 }
 function any2m4a_HE_AAC_VBR {
 #	local inputFile="$1"
+	local outputFile=""
 for inputFile
 do
 	if [ -s "$inputFile" ]
@@ -397,6 +402,7 @@ function any2amr_nb {
 	local bitrate=12.2k
 	local sampling=8k
 	local reSamplingOption=""
+	local outputFile=""
 	echo $1 | \grep -q -- "^-b" && bitrate=$2  && shift 2
 	echo $1 | \grep -q -- "^-s" && sampling=$2 && shift 2
 	bitrate=${bitrate/bps/}
@@ -432,6 +438,7 @@ function any2amr_wb {
 	local bitrate=23.85k
 	local sampling=16k
 	local reSamplingOption=""
+	local outputFile=""
 	echo $1 | \grep -q -- "^-b" && bitrate=$2  && shift 2
 	echo $1 | \grep -q -- "^-s" && sampling=$2 && shift 2
 	bitrate=${bitrate/bps/}
@@ -440,7 +447,7 @@ function any2amr_wb {
 	for inputFile in "$@"
 	do
 		if [ -s "$inputFile" ]; then
-			test -n "$sampling" && outputFile="${inputFile%.*}-${bitrate}bps-${sampling}kHz_amr_wb.3gp" || outputFile="${inputFile%.*}-${bitrate}bps_amr_wb.3gp"
+			test -n "$sampling" && outputFile="${inputFile%.*}-${bitrate}bps-${sampling}kHz_amr_wb.amr" || outputFile="${inputFile%.*}-${bitrate}bps_amr_wb.amr"
 			if [ ! -s "$outputFile" ]; then
 				test -n "$sampling" && { sampling=$(perl -e "{print $sampling*1000}"); reSamplingOption="-ar $sampling"; }
 set -x
@@ -467,6 +474,7 @@ function any2opus {
 	local bitrate=64k
 	local sampling=""
 	local reSamplingOption=""
+	local outputFile=""
 	echo $1 | \grep -q -- "^-b" && bitrate=$2  && shift 2
 	echo $1 | \grep -q -- "^-s" && sampling=$2 && shift 2
 	bitrate=${bitrate/bps/}
@@ -503,6 +511,7 @@ function any2opusVBR {
 	local bitrate=64k
 	local sampling=""
 	local reSamplingOption=""
+	local outputFile=""
 	echo $1 | \grep -q -- "^-b" && bitrate=$2  && shift 2
 	echo $1 | \grep -q -- "^-s" && sampling=$2 && shift 2
 	bitrate=${bitrate/bps/}
@@ -531,6 +540,7 @@ set +x
 }
 function any2wav {
 #	local inputFile="$1"
+	local outputFile=""
 for inputFile
 do
 	if [ -s "$inputFile" ]
@@ -574,7 +584,7 @@ function audio2Video4YouTube {
 	local audio=$1
 	local picture=$2
 	local audioCodec=$(audioCodecOfFile "$audio" 2>/dev/null)
-	local video4YouTubeFile
+	local video4YouTubeFile=""
 	case $audioCodec in
 	aac)video4YouTubeFile="${audio%.*}__4YouTube.mp4"
 		time $ffmpeg -i "$audio" -loop 1 -framerate 4 -i "$picture" -shortest -speed max -map 0:a -c:a copy -map 1:v -preset medium -tune stillimage -crf 18 -pix_fmt yuv420p -movflags +frag_keyframe "$video4YouTubeFile" #cf. https://trac.ffmpeg.org/wiki/Encode/YouTube
