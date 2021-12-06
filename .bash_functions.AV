@@ -388,6 +388,76 @@ do
 	fi
 done
 }
+function any2amr_nb {
+	test $# = 0 && {
+		echo "=> Usage: $FUNCNAME [-b bitrate in kbps|12.2k] audioFile" >&2
+		return 1
+	}
+
+	local bitrate=12.2k
+	local sampling=8k
+	local reSamplingOption=""
+	echo $1 | \grep -q -- "^-b" && bitrate=$2  && shift 2
+	echo $1 | \grep -q -- "^-s" && sampling=$2 && shift 2
+	bitrate=${bitrate/bps/}
+	test -n "$sampling" && sampling=${sampling/k/} && sampling=${sampling/Hz/}
+
+	for inputFile in "$@"
+	do
+		if [ -s "$inputFile" ]; then
+			test -n "$sampling" && outputFile="${inputFile%.*}-${bitrate}bps-${sampling}kHz_amr_nb.amr" || outputFile="${inputFile%.*}-${bitrate}bps_amr_nb.amr"
+			if [ ! -s "$outputFile" ]; then
+				test -n "$sampling" && { sampling=$(perl -e "{print $sampling*1000}"); reSamplingOption="-ar $sampling"; }
+set -x
+				time $ffmpeg $ffmpegOptions -i "$inputFile" $reSamplingOption -vn -b:a $bitrate -ac 1 "$outputFile"
+set +x
+				sync
+				touch -r "$inputFile" "$outputFile"
+				echo "=> outputFile = <$outputFile>"
+			else
+				echo "=> ERROR: The file <$outputFile> already exits." 1>&2
+				continue
+			fi
+		else
+			echo "=> ERROR: The file <$inputFile> does not exit or is empty." 1>&2
+		fi
+	done
+}
+function any2amr_wb {
+	test $# = 0 && {
+		echo "=> Usage: $FUNCNAME [-b bitrate in kbps|23.85k] audioFile" >&2
+		return 1
+	}
+
+	local bitrate=23.85k
+	local sampling=16k
+	local reSamplingOption=""
+	echo $1 | \grep -q -- "^-b" && bitrate=$2  && shift 2
+	echo $1 | \grep -q -- "^-s" && sampling=$2 && shift 2
+	bitrate=${bitrate/bps/}
+	test -n "$sampling" && sampling=${sampling/k/} && sampling=${sampling/Hz/}
+
+	for inputFile in "$@"
+	do
+		if [ -s "$inputFile" ]; then
+			test -n "$sampling" && outputFile="${inputFile%.*}-${bitrate}bps-${sampling}kHz_amr_wb.3gp" || outputFile="${inputFile%.*}-${bitrate}bps_amr_wb.3gp"
+			if [ ! -s "$outputFile" ]; then
+				test -n "$sampling" && { sampling=$(perl -e "{print $sampling*1000}"); reSamplingOption="-ar $sampling"; }
+set -x
+				time $ffmpeg $ffmpegOptions -i "$inputFile" $reSamplingOption -vn -c:a libvo_amrwbenc -b:a $bitrate -ac 1 "$outputFile"
+set +x
+				sync
+				touch -r "$inputFile" "$outputFile"
+				echo "=> outputFile = <$outputFile>"
+			else
+				echo "=> ERROR: The file <$outputFile> already exits." 1>&2
+				continue
+			fi
+		else
+			echo "=> ERROR: The file <$inputFile> does not exit or is empty." 1>&2
+		fi
+	done
+}
 function any2opus {
 	test $# = 0 && {
 		echo "=> Usage: $FUNCNAME [-b bitrate in kbps|64k] [-s frequency in kHz|same as input by default] audioFile" >&2
