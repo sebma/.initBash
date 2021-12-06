@@ -447,7 +447,7 @@ function any2amr_wb {
 	for inputFile in "$@"
 	do
 		if [ -s "$inputFile" ]; then
-			test -n "$sampling" && outputFile="${inputFile%.*}-${bitrate}bps-${sampling}kHz_amr_wb.amr" || outputFile="${inputFile%.*}-${bitrate}bps_amr_wb.amr"
+			test -n "$sampling" && outputFile="${inputFile%.*}-${bitrate}bps-${sampling}kHz_amr_wb.3gp" || outputFile="${inputFile%.*}-${bitrate}bps_amr_wb.3gp"
 			if [ ! -s "$outputFile" ]; then
 				test -n "$sampling" && { sampling=$(perl -e "{print $sampling*1000}"); reSamplingOption="-ar $sampling"; }
 set -x
