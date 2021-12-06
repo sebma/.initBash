@@ -772,7 +772,7 @@ function mediainfoSummary {
 	do
 		mediainfo "$media"
 		echo
-	done | \egrep "^($|Complete name|Width|Height|Encoding settings|Format  |Format version|Format profile|Duration|Video|Audio|Text|Menu|Language)| size|Kbps|[Bb]it ?rate|Frame rate|Sampling rate|Channel|Cover"
+	done | \egrep "^($|Complete name|Width|Height|Encoding settings|Format  |Format version|Format profile|Duration|Video|Audio|Text|Menu|Language)| size|Kbps|[Bb]it ?rate|Frame rate|Sampling rate|Channel|Cover|Info"
 }
 function mkv2ogg {
 #	file="$1"
