@@ -415,7 +415,7 @@ function any2amr_nb {
 			if [ ! -s "$outputFile" ]; then
 				test -n "$sampling" && { sampling=$(perl -e "{print $sampling*1000}"); reSamplingOption="-ar:a $sampling"; }
 set -x
-				time $ffmpeg $ffmpegOptions -i "$inputFile" $reSamplingOption -map 0:a -map 0:s? -c:s mov_text -b:a $bitrate -ac:a 1 "$outputFile"
+				time $ffmpeg $ffmpegOptions -i "$inputFile" $reSamplingOption -map 0:a -map 0:s? -c:s mov_text -c:a amr_nb -b:a $bitrate -ac:a 1 "$outputFile"
 set +x
 				sync
 				touch -r "$inputFile" "$outputFile"
@@ -451,7 +451,7 @@ function any2amr_wb {
 			if [ ! -s "$outputFile" ]; then
 				test -n "$sampling" && { sampling=$(perl -e "{print $sampling*1000}"); reSamplingOption="-ar:a $sampling"; }
 set -x
-				time $ffmpeg $ffmpegOptions -i "$inputFile" $reSamplingOption -map 0:a -map 0:s? -c:s mov_text -c:a libvo_amrwbenc -b:a $bitrate -ac:a 1 "$outputFile"
+				time $ffmpeg $ffmpegOptions -i "$inputFile" $reSamplingOption -map 0:a -map 0:s? -c:s mov_text -c:a amr_wb -b:a $bitrate -ac:a 1 "$outputFile"
 set +x
 				sync
 				touch -r "$inputFile" "$outputFile"
