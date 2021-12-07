@@ -413,9 +413,9 @@ function any2amr_nb {
 		if [ -s "$inputFile" ]; then
 			test -n "$sampling" && outputFile="${inputFile%.*}-${bitrate}bps-${sampling}kHz_amr_nb.amr" || outputFile="${inputFile%.*}-${bitrate}bps_amr_nb.amr"
 			if [ ! -s "$outputFile" ]; then
-				test -n "$sampling" && { sampling=$(perl -e "{print $sampling*1000}"); reSamplingOption="-ar $sampling"; }
+				test -n "$sampling" && { sampling=$(perl -e "{print $sampling*1000}"); reSamplingOption="-ar:a $sampling"; }
 set -x
-				time $ffmpeg $ffmpegOptions -i "$inputFile" $reSamplingOption -vn -b:a $bitrate -ac 1 "$outputFile"
+				time $ffmpeg $ffmpegOptions -i "$inputFile" $reSamplingOption -map 0:a -map 0:s? -c:s mov_text -b:a $bitrate -ac:a 1 "$outputFile"
 set +x
 				sync
 				touch -r "$inputFile" "$outputFile"
@@ -449,9 +449,9 @@ function any2amr_wb {
 		if [ -s "$inputFile" ]; then
 			test -n "$sampling" && outputFile="${inputFile%.*}-${bitrate}bps-${sampling}kHz_amr_wb.3gp" || outputFile="${inputFile%.*}-${bitrate}bps_amr_wb.3gp"
 			if [ ! -s "$outputFile" ]; then
-				test -n "$sampling" && { sampling=$(perl -e "{print $sampling*1000}"); reSamplingOption="-ar $sampling"; }
+				test -n "$sampling" && { sampling=$(perl -e "{print $sampling*1000}"); reSamplingOption="-ar:a $sampling"; }
 set -x
-				time $ffmpeg $ffmpegOptions -i "$inputFile" $reSamplingOption -vn -c:a libvo_amrwbenc -b:a $bitrate -ac 1 "$outputFile"
+				time $ffmpeg $ffmpegOptions -i "$inputFile" $reSamplingOption -map 0:a -map 0:s? -c:s mov_text -c:a libvo_amrwbenc -b:a $bitrate -ac:a 1 "$outputFile"
 set +x
 				sync
 				touch -r "$inputFile" "$outputFile"
