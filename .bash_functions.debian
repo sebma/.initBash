@@ -94,7 +94,7 @@ function aptitude {
 function deblocate {
 	dlocate $(printf "bin/%s$ " "$@")
 }
-function debEditDependencies {
+function debEditDependenciesAndInstall {
 	test $# = 0 && {
 		echo "=> Usage: $FUNCNAME debianPackageFileName" >&2
 		return 1
@@ -107,8 +107,8 @@ function debEditDependencies {
 	$dpkg_deb -x $pkg $tmp/
 	$dpkg_deb --control $pkg $tmp/DEBIAN
 	$EDITOR $tmp/DEBIAN/control
-	dpkg -l gdebi | grep -q ^.i || sudo apt install -Vy gdebi
-	dpkg -l $pkg  | grep -q ^.i || $dpkg_deb -b $tmp/ $newPackage && echo "=> Installing \"$pkg\" and its dependencies ..." && sudo gdebi $newPackage
+	dpkg -l gdebi | \grep -q ^.i || $sudo apt install -Vy gdebi
+	dpkg -l $pkg  | \grep -q ^.i || $dpkg_deb -b $tmp/ $newPackage && echo "=> Installing \"$pkg\" and its dependencies ..." && $sudo gdebi $newPackage
 	rm -fr $tmp/
 }
 function downgradePPA_Package {
