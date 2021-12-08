@@ -8,7 +8,6 @@ LANGUAGE=C.UTF-8
 
 apt=$(which apt 2>/dev/null)
 aptGet=$(which apt-get 2>/dev/null)
-#sudo="$(which sudo >/dev/null 2>&1 && echo LANGUAGE=$LANGUAGE $(which sudo))"
 
 #alias installSecurityUpdates="sudo apt install -V $(apt-get -s dist-upgrade | awk "/^Inst.*\/$codeName-security/"'{print$2}')"
 alias apt-cache="\apt-cache -q0"
