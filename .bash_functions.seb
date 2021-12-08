@@ -6,7 +6,7 @@ test "$debug" -gt 0 && Echo "\n=> \${BASH_SOURCE[*]} = ${BASH_SOURCE[*]}\n"
 
 function gpartedNoUdisks2Inhibit {
 	gpartedLaunchLog=gparted_launch_error_$$.log
-	[ $(id -u) != 0 ] && sudo="sudo" && sudoBackground="sudo -b"
+	[ $isAdmin = true ] && sudoBackground="sudo -b"
 	$sudoBackground gparted 2>&1 "$@" | tee $gpartedLaunchLog
 	if \grep -q "mount.*bad.* /run/udisks2/inhibit-polkit" $gpartedLaunchLog;then
 		$sudo chmod -v -x /usr/lib/udisks2/udisks2-inhibit
