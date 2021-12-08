@@ -283,6 +283,80 @@ do
 	fi
 done
 }
+function any2_3gp_amr_nb {
+	test $# = 0 && {
+		echo "=> Usage: $FUNCNAME [-b bitrate in kbps|12.2k] audioFile" >&2
+		return 1
+	}
+
+	local bitrate=12.2k
+	local sampling=8k
+	local reSamplingOption=""
+	local outputFile=""
+	echo $1 | \grep -q -- "^-b" && bitrate=$2  && shift 2
+	echo $1 | \grep -q -- "^-s" && sampling=$2 && shift 2
+	bitrate=${bitrate/bps/}
+	test -n "$sampling" && sampling=${sampling/k/} && sampling=${sampling/Hz/}
+
+	for inputFile in "$@"
+	do
+		if [ -s "$inputFile" ]; then
+			test -n "$sampling" && outputFile="${inputFile%.*}-${bitrate}bps-${sampling}kHz_amr_nb.3gp" || outputFile="${inputFile%.*}-${bitrate}bps_amr_nb.3gp"
+			if [ ! -s "$outputFile" ]; then
+				test -n "$sampling" && { sampling=$(perl -e "{print $sampling*1000}"); reSamplingOption="-ar:a $sampling"; }
+#				time $ffmpeg $ffmpegOptions -i "$inputFile" -map 0:a $reSamplingOption -c:a amr_nb -b:a $bitrate -ac:a 1 "$outputFile"
+set -x
+				time $ffmpeg $ffmpegOptions -i "$inputFile" -map 0:a -map 0:s? $reSamplingOption -c:s mov_text -c:a amr_nb -b:a $bitrate -ac:a 1 "$outputFile" # removed subtitles because the resulting file produces many "[ffmpeg/audio] amrnb: Corrupt bitstream" errors
+set +x
+				sync
+				touch -r "$inputFile" "$outputFile"
+				echo "=> outputFile = <$outputFile>"
+			else
+				echo "=> ERROR: The file <$outputFile> already exits." 1>&2
+				continue
+			fi
+		else
+			echo "=> ERROR: The file <$inputFile> does not exit or is empty." 1>&2
+		fi
+	done
+}
+function any2_3gp_amr_wb {
+	test $# = 0 && {
+		echo "=> Usage: $FUNCNAME [-b bitrate in kbps|23.85k] audioFile" >&2
+		return 1
+	}
+
+	local bitrate=23.85k
+	local sampling=16k
+	local reSamplingOption=""
+	local outputFile=""
+	echo $1 | \grep -q -- "^-b" && bitrate=$2  && shift 2
+	echo $1 | \grep -q -- "^-s" && sampling=$2 && shift 2
+	bitrate=${bitrate/bps/}
+	test -n "$sampling" && sampling=${sampling/k/} && sampling=${sampling/Hz/}
+
+	for inputFile in "$@"
+	do
+		if [ -s "$inputFile" ]; then
+			test -n "$sampling" && outputFile="${inputFile%.*}-${bitrate}bps-${sampling}kHz_amr_wb.3gp" || outputFile="${inputFile%.*}-${bitrate}bps_amr_wb.3gp"
+			if [ ! -s "$outputFile" ]; then
+				test -n "$sampling" && { sampling=$(perl -e "{print $sampling*1000}"); reSamplingOption="-ar:a $sampling"; }
+#				time $ffmpeg $ffmpegOptions -i "$inputFile" -map 0:a $reSamplingOption -c:a amr_wb -b:a $bitrate -ac:a 1 "$outputFile"
+set -x
+				time $ffmpeg $ffmpegOptions -i "$inputFile" -map 0:a -map 0:s? $reSamplingOption -c:s mov_text -c:a amr_wb -b:a $bitrate -ac:a 1 "$outputFile" # removed subtitles because the resulting file produces many "[ffmpeg/audio] amrwb: Encountered a bad or corrupted frame" errors
+set +x
+				sync
+				touch -r "$inputFile" "$outputFile"
+				echo "=> outputFile = <$outputFile>"
+			else
+				echo "=> ERROR: The file <$outputFile> already exits." 1>&2
+				continue
+			fi
+		else
+			echo "=> ERROR: The file <$inputFile> does not exit or is empty." 1>&2
+		fi
+	done
+}
 function any2aac {
 #	local inputFile="$1"
 	local outputFile=""
