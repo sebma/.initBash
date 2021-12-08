@@ -2,7 +2,7 @@
 ! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-which -a git 2>/dev/null | \grep -q /usr || export GIT_EXEC_PATH=$HOME/libexec/git-core
+type -aP git 2>/dev/null | \grep -q /usr || export GIT_EXEC_PATH=$HOME/libexec/git-core
 
 cd $initDir && git config --get alias.ci >/dev/null || git config alias.ci '!f() { cd ${GIT_PREFIX:-.}; for file; do git commit -uno $file -m "Updated $file"; done; }; f';cd - >/dev/null
 
