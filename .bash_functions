@@ -100,7 +100,7 @@ function Sudo {
 	fi
 }
 function Top {
-	local top=$(which -a top | \grep ^/usr) #Au cas ou il y a un script top ailleurs dans le PATH
+	local top=$(type -aP top | \grep ^/usr) #Au cas ou il y a un script top ailleurs dans le PATH
 	local processPattern=$1
 	test -n "$processPattern" && shift && local processPIDs=$(\pgrep -f $processPattern)
 	if [ -z "$processPIDs" ]
