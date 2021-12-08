@@ -87,7 +87,6 @@ function Nohup {
 }
 function Sudo {
 	local firstArg=$1
-	local sudo="command sudo"
 	if [ $(type -t $firstArg) = function ]
 	then
 		shift && $sudo bash -c "$(declare -f $firstArg);$firstArg $*"
