@@ -72,9 +72,7 @@ fi
 
 setxkbmap -layout fr >/dev/null 2>&1
 
-if [ $(id -u) != 0 ] && groups 2>/dev/null | egrep -wq "sudo|adm|admin|root|wheel";then
-	sudo=$(type -P sudo)
-else
+if [ $isAdmin = false ];then
 	\mkdir -p ~/.local/lib/mlocate/ ~/.local/share/applications/ 2>/dev/null
 fi
 
