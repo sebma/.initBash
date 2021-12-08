@@ -1454,9 +1454,10 @@ function videoSplit {
 	if test $# = 3
 	then
 		end=$3
-		duration=$(echo $(date +%s.%N -d $end) - $(date +%s.%N -d $begin) | bc -l)
+#		duration=$(echo $(date +%s.%N -d $end) - $(date +%s.%N -d $begin) | bc -l)
+#		time $ffmpeg -ss $begin -t $duration -i "$fileName" $remuxOptions "$outputFile"
 		set -x
-		time $ffmpeg -ss $begin -t $duration -i "$fileName" $remuxOptions "$outputFile"
+		time $ffmpeg -ss $begin -to $end -i "$fileName" $remuxOptions "$outputFile"
 	else
 		set -x
 		time $ffmpeg -ss $begin -i "$fileName" $remuxOptions "$outputFile"
