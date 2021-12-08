@@ -74,7 +74,6 @@ function hw-probeAddNodeToInventory {
 	$sudo \hw-probe -all -upload -i $inventoryID && echo "=> INFO: Check your email to add confirm adding the new node to your inventory : https://linux-hardware.org/index.php?view=computers&inventory=$inventoryID" >&2
 }
 function hw-probeInstall {
-	type sudo >/dev/null 2>&1 && [ $(id -u) != 0 ] && groups | egrep -wq "sudo|adm|admin|root|wheel" && local sudo=$(type -P sudo) || local sudo=""
 	local distribName=$(distribName)
 	local retCode=0
 	if [ $distribName = ubuntu ]; then
@@ -130,7 +129,6 @@ function hw-probeInstall {
 	return $retCode
 }
 function hw-probeInstallFromSource {
-	type sudo >/dev/null 2>&1 && [ $(id -u) != 0 ] && groups | egrep -wq "sudo|adm|admin|root|wheel" && local sudo=$(type -P sudo) || local sudo=""
 	local distribName=$(distribName)
 	local hw_probeGitREPO=https://github.com/linuxhw/hw-probe
 
@@ -245,8 +243,6 @@ function lswifiNICs {
 	done
 }
 function lvs {
-	local sudo=""
-	type sudo >/dev/null 2>&1 && [ $(id -u) != 0 ] && groups | egrep -wq "sudo|adm|admin|root|wheel" && sudo=$(type -P sudo)
 	$sudo lvs -o lvname,vgname,seg_count,attr,lvsize,lv_major,lv_minor,lv_kernel_major,lv_kernel_minor,lv_uuid "$@"
 }
 function mac@ {
