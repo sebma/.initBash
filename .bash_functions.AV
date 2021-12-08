@@ -304,9 +304,8 @@ function any2_3gp_amr_nb {
 			test -n "$sampling" && outputFile="${inputFile%.*}-${bitrate}bps-${sampling}kHz_amr_nb.3gp" || outputFile="${inputFile%.*}-${bitrate}bps_amr_nb.3gp"
 			if [ ! -s "$outputFile" ]; then
 				test -n "$sampling" && { sampling=$(perl -e "{print $sampling*1000}"); reSamplingOption="-ar:a $sampling"; }
-#				time $ffmpeg $ffmpegOptions -i "$inputFile" -map 0:a $reSamplingOption -c:a amr_nb -b:a $bitrate -ac:a 1 "$outputFile"
 set -x
-				time $ffmpeg $ffmpegOptions -i "$inputFile" -map 0:a -map 0:s? $reSamplingOption -c:s mov_text -c:a amr_nb -b:a $bitrate -ac:a 1 "$outputFile" # removed subtitles because the resulting file produces many "[ffmpeg/audio] amrnb: Corrupt bitstream" errors
+				time $ffmpeg $ffmpegOptions -i "$inputFile" -map 0:a -map 0:s? $reSamplingOption -c:s mov_text -c:a amr_nb -b:a $bitrate -ac:a 1 "$outputFile"
 set +x
 				sync
 				touch -r "$inputFile" "$outputFile"
@@ -341,9 +340,8 @@ function any2_3gp_amr_wb {
 			test -n "$sampling" && outputFile="${inputFile%.*}-${bitrate}bps-${sampling}kHz_amr_wb.3gp" || outputFile="${inputFile%.*}-${bitrate}bps_amr_wb.3gp"
 			if [ ! -s "$outputFile" ]; then
 				test -n "$sampling" && { sampling=$(perl -e "{print $sampling*1000}"); reSamplingOption="-ar:a $sampling"; }
-#				time $ffmpeg $ffmpegOptions -i "$inputFile" -map 0:a $reSamplingOption -c:a amr_wb -b:a $bitrate -ac:a 1 "$outputFile"
 set -x
-				time $ffmpeg $ffmpegOptions -i "$inputFile" -map 0:a -map 0:s? $reSamplingOption -c:s mov_text -c:a amr_wb -b:a $bitrate -ac:a 1 "$outputFile" # removed subtitles because the resulting file produces many "[ffmpeg/audio] amrwb: Encountered a bad or corrupted frame" errors
+				time $ffmpeg $ffmpegOptions -i "$inputFile" -map 0:a -map 0:s? $reSamplingOption -c:s mov_text -c:a amr_wb -b:a $bitrate -ac:a 1 "$outputFile"
 set +x
 				sync
 				touch -r "$inputFile" "$outputFile"
