@@ -8,7 +8,8 @@ function applescript2app {
 }
 function dmgInstall {
 	local sudo defaultDst
-	groups | \egrep -wq "admin|sudo" && { sudo=sudo;defaultDst=/; }	|| { sudo="";defaultDst="$HOME"; }
+	local defaultDst=not_yet_defined
+	[ $isAdmin = true ] && defaultDst=/ || defaultDst="$HOME"
 	test "$debug" -gt 2 && set -x
 	for dmgFilePath
 	do
@@ -97,8 +98,8 @@ function pkgExpand {
 	done
 }
 function pkgInstall {
-	local sudo defaultDst
-	groups | \egrep -wq "admin|sudo" && { sudo=sudo;defaultDst=/; }	|| { sudo="";defaultDst="$HOME"; }
+	local defaultDst=not_yet_defined
+	[ $isAdmin = true ] && defaultDst=/ || defaultDst="$HOME"
 	test "$debug" -gt 2 && set -x
 	for pkg
 	do
