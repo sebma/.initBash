@@ -16,7 +16,7 @@ function dmgInstall {
 		if \ls $dmgFilePath >/dev/null
 		then
 			mountDev=$(hdiutil mount $dmgFilePath | awk '/dev.disk.*Volumes/{print$1}')
-			mountDir="$($(which mount) | \grep $mountDev | awk '{$1=$2="";sub(" [(].*","");sub("^  ","");print}')"
+			mountDir="$(command mount | \grep $mountDev | awk '{$1=$2="";sub(" [(].*","");sub("^  ","");print}')"
 			test "$debug" = 1 && echo "=> mountDir = $mountDir"
 			if [ -d "$mountDir" ]
 			then
@@ -85,7 +85,7 @@ function netstat {
 	
 	if $wasInWhile
 	then
-		$(which netstat) "${args[@]}"
+		command netstat "${args[@]}"
 	else
 		echo "=> ERROR : There was a problem with the <getopts> builtin." >&2
 		return 1;
@@ -118,9 +118,9 @@ function restart {
 }
 function route {
 	if echo $@ | \egrep -wq "add|flush|delete|change|get|monitor" ;then
-		$(which route) $@
+		command route $@
 	else
-		$(which netstat) -f inet -r $@ | \egrep -v /32 | \egrep "default|0.0.0.0|S"
+		command netstat -f inet -r $@ | \egrep -v /32 | \egrep "default|0.0.0.0|S"
 	fi
 }
 function start {
@@ -136,5 +136,5 @@ function stop {
 	test $serviceName && sudo launchctl unload $macOSServiceDIR/$serviceName.plist && status $serviceName
 }
 function topflines {
-	$(which gfind) "$@" $findPrunePathsExpression -xdev -type f -size +10M -exec gls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | column -t | head -n $(($LINES-4)) | awk '{total+=$5;print}END{if(total) print"=> total = "total" MiB"}'
+	command gfind "$@" $findPrunePathsExpression -xdev -type f -size +10M -exec gls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | column -t | head -n $(($LINES-4)) | awk '{total+=$5;print}END{if(total) print"=> total = "total" MiB"}'
 }
