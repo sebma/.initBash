@@ -4,8 +4,10 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 
 addmanpaths $(kpsewhich -var-value TEXMFDIST)/doc/man
 
+test "$debug" -gt 0 && time="eval time" || time=""
+test "$debug" -gt 0 && Echo "\n=> tlmgr --version ..."
+
 tlmgr=$(type -P tlmgr)
-test "$debug" -gt 0 && Echo "\n=> ${tlmgr/*\//} --version ..." && time="eval time" || time=eval
 if $isSudoer && ! $time $tlmgr --version | \grep "user mode" -q;then
 	export tlmgr="$sudo $tlmgr"
 else
