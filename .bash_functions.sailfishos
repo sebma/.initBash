@@ -52,8 +52,10 @@ function androidCodeName {
 }
 function df {
 	local df="command df"
-	$df -PTh "$@" | columns -t | grep ^Filesystem
-	$df -PTh "$@" | columns -t | sort -u | sort -k7 | grep -v ^Filesystem
+	local dfOptions="-Ph"
+	$df --help 2>&1 | \grep -q -- -T && dfOptions="${dfOptions}T"
+	$df $dfOptions "$@" | columns -t | grep ^Filesystem
+	$df $dfOptions "$@" | columns -t | sort -u | sort -k7 | grep -v ^Filesystem
 }
 function rebalance {
 	which btrfs-balancer >/dev/null && {
