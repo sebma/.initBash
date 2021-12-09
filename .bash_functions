@@ -149,9 +149,9 @@ function any2ascii {
 	for file
 	do
 		encoding=$(file -b -i "$file" | cut -d= -f2 | $sed "s/([0-9]+)[lb]e/\1/")
-		if which iconv >/dev/null 2>&1;then
+		if type -P iconv >/dev/null 2>&1;then
 			iconv -f $encoding "$file"
-		elif which recode >/dev/null 2>&1;then
+		elif type -P recode >/dev/null 2>&1;then
 			cat "$file" | recode $encoding.. 2>/dev/null
 		fi
 	done
@@ -226,7 +226,7 @@ function bible {
 	done
 }
 function brewInstall {
-	if ! which brew >/dev/null 2>&1; then
+	if ! type -P brew >/dev/null 2>&1; then
 		if [ $osFamily = Linux ]; then
 			if groups | \egrep -wq "adm|admin|sudo|wheel";then
 				brewPrefix=/home/linuxbrew/.linuxbrew
@@ -252,7 +252,7 @@ function brewInstall {
 function brewPortableInstall {
 	brew=undefined
 	brewPrefix=undefined
-	if ! which brew > /dev/null 2>&1; then
+	if ! type -P brew > /dev/null 2>&1; then
 		git --help >/dev/null || return
 		brewPrefix=$HOME/.linuxbrew
 		git clone https://github.com/homebrew/brew $brewPrefix
@@ -435,7 +435,7 @@ function distribName {
 	echo $OSTYPE | grep -q android && local osFamily=Android || local osFamily=$(uname -s)
 
 	if [ $osFamily = Linux ]; then
-		if which lsb_release > /dev/null; then
+		if type -P lsb_release > /dev/null; then
 			osName=$(lsb_release -si)
 			osName=${osName,} # Converts 1st letter to lower case cf. man bash | grep -m1 -B4 -A10 ,,
 			[ $osName = "n/a" ] && osName=$(source /etc/os-release && echo $ID)
@@ -532,10 +532,10 @@ function findSeb {
 	fi
 }
 function findCorruptedFilesIn {
-	local grep=$(which ggrep 2>/dev/null || which grep)
+	local grep=$(type -P ggrep 2>/dev/null || type -P grep)
 	time $grep -a -r . "$@" >/dev/null
 }
-function findHumanReadable {
+function findWithHumanReadableSizes {
 	local find="command find"
 	[ $osFamily = Darwin ] && find=gfind
 	local dir=$1
@@ -643,9 +643,9 @@ function getURLTitle {
 	for url
 	do
 		printf "$url # " >&2
-		if which xidel >/dev/null;then
+		if type -P xidel >/dev/null;then
 			xidel -s --css 'head title' "$url"
-		elif which pup >/dev/null;then
+		elif type -P pup >/dev/null;then
 			\curl -Ls "$url" | pup --charset utf8 'head title text{}'
 		fi
 	done
@@ -653,7 +653,7 @@ function getURLTitle {
 function getVideosFromRSSPodCastPlayList {
 	test $# = 1 && {
 		local rssURL="$1"
-		local wget="$(which wget2 2>/dev/null || which wget)"
+		local wget="$(type -P wget2 2>/dev/null || type -P wget)"
 #		$wget $(youtube-dl -g "$rssURL")
 		$wget $(curl -s "$rssURL" | egrep -o "https?:[^ <>]*(mp4|webm)" | grep -v .google.com/ | uniq)
 	}
@@ -761,7 +761,7 @@ function html2pdf {
 		return 1
 	}
 
-	if ! which wkhtmltopdf >/dev/null 2>&1;then
+	if ! type -P wkhtmltopdf >/dev/null 2>&1;then
 		echo "=> ERROR[$FUNCNAME]: You need to install the <wkhtmltopdf> tool." >&2
 		return 2
 	fi
@@ -878,7 +878,7 @@ function latexBuild {
 	done
 }
 function ldapUserFind {
-	if which ldapsearch >/dev/null 2>&1
+	if type -P ldapsearch >/dev/null 2>&1
 	then
 		ldapsearch -x -LLL uid=$1
 	fi
@@ -886,7 +886,7 @@ function ldapUserFind {
 function listVideosFromRSSPodCastPlayList {
 	test $# = 1 && {
 		local rssURL="$1"
-		local wget="$(which wget2 2>/dev/null || which wget)"
+		local wget="$(type -P wget2 2>/dev/null || type -P wget)"
 #		echo $(youtube-dl -g "$rssURL")
 		echo $(curl -s "$rssURL" | egrep -o "https?:[^ <>]*(mp4|webm)" | grep -v .google.com/ | uniq)
 	}
@@ -1113,7 +1113,7 @@ function os {
 		Linux)
 			if [ -s /etc/os-release ]; then
 				source /etc/os-release && os=$PRETTY_NAME
-			elif which lsb_release >/dev/null 2>&1; then
+			elif type -P lsb_release >/dev/null 2>&1; then
 				os=$(\lsb_release -scd | paste -sd" ")
 			else
 				os=$(\sed -n 's/\\[nl]//g;1p' /etc/issue)
@@ -1129,7 +1129,7 @@ function packageManager {
 	case $(distribType) in
 		debian) pkgManager="deb";;
 		redhat) pkgManager="rpm";;
-		Darwin) which brew >/dev/null 2>&1 && pkgManager="brew";;
+		Darwin) type -P brew >/dev/null 2>&1 && pkgManager="brew";;
 		*)
 			local pkgTools=$(which dpkg rpm 2>/dev/null | awk -F/ '{print$NF}')
 			for pkgTool in $pkgTools
@@ -1323,7 +1323,7 @@ function pingMyLAN {
 		fi
 	elif [ $# = 1 ];then
 		port=$1
-		if which fping >/dev/null 2>&1;then
+		if type -P fping >/dev/null 2>&1;then
 			time \nmap -T5 -sP $myLAN | sed -n '/Nmap scan report for /s/Nmap scan report for //p' | while read ip
 			do
 				tcpConnetTest $ip $port
@@ -1720,11 +1720,11 @@ function tcpConnetTest {
 		echo "=> Usage : $FUNCNAME server/ip portNumber" >&2
 		return 1
 	}
-	if which netcat > /dev/null 2>&1
+	if type -P netcat > /dev/null 2>&1
 	then
 		if test $http_proxy
 		then
-			if which nc.openbsd > /dev/null 2>&1
+			if type -P nc.openbsd > /dev/null 2>&1
 			then
 				\nc.openbsd -x $proxyName:$proxyPort -v -z -w 5 $(echo $@ | tr ":" " ")
 			else
@@ -1904,7 +1904,7 @@ function whatPackageContainsExecutable {
 			if $findPackage $executable | sed "s|/||";then
 				:
 			else
-				if which $executable >/dev/null 2>&1
+				if type -P $executable >/dev/null 2>&1
 				then
 					echo "=> Using : $searchPackage "'$'"(type -P $executable) ..." >&2
 					$searchPackage $(type -P $executable)
