@@ -2,7 +2,7 @@
 ! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-export apt=$(which apt)
+export apt="command apt"
 
 trap 'rc=130;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
 function addAptKeys {
@@ -15,7 +15,7 @@ function addAptKeys {
 function apt {
 	local args=("$@")
 	local firstArg=$1
-	local aptGet=$(which apt-get)
+	local aptGet="command apt-get"
 	case $firstArg in
 		install|remove|purge|upgrade|dist-upgrade|full-upgrade)
 			if [ -n "$SSH_CONNECTION" ] && which screen >/dev/null 2>&1;then
