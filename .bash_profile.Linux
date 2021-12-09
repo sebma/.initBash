@@ -88,7 +88,7 @@ if test -w /boot/grub/today.jpg
 then
 	for dir in /datas/ImagesVersets $HOME/ImagesVersets
 	do
-		test -d $dir && $(which find) $dir -type f 2>/dev/null | egrep -q '(png|jpg)$' && cp -pv "$(shuf -n1 -e $dir/*/*.{jpg,png})" /boot/grub/today.jpg 2>/dev/null && Echo
+		test -d $dir && command find $dir -type f 2>/dev/null | egrep -q '(png|jpg)$' && cp -pv "$(shuf -n1 -e $dir/*/*.{jpg,png})" /boot/grub/today.jpg 2>/dev/null && Echo
 	done
 fi
 
@@ -106,9 +106,9 @@ fi
 
 trap 'echo "=> Ignoring this step and continuing the script <$(basename $BASH_SOURCE)> ..." >&2' INT
 $time setxkbmap -option terminate:ctrl_alt_bksp 2>/dev/null
-if which gsettings >/dev/null 2>&1 && [ $DISPLAY ]
+if type -P gsettings >/dev/null 2>&1 && [ $DISPLAY ]
 then
-	if $(which gsettings) help >/dev/null
+	if command gsettings help >/dev/null
 	then
 		[ "$debug" -gt 0 ] && echo "=> Setting 'gsettings' parameters ..."
 		[ "$debug" -gt 2 ] && set -x
