@@ -36,7 +36,7 @@ function connect2SSID {
 	set +x
 }
 function df {
-	local df=$(type -P df)
+	local df=command df
 	local dfOptions="-PTh"
 	LANG=C $df $dfOptions "$@" | \grep "^Filesystem" 1>&2
 	LANG=C $df $dfOptions "$@" | grep -v "^Filesystem"
@@ -168,7 +168,7 @@ function isoLabel {
 }
 function lanIP {
 	set -o pipefail
-	local ip=$(type -P ip)
+	local ip=command ip
 	if $ip -4 -brief addr >/dev/null 2>&1;then
 		$ip -4 -brief addr show "$@"
 	else
@@ -179,7 +179,7 @@ function lanIP {
 }
 function lanIPv6 {
 	set -o pipefail
-	local ip=$(type -P ip)
+	local ip=command ip
 	if $ip -6 -brief addr >/dev/null 2>&1;then
 		$ip -6 -brief addr show "$@"
 	else
@@ -247,7 +247,7 @@ function lvs {
 }
 function mac@ {
 	set -o pipefail
-	local ip=$(type -P ip)
+	local ip=command ip
 	if $ip -brief addr >/dev/null 2>&1;then
 		$ip -brief link show "$@"
 	else
@@ -257,7 +257,7 @@ function mac@ {
 	set +o pipefail
 }
 function man2html {
-	local man2html=$(type -P man2html)
+	local man2html=command man2html
 	$man2html -r $(man -w "$1")
 }
 function mountISO {
@@ -393,7 +393,7 @@ function umount.seb {
 	set -- ${@%/}  # Remove trailing "/" from all arguments
 	local dir_or_device="$1"
 	local device mountDIR mountDIR_ROOT fsType=unknown
-	local df=$(type -P df)
+	local df=command df
 
 	if [ $# == 0 ]
 	then
@@ -438,10 +438,10 @@ function umount.seb {
 	echo "=> Unmounting $device ..." >&2
 	case $fsType in
 		iso9660) command udisksctl unmount -b $device;udisksctl loop-delete -b $device ;;
-		fuseblk|exfat) command umount.udisks2 "$@"  || command umount.udisks "$@" || udisksctl unmount -b $device || udisksctl unmount -b $device -f || { sudo -k $(type -P umount) -v "$@"; } ;;
+		fuseblk|exfat) command umount.udisks2 "$@"  || command umount.udisks "$@" || udisksctl unmount -b $device || udisksctl unmount -b $device -f || { sudo -k umount -v "$@"; } ;;
 		fuse.*) fusermount -u "$mountDIR";;
 		unknown) echo "=> $FUNCNAME : ERROR : This filesystem is of an <unknown> type." >&2; return 3;;
-		*) command umount -v "$@" || command umount.udisks2 "$@"  || command umount.udisks "$@" || udisksctl unmount -b $device || udisksctl unmount -b $device -f || { sudo -k $(type -P umount) -v "$@"; } ;;
+		*) command umount -v "$@" || command umount.udisks2 "$@"  || command umount.udisks "$@" || udisksctl unmount -b $device || udisksctl unmount -b $device -f || { sudo -k umount -v "$@"; } ;;
 	esac
 	rcCode=$?
 	mountDIR_ROOT="$(echo "$mountDIR" | cut -d/ -f-2)"
@@ -463,7 +463,7 @@ function umountISO {
 }
 function watchProcess {
 	local pidList=""
-	local ps=$(type -P ps)
+	local ps=command ps
 	mkdir -p ~/log
 	test $# = 1 && while true
 	do
