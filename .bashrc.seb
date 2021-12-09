@@ -160,7 +160,7 @@ then
 	set +x
 	Source /usr/share/bash-completion/bash_completion
 	$xtrace
-	Debug "=> Running /usr/share/bash-completion/bash_completion ..."
+	Debug "=> END of /usr/share/bash-completion/bash_completion ..."
 fi
 
 type -P register-python-argcomplete >/dev/null 2>&1 && eval "$(register-python-argcomplete conda)"
