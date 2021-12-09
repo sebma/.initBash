@@ -38,7 +38,7 @@ function apt {
 function apt-cache {
 	local args=("$@")
 	local firstArg=$1
-	local aptCache="$(which apt-cache)"
+	local aptCache="command apt-cache"
 	case $firstArg in
 		search)
 			$aptCache "${args[@]}" | sort;;
@@ -60,10 +60,11 @@ function aptCachePolicy2LaunchpadPPAURLs {
 function aptGet {
 	local args=("$@")
 	local firstArg=$1
+	local aptGet="command apt-get"
 	case $firstArg in
 		install|remove|autoremove|purge) sudo $apt "${args[@]}" -V;;
-		download) command apt-get "${args[@]}" --print-uris && $(which apt-get) "${args[@]}";;
-		*) command apt-get "${args[@]}";;
+		download) $aptGet "${args[@]}" --print-uris && $aptGet "${args[@]}";;
+		*) $aptGet "${args[@]}";;
 	esac
 }
 function aptPrintURIS {
@@ -85,10 +86,11 @@ function apt_cache {
 }
 function aptitude {
 	local args=("$@")
+	local aptitude="$(type -P aptitude)"
 	firstArg=$1
 	case $firstArg in
-		install|reinstall|purge|remove) sudo $(which aptitude) "${args[@]}" -V;;
-		*) command aptitude "${args[@]}";;
+		install|reinstall|purge|remove) $sudo $aptitude "${args[@]}" -V;;
+		*) $aptitude "${args[@]}";;
 	esac
 }
 function deblocate {
