@@ -2,7 +2,7 @@
 ! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-export brew=$(which brew)
+export brew="command brew"
 [ $osFamily = Darwin ] && export brewCask="$(which brew) cask" && alias brew-cask="$brewCask"
 
 set +x
