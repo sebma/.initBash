@@ -4,10 +4,11 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 
 addmanpaths $(kpsewhich -var-value TEXMFDIST)/doc/man
 
-if groups 2>/dev/null | egrep -wq "sudo|adm|admin|root|wheel" && ! tlmgr --version 2>/dev/null | grep -q "user mode";then
-	export tlmgr="sudo $(which tlmgr)"
+tlmgr=$(type -P tlmgr)
+if $isSudoer && ! $tlmgr --version 2>/dev/null | \grep "user mode" -q;then
+	export tlmgr="$sudo $tlmgr"
 else
-	export tlmgr=tlmgr
+	export tlmgr=$tlmgr
 	[ -d $HOME/texmf ] || $tlmgr init-usertree
 fi
 
