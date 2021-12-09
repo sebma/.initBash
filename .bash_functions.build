@@ -6,11 +6,11 @@ test "$debug" -gt 0 && Echo "\n=> \${BASH_SOURCE[*]} = ${BASH_SOURCE[*]}\n"
 
 type -P nproc >/dev/null 2>&1 && nproc=$(nproc) || nproc=$(getconf _NPROCESSORS_ONLN)
 myMakeOptions="-j$nproc"
-test "$make" || { type -P remake >/dev/null 2>&1 && export make="$(type -P remake) $myMakeOptions" || export make="$(type -P make) $myMakeOptions"; }
-test "$install" || { type -P checkinstall >/dev/null 2>&1 && export install="$(type -P checkinstall)" || export install="make install"; }
+test "$make" || { type -P remake >/dev/null 2>&1 && export make="command remake $myMakeOptions" || export make="command make $myMakeOptions"; }
+test "$install" || { type -P checkinstall >/dev/null 2>&1 && export install="command checkinstall" || export install="make install"; }
 
 function buildSourceCode {
-	local basicCompiler=$(type -P $(echo $HOSTTYPE-$OSTYPE-gcc | sed "s/armv[^-]*-/arm-/"))
+	local basicCompiler="command $(echo $HOSTTYPE-$OSTYPE-gcc | sed "s/armv[^-]*-/arm-/")"
 	test $CC || [ -z "$basicCompiler" ] || export CC=$(\ls ${basicCompiler}{-?,} 2>/dev/null | awk -F/ 'END{print$NF}')
 	local host=$(echo "$@" | grep -oP -- "--host=\K\S+")
 	local defaultBuildOptions=""
@@ -65,8 +65,8 @@ function buildSourceCode {
 	return $returnCode
 }
 function checkinstallWithGitRepoInformation {
-	[ $osFamily = Darwin ] && local sed="$(type -P sed) -E"
-	[ $osFamily = Linux ]  && local sed="$(type -P sed) -r"
+	[ $osFamily = Darwin ] && local sed="command sed -E"
+	[ $osFamily = Linux ]  && local sed="command sed -r"
 	local gitHTTP_URL=$(\git config --get remote.origin.url | $sed "s|^git@|https://|;s|(\.\w+):|\1/|")
 
 	echo "=> Running $FUNCNAME ..."
@@ -129,7 +129,7 @@ function build_in_usr_local_DEBIAN {
 	test -s GNUmakefile && time $make && sudo checkinstall
 }
 function configure {
-	local basicCompiler=$(type -P $(echo $HOSTTYPE-$OSTYPE-gcc | sed "s/armv[^-]*-/arm-/"))
+	local basicCompiler="command $(echo $HOSTTYPE-$OSTYPE-gcc | sed "s/armv[^-]*-/arm-/")"
 	test $CC || [ -z "$basicCompiler" ] || export CC=$(\ls ${basicCompiler}{-?,} 2>/dev/null | awk -F/ 'END{print$NF}')
 	local defaultBuildOptions=""
 	local project=$(basename $PWD)
