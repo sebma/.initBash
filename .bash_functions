@@ -503,7 +503,7 @@ function extractURLsFromURLs_Simplified  {
 	done | sort -u
 }
 function fileTypes {
-	local find="$(which find)"
+	local find="command find"
 	[ $osFamily = Darwin ] && find=gfind
 	time for dir
 	do
@@ -511,7 +511,7 @@ function fileTypes {
 	done
 }
 function findSeb {
-	local find="$(which find)"
+	local find="command find"
 	[ $osFamily = Darwin ] && find=gfind
 	local dir=$1
 	if echo $dir | \grep -q "^-"
@@ -536,7 +536,7 @@ function findCorruptedFilesIn {
 	time $grep -a -r . "$@" >/dev/null
 }
 function findHumanReadable {
-	local find="$(which find)"
+	local find="command find"
 	[ $osFamily = Darwin ] && find=gfind
 	local dir=$1
 	echo $dir | \grep -q "\-" && dir=. || shift
@@ -555,8 +555,8 @@ function findLoops {
 	time $find "$@" -xdev -follow -printf ""
 }
 function functionDefinition {
-	[ $osFamily = Darwin ] && local sed="$(which sed) -E"
-	[ $osFamily = Linux ]  && local sed="$(which sed) -r"
+	[ $osFamily = Darwin ] && local sed="command sed -E"
+	[ $osFamily = Linux ]  && local sed="command sed -r"
 	type "$@" | \grep -v 'is a function$' | $sed 's/(;| )$//;s/    /\t/g'
 }
 function gdebiALL {
@@ -582,7 +582,7 @@ function getCodeName {
 
 	local brand=$1
 	local model=$2
-	local curl="$(which curl) -sL"
+	local curl="command curl -sL"
 	local codeNameJSONDataBaseURL=https://github.com/jaredrummler/AndroidDeviceNames/raw/master/json/manufacturers
 
 	if $curl -I $codeNameJSONDataBaseURL/$brand.json | \grep "Not Found";then
@@ -610,7 +610,7 @@ function getFiles {
 
 	local lastArg="$(eval echo \${$#})"
 	local baseUrl=$(echo $url | awk -F/ '{print$3}')
-	local wget="$(which wget)"
+	local wget="command wget"
 	local url=$lastArg
 
 	echo $url | egrep "^(https?|ftp)://" || {
@@ -793,7 +793,7 @@ function httpLocalServer {
 	local fqdn=localhost
 	local ip=$(\dig -x +search +short $(hostname))
 	local -i port=1234
-	local python="$(which python)"
+	local python="command python"
 
 	case $1 in
 		-h|-help|--h|--help) echo "=> Usage: $FUNCNAME [portNumber|$port]" >&2; return 1 ;;
@@ -1313,10 +1313,11 @@ function picMpixels {
 function pingMyLAN {
 	local myOutgoingInterFace=$(ip route | awk '/default/{print$5}')
 	local myLAN=$(\ip -o -4 addr show $myOutgoingInterFace scope global up | awk '{print$4}')
+	local fping=$(type -P fping)
 	if [ $# = 0 ];then
-		if which fping >/dev/null 2>&1;then
-			getcap $(which fping) | \grep -q cap_net_raw+ep || sudo setcap cap_net_raw+ep $(which fping)
-			time fping -r 0 -aAg $myLAN 2>/dev/null | sort -u
+		if [ -n "$fping" ];then
+			getcap $fping | \grep -q cap_net_raw+ep || sudo setcap cap_net_raw+ep $fping
+			time $fping -r 0 -aAg $myLAN 2>/dev/null | sort -u
 		else
 			time \nmap -T5 -sP $myLAN | sed -n '/Nmap scan report for /s/Nmap scan report for //p'
 		fi
@@ -1892,21 +1893,21 @@ function whatPackageContainsExecutable {
 		if echo "$@" | \grep -q ^/;then
 			$findPackage $(printf "%s " "$@")
 		else
-			$findPackage $(printf "%s " $(which "$@"))
+			$findPackage $( printf "%s " $(type -P "$@") )
 		fi
 	else
 		for executable
 		do
 			case "$(packageManager)" in
-				*) findPackage="$(which whohas) 2>/dev/null";; # Search package across most common distributions
+				*) findPackage="command whohas 2>/dev/null";; # Search package across most common distributions
 			esac
 			if $findPackage $executable | sed "s|/||";then
 				:
 			else
 				if which $executable >/dev/null 2>&1
 				then
-					echo "=> Using : $searchPackage $(which executable) ..." >&2
-					$searchPackage $(which executable)
+					echo "=> Using : $searchPackage "'$'"(type -P $executable) ..." >&2
+					$searchPackage $(type -P $executable)
 				else
 					echo "=> Using : $searchPackage bin/$executable ..." >&2
 					$searchPackage bin/$executable
