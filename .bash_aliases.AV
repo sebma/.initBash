@@ -2,9 +2,9 @@
 ! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-ffmpeg="$(type -P ffmpeg) -hide_banner"
-ffplay="$(type -P ffplay) -hide_banner"
-ffprobe="$(type -P ffprobe) -hide_banner"
+ffmpeg="command ffmpeg -hide_banner"
+ffplay="command ffplay -hide_banner"
+ffprobe="command ffprobe -hide_banner"
 alias addCover2mp4=addThumbnail2mp4_AtomicParsley
 alias ffmpeg="time \ffmpeg -hide_banner"
 alias ffmpegwebcamInfo="ffmpeg -list_formats all -i"
