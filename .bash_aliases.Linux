@@ -124,16 +124,16 @@ then
 	alias lvresize="\lvresize -r"
 	alias pvs="\pvs -v"
 	alias pgrep="\pgrep -lf"
-	alias pip2Update="\sudo -H pip2 install -U pip || \sudo -H $(type -P pip) install U pip"
-	alias pip3Update="\sudo -H pip3 install -U pip || \sudo -H $(type -P pip) install -U pip"
+	alias pip2Update="\sudo -H pip2 install -U pip || \sudo -H pip install U pip"
+	alias pip3Update="\sudo -H pip3 install -U pip || \sudo -H pip install -U pip"
 	alias restart_nm="nmRestart"
 	alias rtmpdumprd='\sudo iptables -t nat -A OUTPUT -p tcp --dport 1935 -m owner \! --uid-owner root -j REDIRECT'
 	alias rtmpdumprs='\sudo iptables -t nat -D OUTPUT -p tcp --dport 1935 -m owner \! --uid-owner root -j REDIRECT'
 	alias update-mime-database="\sudo \rm -vf /usr/share/mime/packages/kde.xml;time sudo \update-mime-database /usr/share/mime"
 	alias updatedb="time sudo updatedb"
 	alias usermod="\usermod -a" # A default to always use with "usermod -G"
-	alias youtube-dlUpdate='\sudo -H pip3 install -U youtube-dl || \sudo -H $(type -P pip) install -U youtube-dl'
-	alias ytdlInstall='\sudo -H pip3 install youtube-dl || \sudo -H $(type -P pip) install youtube-dl'
+	alias youtube-dlUpdate='\sudo -H pip3 install -U youtube-dl || \sudo -H pip install -U youtube-dl'
+	alias ytdlInstall='\sudo -H pip3 install youtube-dl || \sudo -H pip install youtube-dl'
 	alias vgs="\vgs -v"
 else
 	alias updatedb='time updatedb -l 0 -o ~/.local/lib/mlocate/mlocate.db --prunefs "rpc_pipefs afs binfmt_misc proc smbfs iso9660 ncpfs coda devpts ftpfs devfs mfs shfs sysfs cifs lustre tmpfs usbfs udf fuse.glusterfs fuse.sshfs curlftpfs"'
