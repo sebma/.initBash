@@ -51,7 +51,7 @@ function androidCodeName {
 	echo $androidCodeName$normal
 }
 function rebalance {
-	which btrfs-balancer >/dev/null && {
+	type -P btrfs-balancer >/dev/null && {
 		df /
 		echo
 		set -x
