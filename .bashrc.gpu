@@ -2,10 +2,8 @@
 ! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-if [ $osFamily = Linux ] && type -P lspci >/dev/null
-then
-	if \lspci -nnd ::300 | grep -qi nvidia
-	then
+if [ $osFamily = Linux ] && type -P lspci >/dev/null;then
+	if \lspci -nnd ::300 | \grep -i nvidia -q;then
 		alias nvidiaVersion="cat /proc/driver/nvidia/version"
 		alias cudaVersion="nvcc -V"
 	else
