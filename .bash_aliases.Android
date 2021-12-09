@@ -17,8 +17,8 @@ alias la="ls -a"
 alias ll="ls -lF"
 alias lla="ls -alF"
 alias llah="ls -alhF"
-alias topd10="topd10"
-alias topd5="topd5"
+alias topd10="topd $((10+1))"
+alias topd5="topd $((5+1))"
 alias topd="\du -cxmd 1 2>/dev/null | grep -v '\s*\.$' | sort -nr | head -n"
 alias topdlines='topd $(($LINES-2))'
 
