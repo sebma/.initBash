@@ -549,7 +549,7 @@ function findHumanReadable {
 	fi
 }
 function findLoops {
-	local find="$(type -P find)"
+	local find="command find"
 	echo $OSTYPE | \grep android -q && local osFamily=Android || local osFamily=$(uname -s)
 	[ $osFamily = Darwin ] && find=gfind
 	time $find "$@" -xdev -follow -printf ""
@@ -1337,7 +1337,7 @@ function pip {
 	local caller=${FUNCNAME[1]}
 	test $caller || caller="pip"
 	if type -P $caller >/dev/null;then
-		local callerPath=$(type -P $caller)
+		local callerPath="command $caller"
 	else
 		echo "$0: ERROR $caller is not installed" >&2
 		return 1
