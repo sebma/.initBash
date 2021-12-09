@@ -54,8 +54,8 @@ function df {
 	local df="command df"
 	local dfOptions="-Ph"
 	$df --help 2>&1 | \grep -q -- -T && dfOptions="${dfOptions}T"
-	$df $dfOptions "$@" | columns -t | grep ^Filesystem
-	$df $dfOptions "$@" | columns -t | sort -u | sort -k7 | grep -v ^Filesystem
+	$df $dfOptions "$@" | columns -t | \grep ^Filesystem
+	$df $dfOptions "$@" | columns -t | sort -u | sort -k7 | \grep -v ^Filesystem
 }
 function rebalance {
 	which btrfs-balancer >/dev/null && {
