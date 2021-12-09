@@ -3,7 +3,7 @@
 ! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-export busybox="$(which busybox)"
+export busybox="command busybox"
 
 alias l="$busybox ls --color"
 alias ls="$busybox ls --color -F"
@@ -28,7 +28,7 @@ alias topf="$find   . -xdev -type f -size +10240k -exec busybox ls -al {} + 2>/d
 #alias topflines="$find   . -xdev -type f -size +10240k -exec busybox ls -al {} + 2>/dev/null | sort -nrk5 | awk '{size=\$5/2^20;sub(\" *\"\$5,sprintf(\" %10.3fM\",size));print}' | head -n $(($LINES-4)) | awk '{total+=\$5;print}END{print\"=> total = \"total\" MiB\"}'"
 
 function findSeb {
-	local find="$(which find)"
+	local find="command find"
 	local dir=$1
 	echo $dir | \grep -q "\-" && dir=. || shift
 	local args=("${@}")
