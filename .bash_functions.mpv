@@ -9,7 +9,7 @@ test "$debug" -gt 0 && Echo "\n=> \${BASH_SOURCE[*]} = ${BASH_SOURCE[*]}\n"
 export mpv_Output_Perl_Script="'\$| = 1;s/\n/\r/g if \$_ =~ /AV: /;s/Saving state/\nSaving state/'" # On l'exporte pour qu'elle soit accessible du processus fils
 export HOSTNAME # for mpv auto-profiles conditions
 
-mpv="$(which mpv 2>/dev/null)"
+mpv="command mpv"
 # alias mpv="LANG=en_US.utf8 $mpv $mpvDefaultOptions"
 mpvnoconfig="mpv --no-config"
 alias mpvnoconfig="$mpvnoconfig"
