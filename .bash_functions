@@ -470,7 +470,7 @@ function distribType {
 	elif [ $osFamily = Android ]; then
 			distribType=Android
 	else
-		which bash >/dev/null 2>&1 && distribType=$(bash -c 'echo $OSTYPE') || distribType=$osFamily
+		type -P bash >/dev/null 2>&1 && distribType=$(bash -c 'echo $OSTYPE') || distribType=$osFamily
 	fi
 
 	echo $distribType
@@ -1009,7 +1009,7 @@ function memUsageOfProcessName {
 	do
 		if \pgrep $processName >/dev/null;then
 			printf "=> $processName: "
-			which smem >/dev/null && echo && smem -P $processName -t -c "swap rss uss pss" -k | \sed -n '1p;$p' || $ps -o rss= -C $processName | LC_ALL=C numfmt --from-unit=1K --from=iec | paste -sd+ | bc | numfmt --to=iec-i
+			type -P smem >/dev/null && echo && smem -P $processName -t -c "swap rss uss pss" -k | \sed -n '1p;$p' || $ps -o rss= -C $processName | LC_ALL=C numfmt --from-unit=1K --from=iec | paste -sd+ | bc | numfmt --to=iec-i
 		fi
 	done
 }
@@ -1019,7 +1019,7 @@ function memUsageOfProcessRegExp {
 	do
 		if \pgrep $processRegExp >/dev/null;then
 			printf "=> $processRegExp: "
-			which smem >/dev/null && echo && smem -P $processRegExp -t -c "swap rss uss pss" -k | \sed -n '1p;$p' || $ps -o rss= -p $(\pgrep $processRegExp) | LC_ALL=C numfmt --from-unit=1K --from=iec | paste -sd+ | bc | numfmt --to=iec-i
+			type -P smem >/dev/null && echo && smem -P $processRegExp -t -c "swap rss uss pss" -k | \sed -n '1p;$p' || $ps -o rss= -p $(\pgrep $processRegExp) | LC_ALL=C numfmt --from-unit=1K --from=iec | paste -sd+ | bc | numfmt --to=iec-i
 		fi
 	done
 }
