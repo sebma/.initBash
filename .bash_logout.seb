@@ -4,11 +4,11 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 
 unalias which >/dev/null 2>&1
 test -z "$SSH_CONNECTION" && \pgrep -u $USER -f "adb -." >/dev/null && Echo "=> Killing the <adb> process ..." && pkill -f "adb -. "
-if $(which df) ~/.cache | egrep -wqi "/(home|users?)";then
+if command df ~/.cache | \egrep -wqi "/(home|users?)";then
 	if [ $osID != sailfishos ]; then
 		tty -s && echo "=> Removing everything in ~/.cache/ except the <fontconfig> cache which is also used by matplotlib."
-		$(which find) ~/.cache/ -type d | \egrep -vw "(.cache/|fontconfig|matplotlib)" | \xargs rm -fr
-		$(which find) ~/.cache/ -type f | \egrep -v "/(fontconfig|matplotlib)/" | \xargs rm -f
+		command find ~/.cache/ -type d | \egrep -vw "(.cache/|fontconfig|matplotlib)" | \xargs rm -fr
+		command find ~/.cache/ -type f | \egrep -v "/(fontconfig|matplotlib)/" | \xargs rm -f
 		tty -s && echo "=> Done."
 	fi
 fi 2>/dev/null
