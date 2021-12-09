@@ -573,7 +573,7 @@ function ytdlGetVideoIDsFromPlayListURL {
 	test "$playListURL" && $ytdlnoconfig  --ignore-errors --flat-playlist -j "$playListURL" | jq -r .id
 }
 function ytdlGetFirstURL {
-	local youtube_dl=command youtube-dl
+	local youtube_dl="command youtube-dl"
 	local url="$1"
 	set -o pipefail
 	url="$($youtube_dl -j --playlist-items 1 "$url" | jq -r .webpage_url || echo "$url")"
@@ -645,7 +645,7 @@ function ytdlUpdate {
 	fi
 
 	local package=youtube-dl
-	local youtube_dl=command $package
+	local youtube_dl="command $package"
 	if [ "$youtube_dl" ];then
 		echo "=> Searching for the latest release on $ytdlPyPI_URL ..." >&2
 		local ytdlLatestRelease=$(\curl -Ls $ytdlPyPI_URL/json | jq -r .info.version)
@@ -693,7 +693,7 @@ function ytdlpUpdate {
 	fi
 
 	local package=yt-dlp
-	local yt_dlp=command $package
+	local yt_dlp="command $package"
 	if [ "$yt_dlp" ];then
 		echo "=> Searching for the latest release on $ytdlpPyPI_URL ..." >&2
 		local ytdlpLatestRelease=$(\curl -Ls $ytdlpPyPI_URL/json | jq -r .info.version)
