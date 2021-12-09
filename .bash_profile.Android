@@ -7,6 +7,7 @@ test "$debug" -gt 0 && Echo "\n=> \${BASH_SOURCE[*]} = ${BASH_SOURCE[*]}\n"
 type -P getprop >/dev/null && [ -z "$system" ] && declare -gxr system="Android $(getprop ro.build.version.release)"
 test -z "$USER" && export USER=$(whoami) && export LOGNAME=$USER
 #type -P termux-info >/dev/null && echo "=> sudo = <$sudo>."
+echo $MANPATH | \grep $PREFIX -q || export MANPATH=$MANPATH:$PREFIX/../usr/share/man
 
 set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
