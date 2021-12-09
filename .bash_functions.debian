@@ -114,7 +114,7 @@ function debEditDependenciesAndInstall {
 	rm -fr $tmp/
 }
 function downgradePPA_Package {
-	which ppa-purge >/dev/null || sudo apt install -V ppa-purge -y
+	type -P ppa-purge >/dev/null || sudo apt install -V ppa-purge -y
 	local ppa=""
 	for pkg
 	do
