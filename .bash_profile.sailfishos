@@ -24,7 +24,7 @@ echo
 # User specific environment and startup programs
 
 export MANPAGER="less -is"
-export EDITOR=$(which vim)
+export EDITOR="command vim"
 #export HOMEBREW_TEMP=$HOME/tmp
 
 if tty -s
