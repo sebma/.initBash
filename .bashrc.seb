@@ -116,7 +116,7 @@ then
 	fi
 	trap - INT
 
-#	which randverse >/dev/null 2>&1 && randverse
+#	type -P randverse >/dev/null 2>&1 && randverse
 	echo
 fi
 
@@ -209,9 +209,9 @@ test -r $initDir/.bash_functions.$osID && Source $initDir/.bash_functions.$osID 
 
 case $OSTYPE in
 	linux-gnueabi)
-		which resize >/dev/null 2>&1 && resize
-		which busybox >/dev/null 2>&1 && test -r $initDir/.bash_aliases.busybox && Source $initDir/.bash_aliases.busybox
-		which toybox >/dev/null 2>&1 && test -r $initDir/.bash_aliases.toybox && Source $initDir/.bash_aliases.toybox
+		type -P resize >/dev/null 2>&1 && resize
+		type -P busybox >/dev/null 2>&1 && test -r $initDir/.bash_aliases.busybox && Source $initDir/.bash_aliases.busybox
+		type -P toybox >/dev/null 2>&1 && test -r $initDir/.bash_aliases.toybox && Source $initDir/.bash_aliases.toybox
 		;;
 	linux-android)
 		if type -P termux-info >/dev/null;then
