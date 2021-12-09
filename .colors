@@ -4,7 +4,7 @@
 if tty -s
 then
 	set -o | \grep -wq xtrace.*on && trace=1 || trace=0
-	if command tput >/dev/null 2>&1;then
+	if type -P tput >/dev/null 2>&1;then
 		export normal=$(tput sgr0)
 		export bell=$(tput bel)
 		export bold=$(tput bold)
