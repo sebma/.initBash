@@ -48,7 +48,7 @@ function addpaths {
 TeXLiveDIR=$(\ls -d /usr/local/texlive/*/bin/* 2>/dev/null | egrep "/texlive/[0-9]+/bin/$arch-${osFamily,,}")
 addpaths $TeXLiveDIR
 
-export youtube_dl=$(type -P youtube-dl)
+export youtube_dl="command youtube-dl"
 if [ -n "$youtube_dl" ];then # Recuperation de la variable _USER_AGENT_TPL de youtube-dl pour construire le user agent
 	pythonVersion=$(python3 -V | awk -F "[ .]" '/Python/{printf$2"."$3}')
 	which chromium-browser >/dev/null 2>&1 && chromeVersion=$(chromium-browser --version 2>/dev/null | awk '{printf$2}') || chromeVersion="73.0.3671.2"
@@ -111,7 +111,7 @@ jussieu|enst)
 	;;
 esac
 
-export ssh=$(type -P ssh)
+export ssh="command ssh"
 
 #Si le proxy est joignable
 if [ $domain != localhost ] && nc -v -z -w 4 $proxyName $proxyPort >/dev/null 2>&1
