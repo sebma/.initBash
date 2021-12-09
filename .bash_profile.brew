@@ -2,7 +2,8 @@
 ! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-eval $($brew shellenv) && [ $BASH_VERSINFO -ge 4 ] && [ -r $($brew --prefix)/share/bash-completion/bash_completion ] && Source $($brew --prefix)/share/bash-completion/bash_completion
+test "$debug" -gt 0 && Echo "=> ${brew/*\//} shellenv ..." && time="eval time" || time=eval
+$time eval $($brew shellenv) && [ $BASH_VERSINFO -ge 4 ] && [ -r $($brew --prefix)/share/bash-completion/bash_completion ] && Source $($brew --prefix)/share/bash-completion/bash_completion
 
 set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
