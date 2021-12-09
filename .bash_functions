@@ -994,7 +994,7 @@ function lvm_Mount_Point_2_LVM_Paths {
 function memUsage {
 	local processName=$1
 	local columns="pid,comm,pmem,rssize"
-	local ps=$(which ps)
+	local ps="command ps"
 	if test $processName
 	then
 		\pgrep -f $processName >/dev/null && $ps -o $columns -p $(\pgrep -f $processName) | awk '/PID/;/[0-9]/{sub($4,$4/1024);print$0" MiB";total+=$4}END{if(total>1024)printf "=> Total= %.3lf GiB\n\n",total/1024>"/dev/stderr"; else printf "=> Total= %.3f MiB\n\n",total>"/dev/stderr"}' | \column -t
@@ -1004,7 +1004,7 @@ function memUsage {
 	fi
 }
 function memUsageOfProcessName {
-	local ps=$(which ps)
+	local ps="command ps"
 	for processName
 	do
 		if \pgrep $processName >/dev/null;then
@@ -1014,7 +1014,7 @@ function memUsageOfProcessName {
 	done
 }
 function memUsageOfProcessRegExp {
-	local ps=$(which ps)
+	local ps="command ps"
 	for processRegExp
 	do
 		if \pgrep $processRegExp >/dev/null;then
@@ -1380,7 +1380,7 @@ function piphelp {
 }
 function pkill {
 	local firstArg=$1
-	local pkill=$(which pkill)
+	local pkill="command pkill"
 	local echoOption
 
 	case $osFamily in
@@ -1437,7 +1437,7 @@ function processSPY {
 }
 function processUsage {
 	local columns="rssize,user:12,pmem,pcpu,pid,args"
-	local ps=$(which ps)
+	local ps="command ps"
 #	local headers=$($ps -e -o $columns | grep -v grep.*COMMAND | \grep COMMAND)
 	local headers=" RSS\t       USER %MEM %CPU  PID   COMMAND"
 	echo -e "$headers" >&2
@@ -1445,7 +1445,7 @@ function processUsage {
 	$ps -e -o $columns | sort -nr | cut -c-156 | head -500 | awk '!/COMMAND/{printf "%9.3lf MiB %12s %4.1f%% %4.1f%% %5d %s\n", $1/1024,$2,$3,$4,$5,$6}' | tail -n +1 | head -45
 }
 function psSeb { # Les fontions qui avaient le meme nom que les commands sont exportes et visibles dans les bash, c_est dangereux
-	local ps=$(which ps)
+	local ps="command ps"
 	local firstArg=$1
 #	local args=("$@")
 	if [ $# = 0 ];then
@@ -1763,7 +1763,7 @@ function testURLsFromFILE {
 }
 function timeprocess {
 	local process="$1"
-	local ps=$(which ps)
+	local ps="command ps"
 	local pid=$(\pgrep -f "$process" | head -1)
 	test -n "$pid" && $ps -o pid,lstart,etime,etimes,cmd -fp $pid && time while \pgrep -f "$process" >/dev/null; do sleep 1s;done
 }
