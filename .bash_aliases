@@ -64,7 +64,7 @@ alias clearurlclassifier3="$find . -type f -name urlclassifier3.sqlite -exec rm 
 alias closecd='\eject -t $CDR_DEVICE'
 alias columns='\column -c $COLUMNS -t'
 alias conky_restart=restart_conky
-alias copy2Clipboard="\xclip -i -selection clipboard"
+type -P xclip && alias copy2Clipboard="\xclip -i -selection clipboard" || alias copy2Clipboard="\xsel -bi"
 alias cp2FAT32="rsync --modify-window=1"
 alias cp2NTFS="rsync -ogpuv"
 alias cp2NTFSPartition="rsync -ogpuv -x -r"
