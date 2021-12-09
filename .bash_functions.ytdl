@@ -7,7 +7,7 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 
 test "$debug" -gt 0 && Echo "\n=> \${BASH_SOURCE[*]} = ${BASH_SOURCE[*]}\n"
 
-type -P youtube-dl >/dev/null 2>&1 || { echo "=> ERROR: <youtube-dl> is not installed,  type \"sudo -H $(type -P pip3) install -U youtube-dl\" to install it" >&2; return 1; }
+type -P youtube-dl >/dev/null 2>&1 || { echo "=> ERROR: <youtube-dl> is not installed,  type \"sudo -H pip3 install -U youtube-dl\" to install it" >&2; return 1; }
 
 test $osFamily = Linux  && export locate="command locate"
 test $osFamily = Darwin && export locate="time -p command glocate"
@@ -231,7 +231,7 @@ function getRestrictedFilenamesFORMAT {
 	shift
 	local -i i=0
 	local isLIVE=false
-	local ffmpeg="$(type -P ffmpeg) -hide_banner"
+	local ffmpeg="command ffmpeg -hide_banner"
 	type -P AtomicParsley >/dev/null 2>&1 && local embedThumbnail="--embed-thumbnail" || local embedThumbnail="--write-thumbnail"
 
 	echo $initialSiteVideoFormat | grep -q "^9[0-9]" && isLIVE=true
@@ -573,7 +573,7 @@ function ytdlGetVideoIDsFromPlayListURL {
 	test "$playListURL" && $ytdlnoconfig  --ignore-errors --flat-playlist -j "$playListURL" | jq -r .id
 }
 function ytdlGetFirstURL {
-	local youtube_dl=$(type -P youtube-dl)
+	local youtube_dl=command youtube-dl
 	local url="$1"
 	set -o pipefail
 	url="$($youtube_dl -j --playlist-items 1 "$url" | jq -r .webpage_url || echo "$url")"
@@ -645,7 +645,7 @@ function ytdlUpdate {
 	fi
 
 	local package=youtube-dl
-	local youtube_dl=$(type -P $package)
+	local youtube_dl=command $package
 	if [ "$youtube_dl" ];then
 		echo "=> Searching for the latest release on $ytdlPyPI_URL ..." >&2
 		local ytdlLatestRelease=$(\curl -Ls $ytdlPyPI_URL/json | jq -r .info.version)
@@ -667,12 +667,12 @@ function ytdlUpdate {
 		local ytdlCurrentRelease=$($youtube_dl --version)
 		if [ "$ytdlLatestRelease" != $ytdlCurrentRelease ];then
 			local ytdlPythonVersion=$($youtube_dl --ignore-config -v 2>&1 | awk -F "[ .]" '/Python version/{printf$4"."$5}')
-			$sudo $(type -P pip$ytdlPythonVersion) install -U $package
+			$sudo pip$ytdlPythonVersion install -U $package
 		else
 			echo "=> [$FUNCNAME] INFO : You already have the latest release, which is $ytdlLatestRelease." >&2
 		fi
 	else
-		$sudo $(type -P pip3) install -U $package
+		$sudo pip3 install -U $package
 	fi
 }
 function ytdlpUpdate {
@@ -693,7 +693,7 @@ function ytdlpUpdate {
 	fi
 
 	local package=yt-dlp
-	local yt_dlp=$(type -P $package)
+	local yt_dlp=command $package
 	if [ "$yt_dlp" ];then
 		echo "=> Searching for the latest release on $ytdlpPyPI_URL ..." >&2
 		local ytdlpLatestRelease=$(\curl -Ls $ytdlpPyPI_URL/json | jq -r .info.version)
@@ -714,12 +714,12 @@ function ytdlpUpdate {
 		local ytdlpCurrentRelease=$($yt_dlp --version)
 		if [ "$ytdlpLatestRelease" != $ytdlpCurrentRelease ];then
 			local ytdlPythonVersion=$($yt_dlp --ignore-config -v 2>&1 | awk -F "[ .]" '/Python version/{printf$4"."$5}')
-			$sudo $(type -P pip$ytdlPythonVersion) install -U $package
+			$sudo pip$ytdlPythonVersion install -U $package
 		else
 			echo "=> [$FUNCNAME] INFO : You already have the latest release, which is $ytdlpLatestRelease." >&2
 		fi
 	else
-		$sudo $(type -P pip3) install -U $package
+		$sudo pip3 install -U $package
 	fi
 }
 function ytget {
