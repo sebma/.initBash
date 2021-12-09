@@ -1131,7 +1131,7 @@ function packageManager {
 		redhat) pkgManager="rpm";;
 		Darwin) type -P brew >/dev/null 2>&1 && pkgManager="brew";;
 		*)
-			local pkgTools=$(which dpkg rpm 2>/dev/null | awk -F/ '{print$NF}')
+			local pkgTools=$(type -P dpkg rpm 2>/dev/null | awk -F/ '{print$NF}')
 			for pkgTool in $pkgTools
 			do
 				case $pkgTool in
@@ -1495,7 +1495,7 @@ function realpathSeb {
 		do
 			path="$(\ls -l "${path}" | awk '{print $NF}')"
 		done
-		which "${path}"
+		type -P "${path}"
 	done
 }
 function reload_SHELL_Functions_And_Aliases {
@@ -1917,7 +1917,7 @@ function whatPackageContainsExecutable {
 	fi | \egrep "(libexec|bin)/"
 }
 function whereisIP {
-	which curl >/dev/null && \curl -A "" ipinfo.io/$1 || \wget -qO- -U "" ipinfo.io/$1
+	type -P curl >/dev/null && \curl -A "" ipinfo.io/$1 || \wget -qO- -U "" ipinfo.io/$1
 }
 function wlanmac {
 	wlanIF=$(iwconfig 2>&1 | awk '/ESSID:/{print$1}')
