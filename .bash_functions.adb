@@ -110,7 +110,7 @@ function adbSetADBTcpPort {
 	local getprop="$adb shell getprop"
 	local defaultADBTcpPort=5555
 	local port=0
-	local adb=$(which adb)
+	local adb="command adb"
 	local dos2unix="$(which tr) -d '\r'"
 	case $1 in
 		-h|-help|--h|--help) echo "=> Usage: $FUNCNAME [portNumber|$defaultADBTcpPort]" >&2; return 1 ;;
