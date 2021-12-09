@@ -51,8 +51,9 @@ function androidCodeName {
 	echo $androidCodeName$normal
 }
 function df {
-	$(which df) -PTh "$@" | columns -t | grep ^Filesystem
-	$(which df) -PTh "$@" | columns -t | sort -u | sort -k7 | grep -v ^Filesystem
+	local df="command df"
+	$df -PTh "$@" | columns -t | grep ^Filesystem
+	$df -PTh "$@" | columns -t | sort -u | sort -k7 | grep -v ^Filesystem
 }
 function rebalance {
 	which btrfs-balancer >/dev/null && {
@@ -111,11 +112,11 @@ function sailFishOSUpgrade {
 	}
 }
 function topf {
-	$(which find) . $findPrunePathsExpression -xdev -type f -size +10240k -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | column -t | head -n "$1" | awk '{total+=$5;print}END{if(total) print"=> total = "total" MiB"}'
+	command find . $findPrunePathsExpression -xdev -type f -size +10240k -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | column -t | head -n "$1" | awk '{total+=$5;print}END{if(total) print"=> total = "total" MiB"}'
 }
 
 function topflines {
-	$(which find) "$@" $findPrunePathsExpression -xdev -type f -size +10240k -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | column -t | head -n $(($LINES-4)) | awk '{total+=$5;print}END{if(total) print"=> total = "total" MiB"}'
+	command find "$@" $findPrunePathsExpression -xdev -type f -size +10240k -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | column -t | head -n $(($LINES-4)) | awk '{total+=$5;print}END{if(total) print"=> total = "total" MiB"}'
 }
 
 set +x
