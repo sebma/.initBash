@@ -9,7 +9,7 @@ export find="command find"
 #sdiff -v 2>/dev/null | grep -qw GNU && alias sdiff='\sdiff -Ww $(tput cols 2>/dev/null)' || alias sdiff='\sdiff -w $(tput cols 2>/dev/null)'
 
 #alias reset="\reset;\printf '\33c\e[3J'"
-#which vim >/dev/null && alias vim="LANG=$(locale -a 2>/dev/null | egrep -i '(fr_fr|en_us|en_uk).*utf' | sort -r | head -1) \vim" && alias vi=vim
+#type -P vim >/dev/null && alias vim="LANG=$(locale -a 2>/dev/null | egrep -i '(fr_fr|en_us|en_uk).*utf' | sort -r | head -1) \vim" && alias vi=vim
 #alias wget='wget2 || wget1'
 
 alias .....="cd ../../../.."
@@ -64,7 +64,7 @@ alias clearurlclassifier3="$find . -type f -name urlclassifier3.sqlite -exec rm 
 alias closecd='\eject -t $CDR_DEVICE'
 alias columns='\column -c $COLUMNS -t'
 alias conky_restart=restart_conky
-type -P xclip && alias copy2Clipboard="\xclip -i -selection clipboard" || alias copy2Clipboard="\xsel -bi"
+type -P xclip >/dev/null && alias copy2Clipboard="\xclip -i -selection clipboard" || alias copy2Clipboard="\xsel -bi"
 alias cp2FAT32="rsync --modify-window=1"
 alias cp2NTFS="rsync -ogpuv"
 alias cp2NTFSPartition="rsync -ogpuv -x -r"
