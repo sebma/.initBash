@@ -2,7 +2,7 @@
 ! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-export apt="command apt"
+apt="apt -q0"
 
 trap 'rc=130;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
 function addAptKeys {
@@ -15,7 +15,7 @@ function addAptKeys {
 function apt {
 	local args=("$@")
 	local firstArg=$1
-	local aptGet="command apt-get"
+	local aptGet="apt-get"
 	case $firstArg in
 		install|remove|purge|upgrade|dist-upgrade|full-upgrade)
 			if [ -n "$SSH_CONNECTION" ] && which screen >/dev/null 2>&1;then
@@ -60,7 +60,7 @@ function aptCachePolicy2LaunchpadPPAURLs {
 function aptGet {
 	local args=("$@")
 	local firstArg=$1
-	local aptGet="command apt-get"
+	local aptGet="apt-get"
 	case $firstArg in
 		install|remove|autoremove|purge) sudo $apt "${args[@]}" -V;;
 		download) $aptGet "${args[@]}" --print-uris && $aptGet "${args[@]}";;
@@ -68,7 +68,7 @@ function aptGet {
 	esac
 }
 function aptPrintURIS {
-	local aptGet="command apt-get"
+	local aptGet="apt-get"
 	for apt
 	do
 		$aptGet download --print-uris "$apt"
