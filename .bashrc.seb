@@ -1,5 +1,4 @@
 # vim: set ft=sh noet:
-unalias which >/dev/null 2>&1
 test -z "$initDir" && export initDir=$HOME/.initBash
 ! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
 
@@ -66,14 +65,14 @@ addmanpaths $manPathsList
 [ -n "$BASH_VERSION" ] && test -r $initDir/.bash_functions && Source $initDir/.bash_functions
 test -r $initDir/.bash_functions.seb && Source $initDir/.bash_functions.seb
 
-which lpr >/dev/null 2>&1 &&    test -f $initDir/.bash_aliases.lpr && Source $initDir/.bash_aliases.lpr
-which mpv >/dev/null 2>&1 &&    test -r $initDir/.bash_aliases.mpv && Source $initDir/.bash_aliases.mpv
-which ffmpeg >/dev/null 2>&1 && test -r $initDir/.bash_aliases.AV  && Source $initDir/.bash_aliases.AV
+type -P lpr >/dev/null 2>&1 &&    test -f $initDir/.bash_aliases.lpr && Source $initDir/.bash_aliases.lpr
+type -P mpv >/dev/null 2>&1 &&    test -r $initDir/.bash_aliases.mpv && Source $initDir/.bash_aliases.mpv
+type -P ffmpeg >/dev/null 2>&1 && test -r $initDir/.bash_aliases.AV  && Source $initDir/.bash_aliases.AV
 
-which mpv >/dev/null 2>&1 && test -r $initDir/.bash_functions.mpv && Source $initDir/.bash_functions.mpv
-which units >/dev/null 2>&1 && test -r $initDir/.bash_functions.units && Source $initDir/.bash_functions.units
-which youtube-dl >/dev/null 2>&1 && test -r $initDir/.bash_aliases.ytdl && Source $initDir/.bash_aliases.ytdl
-which youtube-dl >/dev/null 2>&1 && test -r $initDir/.bash_functions.ytdl && Source $initDir/.bash_functions.ytdl
+type -P mpv >/dev/null 2>&1 && test -r $initDir/.bash_functions.mpv && Source $initDir/.bash_functions.mpv
+type -P units >/dev/null 2>&1 && test -r $initDir/.bash_functions.units && Source $initDir/.bash_functions.units
+type -P youtube-dl >/dev/null 2>&1 && test -r $initDir/.bash_aliases.ytdl && Source $initDir/.bash_aliases.ytdl
+type -P youtube-dl >/dev/null 2>&1 && test -r $initDir/.bash_functions.ytdl && Source $initDir/.bash_functions.ytdl
 
 test -r ~/.config/.bcrc && export BC_ENV_ARGS="-l $HOME/.config/.bcrc"
 
@@ -105,12 +104,12 @@ fi
 \mkdir -pvm 700 ~/.ssh/sockets/
 
 # When connecting through ssh, Removes the configured PulseAudio configuration from the X11 root window.
-env | grep -q SSH_CLIENT && which pax11publish >/dev/null 2>&1 && pax11publish -r
+env | grep -q SSH_CLIENT && type -P pax11publish >/dev/null 2>&1 && pax11publish -r
 
 if tty -s #Si c'est une session interactive
 then
 	trap 'echo "=> Ignoring this step and continuing the script <$(basename $BASH_SOURCE)> ..." >&2' INT
-	if which aplay >/dev/null 2>&1 && LANG=C timeout 5 aplay -l 2>/dev/null | grep -wq "card"
+	if type -P aplay >/dev/null 2>&1 && LANG=C timeout 5 aplay -l 2>/dev/null | grep -wq "card"
 	then
 		audioCardNumber=$(LANG=C aplay -l 2>/dev/null | grep -wv HDMI | awk -F "[ :]" '/^card/{number=$2;exit}END{print number}')
 #		test $audioCardNumber && amixer -q -c $audioCardNumber -- sset Master 100%
@@ -121,20 +120,20 @@ then
 	echo
 fi
 
-if which xdg-mime >/dev/null 2>&1 && [ $osID != sailfishos ]
+if type -P xdg-mime >/dev/null 2>&1 && [ $osID != sailfishos ]
 then
 	xdg-mime query default application/pdf | grep -wq evince.desktop || xdg-mime default evince.desktop application/pdf
 fi
 
 #test -f ~/.rvm/scripts/rvm && Source ~/.rvm/scripts/rvm
 
-if which pdflatex >/dev/null 2>&1
+if type -P pdflatex >/dev/null 2>&1
 then
 	grep -qw pdflatex= $HOME/.pdfnup.conf || echo pdflatex=$(type -P pdflatex) >> $HOME/.pdfnup.conf
 fi
 
 tty -s && { # For interactive shell sessions
-	if which ssh-add >/dev/null 2>&1 && ! ssh-add -l 2>/dev/null | grep -q "$UPMC_ID"
+	if type -P ssh-add >/dev/null 2>&1 && ! ssh-add -l 2>/dev/null | grep -q "$UPMC_ID"
 	then
 		if test -s ~/.ssh/.$UPMC_ID; then
 			if [ -z "$SSH_CLIENT" ] && ! tty | grep "/dev/tty[0-9]$" -q; then # Si on est PAS a l autre bout d une connection ssh et qu'on est pas sur la console
@@ -164,20 +163,20 @@ then
 	Debug "=> Running /usr/share/bash-completion/bash_completion ..."
 fi
 
-which register-python-argcomplete >/dev/null 2>&1 && eval "$(register-python-argcomplete conda)"
+type -P register-python-argcomplete >/dev/null 2>&1 && eval "$(register-python-argcomplete conda)"
 
 #[[ -s "$HOME/.rvm/scripts/rvm" ]] && Source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 
 # pidof cupsd >/dev/null && Echo "=> The cups admin console is available at http://localhost:631/admin\n"
 
-which conda >/dev/null 2>&1 && test -r $initDir/.bashrc.conda && Source $initDir/.bashrc.conda
+type -P conda >/dev/null 2>&1 && test -r $initDir/.bashrc.conda && Source $initDir/.bashrc.conda
 getprop 2>/dev/null | grep ro.build.version.release -q && test -r $initDir/.bash_aliases.getprop && Source $initDir/.bash_aliases.getprop
-if which brew >/dev/null 2>&1;then
+if type -P brew >/dev/null 2>&1;then
 	test -r $initDir/.bashrc.brew && Source $initDir/.bashrc.brew
 	test -r $initDir/.bash_aliases.brew && Source $initDir/.bash_aliases.brew
 	test -r $initDir/.bash_functions.brew && Source $initDir/.bash_functions.brew
 fi
-if which adb >/dev/null 2>&1 && \pgrep -u $USER -f "adb -. " >/dev/null;then
+if type -P adb >/dev/null 2>&1 && \pgrep -u $USER -f "adb -. " >/dev/null;then
 	test -r $initDir/.bash_aliases.adb && Source $initDir/.bash_aliases.adb
 	test -r $initDir/.bash_functions.adb && Source $initDir/.bash_functions.adb
 fi
@@ -187,7 +186,7 @@ test -r $initDir/.bashrc.$osFamily && Source $initDir/.bashrc.$osFamily
 test -r $initDir/.bashrc.$osID_LIKE && Source $initDir/.bashrc.$osID_LIKE # Si c'est un Linux de type Debian ou Redhat
 
 #my git configuration
-if which git >/dev/null 2>&1; then
+if type -P git >/dev/null 2>&1; then
 	test -r $initDir/.bashrc.git && Source $initDir/.bashrc.git
 	test -r $initDir/.bash_aliases.git && Source $initDir/.bash_aliases.git
 	test -r $initDir/.bash_functions.git && Source $initDir/.bash_functions.git
@@ -203,7 +202,7 @@ test -r $initDir/.bash_aliases && Source $initDir/.bash_aliases
 test -r $initDir/.bash_aliases.$osFamily && Source $initDir/.bash_aliases.$osFamily #Pour Darwin ou Linux ou Android
 test -r $initDir/.bash_aliases.$osID && Source $initDir/.bash_aliases.$osID # Pour les OS derives de $osFamily
 
-which qemu-system-$arch >/dev/null 2>&1 && test -r $initDir/.bash_aliases.qemu && Source $initDir/.bash_aliases.qemu
+type -P qemu-system-$arch >/dev/null 2>&1 && test -r $initDir/.bash_aliases.qemu && Source $initDir/.bash_aliases.qemu
 
 test -r $initDir/.bash_functions.$osFamily && Source $initDir/.bash_functions.$osFamily #Pour Darwin ou Linux ou Android
 test -r $initDir/.bash_functions.$osID && Source $initDir/.bash_functions.$osID # Pour les OS derives de $osFamily
@@ -231,13 +230,13 @@ fi
 # Disable aliases for tools that are not found in $PATH
 [ $osFamily = Linux ]  && sed="command sed -r"
 [ $osFamily = Darwin ] && sed="command sed -E"
-#for tool in curl ffmpeg ffprobe hexdump hw-probe lsb_release vim;do ! which $tool >/dev/null 2>&1 && alias | grep -q $tool && unalias $tool;done
+#for tool in curl ffmpeg ffprobe hexdump hw-probe lsb_release vim;do ! type -P $tool >/dev/null 2>&1 && alias | grep -q $tool && unalias $tool;done
 
 #Echo "=> Undefining aliases for which the tools are not installed ..."
 #time alias | $sed "s/alias //;s/=[']\w+=\S+ /=/;s/sudo -?\w? //;s/(command|time) //;s/[$]\(which (\w+)\)/\1/;s/\/\S+\///;s/='?\\\?/ /" | awk '!/^[.]+/{print$1" "$2}' | sort -u | Pgrep -v '\s?-|^$' | while read aliasName tool
 #do
 ##	echo "$tool" | grep -q -- "^-" && echo "=> aliasName = <$aliasName> tool = <$tool>" && continue
-#	! which $tool >/dev/null 2>&1 && alias | grep -q $tool && unalias $aliasName #Does not work on Jolla1/SFOS3
+#	! type -P $tool >/dev/null 2>&1 && alias | grep -q $tool && unalias $aliasName #Does not work on Jolla1/SFOS3
 #	set +x
 #done
 #Echo "=> DONE !"

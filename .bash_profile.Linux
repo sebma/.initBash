@@ -6,7 +6,7 @@ tty -s && Debug "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$no
 test "$debug" -gt 3 && set -x
 
 trap 'echo "=> Ignoring this step and continuing the script <$(basename $BASH_SOURCE)> ..." >&2' INT
-#tty -s && echo "=> MIT-MAGIC-COOKIE-1:" && which xauth >/dev/null 2>&1 && timeout 5 xauth list | grep :$(echo $DISPLAY | awk -F '\\.|:' '{print$2}') && echo
+#tty -s && echo "=> MIT-MAGIC-COOKIE-1:" && type -P xauth >/dev/null 2>&1 && timeout 5 xauth list | grep :$(echo $DISPLAY | awk -F '\\.|:' '{print$2}') && echo
 trap - INT
 
 test -d ~/local/lib && test $LD_LIBRARY_PATH && export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:~/local/lib || export LD_LIBRARY_PATH=~/local/lib
@@ -125,13 +125,13 @@ then
 fi
 trap - INT
 
-if which dconf >/dev/null 2>&1 && [ $(dconf read /org/gnome/shell/favorite-apps | wc -c) != 0 ]
+if type -P dconf >/dev/null 2>&1 && [ $(dconf read /org/gnome/shell/favorite-apps | wc -c) != 0 ]
 then
 	dconf read /org/gnome/shell/favorite-apps | grep -wqi firefox.desktop || dconf write /org/gnome/shell/favorite-apps "$(dconf read /org/gnome/shell/favorite-apps | sed "s/\]/, 'Firefox.desktop']/")" 2>/dev/null
 fi
 
-which matlab >/dev/null 2>&1 && test -d "$HOME/.matlab" && export MATLAB=$(\ls -d "$HOME/.matlab/"* | head -1)
-which git >/dev/null && git config --global credential.helper "cache --timeout=86400"
+type -P matlab >/dev/null 2>&1 && test -d "$HOME/.matlab" && export MATLAB=$(\ls -d "$HOME/.matlab/"* | head -1)
+type -P git >/dev/null && git config --global credential.helper "cache --timeout=86400"
 
 test "$debug" -lt 3 && set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"

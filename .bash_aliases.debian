@@ -13,7 +13,7 @@ aptGet="apt-get"
 alias apt-cache="\apt-cache -q0"
 alias architecture="dpkg-architecture -q DEB_HOST_ARCH 2>/dev/null || dpkg-architecture | awk -F'=' '/DEB_HOST_ARCH\>/{print\$2}'"
 
-if [ -n "$SSH_CONNECTION" ] && which screen >/dev/null 2>&1;then
+if [ -n "$SSH_CONNECTION" ] && type -P screen >/dev/null 2>&1;then
 	alias autoremove="$apt -h 2>&1 | \grep -wq autoremove && $aptGet autoremove -s | \grep -wq '^Remv' && $sudo screen -L $apt autoremove -V || ( $aptGet autoremove -s | \grep -wq '^Remv' && $sudo screen -L $aptGet autoremove -V )"
 	alias cleanupOldKernels='\linux-purge -l -k 2 | grep -q linux && $sudo screen -L $apt purge -V $(\linux-purge -l -k 2)'
 	alias full-upgrade="sudo $apt full-upgrade -V --download-only && sync && $sudo screen -L $apt full-upgrade -V --yes;sync"

@@ -14,7 +14,7 @@ alias firefoxDefrag='pgrep firefox || find ~/"Library/Application Support/Firefo
 alias firefox="/Applications/Firefox.app/Contents/MacOS/firefox-bin"
 alias palemoon="/Applications/Palemoon.app/Contents/MacOS/palemoon"
 
-which pgrep >/dev/null 2>&1 || alias pgrep="\ps -fC"
+type -P pgrep >/dev/null 2>&1 || alias pgrep="\ps -fC"
 
 ggrep -V 2>/dev/null | \grep -wq GNU && alias grep="\ggrep --color" && alias Pgrep="grep -P"
 
@@ -34,7 +34,7 @@ alias cpuInfo="\sysctl machdep.cpu | egrep 'brand_string|count|size|VMX|SVM'"
 alias df="\gdf -PTh"
 alias dnsInfo="\scutil --dns"
 alias findDeadLinks='$find . -xtype l -exec ls -G -l {} +'
-which gcp >/dev/null 2>&1 && alias cp='\gcp -puv' || alias cp='\cp -pv'
+type -P gcp >/dev/null 2>&1 && alias cp='\gcp -puv' || alias cp='\cp -pv'
 alias graphicsinfo="\system_profiler SPDisplaysDataType"
 alias hideFiles='defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app'
 alias hwinfo="\system_profiler SPHardwareDataType"

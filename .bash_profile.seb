@@ -57,7 +57,7 @@ else
 	export userAgent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3513.1 Safari/537.36"
 fi
 
-which tlmgr >/dev/null 2>&1 && test -r $initDir/.bash_profile.texlive && SourceProfile $initDir/.bash_profile.texlive
+type -P tlmgr >/dev/null 2>&1 && test -r $initDir/.bash_profile.texlive && SourceProfile $initDir/.bash_profile.texlive
 
 export bashProfileLoaded=1
 
@@ -83,7 +83,7 @@ export myDefault_sshOptions="-A -Y"
 export JOLLA=nemo@jolla-wlan
 #export HOMEBREW_TEMP=$HOME/tmp
 export HOMEBREW_NO_GITHUB_API=1
-which go >/dev/null 2>&1 && test -z "$GOPATH" && export GOPATH=$HOME/go
+type -P go >/dev/null 2>&1 && test -z "$GOPATH" && export GOPATH=$HOME/go
 export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:~/gnu/lib/pkgconfig:~/local/lib/pkgconfig
 PERL5LIB="$HOME/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
 PERL_LOCAL_LIB_ROOT="$HOME/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
@@ -124,7 +124,7 @@ if test -n "$http_proxy"; then
 	export dnsSuffix=$(basename $http_proxy | cut -d. -f2- | cut -d: -f1)
 fi
 
-which gnuplot >/dev/null 2>&1 && export GNUTERM=qt
+type -P gnuplot >/dev/null 2>&1 && export GNUTERM=qt
 
 export RSYNC_SKIP_COMPRESS_LIST="7z/aac/avi/bz2/deb/flv/gz/iso/jpeg/jpg/mkv/mov/m4a/mp2/mp3/mp4/mpeg/mpg/oga/ogg/ogm/ogv/webm/rpm/tbz/tgz/z/zip"
 export RSYNC_EXCLUSION=$(printf -- "--exclude %s/ " /dev /sys /run /proc)
@@ -133,7 +133,7 @@ export RSYNC_EXCLUSION=$(printf -- "--exclude %s/ " /dev /sys /run /proc)
 if [ $osFamily = Linux ] || [ $osFamily = Darwin ]
 then
 	Echo
-	if which ssh-agent >/dev/null 2>&1; then
+	if type -P ssh-agent >/dev/null 2>&1; then
 #		Echo "=> Testing if not logged through ssh i.e if the SSH_CLIENT variable is not set ..." >&2
 		if test -z "$SSH_CLIENT"; then # Si on est PAS a l autre bout d une connection ssh
 			Echo "=> Testing if the ssh-agent is loaded ..." >&2
@@ -188,13 +188,13 @@ if [ "$osFamily" != Darwin ] && [ "$osFamily" != Linux ] && [ "$osFamily" != And
 	fi
 fi
 
-which matlab >/dev/null 2>&1 && test -r $initDir/.bash_profile.matlab && SourceProfile $initDir/.bash_profile.matlab
+type -P matlab >/dev/null 2>&1 && test -r $initDir/.bash_profile.matlab && SourceProfile $initDir/.bash_profile.matlab
 brew=$(\ls ~/.linuxbrew/bin/brew /home/linuxbrew/.linuxbrew/bin/brew 2>/dev/null | head -1)
 set -o | grep -q xtrace.*on && xtrace="set -o xtrace"
 set +x
 test -x "$brew" && test -r $initDir/.bash_profile.brew && SourceProfile $initDir/.bash_profile.brew
 $xtrace
-which hub >/dev/null 2>&1 && eval "$(hub alias -s)"
+type -P hub >/dev/null 2>&1 && eval "$(hub alias -s)"
 
 set +x
 

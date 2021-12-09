@@ -18,14 +18,14 @@ function apt {
 	local aptGet="apt-get"
 	case $firstArg in
 		install|remove|purge|upgrade|dist-upgrade|full-upgrade)
-			if [ -n "$SSH_CONNECTION" ] && which screen >/dev/null 2>&1;then
+			if [ -n "$SSH_CONNECTION" ] && type -P screen >/dev/null 2>&1;then
 				sudo screen -L $apt "${args[@]}" -V
 			else
 				sudo $apt "${args[@]}" -V
 			fi
 			;;
 		autoremove)
-			if [ -n "$SSH_CONNECTION" ] && which screen >/dev/null 2>&1;then
+			if [ -n "$SSH_CONNECTION" ] && type -P screen >/dev/null 2>&1;then
 				sudo screen -L $apt autoremove -V || sudo screen -L $aptGet autoremove -V
 			else
 				sudo $apt autoremove -V || sudo $aptGet autoremove -V

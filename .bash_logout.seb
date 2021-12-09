@@ -2,7 +2,6 @@
 ! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-unalias which >/dev/null 2>&1
 test -z "$SSH_CONNECTION" && \pgrep -u $USER -f "adb -." >/dev/null && Echo "=> Killing the <adb> process ..." && pkill -f "adb -. "
 if command df ~/.cache | \egrep -wqi "/(home|users?)";then
 	if [ $osID != sailfishos ]; then
