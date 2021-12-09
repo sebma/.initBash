@@ -1375,7 +1375,7 @@ function pip3 {
 	pip $@
 }
 function piphelp {
-	local pip=$(type -P pip 2>/dev/null)
+	local pip="command pip"
 	test -n "$pip" && $pip help $1 | less
 }
 function pkill {
