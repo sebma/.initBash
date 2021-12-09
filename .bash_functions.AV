@@ -6,9 +6,9 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 
 test "$debug" -gt 0 && Echo "\n=> \${BASH_SOURCE[*]} = ${BASH_SOURCE[*]}\n"
 
-\which ffmpeg  >/dev/null 2>&1 && ffmpeg="command  ffmpeg" &&  ffmpegOptions="-hide_banner -probesize 400M -analyzeduration 400M"
-\which ffplay  >/dev/null 2>&1 && ffplay="command ffplay" && ffplayOptions=$ffmpegOptions
-\which ffprobe >/dev/null 2>&1 && ffprobe="command ffprobe" && ffprobeOptions=$ffmpegOptions
+type -P ffmpeg  >/dev/null 2>&1 && ffmpeg="command  ffmpeg" &&  ffmpegOptions="-hide_banner -probesize 400M -analyzeduration 400M"
+type -P ffplay  >/dev/null 2>&1 && ffplay="command ffplay" && ffplayOptions=$ffmpegOptions
+type -P ffprobe >/dev/null 2>&1 && ffprobe="command ffprobe" && ffprobeOptions=$ffmpegOptions
 
 #youtube_dl="eval LANG=C.UTF-8 command youtube-dl" # i.e https://unix.stackexchange.com/questions/505733/ # eval A EVITER
 
@@ -751,7 +751,7 @@ function cropdetect {
 	ffmpeg -i "$1" -t 1 -vf cropdetect -f null - 2>&1 | awk '/crop/{line=$NF}END{print line}'
 }
 function ffprobe {
-	which ffprobe >/dev/null && {
+	type -P ffprobe >/dev/null && {
 		for arg
 		do
 			echo "$arg" | \egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $ffprobe $ffprobeOptions "$(youtube-dl -gf best -- "$arg")" || $ffprobe $ffprobeOptions "$arg"
@@ -1341,7 +1341,7 @@ function videoInfo {
 	local columns=$COLUMNS
 #	local columns="" # To see more info than the width of the screen
 	local size=0
-	which ffprobe >/dev/null && {
+	type -P ffprobe >/dev/null && {
 		local youtube_dl='command youtube-dl'
 		local ffprobe='command ffprobe -hide_banner'
 		for urlOrFile
@@ -1385,7 +1385,7 @@ function videoInfoOLD {
 	local columns=$(tput cols)
 #	local columns="" # To see more info than the width of the screen
 	local size=0
-	which ffprobe >/dev/null && {
+	type -P ffprobe >/dev/null && {
 		for urlOrFile
 		do
 			echo "=> urlOrFile = $urlOrFile"
