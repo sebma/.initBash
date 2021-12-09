@@ -21,7 +21,7 @@ cdr_device=/dev/dvd
 [ $BASH_VERSINFO -ge 4 ] && declare -Ag audioExtension videoExtension audioDecode # i.e https://unix.stackexchange.com/a/535721/135038
 audioExtension=( [libspeex]=spx [speex]=spx [opus]=opus [vorbis]=ogg [aac]=m4a [mp3]=mp3 [mp2]=mp2 [ac3]=ac3 [wmav2]=wma [pcm_dvd]=wav [pcm_s16le]=wav )
 videoExtension=( [h264]=m4v [mpeg1video]=mpg [mpeg2video]=vob [mpeg4]=avi [flv1]=flv [wmv3]=wmv )
-audioDecode=( [libspeex]=$(which speexdec 2>/dev/null) [speex]=$(which speexdec 2>/dev/null) [opus]=$(which opusdec 2>/dev/null) [vorbis]=$(which oggdec 2>/dev/null) )
+audioDecode=( [libspeex]=speexdec [speex]=speexdec [opus]=opusdec [vorbis]=oggdec )
 
 #function aacDir2mp3 { inp=aac; shopt -s globstar && time for f in **/*.$inp; do time avconv -i "$f" "${f/.$inp/.mp3}" && rm -v "$f"; done; }
 function _16kwav16k2opus {
