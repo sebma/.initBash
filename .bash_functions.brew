@@ -3,7 +3,7 @@
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 function brew {
-	local brew=$(which brew)
+	local brew="command brew"
 	$brew $@
 	rc=$?
 	test "$brew" && \rm -fr $($brew --prefix)/var/homebrew/locks
