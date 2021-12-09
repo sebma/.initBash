@@ -1376,7 +1376,7 @@ function pip3 {
 }
 function piphelp {
 	local pip="command pip"
-	test -n "$pip" && $pip help $1 | less
+	test -n "$pip" && $pip help $1 | \less
 }
 function pkill {
 	local firstArg=$1
