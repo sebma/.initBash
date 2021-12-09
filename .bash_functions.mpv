@@ -14,7 +14,7 @@ mpv="command mpv"
 mpvnoconfig="mpv --no-config"
 alias mpvnoconfig="$mpvnoconfig"
 
-mplayer="$(which mplayer 2>/dev/null)"
+mplayer="command mplayer"
 alias mplayer="LANG=en_US.utf8 $mplayer $mplayerDefaultOptions"
 mplayernoconfig="mplayer --noconfig=user"
 
