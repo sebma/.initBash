@@ -5,6 +5,9 @@ if tty -s;then function Echo { echo -e "$@"; } else function Echo { : ; } fi
 tty -s && Debug "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 test "$debug" -gt 3 && set -x
 
+#function Time { [ "$debug" -gt 1 ] && eval time "$@" || eval "$@"; }
+[ "$debug" -gt 1 ] && time="eval time" || time=eval
+
 trap 'echo "=> Ignoring this step and continuing the script <$(basename $BASH_SOURCE)> ..." >&2' INT
 #tty -s && echo "=> MIT-MAGIC-COOKIE-1:" && type -P xauth >/dev/null 2>&1 && timeout 5 xauth list | grep :$(echo $DISPLAY | awk -F '\\.|:' '{print$2}') && echo
 trap - INT
@@ -52,18 +55,20 @@ rm -f ~/$cacheLinkName/sessions/xf*
 
 if [ -z "$system" ];then
 	if [ -e /etc/os-release ];then
-		if grep -q ID=sailfishos /etc/os-release;then
+		if grep ID=sailfishos /etc/os-release -q;then
 			declare -gxr system=$(Source /etc/os-release && echo "$NAME $VERSION_ID")
 		elif type -P lsb_release >/dev/null;then
 			declare -gxr system="$( ( \lsb_release -sd | grep "[0-9.]" || \lsb_release -sir ) | paste -sd' ')"
 		else
-			ID=$(source /etc/os-release && echo $ID )
+			PRETTY_NAME=$( Source /etc/os-release && echo $PRETTY_NAME )
+			ID=$( Source /etc/os-release && echo $ID )
 			case $ID in
-				debian) declare -gxr system="$(Source /etc/os-release && echo $PRETTY_NAME | sed "s/[0-9]\+/$(cat /etc/debian_version)/")" ;;
-				ubuntu) declare -gxr system="$(Source /etc/os-release && echo $PRETTY_NAME)" ;;
+				debian) declare -gxr system="$(echo $PRETTY_NAME | sed "s/[0-9]\+/$(cat /etc/debian_version)/")" ;;
+				ubuntu) declare -gxr system="$PRETTY_NAME" ;;
 			esac
 		fi
 		# test -r $initDir/.bash_profile.$osID && SourceProfile $initDir/.bash_profile.$osID
+		unset ID PRETTY_NAME
 	else
 		declare -gxr system=$(echo $HOSTTYPE-$OSTYPE | sed "s/arm[^-]*-/arm-/")
 	fi
@@ -78,7 +83,7 @@ fi
 
 test -z "$XAUTHORITY" && export XAUTHORITY=$HOME/.Xauthority # If "X11 connection rejected because of wrong authentication", read https://stackoverflow.com/a/56661420/5649639
 trap 'echo "=> Ignoring this step and continuing the script <$(basename $BASH_SOURCE)> ..." >&2' INT
-groups 2>/dev/null | egrep -wq "sudo|admin" && xhost SI:localuser:root >/dev/null 2>&1 #Permet a root de lancer des applis graphiques via sudo
+$isSudoer && xhost SI:localuser:root >/dev/null 2>&1 #Permet a root de lancer des applis graphiques via sudo
 trap - INT
 
 [ $TERM = linux ] && setterm -blength 0
@@ -86,7 +91,7 @@ trap - INT
 #Choix d'une splash image grub aleatoire
 if test -w /boot/grub/today.jpg 
 then
-	for dir in /datas/ImagesVersets $HOME/ImagesVersets
+	for dir in /multimedia/ImagesVersets $HOME/ImagesVersets
 	do
 		test -d $dir && command find $dir -type f 2>/dev/null | egrep -q '(png|jpg)$' && cp -pv "$(shuf -n1 -e $dir/*/*.{jpg,png})" /boot/grub/today.jpg 2>/dev/null && Echo
 	done
@@ -101,37 +106,32 @@ then
 	Echo " , this helps identify on which node of the cluster I'm connected to."
 fi
 
-#function Time { [ "$debug" -gt 1 ] && eval time "$@" || eval "$@"; }
-[ "$debug" -gt 1 ] && time="eval time" || time=eval
-
 trap 'echo "=> Ignoring this step and continuing the script <$(basename $BASH_SOURCE)> ..." >&2' INT
-$time setxkbmap -option terminate:ctrl_alt_bksp 2>/dev/null
+$time setxkbmap -option terminate:ctrl_alt_bksp
 if type -P gsettings >/dev/null 2>&1 && [ $DISPLAY ]
 then
 	if command gsettings help >/dev/null
 	then
 		[ "$debug" -gt 0 ] && echo "=> Setting 'gsettings' parameters ..."
 		[ "$debug" -gt 2 ] && set -x
-		$time gsettings get org.gnome.desktop.input-sources xkb-options 2>&1 | grep -q GLib-GIO-Message && export GIO_EXTRA_MODULES=/usr/lib/x86_64-linux-gnu/gio/modules/
+		$time gsettings get org.gnome.desktop.input-sources xkb-options | grep -q GLib-GIO-Message && export GIO_EXTRA_MODULES=/usr/lib/x86_64-linux-gnu/gio/modules/
 		$time profile=$(gsettings list-schemas | grep -q org.gnome.Terminal.ProfilesList && gsettings get org.gnome.Terminal.ProfilesList default)
 		$time profile=${profile:1:-1} # remove leading and trailing single quotes if any
 		$time test $profile && $time gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$profile/ login-shell true
-		$time gsettings set org.gnome.desktop.wm.preferences resize-with-right-button true 2>/dev/null
-		$time gsettings set org.gnome.desktop.wm.preferences mouse-button-modifier "\<Alt\>" 2>/dev/null
-		type -P dconf >/dev/null 2>&1 && $time dconf write /org/gnome/desktop/input-sources/xkb-options "\[\'terminate:ctrl_alt_bksp\'\]" 2>/dev/null
+		$time gsettings set org.gnome.desktop.wm.preferences resize-with-right-button true
+		$time gsettings set org.gnome.desktop.wm.preferences mouse-button-modifier "\<Alt\>"
+		type -P dconf >/dev/null 2>&1 && $time dconf write /org/gnome/desktop/input-sources/xkb-options "\[\'terminate:ctrl_alt_bksp\'\]"
 		[ "$debug" -lt 4 ] && set +x
 		[ "$debug" -gt 0 ] && echo "=> DONE."
 	fi
 fi
 trap - INT
 
-if type -P dconf >/dev/null 2>&1 && [ $(dconf read /org/gnome/shell/favorite-apps | wc -c) != 0 ]
-then
-	dconf read /org/gnome/shell/favorite-apps | grep -wqi firefox.desktop || dconf write /org/gnome/shell/favorite-apps "$(dconf read /org/gnome/shell/favorite-apps | sed "s/\]/, 'Firefox.desktop']/")" 2>/dev/null
+if type -P dconf >/dev/null 2>&1 && [ $($time dconf read /org/gnome/shell/favorite-apps | wc -c) != 0 ];then
+	$time dconf read /org/gnome/shell/favorite-apps | grep -wqi firefox.desktop || $time dconf write /org/gnome/shell/favorite-apps "$($time dconf read /org/gnome/shell/favorite-apps | sed "s/\]/, 'Firefox.desktop']/")" 2>/dev/null
 fi
 
 type -P matlab >/dev/null 2>&1 && test -d "$HOME/.matlab" && export MATLAB=$(\ls -d "$HOME/.matlab/"* | head -1)
-type -P git >/dev/null && git config --global credential.helper "cache --timeout=86400"
 
 test "$debug" -lt 3 && set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
