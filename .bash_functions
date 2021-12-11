@@ -774,6 +774,7 @@ function html2pdf {
 		wkhtmltopdf --no-background --outline --header-line --footer-line --header-left [webpage] --footer-left "[isodate] [time]" --footer-right [page]/[toPage] "$url_or_file" "$pdfFileName"
 	done
 
+	echo
 	echo "=> OutputFile = $pdfFileName"
 	echo
 	open $pdfFiles
