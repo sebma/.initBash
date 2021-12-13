@@ -2,7 +2,7 @@
 ! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-function codeName {
+function androidCodeName {
 	( [ $# -ge 2 ] || echo $1 | egrep -q -- "^--?(h|u)" ) && echo "=> Usage : $FUNCNAME [androidRelease]" 1>&2 && return 1
 	
 	local androidRelease=unknown
@@ -49,6 +49,12 @@ function codeName {
 		esac
 	}
 	echo $androidCodeName$normal
+}
+function topf {
+	local find="command find"
+	local lines=5
+	[ $# = 1 ] && lines="$1"
+	$find "$@" -xdev -type f -size +10240k -exec ls -al {} + 2>/dev/null | sort -nrk4 | awk '{size=$5/2^20;sub(" *"$5,sprintf(" %10.3fM",size));print}' | head -n $lines | awk '{total+=$5;print}END{if(total) print"=> total = "total" MiB"}'
 }
 
 set +x
