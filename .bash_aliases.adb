@@ -27,6 +27,7 @@ alias adbGetArch="$getprop ro.product.cpu.abi | $dos2unix"
 alias adbGetBatteryLevel="$adb shell dumpsys battery | grep level | $dos2unix"
 alias adbGetBrand="$getprop ro.product.brand | $dos2unix"
 alias adbGetDeviceCodeName="$getprop ro.product.device | $dos2unix"
+alias adbCodeName=adbGetDeviceCodeName
 alias adbGetManufacturer="$getprop ro.product.manufacturer | $dos2unix"
 alias adbGetModel="$getprop ro.product.model | $dos2unix"
 alias adbGetSerial="$getprop ro.serialno | $dos2unix"
