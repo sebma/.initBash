@@ -18,20 +18,15 @@ alias ll="ls -lF"
 alias lla="ls -alF"
 alias llah="ls -alhF"
 
+alias topd="\du -cxmd 1 2>/dev/null | grep -v '\s*\.$' | sort -nr | head -n"
 alias topd10="topd $((10+1))"
 alias topd5="topd $((5+1))"
-alias topd="\du -cxmd 1 2>/dev/null | grep -v '\s*\.$' | sort -nr | head -n"
 alias topdlines='topd $(($LINES-2))'
 
-alias topf10="$find . -xdev -type f -size +10240k -exec ls -al {} + 2>/dev/null | sort -nrk4 | awk '{size=\$5/2^20;sub(\" *\"\$5,sprintf(\" %10.3fM\",size));print}' | head | awk '{total+=\$5;print}END{print\"=> total = \"total\" MiB\"}'"
-alias topf50="$find . -xdev -type f -size +10240k -exec ls -al {} + 2>/dev/null | sort -nrk4 | awk '{size=\$5/2^20;sub(\" *\"\$5,sprintf(\" %10.3fM\",size));print}' | head -50 | awk '{total+=\$5;print}END{print\"=> total = \"total\" MiB\"}'"
-alias topf5="$find  . -xdev -type f -size +10240k -exec ls -al {} + 2>/dev/null | sort -nrk4 | awk '{size=\$5/2^20;sub(\" *\"\$5,sprintf(\" %10.3fM\",size));print}' | head -5' | awk '{total+=\$5;print}END{print\"=> total = \"total\" MiB\"}'"
-alias topf="$find   . -xdev -type f -size +10240k -exec ls -al {} + 2>/dev/null | sort -nrk4 | awk '{size=\$5/2^20;sub(\" *\"\$5,sprintf(\" %10.3fM\",size));print}' | head -n | awk '{total+=\$5;print}END{print\"=> total = \"total\" MiB\"}'"
-
-#alias topflines="$find   . -xdev -type f -size +10240k -exec ls -al {} + 2>/dev/null | sort -nrk4 | awk '{size=\$5/2^20;sub(\" *\"\$5,sprintf(\" %10.3fM\",size));print}' | head -n $(($LINES-4)) | awk '{total+=\$5;print}END{print\"=> total = \"total\" MiB\"}'"
-function topflines {
-	$find "$@" -xdev -type f -size +10240k -exec ls -al {} + 2>/dev/null | sort -nrk4 | awk '{size=$5/2^20;sub(" *"$5,sprintf(" %10.3fM",size));print}' | head -n $(($LINES-4)) | awk '{total+=$5;print}END{if(total) print"=> total = "total" MiB"}'
-}
+alias topf5='topf 5'
+alias topf10='topf 10'
+alias topf50='topf 50'
+alias topflines='topf $(($LINES-4))'
 
 set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
