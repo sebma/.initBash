@@ -20,6 +20,7 @@ alias getArch="$getprop ro.product.cpu.abi"
 alias getBatteryLevel="$getprop dumpsys battery | grep level"
 alias getBrand="$getprop ro.product.brand"
 alias getDeviceCodeName="$getprop ro.product.device"
+alias codeName=getDeviceCodeName
 alias getManufacturer="$getprop ro.product.manufacturer"
 alias getModel="$getprop ro.product.model"
 alias getSerial="$getprop ro.serialno"
