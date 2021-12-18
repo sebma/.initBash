@@ -6,15 +6,15 @@ test "$debug" -gt 0 && \echo "=> Running $bold${colors[blue]}$(basename ${BASH_S
 LANGUAGE_OLD=$LANGUAGE
 LANGUAGE=C.UTF-8
 
-apt="apt -q0"
-aptGet="apt-get"
+apt="$(type -P apt) -q0"
+apt_get="apt-get"
 
 #alias installSecurityUpdates="sudo apt install -V $(apt-get -s dist-upgrade | awk "/^Inst.*\/$codeName-security/"'{print$2}')"
 alias apt-cache="\apt-cache -q0"
 alias architecture="dpkg-architecture -q DEB_HOST_ARCH 2>/dev/null || dpkg-architecture | awk -F'=' '/DEB_HOST_ARCH\>/{print\$2}'"
 
 if [ -n "$SSH_CONNECTION" ] && type -P screen >/dev/null 2>&1;then
-	alias autoremove="$apt -h 2>&1 | \grep -wq autoremove && $aptGet autoremove -s | \grep -wq '^Remv' && $sudo screen -L $apt autoremove -V || ( $aptGet autoremove -s | \grep -wq '^Remv' && $sudo screen -L $aptGet autoremove -V )"
+	alias autoremove="$apt -h 2>&1 | \grep -wq autoremove && $apt_get autoremove -s | \grep -wq '^Remv' && $sudo screen -L $apt autoremove -V || ( $apt_get autoremove -s | \grep -wq '^Remv' && $sudo screen -L $apt_get autoremove -V )"
 	alias cleanupOldKernels='\linux-purge -l -k 2 | grep -q linux && $sudo screen -L $apt purge -V $(\linux-purge -l -k 2)'
 	alias full-upgrade="sudo $apt full-upgrade -V --download-only && sync && $sudo screen -L $apt full-upgrade -V --yes;sync"
 	alias installSecurityUpdates="\apt list --upgradable 2>/dev/null | awk -F/ '/security/{packages=packages\" \"\$1}END{if(packages){commandLine=\"sudo screen -L apt install -V -y\"packages;print commandLine >\"/dev/stderr\";print commandLine;}}' | sh"
@@ -22,7 +22,7 @@ if [ -n "$SSH_CONNECTION" ] && type -P screen >/dev/null 2>&1;then
 	alias reinstallPkgWithConfigFiles="sudo screen -L $apt install --reinstall -V -o Dpkg::Options::=--force-confask,confnew,confmiss"
 	alias upgrade="LANGUAGE=$LANGUAGE $apt upgrade -s | \grep '^[1-9][0-9]* upgraded' && $sudo $apt upgrade -V --download-only && sync && $sudo screen -L $apt upgrade -V --yes;sync"
 else
-	alias autoremove="$apt -h 2>&1 | \grep -wq autoremove && $aptGet autoremove -s | \grep -wq '^Remv' && $sudo $apt autoremove -V || ( $aptGet autoremove -s | \grep -wq '^Remv' && $sudo $aptGet autoremove -V )"
+	alias autoremove="$apt -h 2>&1 | \grep -wq autoremove && $apt_get autoremove -s | \grep -wq '^Remv' && $sudo $apt autoremove -V || ( $apt_get autoremove -s | \grep -wq '^Remv' && $sudo $apt_get autoremove -V )"
 	alias cleanupOldKernels='\linux-purge -l -k 2 | grep -q linux && $sudo $apt purge -V $(\linux-purge -l -k 2)'
 	alias full-upgrade="sudo $apt full-upgrade -V --download-only && sync && $sudo $apt full-upgrade -V --yes;sync"
 	alias installSecurityUpdates="\apt list --upgradable 2>/dev/null | awk -F/ '/security/{packages=packages\" \"\$1}END{if(packages){commandLine=\"sudo apt install -V -y\"packages;print commandLine >\"/dev/stderr\";print commandLine;}}' | sh"
