@@ -16,6 +16,7 @@ function apt {
 	local args=("$@")
 	local firstArg=$1
 	local aptGet="apt-get"
+	local apt="apt -q0"
 	case $firstArg in
 		install|remove|purge|upgrade|dist-upgrade|full-upgrade)
 			if [ -n "$SSH_CONNECTION" ] && type -P screen >/dev/null 2>&1;then
@@ -32,7 +33,7 @@ function apt {
 			fi
 			;;
 		*)
-			$apt "${args[@]}";;
+			command $apt "${args[@]}";;
 	esac
 }
 function apt-cache {
