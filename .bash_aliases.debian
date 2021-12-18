@@ -7,7 +7,7 @@ LANGUAGE_OLD=$LANGUAGE
 LANGUAGE=C.UTF-8
 
 apt="$(type -P apt) -q0"
-apt_get="apt-get"
+apt_get=$(type -P apt-get)
 
 #alias installSecurityUpdates="sudo apt install -V $(apt-get -s dist-upgrade | awk "/^Inst.*\/$codeName-security/"'{print$2}')"
 alias apt-cache="\apt-cache -q0"
