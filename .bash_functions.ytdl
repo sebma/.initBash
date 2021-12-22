@@ -558,13 +558,14 @@ function ytdlGetThumbNail {
 	for url
 	do
 		jsonResult="$(youtube-dl -j "$url" | jq -r 'del(.formats, .tags, .automatic_captions, .requested_subtitles)')"
-		thumbnailURL="$(echo "$jsonResult" | jq -r '.thumbnails[-1].url')"
-		thumbnailBaseName="$(echo "$jsonResult" | jq -r '.title | gsub(" ";"_") | gsub("[#|,]";"") | gsub("&";"_and_")')"
-		thumbnailExtension="${thumbnailURL/*./}"
-		thumbnailExtension="${thumbnailExtension/\?*/}"
-		thumbnailBaseName+=.$thumbnailExtension
-		\wget -O "$thumbnailBaseName" "$thumbnailURL"
-		du -h "$thumbnailBaseName"
+		echo "$jsonResult" | jq -r '.thumbnails[-1].url, .title | gsub(" ";"_") | gsub("[#|,]";"") | gsub("&";"_and_")' | while read thumbnailURL;read thumbnailBaseName;
+		do
+			thumbnailExtension="${thumbnailURL/*./}"
+			thumbnailExtension="${thumbnailExtension/\?*/}"
+			thumbnailBaseName+=.$thumbnailExtension
+			\wget -nv -O "$thumbnailBaseName" "$thumbnailURL"
+			du -h "$thumbnailBaseName"
+		done
 	done
 }
 function ytdlpGetThumbNail {
@@ -572,13 +573,14 @@ function ytdlpGetThumbNail {
 	for url
 	do
 		jsonResult="$(yt-dlp -j "$url" | jq -r 'del(.formats, .tags, .automatic_captions, .requested_subtitles)')"
-		thumbnailURL="$(echo "$jsonResult" | jq -r '.thumbnails[] | select(.preference == -1).url')"
-		thumbnailBaseName="$(echo "$jsonResult" | jq -r '.title | gsub(" ";"_") | gsub("[#|,]";"") | gsub("&";"_and_")')"
-		thumbnailExtension="${thumbnailURL/*./}"
-		thumbnailExtension="${thumbnailExtension/\?*/}"
-		thumbnailBaseName+=.$thumbnailExtension
-		\wget -O "$thumbnailBaseName" "$thumbnailURL"
-		du -h "$thumbnailBaseName"
+		echo "$jsonResult" | jq -r '( .thumbnails[] | select(.preference == -1).url ) , .title | gsub(" ";"_") | gsub("[#|,]";"") | gsub("&";"_and_")' | while read thumbnailURL;read thumbnailBaseName;
+		do
+			thumbnailExtension="${thumbnailURL/*./}"
+			thumbnailExtension="${thumbnailExtension/\?*/}"
+			thumbnailBaseName+=.$thumbnailExtension
+			\wget -nv -O "$thumbnailBaseName" "$thumbnailURL"
+			du -h "$thumbnailBaseName"
+		done
 	done
 }
 function ytdlGetVideoIDsFromPlayListURL {
