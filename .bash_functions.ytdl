@@ -554,11 +554,29 @@ function ytdlGetFormat {
 	done | column -c $COLUMNS -ts '	'
 }
 function ytdlGetThumbNail {
-	$local url
+	$local url jsonResult thumbnailURL thumbnailBaseName thumbnailExtension
 	for url
 	do
-		thumbnailURL="$(youtube-dl --get-thumbnail "$url")"
-		thumbnailBaseName="$(basename "$thumbnailURL" | sed "s/\?.*//")"
+		jsonResult="$(youtube-dl -j "$url" | jq -r 'del(.formats, .tags, .automatic_captions, .requested_subtitles)')"
+		thumbnailURL="$(echo "$jsonResult" | jq -r '.thumbnails[-1].url')"
+		thumbnailBaseName="$(echo "$jsonResult" | jq -r '.title | gsub(" ";"_") | gsub("[#|,]";"") | gsub("&";"_and_")')"
+		thumbnailExtension="${thumbnailURL/*./}"
+		thumbnailExtension="${thumbnailExtension/\?*/}"
+		thumbnailBaseName+=.$thumbnailExtension
+		\wget -O "$thumbnailBaseName" "$thumbnailURL"
+		du -h "$thumbnailBaseName"
+	done
+}
+function ytdlpGetThumbNail {
+	$local url jsonResult thumbnailURL thumbnailBaseName thumbnailExtension
+	for url
+	do
+		jsonResult="$(yt-dlp -j "$url" | jq -r 'del(.formats, .tags, .automatic_captions, .requested_subtitles)')"
+		thumbnailURL="$(echo "$jsonResult" | jq -r '.thumbnails[] | select(.preference == -1).url')"
+		thumbnailBaseName="$(echo "$jsonResult" | jq -r '.title | gsub(" ";"_") | gsub("[#|,]";"") | gsub("&";"_and_")')"
+		thumbnailExtension="${thumbnailURL/*./}"
+		thumbnailExtension="${thumbnailExtension/\?*/}"
+		thumbnailBaseName+=.$thumbnailExtension
 		\wget -O "$thumbnailBaseName" "$thumbnailURL"
 		du -h "$thumbnailBaseName"
 	done
