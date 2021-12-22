@@ -563,16 +563,6 @@ function ytdlGetThumbNail {
 		du -h "$thumbnailBaseName"
 	done
 }
-function ytdlpGetThumbNail {
-	$local url
-	for url
-	do
-		thumbnailURL="$(yt-dlp --get-thumbnail "$url")"
-		thumbnailBaseName="$(basename "$thumbnailURL" | sed "s/\?.*//")"
-		\wget -O "$thumbnailBaseName" "$thumbnailURL"
-		du -h "$thumbnailBaseName"
-	done
-}
 function ytdlGetVideoIDsFromPlayListURL {
 	test $# = 0 && {
 		echo "=> Usage: $FUNCNAME playListURL" >&2
