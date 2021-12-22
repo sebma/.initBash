@@ -32,8 +32,6 @@ else
 fi
 
 alias debInfo="\dpkg -I"
-alias debExport="\sudo dpkg-repack"
-alias debExtract="\dpkg-deb -x"
 alias debContents="\dpkg-deb -c"
 alias dupdatedb="time \sudo update-dlocatedb"
 alias kdeVersion="dpkg -l | awk -F'[:-]' '/plasma-desktop\s/{print \$3}'"
