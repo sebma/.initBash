@@ -558,7 +558,7 @@ function ytdlGetThumbNail {
 	for url
 	do
 		jsonResult="$(youtube-dl -j "$url" | jq -r 'del(.formats, .tags, .automatic_captions, .requested_subtitles)')"
-		echo "$jsonResult" | jq -r '.thumbnails[-1].url, .title | gsub(" ";"_") | gsub("[#|,()]";"") | gsub("&";"_and_")' | while read thumbnailURL;read thumbnailBaseName;
+		echo "$jsonResult" | jq -r '.thumbnails[-1].url, .title | gsub(" ";"_") | gsub("[#|,()]";"") | gsub("&";"_and_")' | while read thumbnailURL && read thumbnailBaseName;
 		do
 			thumbnailExtension="${thumbnailURL/*./}"
 			thumbnailExtension="${thumbnailExtension/\?*/}"
@@ -573,7 +573,7 @@ function ytdlpGetThumbNail {
 	for url
 	do
 		jsonResult="$(yt-dlp -j "$url" | jq -r 'del(.formats, .tags, .automatic_captions, .requested_subtitles)')"
-		echo "$jsonResult" | jq -r '( .thumbnails[] | select(.preference == -1).url ) , .title | gsub(" ";"_") | gsub("[#|,()]";"") | gsub("&";"_and_")' | while read thumbnailURL;read thumbnailBaseName;
+		echo "$jsonResult" | jq -r '( .thumbnails[] | select(.preference == -1).url ) , .title | gsub(" ";"_") | gsub("[#|,()]";"") | gsub("&";"_and_")' | while read thumbnailURL && read thumbnailBaseName;
 		do
 			thumbnailExtension="${thumbnailURL/*./}"
 			thumbnailExtension="${thumbnailExtension/\?*/}"
