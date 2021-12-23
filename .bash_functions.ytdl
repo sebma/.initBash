@@ -560,12 +560,13 @@ function ytdlGetThumbNail {
 		jsonResult="$(youtube-dl -j "$url" | jq -r 'del(.formats, .tags, .automatic_captions, .requested_subtitles)')"
 		echo "$jsonResult" | jq -r $'.id, .extractor, .thumbnails[-1].url, .title | gsub("[ \']";"_") | gsub("[#|,()]";"") | gsub("&";"_and_")' | while read thumbnailID && read thumbnailExtractor && read thumbnailURL && read thumbnailBaseName;
 		do
-			thumbnailExtension="${thumbnailURL/*./}"
-			thumbnailExtension="${thumbnailExtension/\?*/}"
-			thumbnailBaseName+=__${thumbnailID}__${thumbnailExtractor}_com.$thumbnailExtension
-			\wget -c -nv -O "$thumbnailBaseName" "$thumbnailURL"
-			du -h "$thumbnailBaseName"
-			unset thumbnailBaseName
+			if [ -n "$thumbnailID" ];then
+				thumbnailExtension="${thumbnailURL/*./}"
+				thumbnailExtension="${thumbnailExtension/\?*/}"
+				thumbnailBaseName+=__${thumbnailID}__${thumbnailExtractor}_com.$thumbnailExtension
+				\wget -c -nv -O "$thumbnailBaseName" "$thumbnailURL" && du -h "$thumbnailBaseName"
+				unset thumbnailBaseName thumbnailID
+			fi
 		done
 	done
 }
@@ -576,12 +577,13 @@ function ytdlpGetThumbNail {
 		jsonResult="$(yt-dlp -j "$url" | jq -r 'del(.formats, .tags, .automatic_captions, .requested_subtitles)')"
 		echo "$jsonResult" | jq -r $'.id, .extractor, ( .thumbnails[] | select(.preference == -1).url ) , .title | gsub("[ \']";"_") | gsub("[#|,()]";"") | gsub("&";"_and_")' | while read thumbnailID && read thumbnailExtractor && read thumbnailURL && read thumbnailBaseName;
 		do
-			thumbnailExtension="${thumbnailURL/*./}"
-			thumbnailExtension="${thumbnailExtension/\?*/}"
-			thumbnailBaseName+=__${thumbnailID}__${thumbnailExtractor}_com.$thumbnailExtension
-			\wget -c -nv -O "$thumbnailBaseName" "$thumbnailURL"
-			du -h "$thumbnailBaseName"
-			unset thumbnailBaseName
+			if [ -n "$thumbnailID" ];then
+				thumbnailExtension="${thumbnailURL/*./}"
+				thumbnailExtension="${thumbnailExtension/\?*/}"
+				thumbnailBaseName+=__${thumbnailID}__${thumbnailExtractor}_com.$thumbnailExtension
+				\wget -c -nv -O "$thumbnailBaseName" "$thumbnailURL" && du -h "$thumbnailBaseName"
+				unset thumbnailBaseName thumbnailID
+			fi
 		done
 	done
 }
