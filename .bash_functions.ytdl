@@ -565,6 +565,7 @@ function ytdlGetThumbNail {
 			thumbnailBaseName+=__${thumbnailID}__${thumbnailExtractor}_com.$thumbnailExtension
 			\wget -c -nv -O "$thumbnailBaseName" "$thumbnailURL"
 			du -h "$thumbnailBaseName"
+			unset thumbnailBaseName
 		done
 	done
 }
@@ -580,6 +581,7 @@ function ytdlpGetThumbNail {
 			thumbnailBaseName+=__${thumbnailID}__${thumbnailExtractor}_com.$thumbnailExtension
 			\wget -c -nv -O "$thumbnailBaseName" "$thumbnailURL"
 			du -h "$thumbnailBaseName"
+			unset thumbnailBaseName
 		done
 	done
 }
