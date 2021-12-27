@@ -1,6 +1,6 @@
 # vim: set ft=sh noet:
 # ~/.bash_logout: executed by bash(1) when login shell exits.
-! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
+! declare 2>&1 | \grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 # when leaving the console clear the screen to increase privacy
