@@ -35,9 +35,9 @@ function mpv {
 	local mpvOptions="$mpvDefaultOptions"
 	local DISPLAY=$DISPLAY
 
-	moveAudio2FirstConnectedBluetoothDevice
+#	moveAudio2FirstConnectedBluetoothDevice
 
-	test "$SSH_CONNECTION" && hostname | grep -qi b206$ && DISPLAY=:0
+	test "$SSH_CONNECTION" && hostname | \grep -qi b206$ && DISPLAY=:0
 	LANG=en_US.utf8 $mpv $mpvOptions "$@"
 }
 function mpv2 {
