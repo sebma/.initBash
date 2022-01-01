@@ -7,7 +7,7 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 test "$debug" -gt 0 && Echo "\n=> \${BASH_SOURCE[*]} = ${BASH_SOURCE[*]}\n"
 
 type -P ffmpeg  >/dev/null 2>&1 && ffmpeg="command  ffmpeg" &&  ffmpegOptions="-hide_banner -probesize 400M -analyzeduration 400M"
-type -P ffplay  >/dev/null 2>&1 && ffplay="command ffplay" && ffplayOptions=$ffmpegOptions
+type -P ffplay  >/dev/null 2>&1 && ffplay="command ffplay" && ffplayOptions="-hide_banner -user_agent $userAgent"
 type -P ffprobe >/dev/null 2>&1 && ffprobe="command ffprobe" && ffprobeOptions=$ffmpegOptions
 
 #youtube_dl="eval LANG=C.UTF-8 command youtube-dl" # i.e https://unix.stackexchange.com/questions/505733/ # eval A EVITER
@@ -750,6 +750,15 @@ function containerOfFile {
 function cropdetect {
 	ffmpeg -i "$1" -t 1 -vf cropdetect -f null - 2>&1 | awk '/crop/{line=$NF}END{print line}'
 }
+function ffplay {
+	type -P ffprobe >/dev/null && {
+		for arg
+		do
+			echo "$arg" | \egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $ffplay $ffplayOptions "$(youtube-dl -gf best -- "$arg")" || $ffplay $ffplayOptions "$arg"
+			echo
+		done 2>&1
+	}
+}
 function ffprobe {
 	type -P ffprobe >/dev/null && {
 		for arg
@@ -823,6 +832,27 @@ function frameCount {
 		mediainfo --Inform="Video;%FrameCount%" "$video"
 		echo
 	done
+}
+function m2ts2mp4 {
+	local inputFile="$1"
+	if [ $# != 2 ]
+	then
+		echo "=> Usage: $FUNCNAME inputFileName outputFileName [ffmpegCLIParameters]" >&2
+		return 1
+	fi
+
+	shift
+	outputFile="$1"
+	outputExtension=${outputFile/*./}
+	local options
+	case $outputExtension in
+		vob) options="-f mpeg" ;;
+		*) options="" ;;
+	esac
+
+	time $ffmpeg -i "$inputFile" -map 0 -c:v copy -c:a copy -c:s mov_text $options "$@"
+	sync
+	touch -r "$inputFile" "$outputFile"
 }
 function m3uConcat {
 	files="$@"
