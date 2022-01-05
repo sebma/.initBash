@@ -123,6 +123,7 @@ alias fuserumount="\fusermount -u"
 alias gateWay="\route -n | awk '/^(0.0.0.0|default)/{print\$2}'"
 alias gateWayFQDN='\dig +short -x $(gateWay)'
 alias gateWayOPEN='open https://$(gateWayFQDN)'
+alias gateWayURL='echo https://$(gateWayFQDN)'
 alias gdmlogout="\gnome-session-quit --force"
 alias geoipjson="( \curl -sLA '' freegeoip.app/json 2>/dev/null || \wget -qU '' -O- freegeoip.app/json ) | jq"
 alias geoipjson2="( \curl -sA '' ipinfo.io/json 2>/dev/null || \wget -qU '' -O- ipinfo.io/json ) | jq"
