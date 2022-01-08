@@ -244,7 +244,8 @@ function lswifiNICs {
 	done
 }
 function lvs {
-	$sudo lvs -o lvname,vgname,seg_count,attr,lvsize,lv_major,lv_minor,lv_kernel_major,lv_kernel_minor,lv_uuid "$@"
+	local lvs=$(type -P lvs)
+	$sudo $lvs -o lvname,vgname,seg_count,attr,lvsize,lv_major,lv_minor,lv_kernel_major,lv_kernel_minor,lv_uuid "$@"
 }
 function mac@ {
 	set -o pipefail
