@@ -900,12 +900,12 @@ function locateBin {
 function locateFromHere {
 	local regExp="$1"
 	shift
-	locate "$PWD/.*$regExp" "$@" | sed "s|$PWD.||"
+	locate "^$PWD/.*$regExp" "$@" | sed "s|$PWD.||"
 }
 function locateFromHome {
 	local regExp="$1"
 	shift
-	locate "$HOME/.*$regExp" "$@" | sed "s|$HOME.||"
+	locate "^$HOME/.*$regExp" "$@" | sed "s|$HOME.||"
 }
 function lprColorPageRange {
 	test -n "$colorPrinter" && test $colorPrinter && lprPageRange $@ -P $colorPrinter
