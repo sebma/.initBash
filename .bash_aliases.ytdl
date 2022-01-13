@@ -39,6 +39,7 @@ alias ytdlpnoconfig="$ytdlpnoconfig"
 alias ytdlVersion="\youtube-dl --version"
 alias ytdlpVersion="\yt-dlp --version"
 alias ytdlGetFileName="\youtube-dl --get-filename"
+alias ytdlpGetFileName="\yt-dlp --get-filename"
 alias ytdlGetVideoID="\youtube-dl --get-id"
 alias ytdlGetFormatID="\youtube-dl --get-filename -o '%(format_id)s' -f"
 alias ytdlLatestRelease='\git ls-remote --tags --refs $ytdlURL | awk -F/ "{print\$NF}" | sort -rV | head -1'
