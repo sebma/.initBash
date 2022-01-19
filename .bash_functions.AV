@@ -135,7 +135,7 @@ function addSubtitles2media {
 	local outputVideo=${inputVideo/.$extension/_NEW.$extension}
 	shift
 	local numberOfSubtitles=$#
-	(printf "ffmpeg -hide_banner -i $inputVideo ";printf -- "-i %s " "$@";printf -- "-map 0:a? -map 0:v? ";printf -- "-map %d " $(seq $numberOfSubtitles);printf -- "-c copy -c:s $subTitleCodec $outputVideo\n") | sh -x
+	(printf "$ffmpeg -i $inputVideo ";printf -- "-i %s " "$@";printf -- "-map 0:a? -map 0:v? ";printf -- "-map %d " $(seq $numberOfSubtitles);printf -- "-c copy -c:s $subTitleCodec $outputVideo\n") | sh -x
 	local retCode=$?
 	sync
 	sleep 1
@@ -174,7 +174,7 @@ function addThumbnail2mp4_ffmpeg {
 	local timestampFileRef=$(mktemp) && touch -r "$videoFileName" $timestampFileRef
 	local extension=${videoFileName/*./}
 
-	local ffprobeJSON_Info=$($ffprobe -hide_banner -v error -show_format -show_streams -print_format json "$videoFileName")
+	local ffprobeJSON_Info=$($ffprobe -v error -show_format -show_streams -print_format json "$videoFileName")
 	local embeddedArtworkCodecName=$(echo $ffprobeJSON_Info | jq -r '[ .streams[] | select(.codec_type=="video") ][-1].codec_name')
 	local major_brand=$(echo $ffprobeJSON_Info | jq -r '.format.tags.major_brand')
 	local disposition_stream_specifier=null
@@ -1372,7 +1372,6 @@ function videoInfo {
 	local size=0
 	type -P ffprobe >/dev/null && {
 		local youtube_dl='command youtube-dl'
-		local ffprobe='command ffprobe -hide_banner'
 		for urlOrFile
 		do
 			echo "=> urlOrFile = $urlOrFile"
@@ -1569,7 +1568,7 @@ function videoSplit {
 	echo "=> outputFile = <$outputFile>"
 }
 function videoToAnyBitrate {
-	test $# != 0 && test $# !=2 && {
+	test $# = 0 || test $# -gt 2 && {
 		echo "=> $FUNCNAME [bitrate=500k] video" >&2
 		return 1
 	}
@@ -1578,7 +1577,7 @@ function videoToAnyBitrate {
 	local ext="${video/*./}"
 	local videoBaseName="${video/.*/}"
 	set -x
-	$ffmpeg -i "$video" -c:a copy -movflags +frag_keyframe -b:v $bitrate "${videoBaseName}-COMPRESSED-${bitrate}bps.$ext"
+	time $ffmpeg -i "$video" -c:a copy -movflags +frag_keyframe -b:v $bitrate "${videoBaseName}-COMPRESSED-${bitrate}bps.$ext"
 	set +x
 }
 function videoURL {
@@ -1730,7 +1729,7 @@ function webcamInfo {
 		echo
 		v4l2-ctl --list-formats-ext -d $videoDevice
 		echo
-		\ffmpeg -hide_banner -list_formats all -i $videoDevice 2>&1
+		$ffmpeg -list_formats all -i $videoDevice 2>&1
 	fi
 }
 function webmAudio2ogg {
