@@ -1568,20 +1568,17 @@ function videoSplit {
 	touch -r "$fileName" "$outputFile"
 	echo "=> outputFile = <$outputFile>"
 }
-function videoTo2Mbps {
-	local video="$1"
+function videoToAnyBitrate {
+	test $# != 0 && test $# !=2 && {
+		echo "=> $FUNCNAME [bitrate=500k] video" >&2
+		return 1
+	}
+	test $# = 1 && local bitrate=500k && local video="$1"
+	test $# = 2 && local bitrate="${1/m/M}" && local video="$2"
 	local ext="${video/*./}"
 	local videoBaseName="${video/.*/}"
 	set -x
-	$ffmpeg -i "$video" -c:a copy -movflags +frag_keyframe -b:v 2M "${videoBaseName}-COMPRESSED-2Mbps.$ext"
-	set +x
-}
-function videoTo4Mbps {
-	local video="$1"
-	local ext="${video/*./}"
-	local videoBaseName="${video/.*/}"
-	set -x
-	$ffmpeg -i "$video" -c:a copy -movflags +frag_keyframe -b:v 4M "${videoBaseName}-COMPRESSED-4Mbps.$ext"
+	$ffmpeg -i "$video" -c:a copy -movflags +frag_keyframe -b:v $bitrate "${videoBaseName}-COMPRESSED-${bitrate}bps.$ext"
 	set +x
 }
 function videoURL {
