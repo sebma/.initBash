@@ -1577,7 +1577,7 @@ function videoToAnyBitrate {
 	local ext="${video/*./}"
 	local videoBaseName="${video/.*/}"
 	set -x
-	time $ffmpeg -i "$video" -c:a copy -movflags +frag_keyframe -b:v $bitrate "${videoBaseName}-COMPRESSED-${bitrate}bps.$ext"
+	time $ffmpeg -i "$video" -map 0:v? -c:v:1 copy -map 0:a? -c:a copy -map 0:s? -c:s copy -movflags +frag_keyframe -b:v:0 $bitrate "${videoBaseName}-COMPRESSED-${bitrate}bps.$ext"
 	set +x
 }
 function videoURL {
