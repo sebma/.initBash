@@ -1191,6 +1191,18 @@ function spx2opus {
 		echo "=> ERROR: The file <$inputFile> does not exit or is empty." >&2
 	fi
 }
+function subtitleCodecOfFile {
+	local subtitleCodec
+	local ffprobeJSON_File_Info=null
+	for file
+	do
+#		subtitleCodec=$($ffprobe "$file" -select_streams s:0? -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 -v error)
+		ffprobeJSON_File_Info=$($ffprobe -v error -show_format -show_streams -print_format json "$file")
+		subtitleCodec=$(echo $ffprobeJSON_File_Info | jq -r '[ .streams[] | select(.codec_type=="subtitle") ][-1].codec_name')
+		printf "=> $file : subtitleCodec = " >&2
+		echo $subtitleCodec
+	done
+}
 function to16_9 {
 	local extension
 	for video
@@ -1220,18 +1232,6 @@ function urlinfo {
 	do
 		echo "=> url = $url"
 		time $ffprobe -user_agent "$userAgent" $(time youtube-dl -gf best -- "$url")
-	done
-}
-function subtitleCodecOfFile {
-	local subtitleCodec
-	local ffprobeJSON_File_Info=null
-	for file
-	do
-#		subtitleCodec=$($ffprobe "$file" -select_streams s:0? -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 -v error)
-		ffprobeJSON_File_Info=$($ffprobe -v error -show_format -show_streams -print_format json "$file")
-		subtitleCodec=$(echo $ffprobeJSON_File_Info | jq -r '[ .streams[] | select(.codec_type=="subtitle") ][-1].codec_name')
-		printf "=> $file : subtitleCodec = " >&2
-		echo $subtitleCodec
 	done
 }
 function videoCodecOfFile {
