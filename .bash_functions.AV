@@ -1568,6 +1568,18 @@ function videoSplit {
 	touch -r "$fileName" "$outputFile"
 	echo "=> outputFile = <$outputFile>"
 }
+function videoTo2Mbps {
+	local video="$1"
+	local ext="${video/*./}"
+	local videoBaseName="${video/.*/}"
+	$ffmpeg -i "$video" -c:a copy -movflags +frag_keyframe -b:v 2M "${videoBaseName}-COMPRESSED-2Mbps.$ext"
+}
+function videoTo4Mbps {
+	local video="$1"
+	local ext="${video/*./}"
+	local videoBaseName="${video/.*/}"
+	$ffmpeg -i "$video" -c:a copy -movflags +frag_keyframe -b:v 4M "${videoBaseName}-COMPRESSED-4Mbps.$ext"
+}
 function videoURL {
 	for video
 	do
