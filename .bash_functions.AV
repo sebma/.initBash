@@ -6,9 +6,9 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 
 test "$debug" -gt 0 && Echo "\n=> \${BASH_SOURCE[*]} = ${BASH_SOURCE[*]}\n"
 
-type -P ffmpeg  >/dev/null 2>&1 && ffmpeg="command  ffmpeg"  && ffmpegOptions="-probesize 400M -analyzeduration 400M"
-type -P ffplay  >/dev/null 2>&1 && ffplay="command ffplay"   && ffplayOptions="$ffmpegOptions"
-type -P ffprobe >/dev/null 2>&1 && ffprobe="command ffprobe" && ffprobeOptions="$ffmpegOptions"
+type -P ffmpeg  >/dev/null 2>&1 && ffmpeg="command  ffmpeg  -hide_banner" && ffmpegOptions="-probesize 400M -analyzeduration 400M"
+type -P ffplay  >/dev/null 2>&1 && ffplay="command  ffplay  -hide_banner" && ffplayOptions="$ffmpegOptions"
+type -P ffprobe >/dev/null 2>&1 && ffprobe="command ffprobe -hide_banner" && ffprobeOptions="$ffmpegOptions"
 
 #youtube_dl="eval LANG=C.UTF-8 command youtube-dl" # i.e https://unix.stackexchange.com/questions/505733/ # eval A EVITER
 
@@ -1572,13 +1572,17 @@ function videoTo2Mbps {
 	local video="$1"
 	local ext="${video/*./}"
 	local videoBaseName="${video/.*/}"
+	set -x
 	$ffmpeg -i "$video" -c:a copy -movflags +frag_keyframe -b:v 2M "${videoBaseName}-COMPRESSED-2Mbps.$ext"
+	set +x
 }
 function videoTo4Mbps {
 	local video="$1"
 	local ext="${video/*./}"
 	local videoBaseName="${video/.*/}"
+	set -x
 	$ffmpeg -i "$video" -c:a copy -movflags +frag_keyframe -b:v 4M "${videoBaseName}-COMPRESSED-4Mbps.$ext"
+	set +x
 }
 function videoURL {
 	for video
