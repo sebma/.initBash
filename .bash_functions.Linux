@@ -289,7 +289,7 @@ function pip2Install {
 				:
 			done
 		fi
-		\curl -Ls https://bootstrap.pypa.io/pip/2.7/get-pip.py | sudo -H python3
+		\curl -Ls https://bootstrap.pypa.io/pip/2.7/get-pip.py | sudo -H python2
 	fi
 }
 function pip3Install {
