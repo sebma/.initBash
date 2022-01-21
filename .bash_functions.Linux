@@ -289,7 +289,7 @@ function pip2Install {
 				:
 			done
 		fi
-		\curl -Ls https://bootstrap.pypa.io/pip/2.7/get-pip.py | sudo -H python2
+		\wget -qO- https://bootstrap.pypa.io/pip/2.7/get-pip.py | sudo -H python2
 	fi
 }
 function pip3Install {
@@ -299,7 +299,7 @@ function pip3Install {
 				dpkg -l $pkg | \grep ^i -q || echo "=> You need to install <$pkg>"
 			done
 		fi
-		\curl -Ls https://bootstrap.pypa.io/get-pip.py | sudo -H python3
+		\wget -qO- https://bootstrap.pypa.io/get-pip.py | sudo -H python3
 	fi
 }
 function ppidof {
