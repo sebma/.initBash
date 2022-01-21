@@ -296,7 +296,7 @@ function pip3Install {
 	if ! type -P pip3 >/dev/null;then
 		if [ $(distribType) = debian ];then
 			for pkg in python3-distutils;do
-				dpkg -l $pkg | \grep ^i -q || echo "=> You need to install <$pkg>"
+				dpkg -l $pkg | \grep ^i -q || { echo "=> You need to install <$pkg>";return 1; }
 			done
 		fi
 		\wget -qO- https://bootstrap.pypa.io/get-pip.py | sudo -H python3
