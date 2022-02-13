@@ -138,7 +138,7 @@ function mpvPlaylistFileFORMAT {
 	tail -f nohup.out | egrep -v "AV: "
 }
 function mpvNoHup {
-	nohup $mpv --profile=background "$@"
+	nohup mpv --profile=background "$@"
 }
 function urlplayer {
 	$mpv $(youtube-dl -gf best "$1")
