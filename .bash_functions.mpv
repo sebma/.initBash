@@ -58,9 +58,11 @@ function mpv2 {
 	done
 }
 function mpvFORMAT {
+	local firstArg="$1"
+	shift
 	\rm nohup.out
 	touch nohup.out
-	mpvNoHup --ytdl-format="$@" &
+	mpvNoHup --ytdl-format="$firstArg" "$@" &
 	tail -f nohup.out | egrep -v "AV: "
 }
 function mpvInit {
@@ -131,7 +133,7 @@ function mpvPlaylistFileFORMAT {
 	\rm nohup.out
 	touch nohup.out
 	local format
-	local playlist
+	local playlist firstArg="$1"
 	echo -- $1 | \grep -q -- "--" && format="$1" && playlist="$2" && shift || playlist="$1"
 	shift
 	mpvNoHup "$firstArg" --ytdl-format="$format" --playlist="$playlist" "$@" &
