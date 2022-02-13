@@ -60,7 +60,7 @@ function mpv2 {
 function mpvFORMAT {
 	local firstArg="$1"
 	shift
-	\rm nohup.out
+	test -f nohup.out && \rm -v nohup.out
 	touch nohup.out
 	mpvNoHup --ytdl-format="$firstArg" "$@" &
 	tail -f nohup.out | egrep -v "AV: "
@@ -96,13 +96,13 @@ function mpvalt {
 	test $1 && $mpv --no-ytdl $(youtube-dl -g -f=best $@ | uniq)
 }
 function mpvdirectly {
-	\rm nohup.out
+	test -f nohup.out && \rm -v nohup.out
 	touch nohup.out
 	mpvNoHup --no-ytdl "$@" &
 	tail -f nohup.out | egrep -v "AV: "
 }
 function mpvlive {
-	\rm nohup.out
+	test -f nohup.out && \rm -v nohup.out
 	touch nohup.out
 	mpvNoHup --no-resume-playback "$@" &
 	tail -f nohup.out | egrep -v "AV: "
@@ -111,7 +111,7 @@ function mpvlocal {
 	mpvdirectly "$@"
 }
 function mpvPlaylistFile {
-	\rm nohup.out
+	test -f nohup.out && \rm -v nohup.out
 	touch nohup.out
 	local playListFile="$1" playlistStartIndex="" index=1
 	local format="mp4[height<=480]/mp4/best"
@@ -130,7 +130,7 @@ function mpvPlaylistFile {
 	tail -f nohup.out | egrep -v "AV: "
 }
 function mpvPlaylistFileFORMAT {
-	\rm nohup.out
+	test -f nohup.out && \rm -v nohup.out
 	touch nohup.out
 	local format
 	local playlist firstArg="$1"
