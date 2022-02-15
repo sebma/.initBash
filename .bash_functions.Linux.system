@@ -7,6 +7,8 @@ if groups 2>/dev/null | egrep -wq "sudo|adm|admin|root|wheel";then
 function nmRestart {
 	local -r systemType=$( ( strings $(\ps -p 1 -o cmd= | cut -d" " -f1) | \egrep -o "upstart|sysvinit|systemd" || echo unknown ) | head -1)
 	local -r timer=12s
+	local output=""
+	local outputDataType=""
 	if ! env | \grep ^SSH_CONNECTION= -q; then
 		if [ $systemType = systemd ]; then
 			systemctl --no-block restart network-manager
@@ -20,7 +22,14 @@ function nmRestart {
 		echo "=> Waiting $timer for Wi-Fi to connect back again ..."
 		sleep $timer
 		printf "=> WANIP: "
-		\curl -sA "" ipinfo.io/ip 2> /dev/null || \wget -qU "" -O- ipinfo.io/ip
+		output="$(\curl -sA "" ipinfo.io/ip 2>/dev/null || \wget -qU "" -O- ipinfo.io/ip)"
+		outputDataType=$(echo "$output" | file -bi -)
+		case $outputDataType in
+			text/html*) echo "$output" | html2text;;
+			application/json*) echo "$output" | jq .;;
+			text/plain*) echo "$output";;
+			*) echo "Unknown data type." >&2; return 1 ;;
+		esac
 		echo
 	fi
 }
