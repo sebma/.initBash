@@ -574,13 +574,22 @@ function wifiList {
 }
 function wifiRestart {
 	local -r timer=7s
+	local output=""
+	local outputDataType=""
 	if ! env | grep SSH_CONNECTION=;then
 		\nmcli nm wifi off 2>/dev/null || \nmcli radio wifi off
 		\nmcli nm wifi on  2>/dev/null || \nmcli radio wifi on
 		echo "=> Waiting $timer for Wi-Fi to connect back again ..."
 		sleep $timer
 		printf "=> WANIP: "
-		\curl -sA "" ipinfo.io/ip 2>/dev/null || \wget -qU "" -O- ipinfo.io/ip
+		output="$(\curl -sA "" ipinfo.io/ip 2>/dev/null || \wget -qU "" -O- ipinfo.io/ip)"
+		outputDataType=$(echo "$output" | file -bi -)
+		case $outputDataType in
+			text/html*) echo "$output" | html2text;;
+			application/json*) echo "$output" | jq .;;
+			text/plain*) echo "$output";;
+			*) echo "Unknown data type." >&2; return 1 ;;
+		esac
 	fi
 }
 
