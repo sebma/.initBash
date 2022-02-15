@@ -1918,7 +1918,14 @@ function whatPackageContainsExecutable {
 	fi | \egrep "(libexec|bin)/"
 }
 function whereisIP {
-	type -P curl >/dev/null && \curl -A "" ipinfo.io/$1 || \wget -qO- -U "" ipinfo.io/$1
+	local output="$(type -P curl >/dev/null && \curl -sA "" ipinfo.io/$1 || \wget -qO- -U "" ipinfo.io/$1)"
+	local outputDataType=$(echo "$output" | file -bi -)
+	case $outputDataType in
+		text/html*) echo "$output" | html2text;;
+		application/json*) echo "$output" | jq .;;
+		text/plain*) echo "$output";;
+		*) echo "Unknown data type." >&2; return 1 ;;
+	esac
 }
 function wlanmac {
 	wlanIF=$(iwconfig 2>&1 | awk '/ESSID:/{print$1}')
