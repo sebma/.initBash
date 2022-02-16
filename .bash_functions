@@ -478,6 +478,12 @@ function distribType {
 function envSorted {
 	command env "$@" | sort
 }
+function expandURL {
+	for url
+	do
+		time \curl -sIL "${url}" | sed -n 's/[Ll]ocation: *//p'
+	done
+}
 function extractURLsFromFiles {
 	for file
 	do
