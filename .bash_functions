@@ -1046,7 +1046,7 @@ function monitorInfo {
 	if [ -z "$SSH_CONNECTION" ];then
 		\xrandr --props | edid-decode | egrep 'Manufacturer:|Product|Alphanumeric'
 	else
-		echo "=> You cannot use <${0/*\//}> through SSH." >&2
+		echo "=> You cannot use <$FUNCNAME> through SSH." >&2
 		return 1
 	fi
 }
