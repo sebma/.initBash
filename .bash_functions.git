@@ -7,7 +7,7 @@ function gitClone {
 	local repoURL=$1
 	local owner=""
 	if test $# = 1;then
-		owner=$(basename $(dirname $repoURL))
+		owner=$(basename $(dirname $repoURL) | cut -d: -f2)
 		project=$(basename $repoURL .git)
 		mkdir -p $owner && cd $owner 
 		if git clone $repoURL && cd $project;then
