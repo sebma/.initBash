@@ -1042,6 +1042,14 @@ function mkdirSeb {
 		mkdir "$dir"
 	done
 }
+function monitorInfo {
+	if [ -z "$SSH_CONNECTION" ];then
+		\xrandr --props | edid-decode | egrep 'Manufacturer:|Product|Alphanumeric'
+	else
+		echo "=> You cannot use <${0/*\//}> through SSH." >&2
+		return 1
+	fi
+}
 function mountISO {
 	loopBackDevice=$(udisksctl loop-setup -r -f "$1" | awk -F "[ .]" '{print$(NF-1)}')
 	udisksctl mount -b $loopBackDevice
