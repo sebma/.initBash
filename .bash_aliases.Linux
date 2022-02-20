@@ -91,8 +91,8 @@ alias scp='time \rsync -h --progress -u -zt --skip-compress=$RSYNC_SKIP_COMPRESS
 #alias sed="\sed -r" # La completion ssh ne fonctionne pas si l'alias est actif a cause du script /usr/share/bash-completion/bash_completion qui est obsolete, faire une maj du package bash_completion vers la v2.8
 #alias halt="\systemctl halt && exit"
 alias poweroff="\systemctl poweroff && exit"
-alias reboot="\systemctl reboot && exit"
-alias suspend="\systemctl suspend && exit"
+alias reboot="\systemctl reboot;exit"
+alias suspend="\systemctl suspend;exit"
 #alias topf=$'$find . -xdev $findPrunePathsExpression -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | head -n | awk \'{total+=$5;print}END{print"=> total = "total" MiB"}\' | column -t'
 #alias topf10=$'$find . -xdev $findPrunePathsExpression -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | head -10 | awk \'{total+=$5;print}END{print"=> total = "total" MiB"}\' | column -t'
 #alias topf50=$'$find . -xdev $findPrunePathsExpression -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | head -50 | awk \'{total+=$5;print}END{print"=> total = "total" MiB"}\' | column -t'
