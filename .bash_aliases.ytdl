@@ -23,7 +23,11 @@ ytdlpIssues=$ytdlpURL/issues
 ytdlpReleases=$ytdlpURL/releases
 ytdlpLatestRelease=$ytdlpReleases/latest
 
-alias recordYTLive="timeout -s SIGINT 150m getRestrictedFilenamesFORMAT.sh"
+if [ -n "$SSH_CONNECTION" ] && type -P screen >/dev/null 2>&1;then
+	alias recordYTLive="screen -L timeout -s SIGINT 150m getRestrictedFilenamesFORMAT.sh"
+else
+	alias recordYTLive="timeout -s SIGINT 150m getRestrictedFilenamesFORMAT.sh"
+fi
 alias recordJPLive360p="recordYTLive  93 $JP_Live"
 alias recordNCCLive360p="recordYTLive 93 $NCC_Live"
 alias recordJPLive480p="recordYTLive  94 $JP_Live"
