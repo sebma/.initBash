@@ -1362,15 +1362,13 @@ function pip {
 
 	firstArg=$1
 	if [ "$firstArg" = install ];then
-		if groups | egrep -wq "sudo|admin"
-		then
+		if $isSudoer;then
 			$sudo -H $callerPath $@
 		else
 			$callerCmd $@ --user
 		fi
 	elif [ "$firstArg" = uninstall ];then
-		if groups | egrep -wq "sudo|admin"
-		then
+		if $isSudoer;then
 			$sudo -H $callerPath $@
 		else
 			$callerCmd $@
