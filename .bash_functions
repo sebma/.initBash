@@ -1353,31 +1353,32 @@ function pip {
 	local caller=${FUNCNAME[1]}
 	test $caller || caller="pip"
 	if type -P $caller >/dev/null;then
-		local callerPath="command $caller"
+		local callerCmd="command $caller"
+		local callerPath="$(type -P $caller)"
 	else
-		echo "$0: ERROR $caller is not installed" >&2
+		echo "=> $0: ERROR $caller is not installed" >&2
 		return 1
 	fi
 
 	firstArg=$1
-	if   [ "$firstArg" = install ];then
+	if [ "$firstArg" = install ];then
 		if groups | egrep -wq "sudo|admin"
 		then
 			$sudo -H $callerPath $@
 		else
-			command $caller $@ --user
+			$callerCmd $@ --user
 		fi
 	elif [ "$firstArg" = uninstall ];then
 		if groups | egrep -wq "sudo|admin"
 		then
 			$sudo -H $callerPath $@
 		else
-			command $caller $@
+			$callerCmd $@
 		fi
 	elif [ "$firstArg" = search ];then
-		command $caller $@ | sort | more
+		$callerCmd $@ | sort
 	else
-		command $caller $@ | more
+		$callerCmd $@
 	fi
 }
 function pip2 {
