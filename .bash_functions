@@ -1358,25 +1358,23 @@ function pip {
 		echo "$0: ERROR $caller is not installed" >&2
 		return 1
 	fi
+
 	firstArg=$1
-	if   [ "$firstArg" = install ]
-	then
+	if   [ "$firstArg" = install ];then
 		if groups | egrep -wq "sudo|admin"
 		then
-			\sudo -H $callerPath $@
+			$sudo -H $callerPath $@
 		else
 			command $caller $@ --user
 		fi
-	elif [ "$firstArg" = uninstall ]
-	then
+	elif [ "$firstArg" = uninstall ];then
 		if groups | egrep -wq "sudo|admin"
 		then
-			\sudo -H $callerPath $@
+			$sudo -H $callerPath $@
 		else
 			command $caller $@
 		fi
-	elif [ "$firstArg" = search ]
-	then
+	elif [ "$firstArg" = search ] || [ "$firstArg" = help ];then
 		command $caller $@ | sort
 	else
 		command $caller $@
