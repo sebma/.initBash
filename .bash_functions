@@ -1,5 +1,5 @@
 # vim: set ft=sh noet:
-! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
+! declare 2>&1 | \grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 Source $initDir/.bash_functions.build
@@ -1374,10 +1374,10 @@ function pip {
 		else
 			command $caller $@
 		fi
-	elif [ "$firstArg" = search ] || [ "$firstArg" = help ];then
-		command $caller $@ | sort
+	elif [ "$firstArg" = search ];then
+		command $caller $@ | sort | more
 	else
-		command $caller $@
+		command $caller $@ | more
 	fi
 }
 function pip2 {
