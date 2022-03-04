@@ -14,11 +14,13 @@ JP_USA_Live=$JP_USA_Channel/live
 JP_USA_Videos=$JP_USA_Channel/videos?sort=dd
 # youtube-dl
 ytdlURL=https://github.com/ytdl-org/youtube-dl
+ytdlGitURL=git+https://github.com/ytdl-org/youtube-dl
 ytdlIssues=$ytdlURL/issues
 ytdlReleases=$ytdlURL/releases
 ytdlLatestRelease=$ytdlReleases/latest
 # yt-dlp
 ytdlpURL=https://github.com/yt-dlp/yt-dlp
+ytdlpGitURL=git+https://github.com/yt-dlp/yt-dlp
 ytdlpIssues=$ytdlpURL/issues
 ytdlpReleases=$ytdlpURL/releases
 ytdlpLatestRelease=$ytdlpReleases/latest
@@ -56,6 +58,8 @@ alias ytdlOpenLatestRelease="open $ytdlURL/releases/latest"
 alias ytdlpOpenLatestRelease="open $ytdlpURL/releases/latest"
 alias ytdlUpdateFromGit="ytdlUpdate $ytdlURL"
 alias ytdlpUpdateFromGit="ytdlpUpdate $ytdlpURL"
+alias ytdlUpdateFromGitLatestMerge="$sudo pip install -U $ytdlGitURL"
+alias ytdlpUpdateFromGitLatestMerge="$sudo pip install -U $ytdlpGitURL"
 
 set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
