@@ -722,7 +722,7 @@ function ytdlpUpdate {
 
 	local package=yt-dlp
 	local yt_dlp="command $package"
-	if [ "$yt_dlp" ];then
+	if [ -n "$yt_dlp" ];then
 		echo "=> Searching for the latest release on $ytdlpPyPI_URL ..." >&2
 		local ytdlpLatestRelease=$(\curl -Ls $ytdlpPyPI_URL/json | jq -r .info.version)
 		if [ -z "$ytdlpLatestRelease" ];then
