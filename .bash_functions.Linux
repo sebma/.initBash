@@ -253,7 +253,7 @@ function mac@ {
 	if $ip -brief addr >/dev/null 2>&1;then
 		$ip -brief link show "$@"
 	else
-		$ip -o link show "$@" | awk '/link\/(ether|loopback)/{for(i=1;i<=NF;i++){if($i=="state"){status=$(i+1);break;}};print gensub(":","",1,$2)" "status" "$(NF-2)" "$3}' | column -t
+		$ip -o link show "$@" | awk '/link\/(ether|loopback)/{for(i=1;i<=NF;i++){if($i=="state"){status=$(i+1);break;}};sub(":","",$2);print$2" "status" "$(NF-2)" "$3}' | column -t
 	fi
 	test $? != 0 && $ip link show help
 	set +o pipefail
