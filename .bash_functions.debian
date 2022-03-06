@@ -214,7 +214,7 @@ function fixAptKeys {
 	done
 	[ $nbKeysAdded != 0 ] && echo "=> New keys were added so resynchronizing the package index files from their sources ..." && sudo apt-get update
 
-	for keyFile in $(awk '/gpg: keyblock resource .*resource limit/{print gensub("`|.:","","g",$4)" "}' /tmp/keymissing)
+	for keyFile in $(awk '/gpg: keyblock resource .*resource limit/{gsub("`|.:","",$4);print$4" "}' /tmp/keymissing)
 	do
 		sudo rm -v $keyFile
 	done
