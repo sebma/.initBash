@@ -335,6 +335,7 @@ alias toupperSed="sed 's/.*/\U&/'"
 alias traceroute="\traceroute -I"
 alias ulogerrors="egrep -iB4 -A1 'error|erreur|Err: [^0]'"
 alias ulogtodayerrors="egrep -iB4 -A1 'error|erreur|Err: [^0]' $ulog"
+alias url2qrcode=string2qrcode
 alias umask="\umask -S"
 alias umount="umount -v"
 alias uncompress="\uncompress -v"
