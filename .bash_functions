@@ -1728,7 +1728,7 @@ function string2qrcode {
 	local dotSize=6 url=""
 	if [ $# = 1 ];then
 		url="$1"
-		qrencode -s $dotSize -o- "$url" | feh -
+		qrencode -l H -s $dotSize -o- "$url" | feh -
 	fi
 }
 function sumFirstColumn {
