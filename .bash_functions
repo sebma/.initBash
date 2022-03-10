@@ -1724,6 +1724,13 @@ function sshStartLocalForwarding {
 		\pgrep -lf $tunnelDef
 	fi
 }
+function string2qrcode {
+	local dotSize=6 url=""
+	if [ $# = 1 ];then
+		url="$1"
+		qrencode -s $dotSize -o- "$url" | feh -
+	fi
+}
 function sumFirstColumn {
 	awk "{print \$1}" | LC_ALL=C numfmt --from=iec | paste -sd+ | bc | numfmt --to=iec-i --suffix=B
 }
