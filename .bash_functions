@@ -1725,7 +1725,7 @@ function sshStartLocalForwarding {
 	fi
 }
 function string2qrcode {
-	local dotSize=6 url=""
+	local dotSize=7 url=""
 	if [ $# = 1 ];then
 		url="$1"
 		qrencode -l H -s $dotSize -o- "$url" | feh -
