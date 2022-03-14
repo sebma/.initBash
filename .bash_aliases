@@ -343,6 +343,7 @@ alias uncpio="\cpio -idcmv <"
 alias unix2dos="\sed -i 's/$/\r/'"
 alias unjar='\unjar || \unzip'
 alias untar='\untar || \tar -xvf'
+alias untar2dir='tar2dir'
 alias unzipFromPipeToStdout="\zcat"
 alias updateBrew="time \brew update -v"
 alias updatePip="pip install -U pip"
