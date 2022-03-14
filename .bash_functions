@@ -1734,6 +1734,12 @@ function string2qrcode {
 function sumFirstColumn {
 	awk "{print \$1}" | LC_ALL=C numfmt --from=iec | paste -sd+ | bc | numfmt --to=iec-i --suffix=B
 }
+function tar2dir {
+	local dir=.
+	[ $# = 2 ] && local dir="$1" archive="$2"
+	mkdir -pv "$dir"
+	tar -C "$@"
+}
 function tcpConnetTest {
 	test $# -lt 2 && {
 		echo "=> Usage : $FUNCNAME server/ip portNumber" >&2
