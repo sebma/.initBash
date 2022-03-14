@@ -1736,9 +1736,15 @@ function sumFirstColumn {
 }
 function tar2dir {
 	local dir=.
-	[ $# = 2 ] && local dir="$1"
+	[ $# = 2 ] && local dir="$1" && shift
 	mkdir -pv "$dir"
-	tar -C "$@"
+	tar -C "$dir" "$@"
+}
+function untar2dir {
+	local dir=.
+	[ $# = $2 ] && local dir="$1" && shift
+	mkdir -pv "$dir"
+	tar -C "$dir" -xvf "$@"
 }
 function tcpConnetTest {
 	test $# -lt 2 && {
