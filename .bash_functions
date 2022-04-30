@@ -1803,6 +1803,11 @@ function totalSize {
 	local column=1
 	awk -v column=$column '{print $column}' | LC_ALL=C numfmt --from=iec | paste -sd+ | bc | numfmt --to=iec-i --suffix=B
 }
+function tuneGuitar {
+	for n in E2 A2 D3 G3 B3 E4;do
+		play -n synth 4 pluck $n repeat 2
+	done
+}
 function txt2pdf {
 	for file
 	do
