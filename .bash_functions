@@ -848,6 +848,13 @@ function installDate {
 		*)	;;
 	esac
 }
+function isbn2Barcode {
+	local string=""
+	if [ $# = 1 ]; then
+		string="$1"
+		barcode -e ean-13 -S -b "$string" | mogrify -format png -resize 200% - | feh -
+	fi
+}
 function jpgRotate {
 	test $# = 0 && {
 		echo "=> Usage: $FUNCNAME angle file1 file2 file3 ..." >&2
