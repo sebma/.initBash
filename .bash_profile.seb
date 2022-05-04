@@ -7,6 +7,13 @@ declare -gxr isSudoer=$(groups 2>/dev/null | \egrep -wq "sudo|adm|admin|root|whe
 test -z "$initDir" && export initDir=$HOME/.initBash
 ! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
 
+initDir=$(basename $initDir) #Pour creer des liens symboliques relatifs a $HOME
+cd $HOME
+[ -f ~/.profile ] || ln -sv $initDir/.bash_profile ~/.profile
+[ -f ~/.bashrc  ] || ln -sv $initDir/.bashrc ~/.bashrc
+[ -f ~/.bash_logout ] || ln -sv $initDir/.bash_logout ~/.bash_logout
+initDir=$HOME/$initDir
+
 #command -v termux-chroot >/dev/null 2>&1 && command -v bash 2>/dev/null | grep termux -q && termux-chroot
 
 if tty -s;then
@@ -56,14 +63,6 @@ if [ -n "$youtube_dl" ];then # Recuperation de la variable _USER_AGENT_TPL de yo
 else
 	export userAgent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3513.1 Safari/537.36"
 fi
-
-
-initDir=$(basename $initDir) #Pour creer des liens symboliques relatifs a $HOME
-cd $HOME
-[ -f ~/.profile ] || ln -sv $initDir/.bash_profile ~/.profile
-[ -f ~/.bashrc  ] || ln -sv $initDir/.bashrc ~/.bashrc
-[ -f ~/.bash_logout ] || ln -sv $initDir/.bash_logout ~/.bash_logout
-initDir=$HOME/$initDir
 
 #DEFINITION DES VARIABLES
 export bashProfileLoaded=true
