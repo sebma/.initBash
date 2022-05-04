@@ -24,5 +24,10 @@ fi
 
 git config --global pull.rebase | grep -q false || git config --global pull.rebase false
 
+git config --global diff.doc.textconv catdoc
+git config --global diff.xls.textconv xls2csv
+git config --global diff.ppt.textconv catppt
+git config --global diff.odt.textconv odt2txt
+
 set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
