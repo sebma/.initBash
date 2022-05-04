@@ -187,7 +187,7 @@ test -r $initDir/.bashrc.$osID_LIKE && Source $initDir/.bashrc.$osID_LIKE # Si c
 
 #my git configuration
 if type -P git >/dev/null 2>&1; then
-	test -r $initDir/.bashrc.git && Source $initDir/.bashrc.git
+#	test -r $initDir/.bashrc.git && Source $initDir/.bashrc.git
 	test -r $initDir/.bash_aliases.git && Source $initDir/.bash_aliases.git
 	test -r $initDir/.bash_functions.git && Source $initDir/.bash_functions.git
 fi
