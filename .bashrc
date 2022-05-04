@@ -7,7 +7,7 @@ test -z "$debug" && export debug=0
 test "$debug" -gt 0 && tty -s && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 tty -s && test "$debug" -gt 0 && { echo;echo "=> \${BASH_SOURCE[*]} = ${BASH_SOURCE[*]}";echo; }
 
-if ! "$bashProfileLoaded";then source .profile;fi
+#if ! "$bashProfileLoaded";then source .profile;fi
 
 if [ -n "$BASH_VERSION" ]; then
 	# include .bashrc if it exists
