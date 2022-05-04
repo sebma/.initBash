@@ -10,6 +10,7 @@ alias gitConf-alias.cipart="git config alias.cipart '!f() { cd \${GIT_PREFIX:-.}
 alias gitConf="\git config -l"
 alias gitCurrentTag='\git describe --tags --abbrev=0'
 alias gitEditConfig='\git config --edit'
+alias gitEditGlobalConfig='\git config --global --edit'
 alias gitHTTP_URL='\git config remote.origin.url | \sed -E "s|^git@|https://|;s|(\.\w+):|\1/|"'
 alias gitLastRelease=gitCurrentTag
 alias gitLocalUndelete="\git ls-files -d | grep . && \git ls-files -d | \xargs git checkout-index"
