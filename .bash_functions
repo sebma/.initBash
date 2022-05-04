@@ -1754,12 +1754,19 @@ function sshStartLocalForwarding {
 		\pgrep -lf $tunnelDef
 	fi
 }
-function string2qrcode {
+function string2qrcode_with_qrencode {
 	local dotSize=8 string=""
 	if [ $# = 1 ];then
 		string="$1"
 		qrencode -l H -s $dotSize -m 0 -o- "$string" | feh -
 	fi
+}
+string2qrcode_with_zint () {
+    local dotSize=8 string=""
+    if [ $# = 1 ]; then
+        string="$1"
+        zint -b 58 --scale 4 --secure 8 --direct -d "$string" | feh -
+    fi
 }
 function sumFirstColumn {
 	awk "{print \$1}" | LC_ALL=C numfmt --from=iec | paste -sd+ | bc | numfmt --to=iec-i --suffix=B
