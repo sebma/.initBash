@@ -1588,6 +1588,12 @@ function restart_conky {
 	done
 	\pgrep conky && \killall -SIGUSR1 conky || conky -d
 }
+function rmEmptyFile {
+	for file
+	do
+		test -f "$file" && ! test -s "$file" && \rm -v "$file"
+	done
+}
 function rsyncIncludeOnly {
 	local destination="$(eval echo \$$#)"
 	local rsyncCommandSuffix="--include='*/' --exclude='*'"
