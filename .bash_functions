@@ -854,10 +854,15 @@ function installDate {
 	esac
 }
 function isbn2Barcode_with_barcode {
-	local string=""
+	local string="" stringLength=0
 	if [ $# = 1 ]; then
 		string="$1"
-		barcode -e ean-13 -S -b "$string" | mogrify -format png -resize 200% - | feh -
+		stringLength="${#string}"
+		if [ $stringLength = 10 ];then
+			barcode -e isbn -S -b "$string" | mogrify -format png -resize 200% - | feh -
+		elif [ $stringLength = 13 ];then
+			barcode -e ean-13 -S -b "$string" | mogrify -format png -resize 200% - | feh -
+		fi
 	fi
 }
 function isbn2Barcode_with_zint {
