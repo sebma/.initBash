@@ -853,7 +853,7 @@ function installDate {
 		*)	;;
 	esac
 }
-function isbn2Barcode {
+function isbn2Barcode_with_barcode {
 	local string=""
 	if [ $# = 1 ]; then
 		string="$1"
