@@ -7,22 +7,24 @@ type -aP git 2>/dev/null | \grep -q /usr || export GIT_EXEC_PATH=$HOME/libexec/g
 cd $initDir && git config --get alias.ci >/dev/null || git config alias.ci '!f() { cd ${GIT_PREFIX:-.}; for file; do git commit -uno $file -m "Updated $file"; done; }; f';cd - >/dev/null
 
 git config --global --get user.email >/dev/null || git config --global user.email sebma@users.noreply.github.com
-git config --global --get user.name >/dev/null || git config --global user.name sebma
-#git config --global push.default current # i.e https://stackoverflow.com/a/22933955/5649639
-test "$http_proxy" && git config --global --get http.proxy >/dev/null || git config --global http.proxy $http_proxy
+git config --global --get user.name  >/dev/null || git config --global user.name sebma
+git config --global push.default current # i.e https://stackoverflow.com/a/22933955/5649639
+git config --global pull.rebase | grep -q false || git config --global pull.rebase false
+test -n "$http_proxy" && git config --global --get http.proxy >/dev/null || git config --global http.proxy $http_proxy
+git config --global --get alias.addv >/dev/null || git config --global alias.addv "add -v"
+git config --global --get alias.br >/dev/null || git config --global alias.br branch
 git config --global --get alias.co >/dev/null || git config --global alias.co checkout
+git config --global --get alias.com >/dev/null || git config --global alias.com "commit -uno"
+git config --global --get alias.ct >/dev/null || git config --global alias.ct "describe --tags --abbrev=0"
+git config --global --get alias.diffw >/dev/null || git config --global alias.diffw "diff --word-diff=plain --color"
+git config --global --get alias.showw >/dev/null || git config --global alias.showw "show --word-diff=plain --color"
 git config --global --get alias.st >/dev/null || git config --global alias.st "status -bs"
 git config --global --get alias.stu >/dev/null || git config --global alias.stu "status -bs -uno"
-git config --global --get alias.br >/dev/null || git config --global alias.br branch
-git config --global --get alias.com >/dev/null || git config --global alias.com "commit -uno"
-git config --global --get alias.mvv >/dev/null || git config --global alias.mvv "mv -v"
 
 if ! git config --global --get credential.helper >/dev/null;then
 	[ $osFamily = Linux  ] && git config --global credential.helper "cache --timeout=86400"
 	[ $osFamily = Darwin ] && git config --global credential.helper osxkeychain
 fi
-
-git config --global pull.rebase | grep -q false || git config --global pull.rebase false
 
 git config --global diff.doc.textconv catdoc
 git config --global diff.xls.textconv xls2csv
