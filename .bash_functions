@@ -860,6 +860,13 @@ function isbn2Barcode_with_barcode {
 		barcode -e ean-13 -S -b "$string" | mogrify -format png -resize 200% - | feh -
 	fi
 }
+function isbn2Barcode_with_zint {
+	local string=""
+	if [ $# = 1 ]; then
+		string="$1"
+		zint -b 69 --scale 2 --direct -d "$string" | feh -
+	fi
+}
 function jpgRotate {
 	test $# = 0 && {
 		echo "=> Usage: $FUNCNAME angle file1 file2 file3 ..." >&2
