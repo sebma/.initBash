@@ -869,7 +869,7 @@ function isbn2Barcode_with_zint {
 	local string=""
 	if [ $# = 1 ]; then
 		string="$1"
-		zint -b 69 --scale 2 --direct -d "$string" | feh -
+		zint -b ISBNX --scale 2 --direct -d "$string" | feh -
 	fi
 }
 function jpgRotate {
@@ -1766,7 +1766,7 @@ string2qrcode_with_zint () {
     local dotSize=8 string=""
     if [ $# = 1 ]; then
         string="$1"
-        zint -b 58 --scale 4 --secure 4 --direct -d "$string" | feh -
+        zint -b QRCODE --scale 4 --secure 4 --direct -d "$string" | feh -
     fi
 }
 function sumFirstColumn {
