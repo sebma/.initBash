@@ -318,6 +318,11 @@ function cgrep {
 	fi
 	\curl -Ls "$url" | grep $allArgsButLast
 }
+function chromium_snap_start {
+	local SNAP=$(snap run --shell chromium -c 'echo $SNAP')
+	local SNAP_USER_COMMON=$(snap run --shell chromium -c 'echo $SNAP_USER_COMMON')
+	SNAP=$SNAP SNAP_USER_COMMON=$SNAP_USER_COMMON $SNAP/bin/chromium.launcher "$@" &
+}
 function cleanFirefoxLock {
 	case $osID in
 		debian) firefoxProgramName=iceweasel;;
