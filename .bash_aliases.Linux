@@ -104,6 +104,7 @@ alias topf5='$find . -xdev $findPrunePathsExpression -type f -size +10M -exec ls
 alias version="\lsb_release -sd"
 alias which="\type -P"
 alias wifimac="mac@ $wiFiInterface"
+alias wifiDriversUsed=$'\lsmod | awk \'/cfg80211/{print$NF}\''
 alias wlanmac=wifimac
 alias xdg-dirs='ls $HOME/.config/user-dirs.dirs && grep ^XDG $HOME/.config/user-dirs.dirs'
 alias ytdlInstall="pip3 install youtube-dl || pip install youtube-dl"
