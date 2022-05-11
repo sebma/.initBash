@@ -279,7 +279,7 @@ function open {
 	[ $# = 0 ] && set -- .
 	for file
 	do
-		$openCommand "$file" 2>&1 | \egrep -v "MBuntu-Y-For-Unity"
+		$openCommand "$file" 2>&1 | \egrep -v "/MBuntu-Y-For-Unity/|/MacBuntu-OSX/|/Adwaita/" &
 	done
 }
 function pip2Install {
