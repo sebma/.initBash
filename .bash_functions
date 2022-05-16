@@ -1022,18 +1022,6 @@ function lvm_Mount_Point_2_LVM_Paths {
 		\lsblk -nf $dmPath | awk '{print"/dev/mapper/"$1}'
 	done
 }
-function memUsage {
-	local processName=$1
-	local columns="pid,comm,pmem,rssize"
-	local ps="command ps"
-	if test $processName
-	then
-		\pgrep -f $processName >/dev/null && $ps -o $columns -p $(\pgrep -f $processName) | awk '/PID/;/[0-9]/{sub($4,$4/1024);print$0" MiB";total+=$4}END{if(total>1024)printf "=> Total= %.3lf GiB\n\n",total/1024>"/dev/stderr"; else printf "=> Total= %.3f MiB\n\n",total>"/dev/stderr"}' | \column -t
-	else
-#		$ps -eo rss= | awk '/[0-9]/{total+=$1/1024}END{print "\tTotal= "total" MiB"}'
-		\free -m | awk '/Mem:/{total=$2}/buffers.cache:/{used=$3}END{printf "%5.2lf%%\n", 100*used/total}'
-	fi
-}
 function memUsageOfProcessName {
 	local ps="command ps"
 	for processName
