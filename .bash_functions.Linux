@@ -268,6 +268,7 @@ function memUsage {
 	local ps="command ps"
 	if test $processName
 	then
+		\pgrep -f $processName >/dev/null && $ps -o $columns -p $(\pgrep -f $processName) | \grep PID
 		\pgrep -f $processName >/dev/null && $ps -o $columns -p $(\pgrep -f $processName) | sort -nrk3 | awk '/PID/;/[0-9]/{sub($4,$4/1024);print$0" MiB";total+=$4}END{if(total>1024)printf "=> Total= %.3lf GiB\n\n",total/1024>"/dev/stderr"; else printf "=> Total= %.3f MiB\n\n",total>"/dev/stderr"}' | \column -t
 	else
 #		$ps -eo rss= | awk '/[0-9]/{total+=$1/1024}END{print "\tTotal= "total" MiB"}'
