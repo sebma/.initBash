@@ -3,8 +3,6 @@
 ! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-export find="command find"
-
 alias ps >/dev/null 2>&1 && unalias ps
 alias androidVersion='echo "=> Android Version: $(getprop ro.build.version.release)"'
 alias androidSDK='echo "=> Android SDK: $(getprop ro.build.version.sdk)"'
