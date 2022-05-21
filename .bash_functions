@@ -6,6 +6,7 @@ Source $initDir/.bash_functions.build
 Source $initDir/.bash_functions.AV
 
 test "$debug" -gt 0 && Echo "\n=> \${BASH_SOURCE[*]} = ${BASH_SOURCE[*]}\n"
+find="$(type -P find)"
 
 function EchoSpecialCharacters {
 	local rc=$?
@@ -514,16 +515,14 @@ function extractURLsFromURLs_Simplified  {
 	done | sort -u
 }
 function fileTypes {
-	local find="command find"
-	[ $osFamily = Darwin ] && find=gfind
+	[ $osFamily = Darwin ] && local find=gfind
 	time for dir
 	do
 		$find $dir -xdev -ls | awk '{print substr($3,1,1)}' | sort -u
 	done
 }
 function findSeb {
-	local find="command find"
-	[ $osFamily = Darwin ] && find=gfind
+	[ $osFamily = Darwin ] && local find=gfind
 	local dir=$1
 	if echo $dir | \grep -q "^-"
 	then
@@ -547,8 +546,7 @@ function findCorruptedFilesIn {
 	time $grep -a -r . "$@" >/dev/null
 }
 function findWithHumanReadableSizes {
-	local find="command find"
-	[ $osFamily = Darwin ] && find=gfind
+	[ $osFamily = Darwin ] && local find=gfind
 	local dir=$1
 	echo $dir | \grep -q "\-" && dir=. || shift
 	local args=("$@")
@@ -560,9 +558,8 @@ function findWithHumanReadableSizes {
 	fi
 }
 function findLoops {
-	local find="command find"
 	echo $OSTYPE | \grep android -q && local osFamily=Android || local osFamily=$(uname -s)
-	[ $osFamily = Darwin ] && find=gfind
+	[ $osFamily = Darwin ] && local find=gfind
 	time $find "$@" -xdev -follow -printf ""
 }
 function functionDefinition {
