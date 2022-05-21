@@ -378,6 +378,7 @@ alias wegrep="wgrep -E"
 alias wget1='\wget'
 alias wget2noconfig="\wget2 --no-config"
 alias wgetnoconfig="\wget --config=/dev/null"
+alias which="\type -P"
 alias xargs="\xargs -ri"
 alias xclock="\xclock -digital -update 1"
 alias xfree="\xterm -geometry 73x5 -e watch -n2 free -m &"
