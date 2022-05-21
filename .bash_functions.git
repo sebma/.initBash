@@ -39,8 +39,8 @@ function gitCloneNonEmptyDir {
 	}
 }
 function gitUpdateAllMyLocalRepos {
-	local find="command find"
-	[ $osFamily = Darwin ] && find=gfind
+	local find="$(type -P find)"
+	[ $osFamily = Darwin ] && local find=gfind
 	local dir=""
 	$find ~ -maxdepth 2 -type d -name .git 2>/dev/null | \egrep -v "/.linuxbrew/" | sort | while read dir
 	do
