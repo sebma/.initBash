@@ -102,7 +102,6 @@ alias topf10='$find . -xdev $findPrunePathsExpression -type f -size +10M -exec l
 alias topf50='$find . -xdev $findPrunePathsExpression -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | head -50 | numfmt --field 5 --from=iec --to=iec-i --suffix=B | column -t'
 alias topf5='$find . -xdev $findPrunePathsExpression -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 |  head -5  | numfmt --field 5 --from=iec --to=iec-i --suffix=B | column -t'
 alias version="\lsb_release -sd"
-alias which="\type -P"
 alias wifimac="mac@ $wiFiInterface"
 alias wifiDriversUsed=$'\lsmod | awk \'/cfg80211/{print$NF}\''
 alias wlanmac=wifimac
