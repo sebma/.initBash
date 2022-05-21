@@ -243,7 +243,7 @@ alias myIP="time curl ipinfo.io/ip"
 alias nautilus="\nautilus --no-desktop"
 alias no='yes n'
 alias nocomment="egrep -v '^(#|$)'"
-alias od="\od -ctx1"
+alias od="\od -ctx1z"
 alias openedFiles="\strace -e trace=open,close,read,write,connect,accept"
 alias openwrtMostSupportedRouterBrands="openwrtTOH | awk '/ Router/{print\$4}' | sort | uniq -c | sort -rn"
 alias openwrtSupportedRouters="openwrtTOH | awk '/ Router/{for(i=4;i<=5;i++)printf\$i\" \";print\$i}'"
