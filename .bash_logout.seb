@@ -21,8 +21,12 @@ fi 2>/dev/null
 # For security reasons
 [ $osFamily = Linux ] && [ $(hostname) != ssh ] && [ -n "$SSH_AGENT_PID" ] && [ $(who | grep -c $USER) -le 2 ] && [ $(\ps -C bash -o pid= | wc -l) = 1 ] && Echo "=> Stopping the ssh-agent ..." && eval $(ssh-agent -k)
 
-sleepTimeout=1.0s
-Echo "=> Sleeping $sleepTimeout before finish ..." && sleep $sleepTimeout
+sleepTimeout=1.0
+interuptTimeout=$(echo $sleepTimeout | awk \$1*=2)
+exitTimeout=$(echo $sleepTimeout | awk \$1*=10)
+Echo "=> Sleeping $sleepTimeout before finish ..."
+Echo "=> Running timeout -v -k $exitTimeout -s SIGINT $interuptTimeout sleep $sleepTimeout ..."
+time timeout -v -k $exitTimeout -s SIGINT $interuptTimeout sleep $sleepTimeout
 
 set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
