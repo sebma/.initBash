@@ -11,5 +11,5 @@ fi
 
 test -f $initDir/.bash_logout.seb && source $initDir/.bash_logout.seb
 
-set -x
+set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal" || Echo "=> Closing connection to $(echo $SSH_CONNECTION | awk '$0=$3') ..."
