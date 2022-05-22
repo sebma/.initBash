@@ -29,4 +29,4 @@ Echo "=> Running timeout -v -k $exitTimeout -s SIGINT $interuptTimeout sleep $sl
 time timeout -v -k $exitTimeout -s SIGINT $interuptTimeout sleep $sleepTimeout
 
 set -x
-test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
+test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal" || Echo "=> GOODBYE ..."
