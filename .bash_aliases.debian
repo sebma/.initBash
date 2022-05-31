@@ -37,7 +37,7 @@ alias dupdatedb="time \sudo update-dlocatedb"
 alias kdeVersion="dpkg -l | awk -F'[:-]' '/plasma-desktop\s/{print \$3}'"
 alias listPPAs=$'awk -F "[ /]" \'/^deb .*launchpad.net/{print"ppa:"$5"/"$6}\' /etc/apt/sources.list.d/*.list | sort -u'
 alias lsPPAs=listPPAs
-alias update="time $sudo $apt update;$apt list --upgradable"
+alias update="time $sudo $apt update && $apt list --upgradable"
 alias upgradable="$apt list --upgradable"
 alias webpage=website
 
