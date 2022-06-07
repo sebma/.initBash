@@ -41,8 +41,8 @@ function apt-cache {
 	local firstArg=$1
 	local aptCache="command apt-cache"
 	case $firstArg in
-		search)
-			$aptCache "${args[@]}" | sort;;
+		search|policy)
+			$aptCache -q0 "${args[@]}" | sort;;
 		*)
 			$aptCache "${args[@]}";;
 	esac
