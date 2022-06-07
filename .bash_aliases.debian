@@ -10,7 +10,6 @@ apt="$(type -P apt) -q0"
 apt_get=$(type -P apt-get)
 
 #alias installSecurityUpdates="sudo apt install -V $(apt-get -s dist-upgrade | awk "/^Inst.*\/$codeName-security/"'{print$2}')"
-alias apt-cache="\apt-cache -q0"
 alias architecture="dpkg-architecture -q DEB_HOST_ARCH 2>/dev/null || dpkg-architecture | awk -F'=' '/DEB_HOST_ARCH\>/{print\$2}'"
 
 if [ -n "$SSH_CONNECTION" ] && type -P screen >/dev/null 2>&1;then
