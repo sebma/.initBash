@@ -6,7 +6,7 @@ test "$debug" -gt 0 && \echo "=> Running $bold${colors[blue]}$(basename ${BASH_S
 LANGUAGE_OLD=$LANGUAGE
 LANGUAGE=C.UTF-8
 
-apt="$(type -P apt) -q0"
+apt="$(type -P apt) -q=0"
 apt_get=$(type -P apt-get)
 
 #alias installSecurityUpdates="sudo apt install -V $(apt-get -s dist-upgrade | awk "/^Inst.*\/$codeName-security/"'{print$2}')"
