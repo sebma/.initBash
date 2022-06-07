@@ -2,7 +2,7 @@
 ! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-apt="$(type -P apt) -q0"
+apt="$(type -P apt) -q=0"
 
 trap 'rc=130;set +x;echo "=> $FUNCNAME: CTRL+C Interruption trapped.">&2;return $rc' INT
 function addAptKeys {
@@ -16,7 +16,7 @@ function apt {
 	local args=("$@")
 	local firstArg=$1
 	local aptGet="apt-get"
-	local apt="apt -q0"
+	local apt="apt -q=0"
 	case $firstArg in
 		install|remove|purge|upgrade|dist-upgrade|full-upgrade)
 			if [ -n "$SSH_CONNECTION" ] && type -P screen >/dev/null 2>&1;then
@@ -41,8 +41,8 @@ function apt-cache {
 	local firstArg=$1
 	local aptCache="command apt-cache"
 	case $firstArg in
-		search|policy)
-			$aptCache -q0 "${args[@]}" | sort;;
+		search)
+			$aptCache -q=0 "${args[@]}" | sort;;
 		*)
 			$aptCache "${args[@]}";;
 	esac
