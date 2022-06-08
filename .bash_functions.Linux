@@ -293,7 +293,8 @@ function open {
 	[ $# = 0 ] && set -- .
 	for file
 	do
-		fileExtension=${file/*./}
+		ls "$file" >/dev/null || continue
+		fileExtension="${file/*./}"
 		if [ $fileExtension = desktop ];then
 			openDesktopApp=$(grep -oP "Exec=\K.*" "$file" | sed 's/"//g;s/ %[a-zA-Z]//')
 			$openDesktopApp &
