@@ -777,7 +777,7 @@ function html2pdf {
 	local pdfFiles=""
 	for url_or_file
 	do
-		pdfFileName=$(basename $url_or_file | \sed -E "s/#.*//;s/$|\.[^.]+$/.pdf/")
+		pdfFileName=$(basename $url_or_file | \sed -E "s/#.*|[)]//;s/%20|[(]/_/g;s/$|\.[^.]+$/.pdf/")
 		pdfFiles+="$pdfFileName "
 		wkhtmltopdf --no-background --outline --header-line --footer-line --header-left [webpage] --footer-left "[isodate] [time]" --footer-right [page]/[toPage] "$url_or_file" "$pdfFileName"
 	done
