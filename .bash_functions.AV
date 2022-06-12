@@ -1532,9 +1532,9 @@ function videoRotateRight {
 	done
 }
 function videoSplit {
-	if [ $# != 2 ] && [ $# != 3 ]
+	if [ $# != 2 ] && [ $# != 3 ] && [ $# != 4 ]
 	then
-		echo "=> Usage: $FUNCNAME <filename> hh:mm:ss[.xxx] [ hh:mm:ss[.xxx] ]" >&2
+		echo "=> Usage: $FUNCNAME <filename> hh:mm:ss[.xxx] [ hh:mm:ss[.xxx] ] [ outputFilePath | .]" >&2
 		return 1
 	fi
 
@@ -1547,11 +1547,12 @@ function videoSplit {
 	extension=${fileName/*./}
 	fileBaseName=${fileName%.???}
 	begin=$2
+	test $# = 4 && local outputFilePath=$4 || local outputFilePath=.
 	outputFile="$fileBaseName-CUT.$extension"
 	chmod -x "$fileName"
 
 #	[ $extension = mp4 ] && remuxOptions="$remuxOptions $mp4Options"
-	if test $# = 3
+	if test $# -ge 3
 	then
 		end=$3
 #		duration=$(echo $(date +%s.%N -d $end) - $(date +%s.%N -d $begin) | bc -l)
