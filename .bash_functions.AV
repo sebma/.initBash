@@ -1548,7 +1548,7 @@ function videoSplit {
 	fileBaseName=${fileName%.???}
 	begin=$2
 	test $# = 4 && local outputFilePath=$4 || local outputFilePath=.
-	outputFile="$fileBaseName-CUT.$extension"
+	outputFile="$outputFilePath/$fileBaseName-CUT.$extension"
 	chmod -x "$fileName"
 
 #	[ $extension = mp4 ] && remuxOptions="$remuxOptions $mp4Options"
