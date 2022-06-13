@@ -189,6 +189,7 @@ alias kshOldVersion="strings $(type -P ksh) | grep Version | tail -2"
 alias kshVersion='ksh -c "echo \$KSH_VERSION" 2>/dev/null'
 alias l1="ls -1"
 alias lastfiles='$find . -xdev -type f -mmin -2'
+alias lastfilestoday="$find . -type f -ctime -1"
 alias lastloggin='\lastlog -u $USER'
 alias less="\less -ir"
 alias libreofficeTo="\lowriter --headless --convert-to"
@@ -337,7 +338,6 @@ alias tcpPorts="\netstat -ntl"
 alias terminfo='echo "=> C est un terminal $(tput cols 2>/dev/null)x$(tput lines 2>/dev/null)."'
 alias thunderbirdUnlock='\ps -C thunderbird >/dev/null || rm ~/.thunderbird/default/lock'
 alias timestamp='\date +"%Y%m%d_%HH%M"'
-alias today="$find . -type f -ctime -1"
 alias tolower="awk '{print tolower(\$0)}'"
 alias tolowerPerl="\perl -pe 'tr/A-Z/a-z/'"
 alias tolowerSed="sed 's/.*/\L&/'"
