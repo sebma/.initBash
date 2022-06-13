@@ -25,6 +25,7 @@ bashRCLoaded=1
 echo $OSTYPE | grep -q android && export osFamily=Android || export osFamily=$(uname -s)
 [ $osFamily = Linux ] && export osID=$(Source /etc/os-release && echo $ID) osID_LIKE=$(Source /etc/os-release && echo $ID_LIKE)
 arch=$(uname -m)
+today=$(date +%Y-%m-%d)
 
 function addmanpaths {
 	for manpath
