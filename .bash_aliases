@@ -79,8 +79,8 @@ alias cssSelect='hxselect -s "\n"'
 alias ct=cleartool
 alias curl="\curl -L" && alias curlnoconfig="\curl -q"
 alias curlResposeCode="\curl -sw "%{http_code}" -o /dev/null"
-alias d="\du -sh *"
-alias da="\du -sh * .??*"
+alias d="\du -sh */ *"
+alias da="\du -sh */ * .??*"
 alias dbus-halt='\dbus-send --system --print-reply --dest="org.freedesktop.ConsoleKit" /org/freedesktop/ConsoleKit/Manager org.freedesktop.ConsoleKit.Manager.Stop'
 alias dbus-hibernate='\dbus-send --system --print-reply --dest="org.freedesktop.UPower" /org/freedesktop/UPower org.freedesktop.UPower.Hibernate'
 alias dbus-logout-force-kde='\qdbus org.kde.ksmserver /KSMServer org.kde.KSMServerInterface.logout 0 0 0'
