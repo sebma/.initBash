@@ -72,7 +72,7 @@ function checkinstallWithGitRepoInformation {
 	echo "=> Running $FUNCNAME ..."
 	printf "=> Project description is :"
 #	\curl -qs $gitHTTP_URL | \pup --charset utf8 "title text{}" | cut -d: -f2-
-	xidel -s -e //title $gitHTTP_URL | cut -d: -f2-
+	xidel -s -e //title $gitHTTP_URL | cut -d: -f2- | cut -d' ' -f2- | tee description-pak
 	echo
 
 	local pkgname=$(basename -s .git $gitHTTP_URL)
