@@ -70,8 +70,8 @@ function checkinstallWithGitRepoInformation {
 	local gitHTTP_URL=$(\git config --get remote.origin.url | $sed "s|^git@|https://|;s|(\.\w+):|\1/|")
 
 	echo "=> Running $FUNCNAME ..."
-	printf "=> Project description is :"
-#	\curl -qs $gitHTTP_URL | \pup --charset utf8 "title text{}" | cut -d: -f2-
+	printf "=> The project description is : "
+#	\curl -qs $gitHTTP_URL | \pup --charset utf8 "title text{}" | cut -d: -f2- | cut -d' ' -f2- | tee description-pak
 	xidel -s -e //title $gitHTTP_URL | cut -d: -f2- | cut -d' ' -f2- | tee description-pak
 	echo
 
