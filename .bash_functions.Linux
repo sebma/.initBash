@@ -50,7 +50,7 @@ function countWorkDays {
 		year=$2
 	fi
 
-	LANG=C ncal -h -m $monthNumber $year | egrep -v "^(Sa|Su| )" | sed "s/[[:alpha:]]//g" | fmt -w 1 | sort -n | wc -l
+	LC_MESSAGES=en_US ncal -h -m $monthNumber $year | egrep -v "^(Sa|Su| )" | sed "s/[[:alpha:]]//g" | fmt -w 1 | sort -n | wc -l
 }
 function df {
 	local df="command df"
