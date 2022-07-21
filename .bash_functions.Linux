@@ -35,6 +35,23 @@ function connect2SSID {
 	time \dig -4 +short @resolver1.opendns.com A myip.opendns.com 2>/dev/null || time host -4 -t A myip.opendns.com resolver1.opendns.com | awk '/\<has\>/{print$NF}'
 	set +x
 }
+function countWorkDays {
+	local monthNumber=$(date +%m)
+	local year=$(date +%Y)
+	if [ $# == 1 ] && [ $1 == "-h" ];then
+		echo "=> Usage: $FUNCNAME [monthNumber=current] [year=current]" >&2
+		return 1
+	fi
+
+	if [ $# == 1 ];then
+		monthNumber=$1
+	elif [ $# == 2 ];then
+		monthNumber=$1
+		year=$2
+	fi
+
+	LANG=C ncal -h -m $monthNumber $year | egrep -v "^(Sa|Su| )" | sed "s/[[:alpha:]]//g" | fmt -w 1 | sort -n | wc -l
+}
 function df {
 	local df="command df"
 	local dfOptions="-Ph"
