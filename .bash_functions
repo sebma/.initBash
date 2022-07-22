@@ -332,6 +332,34 @@ function cleanFirefoxLock {
 
 	pgrep -lf $firefoxProgramName || \rm -vf ~/.mozilla/firefox/*.default/lock ~/.mozilla/firefox/*.default/.parentlock
 }
+function compareRemoteFile {
+	if [ $# != 3 ];then
+		echo "=> Usage: $FUNCNAME filePath server1 server2" >&2
+		return 1
+	fi
+
+	local filePath="$1"
+	shift
+	local server1=$1
+	local server2=$2
+
+	#Le dernier cat est la au cas ou le mdp est demande de maniere interactive
+	sdiff <(ssh $server1 cat "$filePath") <(ssh $server2 cat "$filePath") | cat
+}
+function compareRemoteDir {
+	if [ $# != 3 ];then
+		echo "=> Usage: $FUNCNAME dirPath server1 server2" >&2
+		return 1
+	fi
+
+	local dirPath="$1"
+	shift
+	local server1=$1
+	local server2=$2
+
+	#Le dernier cat est la au cas ou le mdp est demande de maniere interactive
+	sdiff <(ssh $server1 find "$dirPath" -printf '"%p\t%s\n"' | sort) <(ssh $server2 find "$dirPath" -printf '"%p\t%s\n"' | sort) | cat
+}
 function conda2Rename {
 	oldName=$1
 	newName=$2
