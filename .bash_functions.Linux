@@ -14,7 +14,7 @@ function connect2SSID {
 	local ssid=$1
 	test -z "$ssid" && {
 		echo "=> Please chose a connection among these :" >&2
-		nmcli con | grep 802-11-wireless
+		nmcli con | egrep -w "802-11-wireless|wifi"
 		return 1
 	}
 
