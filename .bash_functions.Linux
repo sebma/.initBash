@@ -414,6 +414,11 @@ function processENV_Variables {
 		[ $pid != 0 ] && tr '\0' '\n' < /proc/$pid/environ | \egrep -v "^hidden=" | \grep -P "^[^\s%]+=" | sort -u | egrep -w "$varNAME"
 	fi
 }
+function seconds2duration {
+	local seconds
+	test $# == 1 && seconds=$1 || seconds=0
+	date -u +%T.%3N -d @$seconds
+}
 function text2man {
 	for file
 	do
