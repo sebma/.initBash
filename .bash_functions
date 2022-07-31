@@ -333,9 +333,14 @@ function cleanFirefoxLock {
 	pgrep -lf $firefoxProgramName || \rm -vf ~/.mozilla/firefox/*.default/lock ~/.mozilla/firefox/*.default/.parentlock
 }
 function compareRemoteFile {
+	local sdiffOptions=""
 	if [ $# != 3 ];then
 		echo "=> Usage: $FUNCNAME filePath server1 server2" >&2
 		return 1
+	elif [ $# == 4 ] && [ ${1:0:1} == "-" ];then
+		sdiffOptions=$1
+		shift
+		[ ${sdiffOptions:0:2} == "-h" ] && sdiff --help && return
 	fi
 
 	local filePath="$1"
@@ -344,12 +349,17 @@ function compareRemoteFile {
 	local server2=$2
 
 	#Le dernier cat est la au cas ou le mdp est demande de maniere interactive
-	sdiff <(ssh $server1 cat "$filePath") <(ssh $server2 cat "$filePath") | cat
+	sdiff $sdiffOptions <(ssh $server1 cat "$filePath") <(ssh $server2 cat "$filePath") | cat
 }
 function compareRemoteDir {
+	local sdiffOptions=""
 	if [ $# != 3 ];then
 		echo "=> Usage: $FUNCNAME dirPath server1 server2" >&2
 		return 1
+	elif [ $# == 4 ] && [ ${1:0:1} == "-" ];then
+		sdiffOptions=$1
+		shift
+		[ ${sdiffOptions:0:2} == "-h" ] && sdiff --help && return
 	fi
 
 	local dirPath="$1"
@@ -358,7 +368,7 @@ function compareRemoteDir {
 	local server2=$2
 
 	#Le dernier cat est la au cas ou le mdp est demande de maniere interactive
-	sdiff <(ssh $server1 find "$dirPath" -printf '"%p\t%s\n"' | sort) <(ssh $server2 find "$dirPath" -printf '"%p\t%s\n"' | sort) | cat
+	sdiff $sdiffOptions <(ssh $server1 find "$dirPath" -printf '"%p\t%s\n"' | sort) <(ssh $server2 find "$dirPath" -printf '"%p\t%s\n"' | sort) | cat
 }
 function conda2Rename {
 	oldName=$1
