@@ -1,4 +1,4 @@
-# vim: set ft=sh noet:
+# vim: ft=bash noet:
 set +x
 
 ! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
