@@ -1,4 +1,4 @@
-# vim: set ft=sh noet:
+# vim: ft=bash noet:
 
 function applescript2app {
 	for file
