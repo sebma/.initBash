@@ -1743,7 +1743,7 @@ function split4GiB {
 }
 function ssh {
 	local reachable=""
-	local timeout=5
+	local timeout=15s
 	local ssh="command ssh"
 	type ssh >/dev/null || return
 	local remoteSSHServer=$(echo $@ | awk '{sub("^(-[[:alnum:]_]+ ?)+","");sub("[[:alnum:]_]+@","");print$1}')
@@ -1812,7 +1812,8 @@ function tcpConnetTest {
 		echo "=> Usage : $FUNCNAME server/ip portNumber" >&2
 		return 1
 	}
-	if type -P netcat > /dev/null 2>&1
+	local timeout=30s
+	if type -P netcat2 > /dev/null 2>&1
 	then
 		if test $http_proxy
 		then
@@ -1830,7 +1831,7 @@ function tcpConnetTest {
 #		local remoteSSHServer=$(echo $@ | awk '{sub("^(-[[:alnum:]_]+ ?)+","");sub("[[:alnum:]_]+@","");print$1}')
 		local remoteSSHServer=$1
 		local remotePort=$2
-		command bash -c ": < /dev/tcp/$remoteSSHServer/$remotePort && echo '$0: connect: connection succeeded'"
+		time timeout $timeout bash -c ": < /dev/tcp/$remoteSSHServer/$remotePort" && echo "$0: connect: connection succeeded"
 	fi
 }
 function termtitle {
