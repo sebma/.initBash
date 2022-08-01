@@ -1813,7 +1813,7 @@ function tcpConnetTest {
 		return 1
 	}
 	local timeout=30s
-	if type -P netcat2 > /dev/null 2>&1
+	if type -P netcat > /dev/null 2>&1
 	then
 		if test $http_proxy
 		then
