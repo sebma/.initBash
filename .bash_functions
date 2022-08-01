@@ -1807,25 +1807,39 @@ function untar2dir {
 	mkdir -pv "$dir"
 	tar -C "$dir" -xvf "$@"
 }
+function sshdVersion {
+	test $# -lt 2 && {
+		echo "=> Usage : $FUNCNAME server/ip portNumber" >&2
+		return 1
+	}
+	local timeout=30
+	local remoteSSHServer=$1
+	local remotePort=$2
+	time {
+		local IFS=$'\r' 
+		read -t $timeout version < /dev/tcp/$remoteSSHServer/$remotePort
+		echo "$version"
+	}
+}
 function tcpConnetTest {
 	test $# -lt 2 && {
 		echo "=> Usage : $FUNCNAME server/ip portNumber" >&2
 		return 1
 	}
-	local timeout=30s
+	local timeout=30
 	if type -P netcat > /dev/null 2>&1
 	then
 		if test $http_proxy
 		then
 			if type -P nc.openbsd > /dev/null 2>&1
 			then
-				\nc.openbsd -x $proxyName:$proxyPort -v -z -w 5 $(echo $@ | tr ":" " ")
+				time \nc.openbsd -x $proxyName:$proxyPort -v -z -w $timeout $(echo $@ | tr ":" " ")
 			else
 				echo "=> $FUNCNAME: Cannot connect through $proxyName:$proxyPort because <nc.openbsd> is not installed." >&2		
 				return 1
 			fi
 		else
-			\netcat -v -z -w 5 $(echo $@ | tr ":" " ")
+			time \netcat -v -z -w $timeout $(echo $@ | tr ":" " ")
 		fi
 	else
 #		local remoteSSHServer=$(echo $@ | awk '{sub("^(-[[:alnum:]_]+ ?)+","");sub("[[:alnum:]_]+@","");print$1}')
