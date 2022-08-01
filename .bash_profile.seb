@@ -1,4 +1,4 @@
-# vim: set ft=sh noet:
+# vim: ft=bash noet:
 #[ -n "$ZSH_VERSION" ] && emulate -l bash
 [ $BASH_VERSINFO = 3 ] && [ -x ~/usr/local/bin/bash ] && exec ~/usr/local/bin/bash -l
 declare -gxr isAdmin=$(groups 2>/dev/null | \egrep -wq "sudo|adm|admin|root|wheel" && echo true || echo false)
