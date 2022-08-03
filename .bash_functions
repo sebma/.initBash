@@ -349,7 +349,13 @@ function compareRemoteFile {
 	local server2=$2
 
 	#Le dernier cat est la au cas ou le mdp est demande de maniere interactive
-	sdiff $sdiffOptions <(ssh $server1 cat "$filePath") <(ssh $server2 cat "$filePath") | cat
+	if [ $server1 = localhost ] || [ $server1 == . ];then
+		sdiff $sdiffOptions "$filePath" <(ssh $server2 cat "$filePath") | cat
+	elif [ $server2 = localhost ] || [ $server2 == . ];then
+		sdiff $sdiffOptions <(ssh $server1 cat "$filePath") "$filePath" | cat
+	else
+		sdiff $sdiffOptions <(ssh $server1 cat "$filePath") <(ssh $server2 cat "$filePath") | cat
+	fi
 }
 function compareRemoteDir {
 	local sdiffOptions=""
@@ -368,7 +374,13 @@ function compareRemoteDir {
 	local server2=$2
 
 	#Le dernier cat est la au cas ou le mdp est demande de maniere interactive
-	sdiff $sdiffOptions <(ssh $server1 find "$dirPath" -printf '"%p\t%s\n"' | sort) <(ssh $server2 find "$dirPath" -printf '"%p\t%s\n"' | sort) | cat
+	if [ $server1 = localhost ] || [ $server1 == . ];then
+		sdiff $sdiffOptions <(find "$dirPath" -printf '"%p\t%s\n"' | sort) <(ssh $server2 find "$dirPath" -printf '"%p\t%s\n"' | sort) | cat
+	elif [ $server2 = localhost ] || [ $server2 == . ];then
+		sdiff $sdiffOptions <(ssh $server1 find "$dirPath" -printf '"%p\t%s\n"' | sort) <(find "$dirPath" -printf '"%p\t%s\n"' | sort) | cat
+	else
+		sdiff $sdiffOptions <(ssh $server1 find "$dirPath" -printf '"%p\t%s\n"' | sort) <(ssh $server2 find "$dirPath" -printf '"%p\t%s\n"' | sort) | cat
+	fi
 }
 function conda2Rename {
 	oldName=$1
