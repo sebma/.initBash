@@ -17,5 +17,5 @@ fi
 
 #tlmgr option docfiles | grep -wq '1$' || $tlmgr option docfiles 1
 
-set +x
+test "$debug" -lt 3 && set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
