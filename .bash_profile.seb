@@ -90,6 +90,12 @@ PERL_MM_OPT="INSTALL_BASE=$HOME/perl5"; export PERL_MM_OPT;
 export myPerl5DefaultOptions="-ale"
 export PIP_FORMAT=columns
 
+if [ $osID_LIKE == debian ];then
+	sourceHighlightPath=$(dpkg -L libsource-highlight-common | grep lesspipe)
+elif [ $osID_LIKE == redhat ];then
+	sourceHighlightPath=$(rpm -ql source-highlight | grep lesspipe)
+fi
+
 if ! groups 2>/dev/null | egrep -wq "sudo|adm|admin|root|wheel";then
 	export HOSTALIASES=~/.hosts
 	export PYTHONUSERBASE=$HOME/.local
@@ -198,8 +204,6 @@ test -x "$git"  && test -r $initDir/.bash_profile.git  && SourceProfile $initDir
 $xtrace
 type -P hub >/dev/null 2>&1 && eval "$(hub alias -s)" # See https://github.com/github/hub
 time neofetch;echo
-
-set +x
 
 test "$debug" -lt 3 && set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
