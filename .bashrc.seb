@@ -46,6 +46,11 @@ function addpaths {
 	export PATH
 }
 
+if [ -n "$sourceHighlightPath" ];then
+	export LESSOPEN="| $sourceHighlightPath %s"
+	export LESS=' -R '
+fi
+
 #echo "=> BEFORE: PATH = $PATH"
 systemPathsList="/sbin /usr/sbin /usr/local/sbin /usr/local/go/bin $GOPATH/bin /opt/local/bin /usr/share/fslint/fslint"
 userPathsList="$GOPATH/bin $HOME/.opam/system/bin $HOME/perl5/bin $HOME/rvm/bin $HOME/local/sbin $HOME/local/bin $HOME/usr/bin $HOME/usr/local/bin $HOME/gnu/bin $HOME/.local/bin $HOME/shl $HOME/py $HOME/pl $HOME/bin $HOME/php"
