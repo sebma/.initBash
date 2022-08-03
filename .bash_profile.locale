@@ -19,5 +19,5 @@ export LANGUAGE=en:C:fr # i.e https://unix.stackexchange.com/a/181867/135038
 test "$debug" -gt 1 && localectl status
 test "$debug" -gt 2 && locale
 
-set +x
+test "$debug" -lt 3 && set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
