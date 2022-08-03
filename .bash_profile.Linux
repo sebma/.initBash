@@ -38,7 +38,6 @@ else
 	mkdir -pv /tmp/$USER/$cacheLinkName
 	\ln -vsf /tmp/$USER/$cacheLinkName
 fi
-set +x
 
 if tty -s && ls --color >/dev/null 2>&1
 then
