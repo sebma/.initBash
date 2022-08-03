@@ -28,5 +28,5 @@ export defaultPrinter colorPrinter
 #lpoptions -p $defaultPrinter/Duplex2PagesPerSheet -o media=A4 -o fit-to-page -o Duplex=DuplexNoTumble -o sides=two-sided-long-edge -o page-border=none -o number-up=2 -o number-up-layout=btlr  -o page-border=none -o prettyprint
 #lpoptions -p $defaultPrinter/Duplex4PagesPerSheet -o media=A4 -o fit-to-page -o Duplex=DuplexNoTumble -o sides=two-sided-long-edge -o page-border=none -o number-up=4 -o page-border=none -o prettyprint
 
-set +x
+test "$debug" -lt 3 && set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
