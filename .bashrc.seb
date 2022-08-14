@@ -229,13 +229,13 @@ esac
 
 if [ $osFamily = Linux ];then
 	groups | \egrep -wq "adm|admin|sudo|wheel" && export GOBIN=/usr/local/bin || export GOBIN=~/go/bin
+	sed="command sed -r"
 elif [ $osFamily = Darwin ];then
 	export GOBIN=/usr/local/bin
+	sed="command sed -E"
 fi
 
 # Disable aliases for tools that are not found in $PATH
-[ $osFamily = Linux ]  && sed="command sed -r"
-[ $osFamily = Darwin ] && sed="command sed -E"
 #for tool in curl ffmpeg ffprobe hexdump hw-probe lsb_release vim;do ! type -P $tool >/dev/null 2>&1 && alias | grep -q $tool && unalias $tool;done
 
 #Echo "=> Undefining aliases for which the tools are not installed ..."
