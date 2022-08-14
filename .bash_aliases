@@ -11,6 +11,7 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 #type -P vim >/dev/null && alias vim="LANG=$(locale -a 2>/dev/null | egrep -i '(fr_fr|en_us|en_uk).*utf' | sort -r | head -1) \vim" && alias vi=vim
 #alias wget='wget2 || wget1'
 
+export pageSize=$(paperconf)
 alias .....="cd ../../../.."
 alias ....="cd ../../.."
 alias ...="cd ../.."
@@ -386,7 +387,7 @@ alias vlclocal='DISPLAY=:0 vlc'
 alias wanIP="\dig -4 +short @resolver1.opendns.com A myip.opendns.com 2>/dev/null || time host -4 -t A myip.opendns.com resolver1.opendns.com | awk '/\<has\>/{print\$NF}'"
 alias wanIPv6="\dig -6 +short @resolver1.opendns.com AAAA myip.opendns.com 2>/dev/null || time host -6 -t AAAA myip.opendns.com resolver1.opendns.com | awk '/\<has\>/{print\$NF}'"
 alias wavemon="xterm -e wavemon &"
-alias web2pdf='wkhtmltopdf --no-background --outline --header-line --footer-line --header-left [webpage] --footer-left "[isodate] [time]" --footer-right [page]/[toPage]'
+alias web2pdf="wkhtmltopdf --page-size $pageSize --minimum-font-size 12 --no-background --outline --header-line --footer-line --header-left [webpage] --footer-left '[isodate] [time]' --footer-right [page]/[toPage]"
 alias wegrep="wgrep -E"
 alias wget1='\wget'
 alias wget2noconfig="\wget2 --no-config"
