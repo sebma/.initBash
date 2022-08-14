@@ -421,6 +421,24 @@ function convertion {
 
 	return $retCode
 }
+function countWorkDays {
+	local monthNumber=$(date +%m)
+	local year=$(date +%Y)
+	if [ $# == 1 ] && [ $1 == "-h" ];then
+		echo "=> Usage: $FUNCNAME [monthNumber=current] [year=current]" >&2
+		return 1
+	fi
+
+	if [ $# == 1 ];then
+		monthNumber=$1
+	elif [ $# == 2 ];then
+		monthNumber=$1
+		year=$2
+	fi
+
+#	export LC_MESSAGES=en_US.UTF-8
+	gcal -Hno -i $monthNumber $year | \egrep -v "Saturday|Sunday|$year|^$" | sed "s/[[:alpha:]]//g" | fmt -w 1 | sort -n | wc -l
+}
 function createSshTunnel {
 	test $# -lt 3 && {
 		echo "=> Usage : $FUNCNAME <localPort> <remotePort> <remoteServer> <sshServer>"
