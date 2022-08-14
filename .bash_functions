@@ -825,11 +825,12 @@ function html2pdf {
 	fi
 
 	local pdfFiles=""
+	local pageSize=$(paperconf)
 	for url_or_file
 	do
 		pdfFileName=$(basename $url_or_file | \sed -E "s/#.*|[)]//;s/%20|[(]/_/g;s/$|\.[^.]+$/.pdf/")
 		pdfFiles+="$pdfFileName "
-		wkhtmltopdf --no-background --outline --header-line --footer-line --header-left [webpage] --footer-left "[isodate] [time]" --footer-right [page]/[toPage] "$url_or_file" "$pdfFileName"
+		wkhtmltopdf --page-size $pageSize --minimum-font-size 12 --no-background --outline --header-line --footer-line --header-left [webpage] --footer-left "[isodate] [time]" --footer-right [page]/[toPage] "$url_or_file" "$pdfFileName"
 	done
 
 	echo
