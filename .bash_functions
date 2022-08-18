@@ -210,6 +210,8 @@ function asc2gpg {
 	done
 }
 function awkCalc {
+	set -- ${@/[/(}
+	set -- ${@/]/)}
 	\awk "BEGIN{ print $* }"
 }
 function baseName {
