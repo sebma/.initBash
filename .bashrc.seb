@@ -230,6 +230,7 @@ esac
 if [ $osFamily = Linux ];then
 	groups | \egrep -wq "adm|admin|sudo|wheel" && export GOBIN=/usr/local/bin || export GOBIN=~/go/bin
 	sed="command sed -r"
+	calendar | grep '*'
 elif [ $osFamily = Darwin ];then
 	export GOBIN=/usr/local/bin
 	sed="command sed -E"
