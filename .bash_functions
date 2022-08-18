@@ -212,7 +212,7 @@ function asc2gpg {
 function awkCalc {
 	set -- ${@/[/(}
 	set -- ${@/]/)}
-	\awk "BEGIN{ print $* }"
+	\awk -v CONVFMT=%.15g 'BEGIN{ print '"$*"' "" }'
 }
 function baseName {
 	for arg
