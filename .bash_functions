@@ -1359,7 +1359,8 @@ function pem2cer {
 	done
 }
 function perlCalc {
-	\perl -le "print ${*/^/**}"
+	set -- ${@/^/**}
+	\perl -le "print $@"
 }
 function perlgrep {
 	local pattern="$1"
