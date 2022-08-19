@@ -224,6 +224,12 @@ function lsprinters {
 		\lsusb -d $device "$@"
 	done
 }
+function lsraid {
+	\lspci -nnd ::104 "$@"
+	\lsscsi -ss # W.I.P.
+#	\lsusb | awk 'BEGIN{IGNORECASE=1}/Ethernet/{print$6}' | while read device # see https://stackoverflow.com/q/69860894/5649639
+#	do \lsusb -d $device "$@";done
+}
 function lswebcams {
 	\lspci | awk 'BEGIN{IGNORECASE=1}/web.*cam|camera/{print$1}' | while read device
 	do
