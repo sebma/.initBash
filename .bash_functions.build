@@ -68,11 +68,13 @@ function checkinstallWithGitRepoInformation {
 	[ $osFamily = Darwin ] && local sed="command sed -E"
 	[ $osFamily = Linux ]  && local sed="command sed -r"
 	local gitHTTP_URL=$(\git config --get remote.origin.url | $sed "s|^git@|https://|;s|(\.\w+):|\1/|")
+	local gitHub_API_Repo_URL=$(echo $gitHTTP_URL | $sed "s|github.com|api.github.com/repos|")
 
 	echo "=> Running $FUNCNAME ..."
 	printf "=> The project description is : "
 #	\curl -qs $gitHTTP_URL | \pup --charset utf8 "title text{}" | cut -d: -f2- | cut -d' ' -f2- | tee description-pak
-	xidel -s -e //title $gitHTTP_URL | cut -d: -f2- | cut -d' ' -f2- | tee description-pak
+#	xidel -s -e //title $gitHTTP_URL | cut -d: -f2- | cut -d' ' -f2- | tee description-pak
+	\curl -qs $gitHub_API_Repo_URL | jq -r .description | cut -d: -f3- | cut -d' ' -f2-
 	echo
 
 	local pkgname=$(basename -s .git $gitHTTP_URL)
