@@ -2,7 +2,7 @@
 ! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-alias snapCleanDisabledPackages='\snap list --all | while read snapname ver rev trk pub notes; do if [ $notes = "*disabled*" ]; then $sudo snap remove "$snapname" --revision="$rev"; fi; done'
+alias snapCleanDisabledPackages='\snap list --all | while read snapname ver rev trk pub notes; do if [[ $notes =~ disabled ]]; then $sudo snap remove "$snapname" --revision="$rev"; fi; done'
 
 set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
