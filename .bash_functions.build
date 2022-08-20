@@ -74,7 +74,7 @@ function checkinstallWithGitRepoInformation {
 	printf "=> The project description is : "
 #	\curl -qs $gitHTTP_URL | \pup --charset utf8 "title text{}" | cut -d: -f2- | cut -d' ' -f2- | tee description-pak
 #	xidel -s -e //title $gitHTTP_URL | cut -d: -f2- | cut -d' ' -f2- | tee description-pak
-	\curl -qs $gitHub_API_Repo_URL | jq -r .description | cut -d: -f3- | cut -d' ' -f2-
+	\curl -qs $gitHub_API_Repo_URL | jq -r .description | cut -d: -f3- | cut -d' ' -f2- | tee description-pak
 	echo
 
 	local pkgname=$(basename -s .git $gitHTTP_URL)
