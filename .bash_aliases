@@ -92,6 +92,7 @@ alias dbus-suspend='\dbus-send --system --print-reply --dest="org.freedesktop.UP
 alias deborphan="\deborphan | sort"
 alias dig="\dig +search +short"
 alias disconnectB206_BT_From_DAC="ssh b206.local. myScripts/shl/bluetoothDisconnectAllBlueZ5.sh"
+alias distrib='\strings $(\ps -p 1 -o cmd= | cut -d" " -f1) | egrep -i "ubuntu|debian|centos|redhat" -o | uniq'
 alias document2doc="libreofficeTo doc"
 alias document2docx="libreofficeTo docx"
 alias document2fodt="libreofficeTo fodt"
