@@ -46,6 +46,7 @@ alias burniso='\cdrecord -v -dao driveropts=burnfree fs=14M speed=24 gracetime=1
 alias bzgrep="\bzgrep --color"
 alias bzip2="\bzip2 -v"
 alias calcSigs="time $find . -type f -exec sha1sum {} \;"
+alias cast2chrome="catt cast"
 alias cclive="\cclive -c"
 alias cdda_info="\icedax -gHJq -vtitles"
 alias cdinfo='\cdrdao disk-info'
