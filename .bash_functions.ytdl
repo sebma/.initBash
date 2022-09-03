@@ -743,6 +743,11 @@ function ytdlpUpdate {
 		if [ "$ytdlpLatestRelease" != $ytdlpCurrentRelease ];then
 			local ytdlPythonVersion=$($yt_dlp --ignore-config -v 2>&1 | awk -F "[ .]" '/Python version/{printf$4"."$5}')
 			$sudo pip$ytdlPythonVersion install -U $package
+			ytdlpTestURLs="https://www.facebook.com/PraiseOnTBN/videos/1128470364545441 https://youtu.be/vWYp2iGMDcM"
+			if yt-dlp -q -F $ytdlpTestURLs https://youtu.be/vWYp2iGMDcM >/dev/null;then
+				echo "=> Rolling back to $package $ytdlpCurrentRelease ..."
+				$sudo pip$ytdlPythonVersion install $package==$ytdlpCurrentRelease
+			fi
 		else
 			echo "=> [$FUNCNAME] INFO : You already have the latest release, which is $ytdlpLatestRelease." >&2
 		fi
