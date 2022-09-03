@@ -336,7 +336,7 @@ function cleanFirefoxLock {
 }
 function compareRemoteFile {
 	local sdiffOptions=""
-	if [ $# != 3 ];then
+	if [ $# != 3 ] && [ $# != 4 ];then
 		echo "=> Usage: $FUNCNAME filePath server1 server2" >&2
 		return 1
 	elif [ $# == 4 ] && [ ${1:0:1} == "-" ];then
@@ -361,7 +361,7 @@ function compareRemoteFile {
 }
 function compareRemoteDir {
 	local sdiffOptions=""
-	if [ $# != 3 ];then
+	if [ $# != 3 ] && [ $# != 4 ];then
 		echo "=> Usage: $FUNCNAME dirPath server1 server2" >&2
 		return 1
 	elif [ $# == 4 ] && [ ${1:0:1} == "-" ];then
