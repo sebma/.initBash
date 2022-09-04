@@ -606,9 +606,9 @@ function findSeb {
 	if echo "${args[@]}" | \grep -q "\-ls"
 	then
 		args=( "${args[@]/-ls/}" )
-		$find $dir $firstPredicate "${args[@]}" -printf "%10i %10k %M %n %-10u %-10g %10s %AY-%Am-%Ad %.12AX %p\n"
+		$find $dir $firstPredicate ${args[@]} -printf "%10i %10k %M %n %-10u %-10g %10s %AY-%Am-%Ad %.12AX %p\n"
 	else
-		$find $dir $firstPredicate "${args[@]}"
+		$find $dir $firstPredicate ${args[@]}
 	fi
 }
 function findCorruptedFilesIn {
