@@ -35,7 +35,7 @@ function findSeb {
 	if echo "${args[@]}" | \grep -q "\-ls"
 	then
 		args=("${args[@]/-ls/}")
-		$find $dir $firstPredicate "${args[@]}" -exec busybox ls -alde {} + 2>/dev/null | awk '{
+		$find $dir $firstPredicate ${args[@]} -exec busybox ls -alde {} + 2>/dev/null | awk '{
 unit=" "
 size=int($5)
 if(size==0)exponent=0
@@ -49,7 +49,7 @@ sub(" *"$5,sprintf(" %10.3f%s",size,unit))
 print
 }'
 	else
-		$find $dir $firstPredicate "${args[@]}"
+		$find $dir $firstPredicate ${args[@]}
 	fi
 }
 function topflines {
