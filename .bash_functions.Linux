@@ -190,9 +190,12 @@ function lanIPv6 {
 	set +o pipefail
 }
 function locate {
-	local locate="command locate"
-	groups 2>/dev/null | \egrep -wq "sudo|admin" && locateOptions="-e" || locateOptions="--database $HOME/.local/lib/mlocate/mlocate.db -e"
-	echo "$@" | \grep -q "\-[a-z]*r" && $locate $locateOptions "$@" || $locate $locateOptions -i --regex "${@}"
+	local locate="$(type -P locate)"
+	local locateOptions="-i --regex"
+	[ $locate == "$(which mlocate)" ] && locateOptions+=" -e"
+	groups 2>/dev/null | \egrep -wq "sudo|admin" || locateOptions+=" --database $HOME/.local/lib/mlocate/mlocate.db"
+#	echo "$@" | \grep -q "\-[a-z]*r" && $locate $locateOptions "$@" || $locate $locateOptions -i --regex "${@}"
+	$locate $locateOptions "$@"
 }
 function lsbluetooth {
 	\lspci | awk '/Bluetooth/{print$1}' | while read device
