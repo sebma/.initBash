@@ -121,8 +121,7 @@ alias enman="\man -L en"
 alias erasecd='\cdrecord -v speed=12 blank=fast gracetime=10 -eject'
 alias erasewholecd='\cdrecord -v speed=12 blank=all gracetime=10 -eject'
 alias errors="egrep -wiC2 'err:|:err|error|erreur|java.*exception'"
-which fd &>/dev/null && fd_find=fd
-which fdfind &>/dev/null && fd_find=fdfind
+which fd &>/dev/null && fd_find=fd || { which fdfind &>/dev/null && fd_find=fdfind; }
 alias findBigFiles="findBiggerThan +100mi | sort -rhk5"
 alias findBiggerThan='$fd_find . $PWD --xdev -t f -E /dev,/proc,/sys -ls -S'
 alias findFunctions="grep -P '(^| )\w+\(\)|\bfunction\b'"
