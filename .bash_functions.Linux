@@ -231,12 +231,10 @@ function lsraid {
 set -x
 	\lspci -nnd ::104 "$@"
 	\lsscsi -c # W.I.P.
-	\lsscsi -ss -d -x -p -i | column -t # W.I.P.
+	\lsscsi -ss -d -x -i
 	\lsscsi -C -t # W.I.P.
 	type -P inxi >/dev/null && \inxi -R -xxx
 set +x
-#	\lsusb | awk 'BEGIN{IGNORECASE=1}/Ethernet/{print$6}' | while read device # see https://stackoverflow.com/q/69860894/5649639
-#	do \lsusb -d $device "$@";done
 }
 function lswebcams {
 	\lspci | awk 'BEGIN{IGNORECASE=1}/web.*cam|camera/{print$1}' | while read device
