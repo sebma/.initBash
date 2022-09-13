@@ -230,9 +230,9 @@ function lsprinters {
 function lsraid {
 set -x
 	\lspci -nnd ::104 "$@"
-	\lsscsi -c # W.I.P.
 	\lsscsi -ss -d -x -i
-	\lsscsi -C -t # W.I.P.
+	\lsscsi -c # W.I.P.
+	\lsscsi -C -t || \lsscsi -t # W.I.P.
 	type -P inxi >/dev/null && \inxi -R -xxx
 set +x
 }
