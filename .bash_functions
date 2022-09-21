@@ -424,22 +424,22 @@ function convertion {
 	return $retCode
 }
 function countWorkDays {
-	local monthNumber=$(date +%m)
-	local year=$(date +%Y)
-	if [ $# == 1 ] && [ $1 == "-h" ];then
-		echo "=> Usage: $FUNCNAME [monthNumber=current] [year=current]" >&2
-		return 1
-	fi
+	local monthNumber=-1
+	local year=-1
 
-	if [ $# == 1 ];then
-		monthNumber=$1
-	elif [ $# == 2 ];then
-		monthNumber=$1
-		year=$2
-	fi
+	case $# in
+		0) monthNumber=$(date +%m);year=$(date +%Y);;
+		1) test $1 -le 12 && { monthNumber=$1;year=$(date +%Y);} || year=$1;;
+		2) monthNumber=$1;year=$2;;
+		*) echo "=> Usage: $FUNCNAME [monthNumber=current] [year=current]" >&2;return 1;;
+	esac
 
 #	export LC_MESSAGES=en_US.UTF-8
-	gcal -Hno $monthNumber $year | \egrep -v "Saturday|Sunday|$year|^$" | sed "s/^[[:alpha:]]*\s*//g" | fmt -w 1 | wc -l
+	if [ $# == 1 ] && [ $monthNumber == -1 ];then
+		gcal -Hno -b1 $year | \egrep -v "^Sa|^Su|$year|^$|^ +[[:alpha:]]+" | sed "s/^[[:alpha:]]*\s*//g" | fmt -w 1 | wc -l
+	else
+		gcal -Hno $monthNumber $year | \egrep -v "Saturday|Sunday|$year|^$" | sed "s/^[[:alpha:]]*\s*//g" | fmt -w 1 | wc -l
+	fi
 }
 function createSshTunnel {
 	test $# -lt 3 && {
