@@ -439,7 +439,7 @@ function countWorkDays {
 	fi
 
 #	export LC_MESSAGES=en_US.UTF-8
-	gcal -Hno -i $monthNumber $year | \egrep -v "Saturday|Sunday|$year|^$" | sed "s/[[:alpha:]]//g" | fmt -w 1 | sort -n | wc -l
+	gcal -Hno $monthNumber $year | \egrep -v "Saturday|Sunday|$year|^$" | sed "s/^[[:alpha:]]*\s*//g" | fmt -w 1 | wc -l
 }
 function createSshTunnel {
 	test $# -lt 3 && {
