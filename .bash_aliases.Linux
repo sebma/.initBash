@@ -35,6 +35,7 @@ type -P lspci >/dev/null && {
 	alias lspciSimple="\lspci -nnvmk"
 	alias lsgpu="\lspci -nnd ::300"
 	alias lsaudioCards="\lspci -nnd ::403"
+	alias lssata='\lspci -nnd::0106'
 	alias northBridge="\lspci -nns 0:0.0"
 	alias southBridge="\lspci -nnd ::601"
 	alias lsvga=lsgpu
