@@ -3,6 +3,7 @@
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 alias dockerCleanup="$sudo docker system prune"
+ls /dev/md0 >/dev/null 2>&1 && alias mdraidInfo='sudo mdadm -Q /dev/md?;sudo mdadm -Db /dev/md?'
 alias snapCleanDisabledPackages='\snap list --all | while read snapname ver rev trk pub notes; do if [[ $notes =~ disabled ]]; then $sudo snap remove $snapname --revision=$rev; fi; done'
 
 set +x
