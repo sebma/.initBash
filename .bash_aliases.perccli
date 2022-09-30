@@ -6,7 +6,9 @@ perccli=/opt/MegaRAID/perccli/perccli64
 
 alias perccli=$perccli
 alias perccliListPhyDK="$perccli /call/eall/sall show"
+alias perccliListPhyDK_JSON="perccliListPhyDK J"
 alias perccliListVD="$perccli /call/vall show"
+alias perccliListVD_JSON="perccliListVD J"
 
 set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
