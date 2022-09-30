@@ -6,9 +6,13 @@ omreport=/opt/dell/srvadmin/bin/omreport
 
 alias omreport=$omreport
 alias omsysinfo="$omreport system version"
+alias omsysinfoCSV="omsysinfo -fmt ssv"
 alias omchassis="$omreport chassis info"
+alias omchassisCSV="omchassis -fmt ssv"
 alias ompdiskinfo="$omreport storage pdisk controller=0"
+alias ompdiskinfoCSV="ompdiskinfo -fmt ssv"
 alias omvdiskinfo="$omreport storage vdisk controller=0"
+alias omvdiskinfoCSV="omvdiskinfo -fmt ssv"
 
 set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
