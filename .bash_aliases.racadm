@@ -2,6 +2,12 @@
 ! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
+racadm=/opt/dell/srvadmin/sbin/racadm
+
+alias racadm=$racadm
+alias racadmControllerInfo="$racadm storage get controllers -o"
+alias racadmPDInfo="$racadm raid get pdisks -o"
+alias racadmVDInfo="$racadm raid get vdisks -o"
 
 set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
