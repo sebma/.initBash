@@ -179,6 +179,7 @@ alias inxiSummary="inxi -SMBmCGANEdPjsIJ -xx"
 alias ip@=lanip
 alias ipNeighbours="ip neighbour | column -t"
 alias is32or64bits='\getconf LONG_BIT'
+alias isConsole="tty | grep /dev/tty -q && echo true || echo false"
 alias jpeg2pdf="\convert +density"
 alias jpeg2pdfA4="jpeg2pdf -units pixelsperinch -page A4"
 alias jpeg2pdfA4R="jpeg2pdf -units pixelsperinch -page 842x595"
