@@ -161,6 +161,16 @@ function hw-probeInstallFromSource {
 	type -P hw-probe >/dev/null 2>&1 && \hw-probe -v
 	return $retCode
 }
+function ifdown {
+	local ifdown=$(type -P ifdown)
+	if tty | grep /dev/tty -q;
+	then
+		$ifdown "$@"
+	else
+		echo "$FUNCNAME: You must be connected to the console to stop a network interface." >&2
+		return 1
+	fi
+}
 function isoLabel {
 	for isoFile
 	do
