@@ -8,7 +8,7 @@ alias omreport=$omreport
 alias omsysinfo="$omreport system summary"
 alias omsysinfoCSV="omsysinfo -fmt ssv"
 alias omsysversion="$omreport system version"
-alias omsysversionCSV="omsysinfo -fmt ssv"
+alias omsysversionCSV="omsysversion -fmt ssv"
 alias omchassis="$omreport chassis info"
 alias omchassisCSV="omchassis -fmt ssv"
 alias ompdiskinfo="$omreport storage pdisk controller=0"
