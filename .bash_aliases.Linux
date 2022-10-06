@@ -33,6 +33,7 @@ test "$wiFiInterface" && {
 type -P lspci >/dev/null && {
 	alias lspci="\lspci -nn"
 	alias lspciSimple="\lspci -nnvmk"
+	alias lspcimore="\lspci -m"
 	alias lsgpu="\lspci -nnd ::300"
 	alias lsaudioCards="\lspci -nnd ::403"
 	alias lssata='\lspci -nnd::0106'
