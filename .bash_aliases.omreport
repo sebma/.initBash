@@ -5,12 +5,12 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 omreport=/opt/dell/srvadmin/bin/omreport
 
 alias omreport=$omreport
+alias omchassisinfo="$omreport chassis info"
+alias omchassisinfoCSV="$omchassisinfo -fmt ssv"
 alias omsysinfo="$omreport system summary"
 alias omsysinfoCSV="omsysinfo -fmt ssv"
 alias omsysversion="$omreport system version"
 alias omsysversionCSV="omsysversion -fmt ssv"
-alias omchassis="$omreport chassis info"
-alias omchassisCSV="omchassis -fmt ssv"
 alias ompdiskinfo="$omreport storage pdisk controller=0"
 alias ompdiskinfoCSV="ompdiskinfo -fmt ssv"
 alias omvdiskinfo="$omreport storage vdisk controller=0"
