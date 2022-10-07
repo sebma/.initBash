@@ -5,10 +5,10 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 racadm=/opt/dell/srvadmin/sbin/racadm
 
 alias racadm=$racadm
-alias racadmIP="$racadm get iDRAC.IPv4.Address"
-alias racadmSysInfo="$racadm getsysinfo"
 alias racadmControllerInfo="$racadm storage get controllers -o"
+alias racadmIP="$racadm get iDRAC.IPv4.Address | grep Address | cut -d= -f2"
 alias racadmPDInfo="$racadm raid get pdisks -o"
+alias racadmSysInfo="$racadm getsysinfo"
 alias racadmVDInfo="$racadm raid get vdisks -o"
 
 set +x
