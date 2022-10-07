@@ -6,6 +6,7 @@ racadm=/opt/dell/srvadmin/sbin/racadm
 
 alias racadm=$racadm
 alias racadmIP="$racadm get iDRAC.IPv4.Address"
+alias racadmSysInfo="$racadm getsysinfo"
 alias racadmControllerInfo="$racadm storage get controllers -o"
 alias racadmPDInfo="$racadm raid get pdisks -o"
 alias racadmVDInfo="$racadm raid get vdisks -o"
