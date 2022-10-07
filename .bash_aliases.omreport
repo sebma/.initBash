@@ -5,8 +5,13 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 omreport=/opt/dell/srvadmin/bin/omreport
 
 alias omreport=$omreport
+alias iDracIP="$omreport system summary | grep IP.Address -m1 | cut -d';' -f2"
+alias omchassisbios="$omreport chassis bios"
+alias omchassisbiosCSV="$omchassisbios -fmt ssv"
 alias omchassisinfo="$omreport chassis info"
 alias omchassisinfoCSV="$omchassisinfo -fmt ssv"
+alias omchassisnics="$omreport chassis nics"
+alias omchassisnicsCSV="$omchassisnics -fmt ssv"
 alias omsysinfo="$omreport system summary"
 alias omsysinfoCSV="omsysinfo -fmt ssv"
 alias omsysversion="$omreport system version"
