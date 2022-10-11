@@ -4,7 +4,6 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 
 omreport=/opt/dell/srvadmin/bin/omreport
 
-alias iDracIP="$omreport system summary | grep IP.Address -m1 | cut -d';' -f2"
 alias omreport=$omreport
 alias omServiceTag="$omreport chassis info | awk '/Service.Tag/{print\$NF}'"
 alias omiDracIP="$omreport system summary | awk '/IP.Address/{print\$NF;exit}'"
