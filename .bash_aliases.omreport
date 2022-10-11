@@ -7,6 +7,7 @@ omreport=/opt/dell/srvadmin/bin/omreport
 alias iDracIP="$omreport system summary | grep IP.Address -m1 | cut -d';' -f2"
 alias omreport=$omreport
 alias omServiceTag="$omreport chassis info | awk '/Service.Tag/{print\$NF}'"
+alias omiDracIP="$omreport system summary | awk '/IP.Address/{print\$NF;exit}'"
 alias omchassisbios="$omreport chassis bios"
 alias omchassisbiosCSV="omchassisbios -fmt ssv"
 alias omchassisinfo="$omreport chassis info"
