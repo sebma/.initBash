@@ -10,6 +10,7 @@ alias racadmHWInventory="$racadm hwinventory"
 alias racadmIP="$racadm get iDRAC.IPv4.Address | grep Address | cut -d= -f2"
 alias racadmPDInfo="$racadm raid get pdisks -o"
 alias racadmSysInfo="$racadm getsysinfo"
+alias racadmSVCTag="$racadm getsvctag"
 alias racadmVDInfo="$racadm raid get vdisks -o"
 
 set +x
