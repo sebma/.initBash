@@ -163,7 +163,7 @@ function hw-probeInstallFromSource {
 }
 function ifdown {
 	local ifdown=$(type -P ifdown)
-	if tty | \grep /dev/tty -q;
+	if [ $# == 0 ] || [ $1 == lo ] || tty | \grep /dev/tty -q;
 	then
 		$ifdown "$@"
 	else
