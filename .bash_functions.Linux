@@ -166,6 +166,7 @@ function ifdown {
 
 	if [ -z "$ifdown" ];then
 		command ifdown
+		return
 	fi
 
 	if [ $# == 0 ] || [ $1 == lo ] || tty | \grep /dev/tty -q;
