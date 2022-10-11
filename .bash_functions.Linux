@@ -163,9 +163,13 @@ function hw-probeInstallFromSource {
 }
 function ifdown {
 	local ifdown=$(type -P ifdown)
+
+	if [ -z "$ifdown" ];then
+		command ifdown
+	fi
+
 	if [ $# == 0 ] || [ $1 == lo ] || tty | \grep /dev/tty -q;
 	then
-		echo "=> ifdown = <$ifdown>."
 		$ifdown "$@"
 	else
 		echo "$FUNCNAME: You must be connected to the console to stop a network interface." >&2
