@@ -209,6 +209,25 @@ function asc2gpg {
 		\gpg -v -o "${ascFile/.asc/.gpg}" --dearmor "$ascFile"
 	done
 }
+function aslookup {
+	echo "AS      | IP               | BGP Prefix          | CC | Registry | Allocated  | AS Name"
+	for ip
+	do
+		whois -h whois.cymru.com " -v $ip" | \grep ^[0-9]
+	done
+}
+function aslookupSeb {
+	local options=""
+	if echo $1 | grep "^-" -q;then
+		options="$1 $2"
+		shift 2
+	fi
+
+	for ip
+	do
+		whois $ip | awk -v ip=$ip -F':| +' 'BEGIN{IGNORECASE=1;print"AS      | IP               | BGP Prefix          | CC | Registry | Allocated  | AS Name"}/Origin(AS)?:/{as=$3}/CIDR:|route:/{cidr=$3}/country:/{country=$3}/RegDate:/{regdate=$3}/netname:/{asname=$3}END{print as"\t  "ip"\t     "cidr"\t   "country"\t"registry"\t   "regdate"\t"asname}'
+	done
+}
 function awkCalc {
 	set -- ${@/[/(}
 	set -- ${@/]/)}
