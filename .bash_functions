@@ -223,9 +223,10 @@ function aslookupSeb {
 		shift 2
 	fi
 
+	echo "AS      | IP               | BGP Prefix          | CC | Registry | Allocated  | AS Name"
 	for ip
 	do
-		whois $ip | awk -v ip=$ip -F':| +' 'BEGIN{IGNORECASE=1;print"AS      | IP               | BGP Prefix          | CC | Registry | Allocated  | AS Name"}/Origin(AS)?:/{as=$3}/CIDR:|route:/{cidr=$3}/country:/{country=$3}/RegDate:/{regdate=$3}/netname:/{asname=$3}END{print as"\t  "ip"\t     "cidr"\t   "country"\t"registry"\t   "regdate"\t"asname}'
+		whois $ip | awk -v ip=$ip -F':| +' 'BEGIN{IGNORECASE=1}/Origin(AS)?:/{as=$3}/CIDR:|route:/{cidr=$3}/country:/{country=$3}/RegDate:/{regdate=$3}/netname:/{asname=$3}END{printf "%-7s | %-16s | %-19s | %-2s | %-8s | %-10s | %s\n", as,ip,cidr,country,registry,regdate,asname}'
 	done
 }
 function awkCalc {
