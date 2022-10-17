@@ -8,6 +8,7 @@ alias racadm=$racadm
 alias racadmControllerInfo="$racadm storage get controllers -o"
 alias racadmHWInventory="$racadm hwinventory"
 alias racadmIP="$racadm get iDRAC.IPv4.Address | grep Address | cut -d= -f2"
+alias racadmURL='echo https://$(racadmIP)'
 alias racadmPDInfo="$racadm raid get pdisks -o"
 alias racadmSysInfo="$racadm getsysinfo"
 alias racadmSVCTag="$racadm getsvctag"
