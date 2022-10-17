@@ -169,8 +169,8 @@ function ifdown {
 		return
 	fi
 
-	outputInterface=$(ip route | awk '/^default/{print$NF}')
-	if [ $# == 0 ] || [ $1 != $outputInterface ] || tty | \grep /dev/tty -q;
+	local outputInterface=$(ip route | awk '/^default/{print$NF}')
+	if [ $# == 0 ] || [ $1 != "$outputInterface" ] || tty | \grep /dev/tty -q;
 	then
 		$ifdown "$@"
 	else
