@@ -85,6 +85,7 @@ alias Pgrep="grep -P"
 alias qtVersion='QT_SELECT=$(qtchooser -l | tail -1) qmake -v'
 alias quota="\quota -s"
 alias ramSize="awk '/MemTotal:/{size=\$2*1024;exponent=int( log(size)/(3*log(10)) );print size/10^(3*exponent)}' /proc/meminfo"
+alias ramSize2='bc -l <<< "$(getconf _PHYS_PAGES)*$(getconf PAGE_SIZE)/10^9"'
 alias rename="\prename -v"
 alias rename2LowerCase="\prename -v y/A-Z/a-z/"
 alias rename2UpperCase="\prename -v y/a-z/A-Z/"
