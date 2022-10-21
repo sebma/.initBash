@@ -84,7 +84,7 @@ alias pip_pypy3="\pypy3 -m pip"
 alias Pgrep="grep -P"
 alias qtVersion='QT_SELECT=$(qtchooser -l | tail -1) qmake -v'
 alias quota="\quota -s"
-alias ramSize=$'\\awk \'BEGIN{split("B,kiB,MiB,GiB", unit, ",")}/MemTotal:/{size=$2*1024;exponent=int( log(size)/(3*log(10)) );print size/10^(3*exponent)" "unit[exponent+1]}\' /proc/meminfo'
+alias ramSize=$'\\awk \'BEGIN{split("B,kB,MB,GB", unit, ",")}/MemTotal:/{size=$2*1024;exponent=int( log(size)/(3*log(10)) );print size/10^(3*exponent)" "unit[exponent+1]}\' /proc/meminfo'
 alias ramSize2='\bc -l <<< $(getconf _PHYS_PAGES)*$(getconf PAGE_SIZE)/10^9'
 alias rename="\prename -v"
 alias rename2LowerCase="\prename -v y/A-Z/a-z/"
