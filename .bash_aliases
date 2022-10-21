@@ -18,8 +18,8 @@ alias ...="cd ../.."
 alias ..="cd .."
 alias 2iec='\numfmt --to=iec-i --suffix=B --format=%.1f'
 alias 2si='\numfmt  --to=si    --suffix=B --format=%.1f'
-alias 2iec2="\awk '{size=\$1;exponent=int( log(size)/(10*log(2)) );print size/2^(10*exponent)}'"
-alias 2si2="\awk  '{size=\$1;exponent=int( log(size)/(3*log(10)) );print size/10^(3*exponent)}'"
+alias 2iec2=$'\\awk \'BEGIN{split("iB,kiB,MiB,GiB", unit, ",")}{size=$1;exponent=int( log(size)/(10*log(2)) );print size/2^(10*exponent)" "unit[exponent+1]}\''
+alias 2si2=$'\\awk  \'BEGIN{split("B,kB,MB,GB", unit, ",")}{size=$1;exponent=int( log(size)/(3*log(10)) );print size/10^(3*exponent)" "unit[exponent+1]}\''
 alias 2lower=tolower
 alias 2si='\numfmt  --to=si    --suffix=B --format=%.1f'
 alias 2upper=toupper
