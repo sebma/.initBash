@@ -21,7 +21,6 @@ alias 2si='\numfmt  --to=si    --suffix=B --format=%.1f'
 alias 2iec2=$'\\awk \'BEGIN{split("iB,kiB,MiB,GiB,TiB,PiB,EiB", unit, ",")}{size=$1;exponent=int( log(size)/(10*log(2)) );print size/2^(10*exponent)" "unit[exponent+1]}\''
 alias 2si2=$'\\awk  \'BEGIN{split("B,kB,MB,GB,TB,PB,EB", unit, ",")}{size=$1;exponent=int( log(size)/(3*log(10)) );print size/10^(3*exponent)" "unit[exponent+1]}\''
 alias 2lower=tolower
-alias 2si='\numfmt  --to=si    --suffix=B --format=%.1f'
 alias 2upper=toupper
 alias Cut='\cut -c 1-$COLUMNS'
 alias Pgreplast="greplast -P"
