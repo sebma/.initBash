@@ -10,7 +10,7 @@ apt="$(type -P apt) -q=0"
 apt_get=$(type -P apt-get)
 
 #alias installSecurityUpdates="sudo apt install -V $(apt-get -s dist-upgrade | awk "/^Inst.*\/$codeName-security/"'{print$2}')"
-alias architecture="dpkg-architecture -q DEB_HOST_ARCH 2>/dev/null || dpkg-architecture | awk -F'=' '/DEB_HOST_ARCH\>/{print\$2}'"
+alias architecture="dpkg --print-architecture"
 
 if [ -n "$SSH_CONNECTION" ] && type -P screen >/dev/null 2>&1;then
 	alias autoremove="( $apt -h 2>&1 | \grep -wq autoremove && $apt autoremove -s | \grep -wq '^Remv' && $sudo screen -L $apt autoremove -V ) || $apt_get autoremove -s | \grep -wq '^Remv' && $sudo screen -L $apt_get autoremove -V"
