@@ -1435,7 +1435,7 @@ function pingMyLAN {
 	if [ $# = 0 ];then
 		if [ -n "$fping" ];then
 			getcap $fping | \grep -q cap_net_raw+ep || sudo setcap cap_net_raw+ep $fping
-			time $fping -r 0 -aAg $myLAN 2>/dev/null | sort -u
+			time $fping -r 0 -aAg $myLAN 2>/dev/null | sort -uV
 		else
 			time \nmap -T5 -sP $myLAN | sed -n '/Nmap scan report for /s/Nmap scan report for //p'
 		fi
