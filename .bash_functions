@@ -652,6 +652,16 @@ function findLoops {
 	[ $osFamily = Darwin ] && local find=gfind
 	time $find "$@" -xdev -follow -printf ""
 }
+function fsUsage {
+    local filesytem=/
+    if [ $# = 0 ];then
+        filesytem=/
+    elif [ $# = 1 ];then
+        filesytem=$1
+    fi
+
+    df -m $filesytem | awk '/dev/{printf "  Usage of /: %.1f%% of %.2fGB\n", 100*$3/$2, $2/1024}'
+}
 function functionDefinition {
 	[ $osFamily = Darwin ] && local sed="command sed -E"
 	[ $osFamily = Linux ]  && local sed="command sed -r"
