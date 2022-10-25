@@ -653,6 +653,7 @@ function findLoops {
 	time $find "$@" -xdev -follow -printf ""
 }
 function fsUsage {
+	local df="command df"
     local filesytem=/
     if [ $# = 0 ];then
         filesytem=/
@@ -660,7 +661,7 @@ function fsUsage {
         filesytem=$1
     fi
 
-    df -m $filesytem | awk '/dev/{printf "  Usage of %s %.1f%% of %.2fGB\n", $NF, 100*$3/$2, $2/1024}'
+    $df -m $filesytem | awk '/dev/{printf "  Usage of %s %.1f%% of %.2fGB\n", $NF, 100*$3/$2, $2/1024}'
 }
 function functionDefinition {
 	[ $osFamily = Darwin ] && local sed="command sed -E"
