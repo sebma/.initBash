@@ -60,6 +60,7 @@ alias findDeadLinks='$find . -xtype l -exec ls --color -l {} +'
 alias firefoxDefrag='pgrep firefox || time find ~/.mozilla/firefox/ -name "*sqlite" -ls -exec sqlite3 -echo {} vacuum \;'
 alias fsType="\lsblk -n -o FSTYPE"
 alias journalctl='\journalctl -e'
+alias journalctlErrors='\journalctl -p emerg..err --no-pager'
 alias ipbrief="\ip -brief"
 alias isUEFI="[ -d /sys/firmware/efi ] && echo 'Session EFI' || echo 'Session non-EFI'"
 alias kwinRestart="\kwin --replace >/dev/null 2>&1 &"
