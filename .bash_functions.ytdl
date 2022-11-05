@@ -673,7 +673,7 @@ function ytdlUpdate {
 	fi
 
 	local package=youtube-dl
-	local youtube_dl="command $package"
+	local youtube_dl="type -P $package"
 	if [ "$youtube_dl" ];then
 		local ytdlCurrentRelease=$($package --version)
 		echo "=> The current version of $package is <$ytdlCurrentRelease>."
@@ -730,7 +730,7 @@ function ytdlpUpdate {
 	fi
 
 	local package=yt-dlp
-	local yt_dlp="command $package"
+	local yt_dlp="type -P $package"
 	if [ -n "$yt_dlp" ];then
 		local ytdlpCurrentRelease=$($package --version)
 		echo "=> The current version of $package is <$ytdlpCurrentRelease>."
