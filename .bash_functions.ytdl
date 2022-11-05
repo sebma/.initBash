@@ -709,6 +709,7 @@ set +x
 			echo "=> [$FUNCNAME] INFO : You already have the latest release, which is $ytdlLatestRelease." >&2
 		fi
 	else
+		echo "=> [$FUNCNAME] INFO : $package is not installed, installing $package ..." >&2
 		$sudo pip3 install -U $package
 	fi
 }
@@ -764,6 +765,7 @@ set +x
 			echo "=> [$FUNCNAME] INFO : You already have the latest release, which is $ytdlpLatestRelease." >&2
 		fi
 	else
+		echo "=> [$FUNCNAME] INFO : $package is not installed, installing $package ..." >&2
 		$sudo pip3 install -U $package
 	fi
 }
