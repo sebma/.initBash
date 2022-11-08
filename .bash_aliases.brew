@@ -4,6 +4,7 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 
 [ $osFamily = Linux  ] && alias brewUpgradable="\brew outdated"
 [ $osFamily = Darwin ] && alias brewUpgradable="\brew outdated;yes N | \brew cu -aq;echo" && alias brewUpgrade="\brew cu -aq"
+alias brewCask="\brew --cask"
 
 set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
