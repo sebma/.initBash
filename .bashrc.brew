@@ -3,7 +3,6 @@
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 export brew="command brew"
-[ $osFamily = Darwin ] && export brewCask="command brew cask" && alias brew-cask="$brewCask"
 
 set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
