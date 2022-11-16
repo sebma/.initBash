@@ -234,7 +234,7 @@ function lseth {
 function lsgroup {
 	for group
 	do
-		awk -F: "/$group:/"'{gsub(","," ");print$1":"$NF}' /etc/group
+		awk -F: "/^$group:/"'{gsub(","," ");print$1":"$NF}' /etc/group
 	done
 }
 function lsprinters {
