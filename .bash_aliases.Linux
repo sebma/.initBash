@@ -100,7 +100,7 @@ alias scp='time \rsync -h --progress -u -zt --skip-compress=$RSYNC_SKIP_COMPRESS
 alias poweroff="\systemctl poweroff && exit"
 alias reboot="\systemctl reboot;exit"
 alias suspend="\systemctl suspend;exit"
-alias sysInfo='cat /sys/class/dmi/id/product_name'
+alias sysInfo='cat /sys/class/dmi/id/sys_vendor /sys/class/dmi/id/product_name | xargs'
 #alias topf=$'$find . -xdev $findPrunePathsExpression -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | head -n | awk \'{total+=$5;print}END{print"=> total = "total" MiB"}\' | column -t'
 #alias topf10=$'$find . -xdev $findPrunePathsExpression -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | head -10 | awk \'{total+=$5;print}END{print"=> total = "total" MiB"}\' | column -t'
 #alias topf50=$'$find . -xdev $findPrunePathsExpression -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | head -50 | awk \'{total+=$5;print}END{print"=> total = "total" MiB"}\' | column -t'
