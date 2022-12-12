@@ -29,6 +29,10 @@ alias mpvFASTER='mpv --profile=for_slow_hardware'
 alias mpvOK.ru='mpv --profile=ok.ru'
 alias mpvFreeBoxTV='mpv --profile=freebox-rtsp'
 
+videoExtensions=mp4,avi,mp2,mp3,mpg,mov
+alias mpvFirst="mpv $(\ls -1 -t *.{$videoExtensions} | tail -1)"
+alias mpvLast="mpv $(\ls -1 -t *.{$videoExtensions} | head -1)"
+
 alias mpvPlaylistFileBEST='mpvPlaylistFile --profile=best'
 alias mpvPlaylistFileFHD='mpvPlaylistFile --profile=fhd'
 alias mpvPlaylistFileHD='mpvPlaylistFile --profile=hd'
