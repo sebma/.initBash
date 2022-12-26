@@ -69,6 +69,7 @@ export which="type -P"
 export find="$($which find)"
 export bashProfileLoaded=true
 [ $osFamily = Linux ] && export osID=$(source /etc/os-release && echo $ID) osID_LIKE=$(source /etc/os-release && echo $ID_LIKE)
+[ $osFamily = Darwin ] && export osID=Darwin && export osID_LIKE=Darwin
 export HISTSIZE=2000
 export HISTFILESIZE=4000
 #export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
@@ -203,7 +204,7 @@ test -x "$brew" && test -r $initDir/.bash_profile.brew && SourceProfile $initDir
 test -x "$git"  && test -r $initDir/.bash_profile.git  && SourceProfile $initDir/.bash_profile.git
 $xtrace
 type -P hub >/dev/null 2>&1 && eval "$(hub alias -s)" # See https://github.com/github/hub
-time neofetch;echo
+which neofetch >/dev/null 2>&1 && time neofetch && echo
 
 test "$debug" -lt 3 && set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
