@@ -11,7 +11,7 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 #type -P vim >/dev/null && alias vim="LANG=$(locale -a 2>/dev/null | egrep -i '(fr_fr|en_us|en_uk).*utf' | sort -r | head -1) \vim" && alias vi=vim
 #alias wget='wget2 || wget1'
 
-export pageSize=$(paperconf)
+which paperconf >/dev/null 2>&1 && export pageSize=$(paperconf)
 alias .....="cd ../../../.."
 alias ....="cd ../../.."
 alias ...="cd ../.."
