@@ -28,9 +28,10 @@ fi
 #Stops XQuartz from starting a new terminal window when it starts
 defaults read org.macosforge.xquartz.X11 app_to_run | grep -q bin/true$ || defaults write org.macosforge.xquartz.X11 app_to_run $(type -P true)
 
-#test "$SSH_CONNECTION" || pgrep -qfu $USER XQuartz.app || ( echo "=> Starting XQuartz.app ..." | tee -a ~/log/XQuartz.log ;nohup /Applications/Utilities/XQuartz.app/Contents/MacOS/X11.bin >>~/log/XQuartz.log 2>&1 & )
-test "$SSH_CONNECTION" || pgrep -qfu $USER XQuartz.app || ( echo "=> Starting XQuartz ..." && command open -a XQuartz )
-
+#test "$SSH_CONNECTION" || pgrep -fu $USER XQuartz.app >/dev/null || ( echo "=> Starting XQuartz.app ..." | tee -a ~/log/XQuartz.log ;nohup /Applications/Utilities/XQuartz.app/Contents/MacOS/X11.bin >>~/log/XQuartz.log 2>&1 & )
+if which XQuartz.app >/dev/null 2>&1 && ! test  "$SSH_CONNECTION";then
+	pgrep -fu $USER XQuartz.app >/dev/null || ( echo "=> Starting XQuartz ..." && command open -a XQuartz )
+fi
 
 #echo $DISPLAY | grep -q ^/private/tmp && export DISPLAY=:0
 
