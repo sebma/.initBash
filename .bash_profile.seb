@@ -69,7 +69,7 @@ export which="type -P"
 export find="$($which find)"
 export bashProfileLoaded=true
 [ $osFamily = Linux ] && export osID=$(source /etc/os-release && echo $ID) osID_LIKE=$(source /etc/os-release && echo $ID_LIKE)
-[ $osFamily = Darwin ] && export osID=Darwin && export osID_LIKE=Darwin
+[ $osFamily = Darwin ] && export osID=Darwin && export osID_LIKE=FreeBSD
 export HISTSIZE=2000
 export HISTFILESIZE=4000
 #export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
