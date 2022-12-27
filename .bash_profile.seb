@@ -92,9 +92,9 @@ export myPerl5DefaultOptions="-ale"
 export PIP_FORMAT=columns
 
 if [ $osID_LIKE == debian ];then
-	sourceHighlightPath=$(dpkg -L libsource-highlight-common | grep lesspipe)
+	sourceHighlightPath=$(dpkg -L libsource-highlight-common 2>/dev/null | grep lesspipe)
 elif [ $osID_LIKE == redhat ];then
-	sourceHighlightPath=$(rpm -ql source-highlight | grep lesspipe)
+	sourceHighlightPath=$(rpm -ql source-highlight 2>/dev/null | grep lesspipe)
 fi
 
 if ! groups 2>/dev/null | egrep -wq "sudo|adm|admin|root|wheel";then
