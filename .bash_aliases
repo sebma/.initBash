@@ -203,6 +203,7 @@ alias lastloggin='\lastlog -u $USER'
 alias less="\less -ir"
 alias libreofficeTo="\lowriter --headless --convert-to"
 alias lkshVersion='lksh -c "echo \$KSH_VERSION" 2>/dev/null'
+alias la="ls -a"
 alias ll="ls -lF"
 alias lla="ll -a"
 alias llah="ll -ah"
