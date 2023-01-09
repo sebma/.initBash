@@ -173,7 +173,7 @@ function apkInfo {
 }
 function apkRename {
 	type aapt >/dev/null || return
-	local apkFullInfo="$(type -P aapt aapt2 | tail -1) dump badging"
+	local apkFullInfo="$(type -P aapt) dump badging"
 	for package
 	do
 		echo "=> package = $package"
