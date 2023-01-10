@@ -518,6 +518,18 @@ function umountISO {
 #	udisksctl unmount -b $loopBackDevice
 #	udisksctl loop-delete -b $loopBackDevice
 }
+function updateGrub {
+	local osID=$(source /etc/os-release && echo $ID) osID_LIKE=$(source /etc/os-release && echo $ID_LIKE)
+	if [ $osID_LIKE = debian ];then
+		$sudo update-grub
+	elif [ $osID_LIKE = centos ];then
+		if [ -d /sys/firmware/efi ];then
+			grub-mkconfig -o /etc/grub2-efi.cfg
+		else
+			grub-mkconfig -o /etc/grub2.cfg
+		fi
+	fi
+}
 function watchProcess {
 	local pidList=""
 	local ps="command ps"
