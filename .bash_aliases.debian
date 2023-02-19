@@ -30,6 +30,7 @@ else
 	alias upgrade="LANGUAGE=$LANGUAGE $apt upgrade -s | \grep '^[1-9][0-9]* upgraded' && $sudo $apt upgrade -V --download-only && sync && $sudo $apt upgrade -V --yes;sync"
 fi
 
+alias debExport=dpkg-repack
 alias debInfo="\dpkg -I"
 alias debContents="\dpkg-deb -c"
 alias dupdatedb="time \sudo update-dlocatedb"
