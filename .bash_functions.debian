@@ -94,16 +94,10 @@ function aptitude {
 		*) $aptitude "${args[@]}";;
 	esac
 }
-function debExport {
-	for pkg
-	do
-		sudo dpkg-repack "$pkg"
-	done
-}
 function debExtract {
 	for pkg
 	do
-		dpkg-deb -x "$pkg"
+		dpkg-deb -X "$pkg"
 	done
 }
 function deblocate {
