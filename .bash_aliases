@@ -237,6 +237,7 @@ alias man2ps="\man -Tps"
 alias manen=enman
 alias manfile="\man -l"
 alias manfr=frman
+alias manpageSearch='\man -w -K'
 alias mdns-browse="\avahi-browse -t -k -p"
 alias mdns-service-db="\avahi-browse -b -k | sort"
 alias memInfo=ramInfo
