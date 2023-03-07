@@ -100,9 +100,10 @@ fi
 interface=eth0
 if tty -s && ip link show $interface >/dev/null 2>&1 && [ -z $DISPLAY ]
 then
-	printf "=> $interface MAC@ : " >&2 # permet de differentier le noeud du cluster sur lequel on est connecte
-	ip link show $interface | awk '/ether/{printf$(NF-2)}' >&2
-	Echo " , this helps identify on which node of the cluster I'm connected to."
+#	printf "=> $interface MAC@ : " >&2 # permet de differentier le noeud du cluster sur lequel on est connecte
+#	ip link show $interface | awk '/ether/{printf$(NF-2)}' >&2
+#	Echo " , this helps identify on which node of the cluster I'm connected to."
+	:
 fi
 
 trap 'echo "=> Ignoring this step and continuing the script <$(basename $BASH_SOURCE)> ..." >&2' INT
