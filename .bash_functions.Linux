@@ -8,14 +8,15 @@ test -r $initDir/.bash_functions.$osID_LIKE && Source $initDir/.bash_functions.$
 test -r $initDir/.bash_functions.$osFamily.system && Source $initDir/.bash_functions.$osFamily.system # For system functions call via the "Sudo" function
 
 function CA {
-	local CAToolPath=$(locate -r /CA.pl$ | grep -v /snap/ | grep ^/usr/)
+	local locate="$(type -P locate)"
+	local CAToolPath=$($locate -r /CA.pl$ | grep -v /snap/ | grep ^/usr/)
 	if [ ! -s $CAToolPath ];then
 		scriptDir=$(dirname $0)
 		scriptDir=$(cd $scriptDir;pwd)
 		CAToolPath=$scriptDir/not_mine/CA.pl
 	fi
 
-	exec $CAToolPath "$@"
+	$CAToolPath "$@"
 }
 function connect2MyHiddenWifi {
 	wifi5GHzCapable >/dev/null && { connect2SSID sebWlan;return; } || connect2SSID sebWlan_2.4GHz
