@@ -1,0 +1,22 @@
+# vim: ft=bash noet:
+! declare 2>&1 | \grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
+test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
+
+function cer2pem {
+	for cerCertificate
+	do
+		openssl x509 -inform DER -in "$cerCertificate" -outform PEM -out "${cerCertificate/.pem/.cer}"
+		ls -l "${cerCertificate/.pem/.cer}"
+	done
+}
+function pem2cer {
+	for pemCertificate
+	do
+		openssl x509 -inform PEM -in "$pemCertificate" -outform DER -out "${pemCertificate/.pem/.cer}"
+		ls -l "${pemCertificate/.pem/.cer}"
+		echo
+	done
+}
+
+set +x
+test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
