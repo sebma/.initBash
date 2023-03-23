@@ -323,13 +323,6 @@ function castnowURLs {
 	set +x
 	echo
 }
-function cer2pem {
-	for cerCertificate
-	do
-		openssl x509 -inform DER -in "$cerCertificate" -outform PEM -out "${cerCertificate/.pem/.cer}"
-		ls -l "${cerCertificate/.pem/.cer}"
-	done
-}
 function cgrep {
 	local allArgsButLast="${@:1:$#-1}"
 	local lastArg="${@: -1}"
@@ -1393,14 +1386,6 @@ function pdfSelect {
 	}
 	time \pdfjam --fitpaper true --keepinfo "$input" $pages -o "$output"
 	open "$output"
-}
-function pem2cer {
-	for pemCertificate
-	do
-		openssl x509 -inform PEM -in "$pemCertificate" -outform DER -out "${pemCertificate/.pem/.cer}"
-		ls -l "${pemCertificate/.pem/.cer}"
-		echo
-	done
 }
 function perlCalc {
 	set -- ${@/^/**}
