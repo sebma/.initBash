@@ -233,6 +233,7 @@ alias lsqm='dspmq | sed "s/[()]/ /g" | awk "/Running/{print \$2}" | paste -sd" "
 alias lxterm="\lxterm -sb -fn 9x15"
 alias lzgrep="\lzgrep --color"
 alias mail='\mail || mail -f $HOME/mbox'
+alias manSearch=manpageSearch
 alias man2ps="\man -Tps"
 alias manen=enman
 alias manfile="\man -l"
