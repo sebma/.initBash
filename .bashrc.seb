@@ -177,11 +177,19 @@ type -P register-python-argcomplete >/dev/null 2>&1 && eval "$(register-python-a
 
 type -P conda >/dev/null 2>&1 && test -r $initDir/.bashrc.conda && Source $initDir/.bashrc.conda
 getprop 2>/dev/null | grep ro.build.version.release -q && test -r $initDir/.bash_aliases.getprop && Source $initDir/.bash_aliases.getprop
+
+if type -P openssl >/dev/null 2>&1;then
+	test -r $initDir/.bashrc.openssl && Source $initDir/.bashrc.openssl
+	test -r $initDir/.bash_aliases.openssl && Source $initDir/.bash_aliases.openssl
+	test -r $initDir/.bash_functions.openssl && Source $initDir/.bash_functions.openssl
+fi
+
 if type -P brew >/dev/null 2>&1;then
 	test -r $initDir/.bashrc.brew && Source $initDir/.bashrc.brew
 	test -r $initDir/.bash_aliases.brew && Source $initDir/.bash_aliases.brew
 	test -r $initDir/.bash_functions.brew && Source $initDir/.bash_functions.brew
 fi
+
 if type -P adb >/dev/null 2>&1 && \pgrep -u $USER -f "adb -. " >/dev/null;then
 	test -r $initDir/.bash_aliases.adb && Source $initDir/.bash_aliases.adb
 	test -r $initDir/.bash_functions.adb && Source $initDir/.bash_functions.adb
