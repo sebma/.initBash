@@ -25,5 +25,14 @@ function pem2keyPEM {
 		echo
 	done
 }
+function pem2keyDER {
+	for pemCertificate
+	do
+		openssl pkey -in "$pemCertificate" -outform DER -out "${pemCertificate/.pem/.key}"
+		ls -l "${pemCertificate/.pem/.key}"
+		echo
+	done
+}
+
 set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
