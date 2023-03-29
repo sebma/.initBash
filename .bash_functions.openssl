@@ -21,7 +21,7 @@ function pem2key {
 	for pemCertificate
 	do
 		openssl pkey -in "$pemCertificate" -out "${pemCertificate/.pem/.key}"
-		ls -l "${pemCertificate/.pem/.cer}"
+		ls -l "${pemCertificate/.pem/.key}"
 		echo
 	done
 }
