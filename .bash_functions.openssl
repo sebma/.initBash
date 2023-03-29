@@ -17,10 +17,10 @@ function pem2cer {
 		echo
 	done
 }
-function pem2key {
+function pem2keyPEM {
 	for pemCertificate
 	do
-		openssl pkey -in "$pemCertificate" -out "${pemCertificate/.pem/.key}"
+		openssl pkey -in "$pemCertificate" -outform PEM -out "${pemCertificate/.pem/.key}"
 		ls -l "${pemCertificate/.pem/.key}"
 		echo
 	done
