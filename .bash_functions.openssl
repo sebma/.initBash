@@ -17,6 +17,13 @@ function pem2cer {
 		echo
 	done
 }
-
+function pem2key {
+	for pemCertificate
+	do
+		openssl pkey -in "$pemCertificate" -out "${pemCertificate/.pem/.key}"
+		ls -l "${pemCertificate/.pem/.cer}"
+		echo
+	done
+}
 set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
