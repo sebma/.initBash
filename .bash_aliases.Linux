@@ -60,7 +60,9 @@ alias findDeadLinks='$find . -xtype l -exec ls --color -l {} +'
 alias firefoxDefrag='pgrep firefox || time find ~/.mozilla/firefox/ -name "*sqlite" -ls -exec sqlite3 -echo {} vacuum \;'
 alias fsType="\lsblk -n -o FSTYPE"
 alias ipbrief="\ip -brief"
+alias isEFI=isUEFI
 alias isUEFI="[ -d /sys/firmware/efi ] && echo 'Session EFI' || echo 'Session non-EFI'"
+alias journalSvc="journalctl --unit"
 alias journalctl='\journalctl -e'
 alias journalctlErrors='\journalctl -p emerg..err --no-pager'
 alias kwinRestart="\kwin --replace >/dev/null 2>&1 &"
@@ -100,6 +102,9 @@ alias scp='time \rsync -h --progress -u -zt --skip-compress=$RSYNC_SKIP_COMPRESS
 #alias halt="\systemctl halt && exit"
 alias poweroff="\systemctl poweroff && exit"
 alias reboot="\systemctl reboot;exit"
+alias startSvc="\systemctl start"
+alias statusSvc="\systemctl status"
+alias stopSvc="\systemctl stop"
 alias suspend="\systemctl suspend;exit"
 alias sysInfo='cat /sys/class/dmi/id/sys_vendor /sys/class/dmi/id/product_name | paste -sd" "'
 #alias topf=$'$find . -xdev $findPrunePathsExpression -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | head -n | awk \'{total+=$5;print}END{print"=> total = "total" MiB"}\' | column -t'
