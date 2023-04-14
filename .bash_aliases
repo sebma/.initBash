@@ -118,7 +118,6 @@ alias ejectcd='\eject $CDR_DEVICE'
 alias enman="\man -L en"
 alias erasecd='\cdrecord -v speed=12 blank=fast gracetime=10 -eject'
 alias erasewholecd='\cdrecord -v speed=12 blank=all gracetime=10 -eject'
-alias errors="egrep -wiC2 'err:|:err|error|erreur|java.*exception'"
 which fd &>/dev/null && fd_find=fd || { which fdfind &>/dev/null && fd_find=fdfind; }
 alias findBigFiles="findBiggerThan +100mi | sort -rhk5"
 alias findBiggerThan='$fd_find . $PWD --xdev -t f -E /dev,/proc,/sys -ls -S'
@@ -149,6 +148,7 @@ alias getFS_TYPE="\blkid -o value -s TYPE"
 alias getPip="wget -qO- https://bootstrap.pypa.io/get-pip.py | python"
 alias getUUID="\blkid -o value -s UUID"
 alias grepInHome="time \grep --exclude-dir=Audios --exclude-dir=Music --exclude-dir=Podcasts --exclude-dir=Videos --exclude-dir=Karambiri --exclude-dir=iso --exclude-dir=Downloads --exclude-dir=Documents --exclude-dir=src --exclude-dir=Pictures --exclude-dir=.thunderbird --exclude-dir=deb --exclude-dir=apks --exclude-dir=.mozilla --exclude-dir=.PlayOnLinux --exclude-dir=PlayOnLinux\'s\ virtual\ drives --exclude-dir=.cache --exclude-dir=Sauvegarde_MB525 --exclude-dir=A_Master_RES --exclude-dir=SailFishSDK --exclude=.*history"
+alias greperrors="egrep -wiC2 'err:|:err|error|erreur|java.*exception'"
 alias grepfirst="grep -m1"
 alias grepfirst="grepfirst -P"
 alias grub-emu="xterm -e grub-emu"
