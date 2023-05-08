@@ -220,7 +220,7 @@ function lanIPv6 {
 function locate {
 	local locate="$(type -P locate)"
 	local locateOptions="-i --regex"
-	[ $locate == "$(which mlocate)" ] && locateOptions+=" -e"
+	[ [ $locate == "$(which mlocate)" ] || [ $locate == "$(which plocate)" ] ] && locateOptions+=" -e"
 	groups 2>/dev/null | \egrep -wq "sudo|admin" || locateOptions+=" --database $HOME/.local/lib/mlocate/mlocate.db"
 #	echo "$@" | \grep -q "\-[a-z]*r" && $locate $locateOptions "$@" || $locate $locateOptions -i --regex "${@}"
 	$locate $locateOptions "$@"
