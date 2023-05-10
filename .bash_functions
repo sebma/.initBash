@@ -965,10 +965,10 @@ function isbn2Barcode_with_zint {
 	fi
 }
 function isPrivate {
-    for IP
-    do
-        python3 -c "import ipaddress;print('$IP is private') if ipaddress.ip_address('$IP').is_private else print('$IP is public')"
-    done
+	for IP
+	do
+		python3 -c "import ipaddress;print('$IP is private') if ipaddress.ip_address('$IP').is_private else print('$IP is public')"
+	done
 }
 function jpgRotate {
 	test $# = 0 && {
