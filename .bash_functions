@@ -964,6 +964,12 @@ function isbn2Barcode_with_zint {
 		zint -b ISBNX --scale 2 --direct -d "$string" | feh -
 	fi
 }
+function isPrivate {
+    for IP
+    do
+        python3 -c "import ipaddress;print('$IP is private') if ipaddress.ip_address('$IP').is_private else print('$IP is public')"
+    done
+}
 function jpgRotate {
 	test $# = 0 && {
 		echo "=> Usage: $FUNCNAME angle file1 file2 file3 ..." >&2
