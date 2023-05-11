@@ -389,6 +389,7 @@ alias vim="LANG=C.UTF-8 \vim" && alias vi=vim
 alias vimatlab="vim +'setf matlab'"
 alias vioctave=vimatlab
 alias vlclocal='DISPLAY=:0 vlc'
+alias vmwareUUID='sudo cat /sys/class/dmi/id/product_serial /sys/class/dmi/id/product_uuid'
 alias wanIP="\dig -4 +short @resolver1.opendns.com A myip.opendns.com 2>/dev/null || time host -4 -t A myip.opendns.com resolver1.opendns.com | awk '/\<has\>/{print\$NF}'"
 alias wanIPv6="\dig -6 +short @resolver1.opendns.com AAAA myip.opendns.com 2>/dev/null || time host -6 -t AAAA myip.opendns.com resolver1.opendns.com | awk '/\<has\>/{print\$NF}'"
 alias wavemon="xterm -e wavemon &"
