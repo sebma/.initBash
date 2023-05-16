@@ -208,7 +208,7 @@ alias llh="ll -h"
 alias llha="ll -ha"
 alias ln="\ln -v"
 alias loadsshkeys='eval $(keychain --eval --agents ssh)'
-alias loffice=soffice
+alias loffice='soffice'
 alias lobase="loffice --base"
 alias localc="loffice --calc"
 alias lodraw="loffice --draw"
@@ -222,7 +222,7 @@ alias lpq="\lpq -a +3"
 alias lpr2ppsheet="\lpr -o number-up=2"
 alias ls="ls -F"
 alias lslast="ls -1 -t 2>/dev/null | head"
-alias lsb_release="\lsb_release -s"
+which lsb_release >/dev/null 2>&1 && alias lsb_release="\lsb_release -s"
 alias lsdvd="\lsdvd -avcs"
 alias lshw="\lshw -numeric -sanitize"
 alias lshwBUSINFO='lshw -businfo'
