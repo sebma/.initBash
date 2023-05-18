@@ -60,9 +60,13 @@ function mac@ {
 	fi
 }
 function mount {
-	arg=$1
-	arg=$(echo $arg | sed "s|/dev/||")
-	diskutil list | \grep -q $arg && [ -b /dev/$arg ] && diskutil mount $arg
+	local arg=$1
+	if [ $# = 0 ];then
+		command mount -v
+	else
+		arg=$(echo $arg | sed "s|/dev/||")
+		test -n "$arg" && diskutil list | grep -q $arg && [ -b /dev/$arg ] && diskutil mount $arg
+	fi
 }
 function netstat {
 	local mac_netstat_options="AaLnWgisf:p:I:w:c:mr"
