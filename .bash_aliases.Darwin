@@ -30,8 +30,9 @@ alias useradd=adduser
 
 alias catFiles="\tail -n +1"
 alias cpuInfo="\sysctl machdep.cpu | egrep 'brand_string|count|size|VMX|SVM'"
-#alias df="\df -Ph"
-alias df="\gdf -PTh"
+alias diskInfo="\diskutil list"
+alias df="\df -Ph"
+#alias df="\gdf -PTh"
 alias dnsInfo="\scutil --dns"
 alias findDeadLinks='$find . -xtype l -exec ls -G -l {} +'
 type -P gcp >/dev/null 2>&1 && alias cp='\gcp -puv' || alias cp='\cp -pv'
