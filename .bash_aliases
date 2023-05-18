@@ -291,7 +291,6 @@ alias phpInterpreter="\php -a"
 alias pic2pdf=jpeg2pdf
 alias pic2pdfA4=jpeg2pdfA4
 alias pic2pdfA4R=jpeg2pdfA4R
-alias port="lsof -ni -P | grep LISTEN"
 alias ports="lsof -ni -P | grep LISTEN"
 alias pps2pdf=odp2pdf
 alias ppsx2pdf=odp2pdf
