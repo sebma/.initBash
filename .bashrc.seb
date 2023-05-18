@@ -64,7 +64,7 @@ addpaths $HOME/.linuxbrew/bin /home/linuxbrew/.linuxbrew/bin
 addpaths $TeXLiveDIR
 #echo "=> AFTER: PATH = $PATH"
 
-manPathsList="/opt/ffmpeg/share/man $HOME/.local/share/man /usr/local/share/man /usr/share/man /usr/local/miniconda3/share/man /usr/local/miniconda2/share/man"
+manPathsList="/opt/ffmpeg/share/man /opt/local/man $HOME/.local/share/man /usr/local/share/man /usr/share/man /usr/local/miniconda3/share/man /usr/local/miniconda2/share/man"
 addmanpaths $manPathsList
 
 #Definitions de mes fonctions bash pour Linux
