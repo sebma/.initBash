@@ -7,7 +7,10 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 
 test "$debug" -gt 0 && Echo "\n=> \${BASH_SOURCE[*]} = ${BASH_SOURCE[*]}\n"
 
-type -P youtube-dl >/dev/null 2>&1 || { echo "=> ERROR: <youtube-dl> is not installed,  type \"sudo -H pip3 install -U youtube-dl\" to install it" >&2; return 1; }
+if ! type -P youtube-dl >/dev/null 2>&1 && ! type -P yt-dlp >/dev/null 2>&1;then
+	echo "=> ERROR: <youtube-dl> is not installed,  type \"sudo -H pip3 install -U youtube-dl\" to install it" >&2; return 1
+	echo "=> ERROR: <yt-dlp> is not installed,  type \"sudo -H pip3 install -U yt-dlp\" to install it" >&2; return 1
+fi
 
 test $osFamily = Linux  && export locate="command locate"
 test $osFamily = Darwin && export locate="time -p command glocate"
