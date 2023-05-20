@@ -77,8 +77,11 @@ type -P ffmpeg >/dev/null 2>&1 && test -r $initDir/.bash_aliases.AV  && Source $
 
 type -P mpv >/dev/null 2>&1 && test -r $initDir/.bash_functions.mpv && Source $initDir/.bash_functions.mpv
 type -P units >/dev/null 2>&1 && test -r $initDir/.bash_functions.units && Source $initDir/.bash_functions.units
-type -P youtube-dl >/dev/null 2>&1 && test -r $initDir/.bash_aliases.ytdl && Source $initDir/.bash_aliases.ytdl
-type -P youtube-dl >/dev/null 2>&1 && test -r $initDir/.bash_functions.ytdl && Source $initDir/.bash_functions.ytdl
+
+if type -P youtube-dl >/dev/null 2>&1 || type -P yt-dlp >/dev/null 2>&1;then
+	test -r $initDir/.bash_aliases.ytdl && Source $initDir/.bash_aliases.ytdl
+	test -r $initDir/.bash_functions.ytdl && Source $initDir/.bash_functions.ytdl
+fi
 
 test -r ~/.config/.bcrc && export BC_ENV_ARGS="-l $HOME/.config/.bcrc"
 
