@@ -129,6 +129,8 @@ function addUsersInGroup {
 function anyTimeWithTZ2LocalTimeZone {
 	local remoteTime=to_be_defined
 	local remoteTZ
+	local date=date
+	test $osFamily = Darwin && date=gdate
 	if [ $# = 0 ];then
 		echo "=> Usage : $FUNCNAME remoteTime [remoteTZ]" >&2
 		return 1
@@ -143,7 +145,7 @@ function anyTimeWithTZ2LocalTimeZone {
 	fi
 
 	remoteTime=${remoteTime/./:}
-	date -d "$remoteTime $remoteTZ"
+	$date -d "$remoteTime $remoteTZ"
 }
 function any2ascii {
 	local encoding=unknown
