@@ -341,7 +341,7 @@ alias sshStopLocalForward="command ssh -O exit"
 alias startSSHAgent='\pgrep -lfu $USER ssh-agent || eval $(ssh-agent -s)'
 alias sudo="\sudo "
 alias swapUsage="\free -m | awk '/^Swap/{print 100*\$3/\$2}'"
-alias systemType='strings $(\ps -p 1 -o cmd= | cut -d" " -f1) | \egrep -o "upstart|sysvinit|systemd" | head -1'
+alias systemType='strings $(\ps -p 1 -o cmd= | cut -d" " -f1) | \egrep -o "upstart|sysvinit|systemd|launchd" | head -1'
 alias taillines='\tail -n $((LINES-2))'
 alias tcpPorts="\netstat -ntl"
 alias terminfo='echo "=> C est un terminal $(tput cols 2>/dev/null)x$(tput lines 2>/dev/null)."'
