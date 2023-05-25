@@ -5,7 +5,7 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 if groups 2>/dev/null | egrep -wq "sudo|adm|admin|root|wheel";then
 	# You must call these functions wia the "Sudo" function
 function nmRestart {
-	local -r systemType=$( ( strings $(\ps -p 1 -o cmd= | cut -d" " -f1) | \egrep -o "upstart|sysvinit|systemd" || echo unknown ) | head -1)
+	local -r systemType=$( ( strings $(\ps -p 1 -o cmd= | cut -d" " -f1) | \egrep -o "upstart|sysvinit|systemd|launchd" || echo unknown ) | head -1)
 	local -r timer=12s
 	local output=""
 	local outputDataType=""
