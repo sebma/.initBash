@@ -109,6 +109,7 @@ alias startSvc="\systemctl start"
 alias statusSvc="\systemctl status"
 alias stopSvc="\systemctl stop"
 alias suspend="\systemctl suspend;exit"
+alias swapUsage='smem -t -s swap -k'
 alias sysInfo='paste -d" " /sys/class/dmi/id/sys_vendor /sys/class/dmi/id/product_name'
 #alias topf=$'$find . -xdev $findPrunePathsExpression -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | head -n | awk \'{total+=$5;print}END{print"=> total = "total" MiB"}\' | column -t'
 #alias topf10=$'$find . -xdev $findPrunePathsExpression -type f -size +10M -exec ls -l --block-size=M --time-style=+"%Y-%m-%d %T" {} \; 2>/dev/null | sort -nrk5 | head -10 | awk \'{total+=$5;print}END{print"=> total = "total" MiB"}\' | column -t'
