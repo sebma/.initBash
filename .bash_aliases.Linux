@@ -102,6 +102,7 @@ alias rmdir="\rmdir -v"
 alias rsync='time \rsync -uth -P -z --skip-compress=$RSYNC_SKIP_COMPRESS_LIST $RSYNC_EXCLUSION'
 alias scp='time \rsync -h --progress -u -zt --skip-compress=$RSYNC_SKIP_COMPRESS_LIST $RSYNC_EXCLUSION'
 #alias sed="\sed -r" # La completion ssh ne fonctionne pas si l'alias est actif a cause du script /usr/share/bash-completion/bash_completion qui est obsolete, faire une maj du package bash_completion vers la v2.8
+alias showWM='cat /etc/X11/default-display-manager | xargs basename'
 #alias halt="\systemctl halt && exit"
 alias poweroff="\systemctl poweroff && exit"
 alias reboot="\systemctl reboot;exit"
@@ -126,6 +127,7 @@ alias umount="umount -v"
 alias version="\lsb_release -sd"
 alias wifimac="mac@ $wiFiInterface"
 alias wifiDriversUsed=$'\lsmod | awk \'/cfg80211/{print$NF}\''
+alias windowManager=showWM
 alias wlanmac=wifimac
 alias xdg-dirs='ls $HOME/.config/user-dirs.dirs && grep ^XDG $HOME/.config/user-dirs.dirs'
 alias ytdlInstall="pip3 install youtube-dl || pip install youtube-dl"
