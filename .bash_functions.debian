@@ -225,7 +225,8 @@ function listFiles2LaunchpadPPAURLs {
 	done | uniq | column -t
 }
 function listPackagesFromRepo {
-	local architecture=$(dpkg-architecture -q DEB_HOST_ARCH 2>/dev/null || dpkg-architecture | awk -F"=" '/DEB_HOST_ARCH\>/{print$2}')
+#	local architecture=$(dpkg-architecture -q DEB_HOST_ARCH 2>/dev/null || dpkg-architecture | awk -F"=" '/DEB_HOST_ARCH\>/{print$2}')
+	local architecture=$(dpkg --print-architecture)
 	local repo=undefined_yet
 
 	if [ $# != 1 ];then
