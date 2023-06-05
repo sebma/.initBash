@@ -59,6 +59,7 @@ alias dvdLabel="\blkid -o value -s LABEL /dev/dvd"
 alias findDeadLinks='$find . -xtype l -exec ls --color -l {} +'
 alias firefoxDefrag='pgrep firefox || time find ~/.mozilla/firefox/ -name "*sqlite" -ls -exec sqlite3 -echo {} vacuum \;'
 alias fsType="\lsblk -n -o FSTYPE"
+alias gpuRAM='\dmesg | grep VRAM'
 alias ipAddress=$'\ip -4 -o a | awk -F " *|/" \'!/lo\s/{print$4;exit}\''
 alias ipbrief="\ip -brief" # Since iproute2 v4.3
 alias isEFI=isUEFI
