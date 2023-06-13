@@ -4,6 +4,10 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 
 test "$debug" -gt 0 && time="eval time"
 test "$debug" -gt 0 && Echo "\n=> eval \$(brew shellenv) ..."
+
+export HOMEBREW_NO_INSTALL_CLEANUP=1
+export HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1
+
 alias brewInitEnv='eval $($brew shellenv)'
 $time brewInitEnv && [ $BASH_VERSINFO -ge 4 ] && [ -r $($brew --prefix)/share/bash-completion/bash_completion ] && Source $($brew --prefix)/share/bash-completion/bash_completion
 
