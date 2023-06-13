@@ -197,7 +197,7 @@ if [ "$osFamily" != Darwin ] && [ "$osFamily" != Linux ] && [ "$osFamily" != And
 fi
 
 type -P matlab >/dev/null 2>&1 && test -r $initDir/.bash_profile.matlab && SourceProfile $initDir/.bash_profile.matlab
-brew=$(\ls ~/.linuxbrew/bin/brew /home/linuxbrew/.linuxbrew/bin/brew 2>/dev/null | head -1)
+brew=$(\ls ~/.linuxbrew/bin/brew /home/linuxbrew/.linuxbrew/bin/brew /usr/local/bin/brew 2>/dev/null | head -1)
 git=$(type -P git)
 set -o | grep -q xtrace.*on && xtrace="set -o xtrace"
 set +x
