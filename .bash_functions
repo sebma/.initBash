@@ -511,7 +511,7 @@ function dfc {
 		test $# != 0 && argsRE="|$(echo "$@" | tr -s / | sed 's/ /$|/g' | sed "s,/$,," | sed 's/$/$/')"
 		firstArg=$(echo "$firstArg" | tr -s /)
 		test "$firstArg" != / && firstArg="$(echo "$firstArg" | sed "s,/$,,")"
-		command dfc -TWfwc always | sed "s/ *$//" | \egrep "FILESYSTEM|${firstArg}\$${argsRE}"
+		command dfc -TWfwc always | sed "s/ *$//" | \egrep "FILESYSTEM|${firstArg}\>${argsRE}"
 	fi
 }
 function dirName {
