@@ -3,7 +3,7 @@
 [ $BASH_VERSINFO = 3 ] && [ -x ~/usr/local/bin/bash ] && exec ~/usr/local/bin/bash -l
 declare -gxr isAdmin=$(groups 2>/dev/null | \egrep -wq "sudo|adm|admin|root|wheel" && echo true || echo false)
 declare -gxr isSudoer=$(groups 2>/dev/null | \egrep -wq "sudo|adm|admin|root|wheel" && echo true || echo false)
-[ $isSudoer = true ] && declare -gx sudo="command sudo" || declare -gxr sudo=""
+[ $isSudoer = true ] && declare -gx sudo=$(type -P sudo) || declare -gxr sudo=""
 test -z "$initDir" && export initDir=$HOME/.initBash
 ! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
 
