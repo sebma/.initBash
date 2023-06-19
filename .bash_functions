@@ -1453,7 +1453,7 @@ function picMpixels {
 }
 function pingMyLAN {
 	local myOutgoingInterFace=$(ip route | awk '/default/{print$5}')
-	local myLAN=$(\ip -o -4 addr show $myOutgoingInterFace scope global up | awk '{print$4}')
+	local myLAN=$(\ip -4 addr show dev $myOutgoingInterFace scope global up | awk '/inet/{print$2}')
 	local fping=$(type -P fping)
 	if [ $# = 0 ];then
 		if [ -n "$fping" ];then
