@@ -448,6 +448,7 @@ function seconds2duration {
 	date -u +%T.%3N -d @$seconds
 }
 function text2man {
+	which txt2man || return
 	for file
 	do
 		prefix="${file/.*/}"
