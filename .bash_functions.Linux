@@ -448,13 +448,14 @@ function seconds2duration {
 	date -u +%T.%3N -d @$seconds
 }
 function text2man {
-	which txt2man || return
+	which txt2man >/dev/null || return
 	for file
 	do
 		prefix="${file/.*/}"
 		title="${prefix^^}"
 		echo "=> Converting $file to a manpage ..."
-		txt2man -t "$title" -s 1 "$file" | \gzip -9 > "$prefix.1.gz"
+		txt2man -t "$title" -s 1 "$file" | tee "$prefix.1" >/dev/null
+		gzip -9 "$prefix.1"
 	done
 }
 function topf {
