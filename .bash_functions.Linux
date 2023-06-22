@@ -53,6 +53,17 @@ function df {
 	LANG=C $df $dfOptions "$@" | \grep "^Filesystem" 1>&2
 	LANG=C $df $dfOptions "$@" | \grep -v "^Filesystem"
 }
+function htm2man {
+	which pandoc >/dev/null || return
+	for file
+	do
+		prefix="${file/.*/}"
+		title="${prefix^^}"
+		echo "=> Converting $file to a manpage ..."
+		pandoc -s "$file" -o "$prefix.1"
+		gzip -9 "$prefix.1"
+	done
+}
 function https2zoomtg {
 	if [ $# != 1 ]
 	then
