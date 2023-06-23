@@ -193,6 +193,10 @@ if type -P brew >/dev/null 2>&1;then
 	test -r $initDir/.bash_functions.brew && Source $initDir/.bash_functions.brew
 fi
 
+if type -P smartctl >/dev/null 2>&1;then
+	test -r $initDir/.bash_functions.smartctl && Source $initDir/.bash_functions.smartctl
+fi
+
 if type -P adb >/dev/null 2>&1 && \pgrep -u $USER -f "adb -. " >/dev/null;then
 	test -r $initDir/.bash_aliases.adb && Source $initDir/.bash_aliases.adb
 	test -r $initDir/.bash_functions.adb && Source $initDir/.bash_functions.adb
