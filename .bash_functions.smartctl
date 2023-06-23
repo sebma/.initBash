@@ -4,7 +4,7 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 
 function lsdisks {
 #	$sudo fdisk -l | egrep -v "/dev/(loop|mapper)" | awk -F"[ :]" '/Disk \/dev/{print$2}'
-	\ls -d /sys/class/block/* | sed "s|/sys/class/block/|/dev/|" | awk '!/(loop|dm-|sr|sd[a-z]+)[0-9]+$/'
+	\ls /sys/class/block/ | sed "s|^|/dev/|" | egrep -v '(loop|dm-|sr|sd[a-z]+)[0-9]+$'
 }
 function smartBadsectors {
 	$sudo -v
