@@ -2,5 +2,18 @@
 ! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
+function lsdisks {
+#	$sudo fdisk -l | egrep -v "/dev/(loop|mapper)" | awk -F"[ :]" '/Disk \/dev/{print$2}'
+	\ls -d /sys/class/block/* | sed "s|/sys/class/block/|/dev/|" | awk '!/(loop|dm-|sd[a-z]+)[0-9]+$/'
+}
+function smartBadsectors {
+	$sudo -v
+	for disk
+	do
+		echo "=> disk = $disk"
+		$sudo smartctl -A $disk | awk '/Reallocated_Sector_Ct|Current_Pending_Sector|Offline_Uncorrectable/{bad+=$NF}END{print "=> Bad sectors = "bad}'
+	done
+}
+
 set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
