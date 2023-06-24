@@ -60,7 +60,7 @@ addpaths $systemPathsList
 addpaths $userPathsList
 addpaths $HOME/myScripts/shl $HOME/myScripts/py $HOME/myScripts/pl
 addpaths $HOME/.poetry/bin
-addpaths $HOME/.linuxbrew/bin /home/linuxbrew/.linuxbrew/bin
+addpaths /home/linuxbrew/.linuxbrew/bin
 addpaths $TeXLiveDIR
 #echo "=> AFTER: PATH = $PATH"
 
