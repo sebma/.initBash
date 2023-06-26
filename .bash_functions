@@ -1603,11 +1603,6 @@ function psSeb { # Les fontions qui avaient le meme nom que les commands sont ex
 		$ps h "$@"
 	fi   
 }
-function pulseaudioRestart {
-	pulseaudio --kill
-	sleep 1
-	\pgrep -u $USER pulseaudio >/dev/null || pulseaudio --start --log-target=journal
-}
 function pythonCalc {
 	\python -c "print(${*/^/**})"
 }
