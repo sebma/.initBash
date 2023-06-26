@@ -43,6 +43,7 @@ type -P lspci >/dev/null && {
 }
 
 alias audioCardsMinimumInfo='pactl list sinks | egrep -e "^Sink |Ports?:|available"'
+alias audioInfo="pactl info"
 alias batteryINFO='upower -i $(upower -e 2>/dev/null | grep BAT) 2>/dev/null;acpi -i 2>/dev/null && echo;LC_ALL=C \inxi -z -Bxxx 2>/dev/null'
 alias catFiles="\tail -vn +1"
 alias cdLabel="\blkid -o value -s LABEL /dev/cdrom"
