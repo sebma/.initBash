@@ -408,6 +408,23 @@ function processChildren {
         return 2
 	fi
 }
+function processENV_Variables {
+	if [ $# != 1 ] && [ $# != 2 ];then
+		echo "=> Usage: $FUNCNAME processName [varNAME]" >&2
+		return 1
+	fi
+
+	local processName=$1
+	local -i pid=0
+	pid=$(\pidof -s $processName)
+
+	if [ $# = 1 ];then
+		[ $pid != 0 ] && tr '\0' '\n' < /proc/$pid/environ | \egrep -v "^hidden=" | \grep -P "^[^\s%]+=" | sort -u
+	elif [ $# = 2 ];then
+		local varNAME=$2
+		[ $pid != 0 ] && tr '\0' '\n' < /proc/$pid/environ | \egrep -v "^hidden=" | \grep -P "^[^\s%]+=" | sort -u | egrep -w "$varNAME"
+	fi
+}
 function psAncestors {
 	local processName
 	test $# != 1 && {
@@ -436,22 +453,10 @@ function psHeirs {
         return 2
 	fi
 }
-function processENV_Variables {
-	if [ $# != 1 ] && [ $# != 2 ];then
-		echo "=> Usage: $FUNCNAME processName [varNAME]" >&2
-		return 1
-	fi
-
-	local processName=$1
-	local -i pid=0
-	pid=$(\pidof -s $processName)
-
-	if [ $# = 1 ];then
-		[ $pid != 0 ] && tr '\0' '\n' < /proc/$pid/environ | \egrep -v "^hidden=" | \grep -P "^[^\s%]+=" | sort -u
-	elif [ $# = 2 ];then
-		local varNAME=$2
-		[ $pid != 0 ] && tr '\0' '\n' < /proc/$pid/environ | \egrep -v "^hidden=" | \grep -P "^[^\s%]+=" | sort -u | egrep -w "$varNAME"
-	fi
+function pulseaudioRestart {
+	pulseaudio --kill
+	sleep 1
+	\pgrep -u $USER pulseaudio >/dev/null || pulseaudio --start --log-target=journal
 }
 function seconds2duration {
 	local seconds
