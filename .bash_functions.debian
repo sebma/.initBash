@@ -224,8 +224,17 @@ function listFiles2LaunchpadPPAURLs {
 		sed -n "s/^# //;/deb /p" $listFile | awk '/launchpad.net/{print$2}' | awk -v listFile=$listFile -F/ 'BEGIN{OFS=FS}{printf listFile" ppa:"$4"/"$5" ";sub("ppa.","",$3);$4="~"$4"/+archive";tmp=$5;$5=$6;$6=tmp;print}'
 	done | uniq | column -t
 }
+function listInstalledPackagesFromRepo {
+	local architecture=$(dpkg --print-architecture)
+	local repo=undefined_yet
+
+	if [ $# != 1 ];then
+		echo "=> Usage : $FUNCNAME repo" >&2
+		return 1
+	fi
+	listPackagesFromRepo "$1" | \xargs dpkg-query -W --showformat='${Package} is ${Status}\n' 2>/dev/null | awk '/ installed/{print$1}'
+}
 function listPackagesFromRepo {
-#	local architecture=$(dpkg-architecture -q DEB_HOST_ARCH 2>/dev/null || dpkg-architecture | awk -F"=" '/DEB_HOST_ARCH\>/{print$2}')
 	local architecture=$(dpkg --print-architecture)
 	local repo=undefined_yet
 
@@ -237,7 +246,14 @@ function listPackagesFromRepo {
 		repo="${repo/\//_}"
 	fi
 
-	aptitude search -F '%p' "?origin($repo) ( ?architecture($architecture) | ?architecture(all) ) ?installed" || \grep -h -P -o "^Package: \K.*" /var/lib/apt/lists/*$repo*_*Packages | sort -u || grep-dctrl -n -sPackage . /var/lib/apt/lists/*$repo*_*Packages | sort -u
+#	if aptitude search -F '%p' "?origin(${repo/_/-}\>) ( ?architecture($architecture) | ?architecture(all) ) ?installed";then
+	if aptitude search -F '%p' "?origin(${repo/_/-}\>) ( ?architecture($architecture) | ?architecture(all) )";then
+		:
+	elif \grep -h -P -o "^Package: \K.*" /var/lib/apt/lists/*${repo}_*Packages | sort -u;then
+		:
+	else
+		grep-dctrl -n -sPackage . /var/lib/apt/lists/*${repo}_*Packages | sort -u
+	fi
 }
 function move_Extra_Keys_To_Main_APT_KeyRing {
 	apt-key list 2>&1 >/dev/null | awk -F"[\`']" '/resource limit/{print "sudo apt-key add "$2"; sudo \\rm -vf "$2}' | sh -x
