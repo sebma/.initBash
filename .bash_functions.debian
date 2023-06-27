@@ -232,7 +232,7 @@ function listInstalledPackagesFromRepo {
 		echo "=> Usage : $FUNCNAME repo" >&2
 		return 1
 	fi
-	listPackagesFromRepo "$1" | \xargs dpkg-query -W --showformat='${Package} is ${Status}\n' 2>/dev/null | awk '/ installed/{print$1}'
+	listPackagesFromRepo "$1" | \xargs dpkg-query -W --showformat='${Package} is ${Status}\n' 2>/dev/null | awk '/ installed/{print$1}' | sort -u
 }
 function listPackagesFromRepo {
 	local architecture=$(dpkg --print-architecture)
@@ -245,11 +245,11 @@ function listPackagesFromRepo {
 		repo="${1/ppa:/}"
 	fi
 
-	if \grep -h -P -o "^Package: \K.*" /var/lib/apt/lists/*${repo/\//_}_*Packages | sort -u;then
+	if grep-dctrl -n -sPackage . /var/lib/apt/lists/*${repo/\//_}_*Packages;then
 		:
-	elif grep-dctrl -n -sPackage . /var/lib/apt/lists/*${repo/\//_}_*Packages | sort -u;then
+	elif \grep -h -P -o "^Package: \K.*" /var/lib/apt/lists/*${repo/\//_}_*Packages;then
 		:
-	else aptitude search -F '%p' "?origin(${repo/_/-}\>) ( ?architecture($architecture) | ?architecture(all) )"
+	else aptitude search -F '%p' "?origin(${repo/\//-}\>) ( ?architecture($architecture) | ?architecture(all) )"
 		:
 	fi
 }
