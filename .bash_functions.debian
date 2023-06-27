@@ -243,16 +243,14 @@ function listPackagesFromRepo {
 		return 1
 	else
 		repo="${1/ppa:/}"
-		repo="${repo/\//_}"
 	fi
 
-#	if aptitude search -F '%p' "?origin(${repo/_/-}\>) ( ?architecture($architecture) | ?architecture(all) ) ?installed";then
-	if aptitude search -F '%p' "?origin(${repo/_/-}\>) ( ?architecture($architecture) | ?architecture(all) )";then
+	if \grep -h -P -o "^Package: \K.*" /var/lib/apt/lists/*${repo/\//_}_*Packages | sort -u;then
 		:
-	elif \grep -h -P -o "^Package: \K.*" /var/lib/apt/lists/*${repo}_*Packages | sort -u;then
+	elif grep-dctrl -n -sPackage . /var/lib/apt/lists/*${repo/\//_}_*Packages | sort -u;then
 		:
-	else
-		grep-dctrl -n -sPackage . /var/lib/apt/lists/*${repo}_*Packages | sort -u
+	else aptitude search -F '%p' "?origin(${repo/_/-}\>) ( ?architecture($architecture) | ?architecture(all) )"
+		:
 	fi
 }
 function move_Extra_Keys_To_Main_APT_KeyRing {
