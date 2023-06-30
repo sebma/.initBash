@@ -13,6 +13,14 @@ function smartBadsectors {
 		$sudo smartctl -A $disk | awk '/Reallocated_Sector_Ct|Current_Pending_Sector|Offline_Uncorrectable/{bad+=$NF}END{print "=> Bad sectors = "bad}'
 	done
 }
+function smartPreFailValues {
+	sudo -v
+	for disk
+	do
+		echo "=> disk = $disk"
+		sudo smartctl -A $disk | grep -v "\s0$" | grep --color=always "Pre-fail.*\s[0-9]\+$"
+	done
+}
 function smartBadsectorsAllDisks {
 	smartBadsectors $(lsdisks)
 }
