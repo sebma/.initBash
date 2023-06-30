@@ -14,11 +14,11 @@ function smartBadsectors {
 	done
 }
 function smartPreFailValues {
-	sudo -v
+	$sudo -v
 	for disk
 	do
 		echo "=> disk = $disk"
-		sudo smartctl -A $disk | grep -v "\s0$" | grep --color=always "Pre-fail.*\s[0-9]\+$"
+		$sudo smartctl -A $disk | grep -v "\s0$" | grep --color=always "Pre-fail.*\s[0-9]\+$"
 	done
 }
 function smartBadsectorsAllDisks {
