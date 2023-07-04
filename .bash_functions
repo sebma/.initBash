@@ -242,6 +242,7 @@ function backupFile {
 		date=$(stat -c %y "$file" | cut -d" " -f1 | tr -d -)
 		ext="${file/*./}"
 		basename="${file/.$ext/}"
+		basename="${file/*\//}"
 		\cp -piv "$file" "$basename-$date.$ext"
 	done
 }
