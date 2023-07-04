@@ -236,6 +236,15 @@ function awkCalc {
 	set -- ${@/]/)}
 	\awk -v CONVFMT=%.15g 'BEGIN{ print '"$*"' "" }'
 }
+function backupFile {
+	for file
+	do
+		date=$(stat -c %y "$file" | cut -d" " -f1 | tr -d -)
+		ext="${file/*./}"
+		basename="${file/.$ext/}"
+		\cp -piv "$file" "$basename-$date.$ext"
+	done
+}
 function baseName {
 	for arg
 	do
