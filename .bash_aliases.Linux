@@ -99,8 +99,8 @@ alias ramSize2='\bc -l <<< $(getconf _PHYS_PAGES)*$(getconf PAGE_SIZE) | 2si'
 alias rename="\prename -v"
 alias rename2LowerCase="\prename -v y/A-Z/a-z/"
 alias rename2UpperCase="\prename -v y/a-z/A-Z/"
-alias rgrep='time grep -Ir --exclude-dir=.git'
-alias rgrepFollowSymLinks='time grep -IR --exclude-dir=.git'
+alias rgrep=$'rg -uuu -g !.git/'
+alias rgrepFollowSymLinks="rgrep -L"
 alias rmdir="\rmdir -v"
 alias rsync='time \rsync -uth -P -z --skip-compress=$RSYNC_SKIP_COMPRESS_LIST $RSYNC_EXCLUSION'
 alias scp='time \rsync -h --progress -u -zt --skip-compress=$RSYNC_SKIP_COMPRESS_LIST $RSYNC_EXCLUSION'
