@@ -6,7 +6,7 @@ function viewCertificateValidity {
 	for cerCertificate
 	do
 		echo "=> cerCertificate = $cerCertificate :"
-		openssl x509 -in "$cerCertificate" -noout -text | grep Not
+		openssl x509 -in "$cerCertificate" -noout -dates
 	done
 }
 function der2pem {
