@@ -3,9 +3,9 @@
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 alias checkcertif="\openssl verify -verbose"
-alias readcsr="\openssl req -noout -inform PEM"
-alias readder="\openssl x509 -noout -inform DER"
-alias readpem="\openssl x509 -noout -inform PEM"
+alias readcsr="\openssl req -noout -inform PEM -in"
+alias readder="\openssl x509 -noout -inform DER -in"
+alias readpem="\openssl x509 -noout -inform PEM -in"
 alias viewcsr="readcsr -text -in"
 alias viewder="readder -text -in"
 alias viewpem="readpem -text -in"
