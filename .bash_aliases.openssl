@@ -2,15 +2,13 @@
 ! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-alias checkcer="\openssl x509 -noout -inform PEM -in"
 alias checkcertif="\openssl verify -verbose"
-alias checkcrt="\openssl x509 -noout -inform PEM -in"
-alias checkder="\openssl x509 -noout -inform DER -in"
-alias viewcer="\openssl x509 -noout -text -inform DER -subject -issuer -dates -purpose -nameopt multiline -in"
-alias viewcrt="viewcer"
 alias viewcsr="\openssl req -noout -text -inform PEM -in"
-alias viewder="\openssl x509 -noout -text -inform DER -in"
-alias viewpem="\openssl x509 -noout -text -inform PEM -subject -issuer -dates -purpose -nameopt multiline -in"
+alias viewder="\openssl x509 -noout -inform DER -in"
+#alias viewder="\openssl x509 -noout -text -inform DER -in"
+alias viewpem="\openssl x509 -noout -inform PEM -in"
+alias viewderSummary="viewder -subject -issuer -dates -purpose -nameopt multiline -in"
+alias viewpemSummary="viewpem -subject -issuer -dates -purpose -nameopt multiline -in"
 
 set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
