@@ -682,7 +682,9 @@ function gdebiALL {
 function getCertificate {
 	for url
 	do
-		openssl s_client -showcerts -verify 5 -connect "$url" </dev/null 2> /dev/null | openssl x509
+		url="${url#http*\/\/}"
+		url="${url/\/*/}"
+		openssl s_client -showcerts -verify 5 -connect "$url":https </dev/null 2>/dev/null | openssl x509
 	done
 }
 function getBJC {
