@@ -110,6 +110,7 @@ alias sheet2xls="libreofficeTo xls"
 alias sheet2xlsx="libreofficeTo xlsx"
 alias dos2unix="\sed -i 's/\r//'"
 alias doublons='\fdupes -rnASd'
+alias downloadCertificate=getCertificate
 alias driveinfo='\cdrecord -prcap'
 alias du="LANG=C \du -h"
 alias dvdinfo='\cdrecord -minfo'
