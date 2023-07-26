@@ -679,6 +679,12 @@ function gdebiALL {
 		sudo gdebi -n $package
 	done
 }
+function getCertificate {
+	for url
+	do
+		openssl s_client -showcerts -verify 5 -connect "$url" </dev/null 2> /dev/null | openssl x509
+	done
+}
 function getBJC {
 	#bjcUrl=http://www.bibledejesuschrist.org/downloads/bjc_internet.pdf
 	bjcUrl=http://www.bibledejesuschrist.org/downloads/bjc.pdf
