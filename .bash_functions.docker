@@ -2,7 +2,20 @@
 ! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-function findDockerFromOverlayDirectories {
+function findDockerContainerFromPath {
+        for dir
+        do
+                sha=$(cut -d/ -f6 <<< $dir)
+                for id in $(sudo docker image ls -q)
+                do
+                        if sudo docker image inspect $id --format '{{json .GraphDriver}}' | grep -q $sha; then
+                                echo "=> found in image $id" #cf. https://stackoverflow.com/a/76771727/5649639
+                        fi
+                done
+                sudo docker container ls -a | grep ${sha:0:12}
+        done
+}
+function findDockerImageFromPath {
 	for dir
 	do
 		sha=$(echo "$dir" | cut -d/ -f6)
@@ -12,6 +25,7 @@ function findDockerFromOverlayDirectories {
 				echo "=> found in image $id"
 			fi
 		done
+		sudo docker image ls -a | grep ${sha:0:12}
 	done
 }
 
