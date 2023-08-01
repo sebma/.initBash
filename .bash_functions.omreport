@@ -3,7 +3,7 @@
 export omreport=/opt/dell/srvadmin/bin/omreport
 
 function omreportTechnicalSupportReport {
-    local id=0
+    local id=$($omreport storage controller -fmt ssv | awk -F';' '/RAID$/{printf$1;exit}')
 
     $omreport system alertlog
     $omreport system esmlog
