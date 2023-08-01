@@ -1,0 +1,14 @@
+# vim: set ft=sh noet:
+
+export omreport=/opt/dell/srvadmin/bin/omreport
+
+function omreportTechnicalSupportReport {
+    local id=0
+
+    $omreport system alertlog
+    $omreport system esmlog
+    $omreport system version
+    $omreport storage controller
+    $omreport storage vdisk
+    $omreport storage pdisk controller=$id
+}
