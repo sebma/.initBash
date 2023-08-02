@@ -5,14 +5,14 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 export omreport=/opt/dell/srvadmin/bin/omreport
 
 function omreportTechnicalSupportReport {
-    local id=$($omreport storage controller -fmt ssv | awk -F';' '/RAID$/{printf$1;exit}')
+	local id=$($omreport storage controller -fmt ssv | awk -F';' '/RAID$/{printf$1;exit}')
 
-    $omreport system alertlog
-    $omreport system esmlog
-    $omreport system version
-    $omreport storage controller
-    $omreport storage vdisk
-    $omreport storage pdisk controller=$id
+	$omreport system alertlog
+	$omreport system esmlog
+	$omreport system version
+	$omreport storage controller
+	$omreport storage vdisk
+	$omreport storage pdisk controller=$id
 }
 
 set +x
