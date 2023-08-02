@@ -7,11 +7,14 @@ export omreport=/opt/dell/srvadmin/bin/omreport
 function omreportTechnicalSupportReport {
 	local id=$($omreport storage controller -fmt ssv | awk -F';' '/RAID$/{printf$1;exit}')
 
-	$omreport system alertlog
-	$omreport system esmlog
-	$omreport system version
-	$omreport storage controller
-	$omreport storage vdisk
+	for subsystem in alertlog esmlog version
+	do
+		$omreport system $subsystem
+	done
+	for substorage in controller vdisk
+	do
+		$omreport storage $substorage
+	done
 	$omreport storage pdisk controller=$id
 }
 
