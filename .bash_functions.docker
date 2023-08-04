@@ -10,6 +10,7 @@ function findDockerContainerFromPath {
 		do
 			if sudo docker image inspect $id --format '{{json .GraphDriver}}' | grep -q $sha; then
 				echo "=> found in image $id" #cf. https://stackoverflow.com/a/76771727/5649639
+				sudo docker container ls | grep $id
 			fi
 		done
 		sudo docker container ls -a | grep ${sha:0:12}
@@ -23,6 +24,7 @@ function findDockerImageFromPath {
 		do
 			if $sudo docker image inspect $id --format '{{json .GraphDriver}}' | grep -q $sha; then
 				echo "=> found in image $id"
+				sudo docker image ls | grep $id
 			fi
 		done
 		sudo docker image ls -a | grep ${sha:0:12}
