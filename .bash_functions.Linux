@@ -53,6 +53,17 @@ function df {
 	LANG=C $df $dfOptions "$@" | \grep "^Filesystem" 1>&2
 	LANG=C $df $dfOptions "$@" | \grep -v "^Filesystem"
 }
+function heic2any {
+	local allArgsButLast="${@:1:$#-1}"
+	local lastArg="${@: -1}"
+	for heicFile in $allArgsButLast
+	do
+		convert "$heicFile" "${heicFile/heic/$lastArg}" || heif-convert "$heicFile" "${heicFile/heic/$lastArg}"
+	done
+}
+function heic2jpg {
+	heic2any "$@" ĵpg
+}
 function htm2man {
 	which pandoc >/dev/null || return
 	for file
