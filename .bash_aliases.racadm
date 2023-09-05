@@ -6,6 +6,7 @@ racadm=/opt/dell/srvadmin/sbin/racadm
 
 alias racadm=$racadm
 alias racadmControllerInfo="$racadm storage get controllers -o"
+alias racadmDNSRacName="$racadm get iDRAC.NIC.DNSRacName"
 alias racadmHWInventory="$racadm hwinventory"
 alias racadmIP="$racadm get iDRAC.IPv4.Address | grep Address | cut -d= -f2"
 alias racadmURL='echo https://$(racadmIP)'
