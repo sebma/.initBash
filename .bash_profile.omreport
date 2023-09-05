@@ -1,0 +1,17 @@
+# vim: set ft=sh noet:
+
+omreport=/opt/dell/srvadmin/bin/omreport
+
+if which $omreport >/dev/null 2>&1;then
+	echo "=> Listing bad disks :"
+	$omreport storage pdisk controller=0 -fmt ssv | grep -B20 ';Critical;' | egrep '^ID|;Critical;' | awk -F";" '{print$1";"$2";"$3";"$4";"$6";"$7";"$10";"$21";"$25";"$26";"$27}'
+	echo "=> DONE."
+	echo
+	echo "=> Listing prefail disks :"
+	$omreport storage pdisk controller=0 -fmt ssv | grep -B20 ';Non-Critical;' | egrep '^ID|;Non-Critical;' | awk -F";" '{print$1";"$2";"$3";"$4";"$6";"$7";"$10";"$21";"$25";"$26";"$27}'
+	echo "=> DONE."
+	echo
+	echo "=> Listing new physical disks waiting for virtual disk assignment :"
+	$omreport storage pdisk controller=0 -fmt ssv | grep -B20 ';Ready;' | egrep '^ID|;Ready;' | awk -F";" '{print$1";"$2";"$3";"$4";"$6";"$7";"$10";"$21";"$25";"$26";"$27}'
+	echo "=> DONE."
+fi
