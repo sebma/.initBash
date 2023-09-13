@@ -681,7 +681,7 @@ function ytdlUpdate {
 		local ytdlCurrentRelease=$($package --version)
 		echo "=> The current version of $package is <$ytdlCurrentRelease>."
 		echo "=> Searching for the latest release on $ytdlPyPI_URL ..." >&2
-		local ytdlLatestRelease=$(\curl -Ls $ytdlPyPI_URL/json | jq -r .info.version)
+		local ytdlLatestRelease=$(\curl -qLs $ytdlPyPI_URL/json | jq -r .info.version)
 		if [ -z "$ytdlLatestRelease" ];then
 			# Le repo. youtube-dl avait ete interdit par la R.I.A.A. le 23/10/2020 cf. https://github.com/github/dmca/blob/master/2020/10/2020-10-23-RIAA.md mais il est reouvert: https://github.blog/2020-11-16-standing-up-for-developers-youtube-dl-is-back/
 			set -o pipefail
@@ -739,7 +739,7 @@ function ytdlpUpdate {
 		local ytdlpCurrentRelease=$($package --version)
 		echo "=> The current version of $package is <$ytdlpCurrentRelease>."
 		echo "=> Searching for the latest release on $ytdlpPyPI_URL ..." >&2
-		local ytdlpLatestRelease=$(\curl -Ls $ytdlpPyPI_URL/json | jq -r .info.version)
+		local ytdlpLatestRelease=$(\curl -qLs $ytdlpPyPI_URL/json | jq -r .info.version)
 		if [ -z "$ytdlpLatestRelease" ];then
 			set -o pipefail
 			echo "=> Couldn't find the latest release on $ytdlpPyPI_URL, checking the $ytdlpGitURL repository ..." >&2
