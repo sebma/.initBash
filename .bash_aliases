@@ -264,7 +264,7 @@ alias myCountry="time curl ipinfo.io/country"
 alias myIP="time curl ipinfo.io/ip"
 alias nautilus="\nautilus --no-desktop"
 alias no='yes n'
-alias nocomment='\egrep -v "^(\s*#|$|^;)"'
+alias nocomment='\egrep -v "^\s*(#|$|;|//)"'
 alias od="\od -ct x1z"
 alias openedFiles="\strace -e trace=open,close,read,write,connect,accept"
 alias openwrtMostSupportedRouterBrands="openwrtTOH | awk '/ Router/{print\$4}' | sort | uniq -c | sort -rn"
