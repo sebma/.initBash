@@ -569,11 +569,11 @@ function updateGrub {
 	local osID=$(source /etc/os-release && echo $ID) osID_LIKE=$(source /etc/os-release && echo $ID_LIKE)
 	if [ $osID_LIKE == debian ];then
 		$sudo update-grub
-	elif [ $osID_LIKE == centos ];then
+	elif [ $osID == centos ];then
 		if [ -d /sys/firmware/efi ];then
-			grub-mkconfig -o /etc/grub2-efi.cfg
+			grub-mkconfig -o /boot/efi/EFI/$osID/grub.cfg
 		else
-			grub-mkconfig -o /etc/grub2.cfg
+			grub-mkconfig -o /boot/grub2/grub.cfg
 		fi
 	fi
 }
