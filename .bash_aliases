@@ -149,7 +149,7 @@ alias geoipCity="geoipjson '.city+\" \"+.country_code' -r"
 alias geoipHostname="geoipjson2 .hostname -r"
 alias getFS_TYPE="\blkid -o value -s TYPE"
 alias getPip="wget -qO- https://bootstrap.pypa.io/get-pip.py | python"
-alias getUUID="\blkid -o value -s UUID"
+alias getPartitionUUID="\blkid -o value -s UUID"
 alias grepInHome="time \grep --exclude-dir=Audios --exclude-dir=Music --exclude-dir=Podcasts --exclude-dir=Videos --exclude-dir=Karambiri --exclude-dir=iso --exclude-dir=Downloads --exclude-dir=Documents --exclude-dir=src --exclude-dir=Pictures --exclude-dir=.thunderbird --exclude-dir=deb --exclude-dir=apks --exclude-dir=.mozilla --exclude-dir=.PlayOnLinux --exclude-dir=PlayOnLinux\'s\ virtual\ drives --exclude-dir=.cache --exclude-dir=Sauvegarde_MB525 --exclude-dir=A_Master_RES --exclude-dir=SailFishSDK --exclude=.*history"
 alias greperrors="egrep -wiC2 'err:|:err|error|erreur|java.*exception'"
 alias grepfirst="grep -m1"
@@ -374,7 +374,7 @@ alias updateBrew="time \brew update -v"
 alias updatePip="pip install -U pip"
 alias updateThumbnails="\exiftran -gpi"
 alias updateYoutube-dl="pip install -U youtube-dl"
-alias uuidGet="\blkid -o value -s UUID"
+alias uuidGet='sudo cat /sys/class/dmi/id/product_serial /sys/class/dmi/id/product_uuid'
 alias venv="\python3 -m venv"
 alias vict2c="vim +'setf xml' $LOGDIR/ct2c.log"
 alias vidInfo=videoInfo
@@ -389,7 +389,6 @@ alias vim="LANG=C.UTF-8 \vim" && alias vi=vim
 alias vimatlab="vim +'setf matlab'"
 alias vioctave=vimatlab
 alias vlclocal='DISPLAY=:0 vlc'
-alias vmwareUUID='sudo cat /sys/class/dmi/id/product_serial /sys/class/dmi/id/product_uuid'
 alias wanIP="\dig -4 +short @resolver1.opendns.com A myip.opendns.com 2>/dev/null || time host -4 -t A myip.opendns.com resolver1.opendns.com | awk '/\<has\>/{print\$NF}'"
 alias wanIPv6="\dig -6 +short @resolver1.opendns.com AAAA myip.opendns.com 2>/dev/null || time host -6 -t AAAA myip.opendns.com resolver1.opendns.com | awk '/\<has\>/{print\$NF}'"
 alias wavemon="xterm -e wavemon &"
