@@ -149,15 +149,20 @@ function anyTimeWithTZ2LocalTimeZone {
 	remoteTime=${remoteTime/./:}
 	remoteTZ=$(echo $remoteTime | awk '{printf$NF}')
 	case $remoteTZ in
-		AT) remoteTZ=$(TZ=Canada/Atlantic date '+%Z');;
-		CT) remoteTZ=$(TZ=US/Central date '+%Z');;
-		ET) remoteTZ=$(TZ=US/Eastern date '+%Z');;
-		PT) remoteTZ=$(TZ=US/Pacific date '+%Z');;
-		AET) remoteTZ=$(TZ=Australia/Sydney date '+%Z');;
-		CET) remoteTZ=$(TZ=CEST date '+%Z');;
+		AT) remoteTZ=$(TZ=Canada/Atlantic date '+%Z')
+			remoteTime=${remoteTime/ AT/ $remoteTZ};;
+		CT) remoteTZ=$(TZ=US/Central date '+%Z')
+			remoteTime=${remoteTime/ CT/ $remoteTZ};;
+		ET) remoteTZ=$(TZ=US/Eastern date '+%Z')
+			remoteTime=${remoteTime/ ET/ $remoteTZ};;
+		PT) remoteTZ=$(TZ=US/Pacific date '+%Z')
+			remoteTime=${remoteTime/ PT/ $remoteTZ};;
+		AET) remoteTZ=$(TZ=Australia/Sydney date '+%Z')
+			remoteTime=${remoteTime/ AET/ $remoteTZ};;
+		CET) remoteTZ=$(TZ=CEST date '+%Z')
+			remoteTime=${remoteTime/ CET/ $remoteTZ};;
 		*) ;;
 	esac
-	remoteTime=${remoteTime/ ET/ $remoteTZ}
 
 	$date -d "$remoteTime $destinationTZ"
 }
