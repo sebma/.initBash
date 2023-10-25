@@ -128,24 +128,34 @@ function addUsersInGroup {
 }
 function anyTimeWithTZ2LocalTimeZone {
 	local remoteTime=to_be_defined
-	local remoteTZ
+	local remoteTZ=to_be_defined
+	local destinationTZ
 	local date=date
+	local localTZ=$(date +%Z)
 	test $osFamily = Darwin && date=gdate
 	if [ $# = 0 ];then
-		echo "=> Usage : $FUNCNAME remoteTime [remoteTZ]" >&2
+		echo "=> Usage : $FUNCNAME remoteTime [destinationTZ=$localTZ]" >&2
 		return 1
 	elif [ $# = 1 ];then
 		case $1 in
-			-h|--h|-help|--help) echo "=> Usage : $FUNCNAME remoteTime [remoteTZ]" >&2;return 1;;
+			-h|--h|-help|--help) echo "=> Usage : $FUNCNAME remoteTime [destinationTZ=$localTZ]" >&2;return 1;;
 			*) remoteTime=$1;;
 		esac
 	else
 		remoteTime=$1
-		remoteTZ=$2
+		destinationTZ=$2
 	fi
 
 	remoteTime=${remoteTime/./:}
-	$date -d "$remoteTime $remoteTZ"
+	remoteTZ=$(echo $remoteTime | awk '{printf$NF}')
+	case $remoteTZ in
+		ET)
+			remoteTZ=$(TZ=America/New_York date '+%Z')
+			remoteTime=${remoteTime/ ET/ $remoteTZ};;
+		*) ;;
+	esac
+		
+	$date -d "$remoteTime $destinationTZ"
 }
 function any2ascii {
 	local encoding=unknown
