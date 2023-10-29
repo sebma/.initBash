@@ -30,8 +30,8 @@ alias mpvOK.ru='mpv --profile=ok.ru'
 alias mpvFreeBoxTV='mpv --profile=freebox-rtsp'
 
 videoExtensions=mp4,avi,mp2,mp3,mpg,mov
-alias mpvFirst='mpv $(\ls -1 -t '*.{$videoExtensions}' 2>/dev/null | tail -1)'
-alias mpvLast='mpv  $(\ls -1 -t '*.{$videoExtensions}' 2>/dev/null | head -1)'
+alias mpvfirst='mpv $(\ls -1 -t '*.{$videoExtensions}' 2>/dev/null | tail -1)'
+alias mpvlast='mpv  $(\ls -1 -t '*.{$videoExtensions}' 2>/dev/null | head -1)'
 
 alias mpvPlaylistFileBEST='mpvPlaylistFile --profile=best'
 alias mpvPlaylistFileFHD='mpvPlaylistFile --profile=fhd'
