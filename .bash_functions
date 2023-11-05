@@ -139,7 +139,7 @@ function anyTimeWithTZ2LocalTimeZone {
 	elif [ $# = 1 ];then
 		case $1 in
 			-h|--h|-help|--help) echo "=> Usage : $FUNCNAME remoteTime [destinationTZ=$localTZ]" >&2;return 1;;
-			*) remoteTime=$1;;
+			*) remoteTime=$1;destinationTZ=$localTZ;;
 		esac
 	else
 		remoteTime=$1
@@ -164,7 +164,7 @@ function anyTimeWithTZ2LocalTimeZone {
 		*) ;;
 	esac
 
-	$date -d "$remoteTime $destinationTZ"
+	TZ=$destinationTZ $date -d "$remoteTime"
 }
 function any2ascii {
 	local encoding=unknown
