@@ -764,6 +764,8 @@ function ytdlpUpdate {
 set -x
 				$sudo pip$ytdlPythonVersion install $package==$ytdlpCurrentRelease
 set +x
+			else
+				echo "=> Success."
 			fi
 		else
 			echo "=> [$FUNCNAME] INFO : You already have the latest release, which is $ytdlpLatestRelease." >&2
