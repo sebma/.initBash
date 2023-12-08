@@ -3,6 +3,7 @@
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 alias esxcliHistory="grep -o "esxcli.*" /var/log/shell.log | uniq"
+alias fullHistory=$'awk -F ":" \'/shell.*:.*:/{sub("^ ","",$NF);print $NF}\' /var/log/shell.log'
 
 set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
