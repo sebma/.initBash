@@ -3,7 +3,8 @@
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 function lsdisks {
-	\ls /sys/class/block/ | sed "s|^|/dev/|" | egrep -v '/(loop|dm-|md|sr|z?ram|sd[a-z]+[0-9]+|nvme[0-9]n[0-9]p[0-9]|synoboot[0-9])'
+	[ $osFamily = Linux ]  && \ls /sys/class/block/ | sed "s|^|/dev/|" | egrep -v '/(loop|dm-|md|sr|z?ram|sd[a-z]+[0-9]+|nvme[0-9]n[0-9]p[0-9]|synoboot[0-9])'
+	[ $osFamily = Darwin ] && \ls /dev/disk{0..9} 2>/dev/null
 }
 function smartBadsectors {
 	$sudo -v
