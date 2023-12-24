@@ -82,6 +82,7 @@ alias llm="ll --block-size=M"
 alias ls="ls --color -F"
 alias lsinterfaces="\ls /sys/class/net"
 alias lsprocessors="lscpu -J | jq -r '.lscpu | map( select(.field | IN(\"CPU(s):\",\"Model name:\") ).data ) | join(\" x \")'"
+alias lxterm="\lxterm -sb -fn 9x15"
 alias macinfo='\ip -c -br link show'
 alias mmcSize="awk '/[0-9]/{print FILENAME\": \"\$1/(2*1024^2)\" GiB\"}' /sys/class/block/mmcblk?/size"
 alias mmcInfo="tail -vn +1 /sys/class/block/mmcblk0/device/driver/mmc*/uevent"
