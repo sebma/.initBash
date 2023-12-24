@@ -230,7 +230,6 @@ alias lsdvd="\lsdvd -avcs"
 alias lshw="\lshw -numeric -sanitize"
 alias lshwBUSINFO='lshw -businfo'
 alias lsqm='dspmq | sed "s/[()]/ /g" | awk "/Running/{print \$2}" | paste -sd" ";echo'
-alias lxterm="\lxterm -sb -fn 9x15"
 alias lzgrep="\lzgrep --color"
 alias mail='\mail || mail -f $HOME/mbox'
 alias manSearch=manpageSearch
