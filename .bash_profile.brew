@@ -8,9 +8,13 @@ test "$debug" -gt 0 && Echo "\n=> eval \$(brew shellenv) ..."
 export HOMEBREW_NO_INSTALL_CLEANUP=1
 export HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1
 
-alias brewInitEnv='eval $($brew shellenv)'
-Echo "=> Running eval \$(brew shellenv) ..."
-$time brewInitEnv && [ $BASH_VERSINFO -ge 4 ] && [ -r $($brew --prefix)/share/bash-completion/bash_completion ] && Source $($brew --prefix)/share/bash-completion/bash_completion
+brewInitEnv='eval $($brew shellenv)'
+brewPrefix=$($brew --prefix)
+
+Echo "=> Running $brewInitEnv ..."
+$time $brewInitEnv
+Echo "=> Sourcing $brewPrefix/share/bash-completion/bash_completion ..."
+[ $BASH_VERSINFO -ge 4 ] && [ -r $brewPrefix/share/bash-completion/bash_completion ] && Source $brewPrefix/share/bash-completion/bash_completion
 Echo "=> DONE."
 
 set +x
