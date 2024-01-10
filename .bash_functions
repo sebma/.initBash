@@ -566,6 +566,8 @@ function distribName {
 		osName="$(sw_vers -productName)"
 	elif [ $osFamily = Android ]; then
 		osName=Android
+	elif [ $osFamily = VMkernel ]; then # ESXi
+		osName=ESXi
 	else
 		osName=$OSTYPE
 	fi
@@ -589,6 +591,8 @@ function distribType {
 			distribType=Darwin
 	elif [ $osFamily = Android ]; then
 			distribType=Android
+	elif [ $osFamily = VMkernel ]; then # ESXi
+			distribType=ESXi
 	else
 		type -P bash >/dev/null 2>&1 && distribType=$(bash -c 'echo $OSTYPE') || distribType=$osFamily
 	fi
