@@ -32,7 +32,7 @@ groups | egrep -wq "admin|sudo" && alias pipInstall="sudo -H easy_install pip"  
 groups | egrep -wq "admin|sudo" && alias pipInstall="sudo -H easy_install3 pip" || alias pipInstall="easy_install3 --user pip"
 alias refresh="time sudo pkcon refresh"
 alias refresh2="time sudo zypper refresh"
-alias rgrep='time grep -r'
+alias rgrep=$'time rg -uu -g !.git/'
 alias smsGrep='sqlite3 ~/.local/share/commhistory/commhistory.db "select Freetext from Events where type=2;" | grep'
 alias smsSearch=smsGrep
 alias timedRestart='systemctl --user restart timed-qt5.service;systemctl --user status timed-qt5.service | egrep " - |Active:"'
