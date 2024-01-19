@@ -18,7 +18,7 @@ type -P pgrep >/dev/null 2>&1 || alias pgrep="\ps -fC"
 ggrep -V 2>/dev/null | \grep -wq GNU && alias grep="\ggrep --color" && alias Pgrep="grep -P"
 
 alias egrep="grep -E"
-alias rgrep='time grep -Ir --exclude-dir=.git'
+alias rgrep=$'rg -uu -g !.git/'
 alias rgrepFollowSymLinks='time grep -IR --exclude-dir=.git'
 alias zegrep="zgrep -E"
 
