@@ -368,7 +368,7 @@ function open {
 			openDesktopApp=$(grep -oP "Exec=\K.*" "$file" | sed 's/"//g;s/ %[a-zA-Z]//')
 			$openDesktopApp &
 		else
-			$openCommand "$file" 2>&1 | \egrep -v "/MBuntu-Y-For-Unity/|/MacBuntu-OSX/|/Adwaita/" &
+			$openCommand "$file" 2>&1 | \egrep -v "/MBuntu-Y-For-Unity/|/MacBuntu-OS.*/|/Adwaita/|QT_DEVICE_PIXEL_RATIO|QT_.*SCALE_FACTOR" &
 		fi
 	done
 }
