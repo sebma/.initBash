@@ -20,9 +20,9 @@ function findDockerImageFromPath {
 	for path
 	do
 		sha=$(echo "$path" | cut -d/ -f6)
-		for id in $($sudo docker image ls -q)
+		for id in $(sudo docker image ls -q)
 		do
-			if $sudo docker image inspect $id --format '{{json .GraphDriver}}' | grep -q $sha; then
+			if sudo docker image inspect $id --format '{{json .GraphDriver}}' | grep -q $sha; then
 				echo "=> found in image $id"
 				sudo docker image ls | grep $id
 			fi
