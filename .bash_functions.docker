@@ -3,9 +3,9 @@
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 function findDockerContainerFromPath {
-	for dir
+	for path
 	do
-		sha=$(cut -d/ -f6 <<< $dir)
+		sha=$(echo "$path" | cut -d/ -f6)
 		for id in $(sudo docker image ls -q)
 		do
 			if sudo docker image inspect $id --format '{{json .GraphDriver}}' | grep -q $sha; then
@@ -17,9 +17,9 @@ function findDockerContainerFromPath {
 	done
 }
 function findDockerImageFromPath {
-	for dir
+	for path
 	do
-		sha=$(echo "$dir" | cut -d/ -f6)
+		sha=$(echo "$path" | cut -d/ -f6)
 		for id in $($sudo docker image ls -q)
 		do
 			if $sudo docker image inspect $id --format '{{json .GraphDriver}}' | grep -q $sha; then
