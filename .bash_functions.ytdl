@@ -568,8 +568,13 @@ function ytdlGetThumbNail {
 				thumbnailExtension="${thumbnailURL/*./}"
 				thumbnailExtension="${thumbnailExtension/\?*/}"
 				thumbnailBaseName+=__${thumbnailID}__${thumbnailExtractor}_com.$thumbnailExtension
-				alias 2iec='\numfmt --to=iec-i --suffix=B --format=%.1f'
-				\wget -c -nv -O "$thumbnailBaseName" "$thumbnailURL" && \du -h "$thumbnailBaseName" || { retCode=$?;set +x;[ $retCode != 8 ] && echo "${jsonResult}" | wc -c | 2iec && return $retCode; }
+				if \wget -c -nv -O "$thumbnailBaseName" "$thumbnailURL";then
+					\du -h "$thumbnailBaseName"
+				else
+					retCode=$?
+					set +x
+					[ $retCode != 8 ] && echo "${jsonResult}" | wc -c | \numfmt --to=iec-i --suffix=B --format=%.1f && return $retCode
+				fi
 				unset thumbnailBaseName thumbnailID
 			fi
 		done
@@ -587,8 +592,13 @@ function ytdlpGetThumbNail {
 				thumbnailExtension="${thumbnailURL/*./}"
 				thumbnailExtension="${thumbnailExtension/\?*/}"
 				thumbnailBaseName+=__${thumbnailID}__${thumbnailExtractor}_com.$thumbnailExtension
-				alias 2iec='\numfmt --to=iec-i --suffix=B --format=%.1f'
-				\wget -c -nv -O "$thumbnailBaseName" "$thumbnailURL" && \du -h "$thumbnailBaseName" || { retCode=$?;set +x;[ $retCode != 8 ] && echo "${jsonResult}" | wc -c | 2iec && return $retCode; }
+				if \wget -c -nv -O "$thumbnailBaseName" "$thumbnailURL";then
+					\du -h "$thumbnailBaseName"
+				else
+					retCode=$?
+					set +x
+					[ $retCode != 8 ] && echo "${jsonResult}" | wc -c | \numfmt --to=iec-i --suffix=B --format=%.1f && return $retCode
+				fi
 				unset thumbnailBaseName thumbnailID
 			fi
 		done
