@@ -1,0 +1,22 @@
+# vim: set ft=sh noet:
+
+echo
+echo "=> Listing Salt Minions that is/are not reachable :"
+salt '*' --out=txt cmd.run 'printf ""'
+echo "=> DONE."
+echo
+echo "=> Listing bad disks :"
+salt -G "virtual:physical" --out=txt cmd.run "$omreport storage pdisk controller=0 -fmt ssv | grep -B20 ';Critical;' | egrep '^ID|;Critical;'" | awk -F";" '{print$1";"$2";"$3";"$4";"$6";"$7";"$10";"$21";"$25";"$26";"$27}'
+echo "=> DONE."
+echo
+echo "=> Listing prefail disks :"
+salt -G "virtual:physical" --out=txt cmd.run "$omreport storage pdisk controller=0 -fmt ssv | grep -B20 ';Non-Critical;' | egrep '^ID|;Non-Critical;'" | awk -F";" '{print$1";"$2";"$3";"$4";"$6";"$7";"$10";"$21";"$25";"$26";"$27}'
+echo "=> DONE."
+echo
+echo "=> Listing new physical disks waiting for virtual disk assignment :"
+salt -G "virtual:physical" --out=txt cmd.run "$omreport storage pdisk controller=0 -fmt ssv | grep -B20 ';Ready;' | egrep '^ID|;Ready;'" | awk -F";" '{print$1";"$2";"$3";"$4";"$6";"$7";"$10";"$21";"$25";"$26";"$27}'
+echo "=> DONE."
+echo
+echo "=> RAM and Swap usage accross physical servers :"
+salt -G "virtual:physical" --out=txt cmd.run $'free -m | awk \'/Mem:/{printf"%03.2f%% ram usage ; ", 100*$3/$2}\';swapon -s | awk \'NR==2{printf "%03.2f%% swap usage\\n", 100*$4/$3}\'' | sort -h
+echo "=> DONE."
