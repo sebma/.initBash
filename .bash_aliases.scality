@@ -1,0 +1,6 @@
+# vim: ft=sh noet:
+
+ringsh=$(which ringsh)
+
+alias ringStatus=' for RING in $($ringsh supervisor ringList);do echo "=> RING = $RING :";$ringsh supervisor ringStatus  $RING | egrep -v "(^Node:\s.*RUN$|\<OK)$";done | egrep "ARC_REBUILD_NOK|DISKERR|DISKFULL|$"'
+alias ringStorage='for RING in $($ringsh supervisor ringList);do echo "=> RING = $RING :";$ringsh supervisor ringStorage $RING;done'
