@@ -162,6 +162,7 @@ then
 	alias rtmpdumprs='\sudo iptables -t nat -D OUTPUT -p tcp --dport 1935 -m owner \! --uid-owner root -j REDIRECT'
 	alias update-mime-database="\sudo \rm -vf /usr/share/mime/packages/kde.xml;time sudo \update-mime-database /usr/share/mime"
 	alias updatedb="time sudo updatedb"
+	alias updateCurrencies="sudo units_cur -v"
 	alias usermod="\usermod -a" # A default to always use with "usermod -G"
 	alias youtube-dlUpdate='\sudo -H pip3 install -U youtube-dl || \sudo -H pip install -U youtube-dl'
 	alias ytdlInstall='\sudo -H pip3 install youtube-dl || \sudo -H pip install youtube-dl'
