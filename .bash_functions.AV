@@ -1452,11 +1452,10 @@ function videoInfoOLD {
 	}
 }
 function videoRemoveMetaData {
-	local extension videoBaseName outputVideo
+	local extension outputVideo
 	for video
 	do
 		extension="${video/*./}"
-#		videoBaseName="${video%.???}"
 		outputVideo="${video/.$extension/-NoMetaData.$extension}"
 		echo "=> Processing = $video ..." >&2
 		$ffmpeg -i "$video" -map 0:v:0? -map 0:a? -map 0:s? -c copy -map_metadata:g -1 "$outputVideo"
@@ -1469,11 +1468,10 @@ function videoRemoveMetaData {
 	done
 }
 function videoRemoveMetaDataAndSubtitles {
-	local extension videoBaseName outputVideo
+	local extension outputVideo
 	for video
 	do
 		extension="${video/*./}"
-#		videoBaseName="${video%.???}"
 		outputVideo="${video/.$extension/-NoMetaData.$extension}"
 		echo "=> Processing = $video ..." >&2
 		$ffmpeg -i "$video" -map 0:v:0? -map 0:a? -c copy -map_metadata:g -1 "$outputVideo"
