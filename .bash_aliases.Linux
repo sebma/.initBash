@@ -45,6 +45,8 @@ type -P lspci >/dev/null && {
 alias audioCardsMinimumInfo='pactl list sinks | egrep -e "^Sink |Ports?:|available"'
 alias audioInfo="pactl info"
 alias batteryINFO='upower -i $(upower -e 2>/dev/null | grep BAT) 2>/dev/null;acpi -i 2>/dev/null && echo;LC_ALL=C \inxi -z -Bxxx 2>/dev/null'
+alias bluetoothInfo='\inxi -E'
+alias bluetoothVersion=$'hciconfig -a | awk \'/^hci[0-9]:/{print$1} /Address:/{print"Address: "$3} /HCI [Vv]ersion/{print"Bluetooth Version: "$3" "$4}\''
 alias catFiles="\tail -vn +1"
 alias cdLabel="\blkid -o value -s LABEL /dev/cdrom"
 #type -P ccze >/dev/null 2>&1 && alias ccze="\ccze -A" && alias dmesg="\ccze -A < /var/log/dmesg"
