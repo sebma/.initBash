@@ -48,7 +48,6 @@ function addpaths {
 
 if [ -n "$sourceHighlightPath" ];then
 	export LESSOPEN="| $sourceHighlightPath %s"
-	export LESS=' -R '
 fi
 
 #echo "=> BEFORE: PATH = $PATH"
