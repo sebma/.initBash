@@ -6,6 +6,8 @@ alias saltMinionsList='\ls -1 /etc/salt/pki/master/minions'
 alias saltMinionsStatus='time salt-run manage.status'
 alias salt2VMs='salt -C "not G@virtual:physical"'
 alias salt2Physical='salt -G virtual:physical'
+alias salt2S3='salt -G roles:ROLE_S3'
+alias salt2Sproxyd='salt -G roles:ROLE_CONN_SPROXYD'
 alias salt2StorageServer='salt -G roles:ROLE_STORE'
 alias salt2AllExceptMaster='salt -C "* and not $(</etc/salt/minion_id)"'
 
