@@ -2,14 +2,15 @@
 ! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-alias saltMinionsList='\ls -1 /etc/salt/pki/master/minions'
-alias saltMinionsStatus='time salt-run manage.status'
-alias salt2VMs='salt -C "not G@virtual:physical"'
+alias salt2AllExceptMaster='salt -C "* and not $(</etc/salt/minion_id)"'
+alias salt2CIFS='salt -G roles:ROLE_CONN_CIFS'
 alias salt2Physical='salt -G virtual:physical'
 alias salt2S3='salt -G roles:ROLE_S3'
 alias salt2Sproxyd='salt -G roles:ROLE_CONN_SPROXYD'
 alias salt2StorageServer='salt -G roles:ROLE_STORE'
-alias salt2AllExceptMaster='salt -C "* and not $(</etc/salt/minion_id)"'
+alias salt2VMs='salt -C "not G@virtual:physical"'
+alias saltMinionsList='\ls -1 /etc/salt/pki/master/minions'
+alias saltMinionsStatus='time salt-run manage.status'
 
 set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
