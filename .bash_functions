@@ -983,7 +983,7 @@ function installDate {
 	local distribType=$(distribType)
 	case $distribType in
 		debian|ubuntu) \ls -lact --full-time /etc | awk 'END {print $6,substr($7,1,8)}' ;;
-		linux) find /etc -type f -printf '%T+ \n' 2>/dev/null | sort | head -1 ;;
+		linux) find /etc -type f -printf '%T+ \n' 2>/dev/null | sort | head -1 ;; # Pas tres fiable
 		mer|redhat) \rpm -q basesystem --qf '%{installtime:date}\n' ;;
 		darwin15*) \ls -lactL -T /etc | awk 'END {print $6,$7,$8}' ;;
 		*)	;;
