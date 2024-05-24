@@ -3,14 +3,14 @@
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 alias checkcertif="\openssl verify -verbose"
-alias readcsr="\openssl req -noout -inform PEM -in"
-alias readder="\openssl x509 -noout -inform DER -in"
-alias readpem="\openssl x509 -noout -inform PEM -in"
-alias viewcsr="readcsr -text -in"
-alias viewder="readder -text -in"
-alias viewpem="readpem -text -in"
-alias viewderSummary="readder -subject -issuer -dates -nameopt multiline -in"
-alias viewpemSummary="readpem -subject -issuer -dates -in"
+alias opencsr="\openssl req -noout -inform PEM -in"
+alias opender="\openssl x509 -noout -inform DER -in"
+alias openpem="\openssl x509 -noout -inform PEM -in"
+alias viewcsr="opencsr -text -in"
+alias viewder="opender -text -in"
+alias viewpem="openpem -text -in"
+alias viewderSummary="opender -subject -issuer -dates -nameopt multiline -in"
+alias viewpemSummary="openpem -subject -issuer -dates -in"
 
 set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
