@@ -10,7 +10,7 @@ function downloadCert {
 function downloadIntermediateCert {
 	local URL=$1
 	local port=$2
-	openssl s_client -connect "$URL":$port -showcerts </dev/null 2>/dev/null | awk '/BEGIN CERTIFICATE/,/END CERTIFICATE/{ if(/BEGIN CERTIFICATE/){a++};if(a==2)print}'
+	openssl s_client -connect "$URL":$port -showcerts </dev/null 2>/dev/null | awk '/BEGIN CERTIFICATE/,/END CERTIFICATE/{ if(/BEGIN CERTIFICATE/)a++;if(a==2)print}'
 }
 function viewCertificateValidity {
 	for cerCertificate
