@@ -66,7 +66,7 @@ fi
 
 #DEFINITION DES VARIABLES
 export which="type -P"
-export find="$($which find)"
+export find="$(which find)"
 export bashProfileLoaded=true
 [ $osFamily = Linux ] && export osID=$(source /etc/os-release && echo $ID) osID_LIKE=$(source /etc/os-release && echo $ID_LIKE)
 [ $osFamily = Darwin ] && export osID=Darwin && export osID_LIKE=FreeBSD
