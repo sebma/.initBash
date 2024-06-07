@@ -61,6 +61,7 @@ alias dnsInfo="( \nmcli -f IP4.DNS,IP6.DNS dev list iface $wiFiInterface || \nmc
 alias dvdLabel="\blkid -o value -s LABEL /dev/dvd"
 alias ethinfo='\ip -c -br link show'
 alias findDeadLinks='$find . -xtype l -exec ls --color -l {} +'
+alias findDirectoriesWithLotsOfInodes=$'locate "" | sed "s|/[^/]*$|/|g" | sort | uniq -c | sort -n | tee filesperdirectory.txt | tail'
 alias firefoxDefrag='pgrep firefox || time find ~/.mozilla/firefox/ -name "*sqlite" -ls -exec sqlite3 -echo {} vacuum \;'
 alias fsType="\lsblk -n -o FSTYPE"
 alias gpuRAM='\dmesg | grep VRAM'
