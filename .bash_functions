@@ -969,6 +969,28 @@ function httpLocalServer {
 		}
 	}
 }
+function hw-probeAddNodeToInventory {
+	local inventoryID=null
+	if ! type -P hw-probe >/dev/null 2>&1;then
+		echo "=> ERROR [$FUNCNAME] : You must first install <hw-probe>." >&2
+		return 1
+	fi
+
+	if [ $# = 0 ];then
+		inventoryID="LHW-8028-0102-D496-15BF"
+	elif [ $# = 1 ] && [ $1 != -h ] && [[ $1 =~ /[A-Z0-9-]+/ ]];then
+		inventoryID=$1
+	else
+		echo "=> $FUNCNAME [inventoryID]" >&2
+		return 2
+	fi
+
+	[ -n "$sudo" ] && local sudo="$sudo -E"
+	local architecture=$(uname)
+	test $architecture = Darwin && architecture=bsd
+	hwprobe=$(which hw-probe)
+	$sudo $hwprobe -all -upload -i $inventoryID && echo "=> INFO: Check your email to add confirm adding the new node to your inventory : https://$architecture-hardware.org/index.php?view=computers&inventory=$inventoryID" >&2
+}
 function img2pdfA4 {
 	local lastArg="${@: -1}"
 	local allArgsButLast="${@:1:$#-1}"
