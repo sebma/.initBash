@@ -1583,7 +1583,7 @@ function piphelp {
 }
 function pkill {
 	local firstArg=$1
-	local pkill="command pkill"
+	local pkill=/usr/bin/pkill
 	local echoOption
 
 	case $osFamily in
