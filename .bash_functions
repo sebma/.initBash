@@ -1594,7 +1594,7 @@ function pkill {
 
 	if [ $# != 0 ]; then
 		firstArg="$1"
-		if echo $firstArg | \grep -q -- "-[0-9]"
+		if echo $firstArg | \egrep -q -- "-[0-9]|[A-Z]+"
 		then
 			shift
 			processName="$1"
