@@ -51,7 +51,7 @@ if [ -n "$sourceHighlightPath" ];then
 fi
 
 #echo "=> BEFORE: PATH = $PATH"
-systemPathsList="/sbin /usr/sbin /usr/local/sbin /usr/local/go/bin $GOPATH/bin /opt/local/bin /opt/local/sbin /usr/share/fslint/fslint"
+systemPathsList="/sbin /usr/sbin /usr/local/sbin /usr/local/go/bin $GOPATH/bin /opt/local/bin /opt/local/sbin /usr/share/fslint/fslint /usr/local/opt/openjdk/bin"
 userPathsList="$GOPATH/bin $HOME/.opam/system/bin $HOME/perl5/bin $HOME/rvm/bin $HOME/local/sbin $HOME/local/bin $HOME/usr/bin $HOME/usr/local/bin $HOME/gnu/bin $HOME/.local/bin $HOME/shl $HOME/py $HOME/pl $HOME/bin $HOME/php"
 
 TeXLiveDIR=$(\ls -d /usr/local/texlive/*/bin/* 2>/dev/null | egrep "/texlive/[0-9]+/bin/$arch-${osFamily,,}")
