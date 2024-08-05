@@ -13,6 +13,8 @@ findPrunePathsExpression="( -type d -a ( -name .git $(printf -- " -o -path %s" $
 grep=ggrep
 codeName=$($grep -o -P '((\w+)\s){2}LICENSE\s(\w+)\sFOR\s\K(\w+)\s(\w+)' '/System/Library/CoreServices/Setup Assistant.app/Contents/Resources/en.lproj/OSXSoftwareLicense.rtf')
 
+[ -x /usr/local/opt/gnu-getopt/bin/getopt ] && export PATH="/usr/local/opt/gnu-getopt/bin:$PATH" # cf. brew link gnu-getopt
+
 #Creation du .cache dans "/tmp/$USER/" ssi le lien symbolique ~/.cache existe
 cacheLinkName=.cache
 if [ -L $HOME/Library/$cacheLinkName ];then
