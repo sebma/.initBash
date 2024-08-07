@@ -15,7 +15,7 @@ Echo "=> Running $brewInitEnv ..."
 $time $brewInitEnv
 Echo "=> Sourcing $brewPrefix/share/bash-completion/bash_completion ..."
 [ $BASH_VERSINFO -ge 4 ] && [ -r $brewPrefix/share/bash-completion/bash_completion ] && Source $brewPrefix/share/bash-completion/bash_completion
-Echo "=> DONE."
+Echo "=> Done."
 
 set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
