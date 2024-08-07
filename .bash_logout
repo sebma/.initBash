@@ -11,5 +11,7 @@ fi
 
 test -f $initDir/.bash_logout.seb && source $initDir/.bash_logout.seb
 
+[ -n "$SSH_CONNECTION" ] && Echo "=> Closing SSH connection to $(echo $SSH_CONNECTION | awk '$0=$3') ..."
+
 set +x
-test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal" || Echo "=> Closing SSH connection to $(echo $SSH_CONNECTION | awk '$0=$3') ..."
+test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
