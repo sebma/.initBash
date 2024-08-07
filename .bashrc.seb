@@ -9,7 +9,7 @@ if tty -s;then function Printf { printf "$@"; } else function Printf { : ; } fi
 
 test "$debug" -gt 0 && Echo "\n=> \${BASH_SOURCE[*]} = ${BASH_SOURCE[*]}\n"
 Debug "=> Running $(basename ${BASH_SOURCE[0]}) ..."
-Echo "$(date)"
+#Echo "$(date)"
 
 sebInterpreter=$(ps -o args= $$ | awk '{gsub("^/.*/","",$1);print$1}')
 ( [ $sebInterpreter = bash ] || [ $sebInterpreter = zsh ] || [ $sebInterpreter = sh ] ) && local=local || local=typeset
@@ -51,6 +51,8 @@ if [ -n "$sourceHighlightPath" ];then
 fi
 
 test -d /usr/local/share/android-commandlinetools && export ANDROID_SDK_ROOT=/usr/local/share/android-commandlinetools
+test -d $HOME/.android && export ANDROID_SDK_HOME=$HOME/.android
+
 #echo "=> BEFORE: PATH = $PATH"
 systemPathsList="/sbin /usr/sbin /usr/local/sbin /usr/local/go/bin $GOPATH/bin /opt/local/bin /opt/local/sbin /usr/share/fslint/fslint /usr/local/opt/openjdk/bin $ANDROID_SDK_ROOT/cmdline-tools/latest/bin $ANDROID_SDK_ROOT/emulator $ANDROID_SDK_ROOT/platform-tools"
 userPathsList="$GOPATH/bin $HOME/.opam/system/bin $HOME/perl5/bin $HOME/rvm/bin $HOME/local/sbin $HOME/local/bin $HOME/usr/bin $HOME/usr/local/bin $HOME/gnu/bin $HOME/.local/bin $HOME/shl $HOME/py $HOME/pl $HOME/bin $HOME/php"
