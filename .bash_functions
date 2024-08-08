@@ -1306,7 +1306,7 @@ function os {
 	local os=not_yet_defined
 	case $osFamily in
 		Darwin)
-			sw_vers >/dev/null 2>&1 && os="$($(sw_vers -productName) $(sw_vers -productVersion))" || os=$(system_profiler SPSoftwareDataType) || os=$(defaults read /System/Library/CoreServices/SystemVersion ProductVersion) ;;
+			sw_vers >/dev/null 2>&1 && os="$(sw_vers -productName) $(sw_vers -productVersion)" || os=$(system_profiler SPSoftwareDataType) || os="$(defaults read /System/Library/CoreServices/SystemVersion ProductName) $(defaults read /System/Library/CoreServices/SystemVersion ProductVersion)" ;;
 		Linux)
 			if [ -s /etc/os-release ]; then
 				source /etc/os-release && os=$PRETTY_NAME
