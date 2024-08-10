@@ -551,16 +551,19 @@ function dirName {
 	done
 }
 function distribName {
+	local OSTYPE=$(bash -c 'echo $OSTYPE')
 	local osName=unknown
 	echo $OSTYPE | grep -q android && local osFamily=Android || local osFamily=$(uname -s)
 
 	if [ $osFamily = Linux ]; then
-		if type -P lsb_release > /dev/null; then
-			osName=$(lsb_release -si)
-			osName=${osName,} # Converts 1st letter to lower case cf. man bash | grep -m1 -B4 -A10 ,,
-			[ $osName = "n/a" ] && osName=$(source /etc/os-release && echo $ID)
-		elif [ -s /etc/os-release ]; then
+		if ! lsb_release -si 2>/dev/null | grep -i "n/a" -q; then
+			osName=$(lsb_release -si | awk '{print tolower($0)}')
+		elif type -P hostnamectl >/dev/null 2>&1; then
+			osName=$(hostnamectl status | awk '/Operating System/{print tolower($3)}')
+		elif grep -w ID /etc/os-release -q 2>/dev/null; then
 			osName=$(source /etc/os-release && echo $ID)
+		elif [ -s /etc/issue.net ]; then
+			osName=$(awk '{print tolower($1)}' /etc/issue.net)
 		fi
 	elif [ $osFamily = Darwin ]; then
 		osName="$(sw_vers -productName)"
@@ -575,26 +578,32 @@ function distribName {
 	echo $osName | awk '{print tolower($0)}'
 }
 function distribType {
+	local OSTYPE=$(bash -c 'echo $OSTYPE')
 	local distribName=unknown
 	local distribType=unknown
 	echo $OSTYPE | grep -q android && local osFamily=Android || local osFamily=$(uname -s)
 
-	distribName=$(distribName)
-
 	if [ $osFamily = Linux ]; then
-		case $distribName in
-			sailfishos|rhel|fedora|centos) distribType=redhat ;;
-			ubuntu) distribType=debian;;
-			*) distribType=$distribName ;;
-		esac
+		if grep ID_LIKE /etc/os-release -q 2>/dev/null; then
+			distribType=$(source /etc/os-release && echo $ID_LIKE)
+		elif [ ls /etc/*_version >/dev/null 2>&1 ]; then
+			distribType=$(echo /etc/*version | sed 's,/etc/\|_version,,g')
+		else
+			distribName=$(distribName)
+			case $distribName in
+				sailfishos|rhel|fedora|centos) distribType=redhat ;;
+				ubuntu) distribType=debian;;
+				*) distribType=$distribName ;;
+			esac
+		fi
 	elif [ $osFamily = Darwin ]; then
-			distribType=Darwin
+		distribType=Darwin
 	elif [ $osFamily = Android ]; then
-			distribType=Android
+		distribType=Android
 	elif [ $osFamily = VMkernel ]; then # ESXi
-			distribType=ESXi
+		distribType=ESXi
 	else
-		type -P bash >/dev/null 2>&1 && distribType=$(bash -c 'echo $OSTYPE') || distribType=$osFamily
+		distribType=$(bash -c 'echo $OSTYPE') || distribType=$osFamily
 	fi
 
 	echo $distribType
