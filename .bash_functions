@@ -571,7 +571,7 @@ function distribName {
 	elif [ $osFamily = VMkernel ]; then # ESXi
 		osName=ESXi
 	else
-		osName=$OSTYPE
+		test -n $OSTYPE && osName=$OSTYPE || osName=$osFamily
 	fi
 
 	echo $osName | awk '{print tolower($0)}'
@@ -600,7 +600,7 @@ function distribType {
 	elif [ $osFamily = VMkernel ]; then # ESXi
 		distribType=ESXi
 	else
-		test -n $OSTYPE distribType=$OSTYPE || distribType=$osFamily
+		test -n $OSTYPE && distribType=$OSTYPE || distribType=$osFamily
 	fi
 
 	echo $distribType
