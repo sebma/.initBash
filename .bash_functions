@@ -551,7 +551,6 @@ function dirName {
 	done
 }
 function distribName {
-	local OSTYPE=$(bash -c 'echo $OSTYPE')
 	local osName=unknown
 	echo $OSTYPE | grep -q android && local osFamily=Android || local osFamily=$(uname -s)
 
@@ -578,8 +577,6 @@ function distribName {
 	echo $osName | awk '{print tolower($0)}'
 }
 function distribType {
-	local OSTYPE=$(bash -c 'echo $OSTYPE')
-	local distribName=unknown
 	local distribType=unknown
 	echo $OSTYPE | grep -q android && local osFamily=Android || local osFamily=$(uname -s)
 
@@ -603,7 +600,7 @@ function distribType {
 	elif [ $osFamily = VMkernel ]; then # ESXi
 		distribType=ESXi
 	else
-		distribType=$(bash -c 'echo $OSTYPE') || distribType=$osFamily
+		test -n $OSTYPE distribType=$OSTYPE || distribType=$osFamily
 	fi
 
 	echo $distribType
