@@ -131,8 +131,8 @@ function anyTimeWithTZ2LocalTimeZone {
 	local remoteTZ=to_be_defined
 	local destinationTZ
 	local date=date
-#	local localTZ=$(date +%Z)
-	local localTZ=CET
+	local localTZ=$(date +%Z | sed 's/ST$/T/')
+
 	test $osFamily = Darwin && date=gdate
 	if [ $# = 0 ];then
 		echo "=> Usage : $FUNCNAME remoteTime [destinationTZ=$localTZ]" >&2
@@ -140,14 +140,13 @@ function anyTimeWithTZ2LocalTimeZone {
 	elif [ $# = 1 ];then
 		case $1 in
 			-h|--h|-help|--help) echo "=> Usage : $FUNCNAME remoteTime [destinationTZ=$localTZ]" >&2;return 1;;
-			*) remoteTime=$1;destinationTZ=$localTZ;;
+			*) remoteTime=${1/./:};destinationTZ=$localTZ;;
 		esac
 	else
-		remoteTime=$1
-		destinationTZ=$2
+		remoteTime=${1/./:}
+		destinationTZ=${2/%ST/T}
 	fi
 
-	remoteTime=${remoteTime/./:}
 	remoteTZ=$(echo $remoteTime | awk '{printf$NF}')
 	case $remoteTZ in
 		AT) remoteTZ=$(TZ=Canada/Atlantic date '+%Z')
