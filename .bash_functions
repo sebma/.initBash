@@ -131,7 +131,8 @@ function anyTimeWithTZ2LocalTimeZone {
 	local remoteTZ=to_be_defined
 	local destinationTZ
 	local date=date
-	local localTZ=$(date +%Z)
+#	local localTZ=$(date +%Z)
+	local localTZ=CET
 	test $osFamily = Darwin && date=gdate
 	if [ $# = 0 ];then
 		echo "=> Usage : $FUNCNAME remoteTime [destinationTZ=$localTZ]" >&2
