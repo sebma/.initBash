@@ -42,6 +42,7 @@ type -P lspci >/dev/null && {
 	alias southBridge="\lspci -nnd ::601"
 	alias lsgpu=lsvideo
 	alias lsvga=lsvideo
+	alias lswifi='\lspci -nnd ::0280'
 }
 
 alias audioCardsMinimumInfo='pactl list sinks | egrep -e "^Sink |Ports?:|available"'
