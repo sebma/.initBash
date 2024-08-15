@@ -76,6 +76,7 @@ alias cp2ext234Partition="rsync -ogpuv -lSH -x -r"
 alias cp2ftpfs="\rsync -uth --progress --inplace --size-only"
 alias cpanRepair="cpan -f -i Term::ReadLine::Gnu"
 alias cpuUsage="mpstat 1 1 | awk 'END{print 100-\$NF\"%\"}'"
+alias cpucache='\inxi -Cx || \sudo lshw -businfo -class memory || \sudo dmidecode -t cache'
 alias cssSelect='hxselect -s "\n"'
 alias ct=cleartool
 alias curl="\curl -L" && alias curlnoconfig="\curl -q"
