@@ -41,6 +41,7 @@ type -P lspci >/dev/null && {
 	alias northBridge="\lspci -nns 0:0.0"
 	alias southBridge="\lspci -nnd ::601"
 	alias lsgpu=lsvideo
+	alias lstpm='lsmod | grep tpm;\ls -ld /sys/kernel/security/tpm*/ /sys/class/tpm/tpm*/ /dev/tpm? /dev/tpmrm?;\sudo dmidecode -t 43'
 	alias lsvga=lsvideo
 	alias lswifi='\lspci -nnd ::0280'
 }
