@@ -76,6 +76,7 @@ alias ipmcastinfo='\ip -c -br maddr show'
 alias isEFI=isUEFI
 alias isUEFI="[ -d /sys/firmware/efi ] && echo 'Session EFI' || echo 'Session non-EFI'"
 alias isVM='egrep -i "vmware|virtal" /sys/class/dmi/id/sys_vendor /sys/class/dmi/id/product_name -q && echo true || echo false'
+alias isWayLand=$'loginctl show-session $(loginctl | awk "/$USER/"\'{print $1}\') -p Type | grep =wayland -q && echo true || echo false'
 alias journalSvc="journalctl --unit"
 alias journalctl='\journalctl -e'
 alias journalctlErrors='\journalctl -p err..emerg --no-pager'
