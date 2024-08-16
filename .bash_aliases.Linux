@@ -41,7 +41,6 @@ type -P lspci >/dev/null && {
 	alias northBridge="\lspci -nns 0:0.0"
 	alias southBridge="\lspci -nnd ::601"
 	alias lsgpu=lsvideo
-	alias lstpm='cat /proc/tpminfo;lsmod | grep tpm;\ls -ld /sys/kernel/security/tpm?/ /sys/class/tpm/tpm?/device/caps /sys/class/tpm/tpm?/tpm_version_major /sys/class/tpm/tpm?/device/firmware_node/description;\ls /dev/tpm? /dev/tpmrm? && sudo dmidecode -t 43'
 	alias lsvga=lsvideo
 	alias lswifi='\lspci -nnd ::0280'
 }
@@ -90,6 +89,7 @@ alias llm="ll --block-size=M"
 alias ls="ls --color -F"
 alias lsinterfaces="\ls /sys/class/net"
 alias lsprocessors="lscpu -J | jq -r '.lscpu | map( select(.field | IN(\"CPU(s):\",\"Model name:\") ).data ) | join(\" x \")'"
+alias lstpm='cat /proc/tpminfo;lsmod | grep tpm;\ls -ld /sys/kernel/security/tpm?/ /sys/class/tpm/tpm?/device/caps /sys/class/tpm/tpm?/tpm_version_major /sys/class/tpm/tpm?/device/firmware_node/description;\ls /dev/tpm? /dev/tpmrm? && sudo dmidecode -t 43'
 alias lszombies='\ps aux | grep -v grep | grep defunct'
 alias lxterm="\lxterm -sb -fn 9x15"
 alias macinfo='\ip -c -br link show'
