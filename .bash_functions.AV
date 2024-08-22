@@ -1566,7 +1566,7 @@ function videoSplit {
 	touch -r "$fileName" "$outputFile"
 	echo "=> outputFile = <$outputFile>"
 }
-function videoToAnyBitrate {
+function video2AnyBitrate {
 	test $# = 0 || test $# -gt 2 && {
 		echo "=> $FUNCNAME [bitrate=500k] video" >&2
 		return 1
