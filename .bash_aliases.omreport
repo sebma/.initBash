@@ -2,7 +2,13 @@
 ! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-omreport=/opt/dell/srvadmin/bin/omreport
+openManagerBinDir=/opt/dell/srvadmin/bin
+openManagerSBinDir=/opt/dell/srvadmin/sbin
+
+#update-alternatives --install /usr/bin/omreport omreport $openManagerBinDir/omreport 5
+#update-alternatives --install /usr/sbin/omconfig omconfig $openManagerSBinDir/omconfig 5
+
+omreport=$openManagerBinDir/omreport
 
 alias omreport=$omreport
 alias omServiceTag="$omreport chassis info | awk '/Service.Tag/{print\$NF}'"
