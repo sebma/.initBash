@@ -9,6 +9,7 @@ openManagerSBinDir=/opt/dell/srvadmin/sbin
 #update-alternatives --install /usr/sbin/omconfig omconfig $openManagerSBinDir/omconfig 5
 
 omreport=$openManagerBinDir/omreport
+controllerID=$($omreport storage controller -fmt ssv | awk -F';' '/^[0-9];/{printf$1;exit}')
 
 alias omreport=$omreport
 alias omServiceTag="$omreport chassis info | awk '/Service.Tag/{print\$NF}'"
@@ -20,13 +21,13 @@ alias omchassisinfo="$omreport chassis info"
 alias omchassisinfoCSV="omchassisinfo -fmt ssv"
 alias omchassisnics="$omreport chassis nics"
 alias omchassisnicsCSV="omchassisnics -fmt ssv"
-alias ompdiskinfo="$omreport storage pdisk controller=0"
+alias ompdiskinfo="$omreport storage pdisk controller=$controllerID"
 alias ompdiskinfoCSV="ompdiskinfo -fmt ssv"
 alias omsysinfo="$omreport system summary"
 alias omsysinfoCSV="omsysinfo -fmt ssv"
 alias omsysversion="$omreport system version"
 alias omsysversionCSV="omsysversion -fmt ssv"
-alias omvdiskinfo="$omreport storage vdisk controller=0"
+alias omvdiskinfo="$omreport storage vdisk controller=$controllerID"
 alias omvdiskinfoCSV="omvdiskinfo -fmt ssv"
 
 set +x
