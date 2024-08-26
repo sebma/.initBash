@@ -1,6 +1,12 @@
-# vim: ft=sh noet:
+# vim: set ft=sh noet:
+! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
+test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 ringsh=$(which ringsh)
 
 alias ringStatus=' for RING in $($ringsh supervisor ringList);do echo "=> RING = $RING :";$ringsh supervisor ringStatus  $RING | egrep -v "(^Node:\s.*RUN$|\<OK)$";done | egrep "ARC_REBUILD_NOK|DISKERR|DISKFULL|$"'
 alias ringStorage='for RING in $($ringsh supervisor ringList);do echo "=> RING = $RING :";$ringsh supervisor ringStorage $RING;done'
+alias ringVersion="$ringsh version"
+
+set +x
+test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
