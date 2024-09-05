@@ -639,6 +639,24 @@ function ytdlGetSize {
 		echo $size
 	}
 }
+function ytdlpGetSize {
+	type jq >/dev/null || { echo -1;return 1; }
+	local ytdlpnoconfig="yt-dlp --ignore-config"
+	local firstArg=$1 format=best size=0 url=""
+	test $# = 0 && {
+		echo "=> Usage: $FUNCNAME [format=best] url" >&2
+		return 1
+	} || {
+		echo $firstArg | \egrep -q "^https?://" || { format=$firstArg;shift; }
+#		read size url <<< $($ytdlpnoconfig -j -f $format "$@" | jq -r '[ .filesize ,.url | tostring ] | join(" ")')
+		while read size url
+		do
+			:
+		done < <($ytdlpnoconfig -j -f $format "$@" | jq -r '[ .filesize ,.url | tostring ] | join(" ")')
+		[ "$size" = null ] && size=$(\curl -sI "$url" | \sed "s/\r//g" | awk -F ": " 'BEGIN{IGNORECASE=1}/^Content-?Length/{printf$2}')
+		echo $size
+	}
+}
 function ytdlPlaylist2M3U {
 	type jq >/dev/null || { return 1; }
 	local ytdlnoconfig="youtube-dl --ignore-config"
