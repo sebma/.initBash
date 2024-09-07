@@ -232,9 +232,9 @@ function listInstalledPackagesFromRepo {
 		echo "=> Usage : $FUNCNAME repo" >&2
 		return 1
 	fi
-	listPackagesFromRepo "$1" | \xargs dpkg-query -W --showformat='${Package} is ${Status}\n' 2>/dev/null | awk '/ installed/{print$1}' | sort -u
+	lsPackagesFromRepo "$1" | \xargs dpkg-query -W --showformat='${Package} is ${Status}\n' 2>/dev/null | awk '/ installed/{print$1}' | sort -u
 }
-function listPackagesFromRepo {
+function lsPackagesFromRepo {
 	local architecture=$(dpkg --print-architecture)
 	local repo=undefined_yet
 
