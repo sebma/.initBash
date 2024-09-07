@@ -1126,7 +1126,7 @@ function lprPageRange {
 	shift
 	test $pageRange && echo $pageRange | grep -ivq "[A-Z]" && command lpr -o page-ranges=$pageRange $@ && lpq
 }
-function listPackageContents {
+function lsPackageContents {
 	package=${1/:/}
 	case "$(packageManager)" in
 		rpm) packageContents="rpm -ql";;
@@ -1137,37 +1137,37 @@ function listPackageContents {
 function lsbin {
 	for package
 	do
-		listPackageContents $package
+		lsPackageContents $package
 	done | sort -u | grep bin/
 }
 function lsconf {
 	for package
 	do
-		listPackageContents $package
+		lsPackageContents $package
 	done | sort -u | grep etc/
 }
 function lsdesktopfiles {
 	for package
 	do
-		listPackageContents $package
+		lsPackageContents $package
 	done | sort -u | grep "\.desktop$"
 }
 function lsdoc {
 	for package
 	do
-		listPackageContents $package
+		lsPackageContents $package
 	done | sort -u | egrep "(doc|man[0-9]?)/"
 }
 function lsicons {
 	for package
 	do
-		listPackageContents $package
+		lsPackageContents $package
 	done | sort -u | egrep "(jpg|svg|png)$"
 }
 function lslib {
 	for package
 	do
-		listPackageContents $package
+		lsPackageContents $package
 	done | sort -u | egrep "(\.so)"
 }
 function lv_Dev_Creation_Date {
