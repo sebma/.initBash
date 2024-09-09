@@ -29,6 +29,7 @@ alias acp='\advcp -gpuv'
 alias amv='\advmv -gvi'
 alias any2dos="\perlSed 's/\R/\r\n/g'"
 alias any2man="\pandoc -s -t man"
+alias any2pdf="\pandoc -s -t pdf"
 alias any2unix="\perlSed 's/\R/\n/'"
 alias arch="arch 2>/dev/null || uname -m"
 alias arp="\ip -4 neigh"
