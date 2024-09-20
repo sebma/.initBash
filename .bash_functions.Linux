@@ -339,15 +339,15 @@ function open {
 	local openCommand="command xdg-open"
 	local fileExtension=""
 	[ $# = 0 ] && set -- .
-	for file
+	for arg
 	do
-		ls "$file" >/dev/null || continue
-		fileExtension="${file/*./}"
+		ls "$arg" >/dev/null || continue
+		fileExtension="${arg/*./}"
 		if [ $fileExtension = desktop ];then
-			openDesktopApp=$(grep -oP "Exec=\K.*" "$file" | sed 's/"//g;s/ %[a-zA-Z]//')
+			openDesktopApp=$(grep -oP "Exec=\K.*" "$arg" | sed 's/"//g;s/ %[a-zA-Z]//')
 			$openDesktopApp &
 		else
-			$openCommand "$file" 2>&1 | \egrep -v "/MBuntu-Y-For-Unity/|/MacBuntu-OS.*/|/Adwaita/|QT_DEVICE_PIXEL_RATIO|QT_.*SCALE_FACTOR" &
+			$openCommand "$arg" 2>&1 | \egrep -v "/MBuntu-Y-For-Unity/|/MacBuntu-OS.*/|/Adwaita/|QT_DEVICE_PIXEL_RATIO|QT_.*SCALE_FACTOR" &
 		fi
 	done
 }
