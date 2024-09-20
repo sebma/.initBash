@@ -341,13 +341,17 @@ function open {
 	[ $# = 0 ] && set -- .
 	for arg
 	do
-		ls "$arg" >/dev/null || continue
-		fileExtension="${arg/*./}"
-		if [ $fileExtension = desktop ];then
-			openDesktopApp=$(grep -oP "Exec=\K.*" "$arg" | sed 's/"//g;s/ %[a-zA-Z]//')
-			$openDesktopApp &
+		if echo $arg | egrep 'https?://' -q;then
+			$openCommand "$arg"
 		else
-			$openCommand "$arg" 2>&1 | \egrep -v "/MBuntu-Y-For-Unity/|/MacBuntu-OS.*/|/Adwaita/|QT_DEVICE_PIXEL_RATIO|QT_.*SCALE_FACTOR" &
+			ls "$arg" >/dev/null || continue
+			fileExtension="${arg/*./}"
+			if [ $fileExtension = desktop ];then
+				openDesktopApp=$(grep -oP "Exec=\K.*" "$arg" | sed 's/"//g;s/ %[a-zA-Z]//')
+				$openDesktopApp &
+			else
+				$openCommand "$arg" 2>&1 | \egrep -v "/MBuntu-Y-For-Unity/|/MacBuntu-OS.*/|/Adwaita/|QT_DEVICE_PIXEL_RATIO|QT_.*SCALE_FACTOR" &
+			fi
 		fi
 	done
 }
