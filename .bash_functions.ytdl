@@ -729,7 +729,7 @@ function ytdlUpdate {
 		if [ "$ytdlLatestRelease" != $ytdlCurrentRelease ];then
 			local ytdlPythonVersion=$($youtube_dl --ignore-config -v 2>&1 | awk -F "[ .]" '/Python version/{printf$4"."$5}')
 			$sudo pip$ytdlPythonVersion install -U $package
-			ytdlTestURLs="https://youtu.be/vWYp2iGMDcM https://www.dailymotion.com/video/x5850if https://vimeo.com/groups/57545/videos/13262021"
+			ytdlTestURLs="https://youtu.be/vWYp2iGMDcM https://www.dailymotion.com/video/x5850if"
 			if ! yt-dl -q -F $ytdlTestURLs >/dev/null;then
 				echo "=> Rolling back to $package version <$ytdlCurrentRelease> ..."
 set -x
@@ -785,7 +785,7 @@ function ytdlpUpdate {
 		if [ "$ytdlpLatestRelease" != $ytdlpCurrentRelease ];then
 			local ytdlPythonVersion=$($yt_dlp --ignore-config -v 2>&1 | awk -F "[ .]" '/Python version/{printf$4"."$5}')
 			$sudo pip$ytdlPythonVersion install -U $package
-			ytdlpTestURLs="https://youtu.be/vWYp2iGMDcM https://www.dailymotion.com/video/x5850if https://vimeo.com/groups/57545/videos/13262021 https://ok.ru/video/2091889462009"
+			ytdlpTestURLs="https://youtu.be/vWYp2iGMDcM https://www.dailymotion.com/video/x5850if https://ok.ru/video/2091889462009"
 			echo "=> Checking if $package can parse these URLs : $ytdlpTestURLs ..."
 			if ! time yt-dlp -q -F $ytdlpTestURLs >/dev/null;then
 				echo "=> At least one of them failed parsing so rolling back to $package version <$ytdlpCurrentRelease> ..."
