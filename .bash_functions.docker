@@ -5,6 +5,9 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 function dockerCleanUpImages {
 	sudo docker image ls | awk '/^<none>\s+<none>/{printf" "$3}' | sudo \xargs -rt docker rmi
 }
+function dockerRemoveStoppedContainers {
+	sudo docker ps -a | awk '/Exited/{print$1}' | sudo \xargs -rt docker rm
+}
 function findDockerContainerFromPath {
 	for path
 	do
