@@ -5,7 +5,7 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 
 export busybox="command busybox"
 
-alias l="$busybox ls --color"
+alias l="$busybox ls"
 alias ls="$busybox ls --color -F"
 #alias touch="$busybox touch"
 #alias date="$busybox date"
