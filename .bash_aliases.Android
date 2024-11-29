@@ -10,7 +10,7 @@ alias df="\df -Ph"
 alias grep="grep --color"
 alias egrep="grep -E"
 unalias less
-alias l="ls"
+alias l="\ls"
 alias ll="ls -lF"
 alias lla="ls -alF"
 alias llah="ls -alhF"
