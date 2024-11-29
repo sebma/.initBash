@@ -81,7 +81,7 @@ alias journalSvc="journalctl --unit"
 alias journalctl='\journalctl -e'
 alias journalctlErrors='\journalctl -p err..emerg --no-pager'
 alias kwinRestart="\kwin --replace >/dev/null 2>&1 &"
-alias l="ls --color"
+alias l="\ls"
 alias lastme='last -w $USER'
 alias lastmeToday='lastme | \egrep -e "$(LC_TIME=C date +%b\ %_d)"'
 alias ll="ls -blF --time-style=+'%Y-%m-%d %T'"
