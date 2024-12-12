@@ -1,6 +1,7 @@
 # vim: ft=bash noet:
 ! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
+[ "$debug" -gt 2 ] && set -x
 
 register-python-argcomplete -h >/dev/null 2>&1 && eval "$(register-python-argcomplete conda)"
 
