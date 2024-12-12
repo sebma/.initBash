@@ -174,8 +174,6 @@ then
 	Debug "=> END of /usr/share/bash-completion/bash_completion ..."
 fi
 
-type -P register-python-argcomplete >/dev/null 2>&1 && eval "$(register-python-argcomplete conda)"
-
 #[[ -s "$HOME/.rvm/scripts/rvm" ]] && Source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 
 # pidof cupsd >/dev/null && Echo "=> The cups admin console is available at http://localhost:631/admin\n"
