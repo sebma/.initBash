@@ -6,6 +6,7 @@ test -z "$initDir" && export initDir=$HOME/.initBash
 test -z "$debug" && export debug=0
 test "$debug" -gt 0 && tty -s && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 tty -s && test "$debug" -gt 0 && { echo;echo "=> \${BASH_SOURCE[*]} = ${BASH_SOURCE[*]}";echo; }
+[ "$debug" -gt 2 ] && set -x
 
 #if ! "$bashProfileLoaded";then source .profile;fi
 
