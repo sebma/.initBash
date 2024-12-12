@@ -15,7 +15,7 @@ sebInterpreter=$(ps -o args= $$ | awk '{gsub("^/.*/","",$1);print$1}')
 ( [ $sebInterpreter = bash ] || [ $sebInterpreter = zsh ] || [ $sebInterpreter = sh ] ) && local=local || local=typeset
 unset sebInterpreter
 
-test "$debug" -gt "2" && set -x
+[ "$debug" -gt 2 ] && set -x
 
 set -o histexpand # Re-enable the history expansion disabled previously by my "echo" alias
 
