@@ -39,6 +39,7 @@ alias graphicsinfo="\system_profiler SPDisplaysDataType"
 alias hideFiles='defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app'
 alias hwinfo="\system_profiler SPHardwareDataType"
 alias serialNumber="\system_profiler SPHardwareDataType -json | jq -r '.SPHardwareDataType[0].serial_number'"
+alias macmodel="\system_profiler SPHardwareDataType -json | jq -r '.SPHardwareDataType[0].machine_model'"
 #alias lshw="\system_profiler SPHardwareDataType SPSoftwareDataType SPParallelATADataType SPAudioDataType SPBluetoothDataType SPCameraDataType SPDiscBurningDataType SPEthernetDataType SPFibreChannelDataType SPFireWireDataType SPDisplaysDataType SPHardwareRAIDDataType SPNetworkLocationDataType SPManagedClientDataType SPMemoryDataType SPNVMeDataType SPNetworkDataType SPPCIDataType SPParallelSCSIDataType SPPowerDataType SPPrintersDataType SPSASDataType SPSerialATADataType SPSPIDataType SPStorageDataType SPThunderboltDataType SPUSBDataType SPWWANDataType SPAirPortDataType SPiBridgeDataType"
 alias lastme='last -t console | \grep $USER'
 alias lastmeToday='lastme | \grep "$(LC_TIME=C date +%b\ %_d)"'
