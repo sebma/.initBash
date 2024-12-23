@@ -52,7 +52,7 @@ function addpaths {
 	export PATH
 }
 
-TeXLiveDIR=$(\ls -d /usr/local/texlive/*/bin/* 2>/dev/null | egrep "/texlive/[0-9]+/bin/$arch-${osFamily,,}")
+TeXLiveDIR=$(\ls -d /usr/local/texlive/*/bin/* 2>/dev/null | egrep "/texlive/[0-9]+/bin/$archi-${osFamily,,}")
 addpaths $TeXLiveDIR
 
 export youtube_dl="command youtube-dl"
