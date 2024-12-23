@@ -24,7 +24,7 @@ bashRCLoaded=1
 
 echo $OSTYPE | grep -q android && export osFamily=Android || export osFamily=$(uname -s)
 [ $osFamily = Linux ] && export osID=$(Source /etc/os-release && echo $ID) osID_LIKE=$(Source /etc/os-release && echo $ID_LIKE)
-arch=$(uname -m)
+archi=$(uname -m)
 today=$(date +%Y-%m-%d)
 
 function addmanpaths {
@@ -57,7 +57,7 @@ test -d $HOME/.android && export ANDROID_SDK_HOME=$HOME/.android
 systemPathsList="/sbin /usr/sbin /usr/local/sbin /usr/local/go/bin $GOPATH/bin /opt/local/bin /opt/local/sbin /usr/share/fslint/fslint /usr/local/opt/openjdk/bin $ANDROID_SDK_ROOT/cmdline-tools/latest/bin $ANDROID_SDK_ROOT/emulator $ANDROID_SDK_ROOT/platform-tools"
 userPathsList="$GOPATH/bin $HOME/.opam/system/bin $HOME/perl5/bin $HOME/rvm/bin $HOME/local/sbin $HOME/local/bin $HOME/usr/bin $HOME/usr/local/bin $HOME/gnu/bin $HOME/.local/bin $HOME/shl $HOME/py $HOME/pl $HOME/bin $HOME/php"
 
-TeXLiveDIR=$(\ls -d /usr/local/texlive/*/bin/* 2>/dev/null | egrep "/texlive/[0-9]+/bin/$arch-${osFamily,,}")
+TeXLiveDIR=$(\ls -d /usr/local/texlive/*/bin/* 2>/dev/null | egrep "/texlive/[0-9]+/bin/$archi-${osFamily,,}")
 addpaths $systemPathsList
 addpaths $userPathsList
 addpaths $HOME/myScripts/shl $HOME/myScripts/py $HOME/myScripts/pl
@@ -227,7 +227,7 @@ test -r $initDir/.bash_aliases && Source $initDir/.bash_aliases
 test -r $initDir/.bash_aliases.$osFamily && Source $initDir/.bash_aliases.$osFamily #Pour Darwin ou Linux ou Android
 test -r $initDir/.bash_aliases.$osID && Source $initDir/.bash_aliases.$osID # Pour les OS derives de $osFamily
 
-type -P qemu-system-$arch >/dev/null 2>&1 && test -r $initDir/.bash_aliases.qemu && Source $initDir/.bash_aliases.qemu
+type -P qemu-system-$archi >/dev/null 2>&1 && test -r $initDir/.bash_aliases.qemu && Source $initDir/.bash_aliases.qemu
 
 test -r $initDir/.bash_functions.$osFamily && Source $initDir/.bash_functions.$osFamily #Pour Darwin ou Linux ou Android
 test -r $initDir/.bash_functions.$osID && Source $initDir/.bash_functions.$osID # Pour les OS derives de $osFamily
