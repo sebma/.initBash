@@ -365,6 +365,7 @@ alias toupperSed="sed 's/.*/\U&/'"
 alias ulogerrors="egrep -iB4 -A1 'error|erreur|Err: [^0]'"
 alias ulogtodayerrors="egrep -iB4 -A1 'error|erreur|Err: [^0]' $ulog"
 alias url2qrcode=string2qrcode
+alias urlExists='\curl --head --silent --fail'
 alias umask="\umask -S"
 alias uncompress="\uncompress -v"
 alias uncpio="\cpio -idcmv <"
