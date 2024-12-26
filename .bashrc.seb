@@ -127,8 +127,7 @@ then
 	fi
 	trap - INT
 
-#	type -P randverse >/dev/null 2>&1 && randverse
-	echo
+#	type -P randverse >/dev/null 2>&1 && randverse && echo
 fi
 
 if type -P xdg-mime >/dev/null 2>&1 && [ $osID != sailfishos ]
