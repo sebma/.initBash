@@ -138,9 +138,7 @@ export RSYNC_SKIP_COMPRESS_LIST="7z/aac/aif/aiff/avi/bz2/deb/flv/gz/iso/jpeg/jpg
 export RSYNC_EXCLUSION=$(printf -- "--exclude %s/ " /dev /sys /run /proc)
 #FIN DE DEFINITION DES VARIABLES
 
-if [ $osFamily = Linux ] || [ $osFamily = Darwin ]
-then
-	Echo
+if [ $osFamily = Linux ] || [ $osFamily = Darwin ];then
 	if type -P ssh-agent >/dev/null 2>&1; then
 #		Echo "=> Testing if not logged through ssh i.e if the SSH_CLIENT variable is not set ..." >&2
 		if test -z "$SSH_CLIENT"; then # Si on est PAS a l autre bout d une connection ssh
@@ -156,7 +154,6 @@ then
 			fi
 		fi
 #		pgrep -lfu $USER ssh-agent 2>/dev/null
-		Echo >&2
 	fi
 	
 	#Definition des parametres de proxy dans cpan
@@ -182,7 +179,7 @@ test -r $initDir/.bash_profile.$osFamily && SourceProfile $initDir/.bash_profile
 test "$debug" -gt 0 && echo "=> BACK to $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
 
 [ $debug = 1 ] && echo "=> system = <$system>."
-if [ "$osFamily" != Darwin ] && [ "$osFamily" != Linux ] && [ "$osFamily" != Android ] ; then
+if [ "$osFamily" != Darwin ] && [ "$osFamily" != Linux ] && [ "$osFamily" != Android ];then
 	if [ -z "$system" ];then
 		[ $debug = 1 ] && echo "=> system = <$system>."
 		if type -P lsb_release >/dev/null;then 
