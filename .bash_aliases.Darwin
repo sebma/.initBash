@@ -10,7 +10,7 @@ wiFiInterface="$(networksetup -listallhardwareports | awk '/Hardware Port: Wi-Fi
 
 alias airport="\/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport"
 alias firefoxDefrag='pgrep firefox || find ~/"Library/Application Support/Firefox" -name "*sqlite" -ls -exec sqlite3 {} vacuum \;'
-alias firefox="/Applications/Firefox.app/Contents/MacOS/firefox-bin"
+alias firefox="/Applications/Firefox.app/Contents/MacOS/firefox"
 alias palemoon="/Applications/Palemoon.app/Contents/MacOS/palemoon"
 
 type -P pgrep >/dev/null 2>&1 || alias pgrep="\ps -fC"
