@@ -372,7 +372,7 @@ function pip3Install {
 				dpkg -l $pkg | \grep ^i -q || { echo "=> You need to install <$pkg>";return 1; }
 			done
 		fi
-		\wget -qO- https://bootstrap.pypa.io/get-pip.py | sudo -H python3
+		wget -qO- https://bootstrap.pypa.io/get-pip.py | sudo -H python3
 	fi
 }
 function ppidof {
