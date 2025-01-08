@@ -62,7 +62,7 @@ function addpathsAtTheEnd {
 
 TeXLiveDIR=$(\ls -d /usr/local/texlive/*/bin/* 2>/dev/null | egrep "/texlive/[0-9]+/bin/$archi-${osFamily,,}")
 addpaths $TeXLiveDIR
-addpathsAtTheEnd /home/linuxbrew/.linuxbrew/bin /home/linuxbrew/.linuxbrew/sbin
+#addpathsAtTheEnd /home/linuxbrew/.linuxbrew/bin /home/linuxbrew/.linuxbrew/sbin
 
 export youtube_dl="command youtube-dl"
 if [ -n "$youtube_dl" ];then # Recuperation de la variable _USER_AGENT_TPL de youtube-dl pour construire le user agent
