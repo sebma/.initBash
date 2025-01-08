@@ -8,7 +8,7 @@ test "$debug" -gt 0 && Echo "\n=> eval \$(brew shellenv) ..."
 export HOMEBREW_NO_INSTALL_CLEANUP=1
 export HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1
 
-brewInitEnv='eval $($brew shellenv | grep -vw PATH)'
+brewInitEnv='eval $(brew shellenv | grep -vw PATH)'
 brewPrefix=$($brew --prefix)
 
 $time $brewInitEnv
