@@ -70,8 +70,8 @@ userPathsList="$GOPATH/bin $HOME/.opam/system/bin $HOME/perl5/bin $HOME/rvm/bin 
 addpathsAtTheEnd $systemPathsList
 addpathsAtTheEnd $TeXLiveDIR
 #addpathsAtTheEnd /home/linuxbrew/.linuxbrew/bin /home/linuxbrew/.linuxbrew/sbin
-addpathsAtTheEnd $userPathsList
 addpathsAtTheEnd $HOME/myScripts/shl $HOME/myScripts/py $HOME/myScripts/pl
+addpathsAtTheEnd $userPathsList
 addpathsAtTheEnd $HOME/.poetry/bin
 #echo "=> AFTER: PATH = $PATH"
 
