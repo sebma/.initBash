@@ -45,6 +45,14 @@ function addpaths {
 	done
 	export PATH
 }
+function addpathsAtTheEnd {
+	for path
+	do
+		test ! -d "$path" && continue
+		echo $PATH | \grep -wq "$path" || PATH=$PATH:$path
+	done
+	export PATH
+}
 
 if [ -n "$sourceHighlightPath" ];then
 	export LESSOPEN="| $sourceHighlightPath %s"
