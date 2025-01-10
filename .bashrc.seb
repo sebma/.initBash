@@ -61,17 +61,18 @@ fi
 test -d /usr/local/share/android-commandlinetools && export ANDROID_SDK_ROOT=/usr/local/share/android-commandlinetools
 test -d $HOME/.android && export ANDROID_SDK_HOME=$HOME/.android
 
+TeXLiveDIR=$(\ls -d /usr/local/texlive/*/bin/* 2>/dev/null | egrep "/texlive/[0-9]+/bin/$archi-${osFamily,,}")
+
 #echo "=> BEFORE: PATH = $PATH"
 systemPathsList="/sbin /usr/sbin /usr/local/sbin /usr/local/go/bin $GOPATH/bin /opt/local/bin /opt/local/sbin /usr/share/fslint/fslint /usr/local/opt/openjdk/bin $ANDROID_SDK_ROOT/cmdline-tools/latest/bin $ANDROID_SDK_ROOT/emulator $ANDROID_SDK_ROOT/platform-tools"
 userPathsList="$GOPATH/bin $HOME/.opam/system/bin $HOME/perl5/bin $HOME/rvm/bin $HOME/local/sbin $HOME/local/bin $HOME/usr/bin $HOME/usr/local/bin $HOME/gnu/bin $HOME/.local/bin $HOME/shl $HOME/py $HOME/pl $HOME/bin $HOME/php"
 
-TeXLiveDIR=$(\ls -d /usr/local/texlive/*/bin/* 2>/dev/null | egrep "/texlive/[0-9]+/bin/$archi-${osFamily,,}")
-addpaths $systemPathsList
-addpaths $userPathsList
-addpaths $HOME/myScripts/shl $HOME/myScripts/py $HOME/myScripts/pl
-addpaths $HOME/.poetry/bin
-#addpaths /home/linuxbrew/.linuxbrew/bin
-addpaths $TeXLiveDIR
+addpathsAtTheEnd $systemPathsList
+addpathsAtTheEnd $TeXLiveDIR
+#addpathsAtTheEnd /home/linuxbrew/.linuxbrew/bin /home/linuxbrew/.linuxbrew/sbin
+addpathsAtTheEnd $userPathsList
+addpathsAtTheEnd $HOME/myScripts/shl $HOME/myScripts/py $HOME/myScripts/pl
+addpathsAtTheEnd $HOME/.poetry/bin
 #echo "=> AFTER: PATH = $PATH"
 
 manPathsList="/opt/ffmpeg/share/man /opt/local/man $HOME/.local/share/man /usr/local/share/man /usr/share/man /usr/local/miniconda3/share/man /usr/local/miniconda2/share/man"
