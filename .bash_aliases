@@ -325,7 +325,7 @@ alias rm="\rm -i"
 alias rpml="\rpm --root ~/local -Uvh"
 alias rpmt="\rpm --test"
 alias rsync2SDCard="rsync --size-only"
-alias rsyncMove="rsync --remove-source-files"
+alias rsyncMove="rsync -aiv --remove-source-files"
 alias rubyInterpreter="\irb"
 alias scp_unix='time \rsync -h --progress --rsync-path=$HOME/gnu/bin/rsync -ut'
 alias screenDPI=$'xdpyinfo | awk \'/dots per inch/{$1="";sub("^ ","");print}\''
