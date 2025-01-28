@@ -2,6 +2,15 @@
 ! declare 2>&1 | \grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
+function viewAllCertsSummary {
+	for cert
+	do
+		while openssl x509 -noout -subject -issuer -dates
+		do
+			printf -- "-%.0s" {1..45};echo
+		done <  $cert
+	done
+}
 function downloadCert {
 	local URL=$1
 	local port=$2
