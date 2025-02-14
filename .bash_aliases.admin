@@ -2,7 +2,6 @@
 ! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-alias dockerCleanup="$sudo docker system prune"
 ls /dev/md* >/dev/null 2>&1 && alias mdraidInfo='sudo mdadm /dev/md?;sudo mdadm -D /dev/md?;cat /proc/mdstat'
 alias snapCleanDisabledPackages='\snap list --all | while read snapname ver rev trk pub notes; do if [[ $notes =~ disabled ]]; then $sudo snap remove $snapname --revision=$rev; fi; done'
 alias enableAllCPUs='echo 1 | sudo tee /sys/devices/system/cpu/cpu{?,??}/online'
