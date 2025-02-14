@@ -27,20 +27,20 @@ function dockerBuild {
 	fi
 
 	set -x
-	time sudo docker build --no-cache -t "$imageName" -f "$dockerFile" "$dir" "$@"
+	time $sudo docker build --no-cache -t "$imageName" -f "$dockerFile" "$dir" "$@"
 	retCode=$?
 	set +x
 
 	if [ $retCode == 0 ];then
-		echo && sudo docker images "$imageName" && echo && echo "=> sudo docker run -it -h pc1 --rm $imageName"
+		echo && $sudo docker images "$imageName" && echo && echo "=> $sudo docker run -it -h pc1 --rm $imageName"
 	fi
 	return $retCode
 }
 function dockerCleanUpImages {
-	sudo docker image ls | awk '/^<none>\s+<none>/{printf" "$3}' | sudo \xargs -rt docker rmi
+	$sudo docker image ls | awk '/^<none>\s+<none>/{printf" "$3}' | $sudo \xargs -rt docker rmi
 }
 function dockerRemoveStoppedContainers {
-	sudo docker ps -a | awk '/Exited/{print$1}' | sudo \xargs -rt docker rm
+	$sudo docker ps -a | awk '/Exited/{print$1}' | $sudo \xargs -rt docker rm
 }
 function findDockerContainerFromPath {
 	for path
@@ -48,12 +48,12 @@ function findDockerContainerFromPath {
 		sha=$(echo "$path" | cut -d/ -f6)
 		for id in $(sudo docker image ls -q)
 		do
-			if sudo docker image inspect $id --format '{{json .GraphDriver}}' | grep -q $sha; then
+			if $sudo docker image inspect $id --format '{{json .GraphDriver}}' | grep -q $sha; then
 				echo "=> found in image $id" #cf. https://stackoverflow.com/a/76771727/5649639
-				sudo docker container ls | grep $id
+				$sudo docker container ls | grep $id
 			fi
 		done
-		sudo docker container ls -a | grep ${sha:0:12}
+		$sudo docker container ls -a | grep ${sha:0:12}
 	done
 }
 function findDockerImageFromPath {
@@ -62,12 +62,12 @@ function findDockerImageFromPath {
 		sha=$(echo "$path" | cut -d/ -f6)
 		for id in $(sudo docker image ls -q)
 		do
-			if sudo docker image inspect $id --format '{{json .GraphDriver}}' | grep -q $sha; then
+			if $sudo docker image inspect $id --format '{{json .GraphDriver}}' | grep -q $sha; then
 				echo "=> found in image $id"
-				sudo docker image ls | grep $id
+				$sudo docker image ls | grep $id
 			fi
 		done
-		sudo docker image ls -a | grep ${sha:0:12}
+		$sudo docker image ls -a | grep ${sha:0:12}
 	done
 }
 
