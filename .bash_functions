@@ -1989,7 +1989,7 @@ function tcpConnetTest {
 #		local remoteSSHServer=$(echo $@ | awk '{sub("^(-[[:alnum:]_]+ ?)+","");sub("[[:alnum:]_]+@","");print$1}')
 		local remoteSSHServer=$1
 		local remotePort=$2
-		time timeout $timeout bash -c ": < /dev/tcp/$remoteSSHServer/$remotePort" && echo "$0: connect: connection succeeded" && echo "$0: /dev/tcp/$remoteSSHServer/$remotePort: Connection accepted"
+		time timeout $timeout bash -c "< /dev/tcp/$remoteSSHServer/$remotePort" && echo "$0: connect: connection succeeded" && echo "$0: /dev/tcp/$remoteSSHServer/$remotePort: Connection accepted"
 	fi
 }
 function termtitle {
