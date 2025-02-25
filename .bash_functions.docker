@@ -37,7 +37,7 @@ function dockerBuild {
 	return $retCode
 }
 function dockerCleanUpImages {
-	$sudo docker image ls | awk '/^<none>\s+<none>/{printf" "$3}' | $sudo \xargs -rt docker rmi
+	$sudo docker image ls | awk '/^<none>[[:space:]]+<none>/{printf" "$3}' | $sudo \xargs -rt docker rmi
 }
 function dockerRemoveStoppedContainers {
 	$sudo docker ps -a | awk '/Exited/{print$1}' | $sudo \xargs -rt docker rm
