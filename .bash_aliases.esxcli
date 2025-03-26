@@ -3,7 +3,7 @@
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 alias esxcliHistory="grep -o "esxcli.*" /var/log/shell.log | uniq"
-alias fullHistory=$'awk -F ":" \'/shell[^:]*:[^:]*:/{sub("^ ","",$5);for(i=5;i<=NF;++i)printf $i" ";print""}\' /var/log/shell.log'
+alias esxcliFullHistory=$'awk -F ":" \'/shell[^:]*:[^:]*:/{sub("^ ","",$5);for(i=5;i<=NF;++i)printf $i" ";print""}\' /var/log/shell.log'
 
 set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
