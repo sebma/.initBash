@@ -14,6 +14,7 @@ alias mplayernoconfig="$mplayernoconfig"
 
 alias mpvh="mpv --profile=hid"
 alias mpvid="mpv --profile=identify"
+alias mpvinfo="mpv --no-resume-playback --frames=0"
 alias mpvwebcam="$mpv --profile=webcam"
 
 alias mpvYouTubeLIVE='mpv --profile=youtube-live'
