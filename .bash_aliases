@@ -97,7 +97,7 @@ alias dig="\dig +search +short"
 alias digReverse="\dig +search +short -x"
 alias dir2iso='\mkisofs -J -R -o'
 alias disconnectB206_BT_From_DAC="ssh b206.local. myScripts/shl/bluetoothDisconnectAllBlueZ5.sh"
-alias distrib='\strings $(\ps -p 1 -o cmd= | cut -d" " -f1) | egrep -i "ubuntu|debian|centos|redhat" -o | uniq'
+alias distrib='\strings $(\ps -p 1 -o cmd= | cut -d" " -f1) | egrep -i "ubuntu|debian|centos|redhat" -o | tr [:upper:] [:lower:] | uniq'
 alias dnsroots='dnsServers .'
 alias dnsServers='\dig +short -t NS'
 alias document2doc="libreofficeTo doc"
