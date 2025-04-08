@@ -97,7 +97,7 @@ alias dig="\dig +search +short"
 alias digReverse="\dig +search +short -x"
 alias dir2iso='\mkisofs -J -R -o'
 alias disconnectB206_BT_From_DAC="ssh b206.local. myScripts/shl/bluetoothDisconnectAllBlueZ5.sh"
-alias distrib='\strings $(\ps -p 1 -o cmd= | cut -d" " -f1) | egrep -i "ubuntu|debian|centos|redhat" -o | tr [:upper:] [:lower:] | uniq'
+alias distrib='\strings $(\ps -p 1 -o command= | cut -d" " -f1) | egrep -i "ubuntu|debian|centos|redhat" -o | tr [:upper:] [:lower:] | uniq'
 alias dnsroots='dnsServers .'
 alias dnsServers='\dig +short -t NS'
 alias document2doc="libreofficeTo doc"
@@ -355,7 +355,7 @@ alias tcpPorts="\netstat -ntl"
 alias terminfo='echo "=> C est un terminal $(tput cols 2>/dev/null)x$(tput lines 2>/dev/null)."'
 alias thunderbirdUnlock='\ps -C thunderbird >/dev/null || rm ~/.thunderbird/default/lock'
 alias timestamp='\date +"%Y%m%d_%HH%M"'
-alias tolower="awk '{print tolower(\$0)}'"
+alias tolowerAwk="awk '{print tolower(\$0)}'"
 alias tolowerPerl="\perl -pe 'tr/A-Z/a-z/'"
 alias tolowerSed="sed 's/.*/\L&/'"
 alias topd10="topd $((10+1))"
