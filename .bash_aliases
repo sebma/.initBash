@@ -366,6 +366,7 @@ alias topdlines='topd $(($LINES-2))'
 alias toupperAwk="awk '{print toupper(\$0)}'"
 alias toupperPerl="\perl -pe 'tr/a-z/A-Z/'"
 alias toupperSed="sed 's/.*/\U&/'"
+alias toupperTr='tr [:lower:] [:upper:]'
 alias ulogerrors="egrep -iB4 -A1 'error|erreur|Err: [^0]'"
 alias ulogtodayerrors="egrep -iB4 -A1 'error|erreur|Err: [^0]' $ulog"
 alias url2qrcode=string2qrcode
