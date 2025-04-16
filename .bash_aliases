@@ -93,8 +93,9 @@ alias dbus-logout-kde='\qdbus org.kde.ksmserver /KSMServer org.kde.KSMServerInte
 alias dbus-reboot='\dbus-send --system --print-reply --dest="org.freedesktop.ConsoleKit" /org/freedesktop/ConsoleKit/Manager org.freedesktop.ConsoleKit.Manager.Restart'
 alias dbus-suspend='\dbus-send --system --print-reply --dest="org.freedesktop.UPower" /org/freedesktop/UPower org.freedesktop.UPower.Suspend || \dbus-send --system --print-reply --dest="org.freedesktop.login1" /org/freedesktop/login1 org.freedesktop.login1.Manager.Suspend boolean:true'
 alias deborphan="\deborphan | sort"
-alias dig="\dig +search +short"
-alias digReverse="\dig +search +short -x"
+alias dig='\dig +ttlunits'
+alias digshort="dig +search +short"
+alias digreverse="dig +short -x"
 alias dir2iso='\mkisofs -J -R -o'
 alias disconnectB206_BT_From_DAC="ssh b206.local. myScripts/shl/bluetoothDisconnectAllBlueZ5.sh"
 alias distrib='\strings $(\ps -p 1 -o command= | cut -d" " -f1) | egrep -i "ubuntu|debian|centos|redhat" -o | tr [:upper:] [:lower:] | uniq'
