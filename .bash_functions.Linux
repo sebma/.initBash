@@ -663,7 +663,7 @@ function wifiList {
 			echo "=> Rescanning WiFi networks ..."
 			\nmcli dev wifi rescan && sleep 2
 			\nmcli -f ssid,bssid,mode,freq,rate,signal,security,active,bars dev wifi list | \grep 'SSID' >&2 # Print nmcli headers
-			\nmcli -f ssid,bssid,mode,freq,rate,signal,security,active,bars dev wifi list -c yes | grep -v 'SSID' 
+			\nmcli -f ssid,bssid,mode,freq,rate,signal,security,active,bars -c yes dev wifi list | grep -v 'SSID' 
 		elif iw dev 2>/dev/null | \grep -q Interface;then
 			$sudo iw dev $wiFiInterface scan | \grep SSID
 		elif type -P iwlist >/dev/null 2>&1; then
