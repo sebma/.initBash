@@ -71,6 +71,7 @@ addpathsAtTheEnd $systemPathsList
 addpathsAtTheEnd $TeXLiveDIR
 #addpathsAtTheEnd /home/linuxbrew/.linuxbrew/bin /home/linuxbrew/.linuxbrew/sbin
 addpathsAtTheEnd $HOME/myScripts/shl $HOME/myScripts/py $HOME/myScripts/pl
+addpathsAtTheEnd $HOME/Scripts/shl $HOME/Scripts/py $HOME/Scripts/pl
 addpathsAtTheEnd $userPathsList
 addpathsAtTheEnd $HOME/.poetry/bin
 #echo "=> AFTER: PATH = $PATH"
