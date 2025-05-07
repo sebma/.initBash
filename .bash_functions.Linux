@@ -224,8 +224,9 @@ function lanIPv6 {
 }
 function locate {
 	local locate="$(type -P locate)"
+	local target="$(readlink -f $locate | awk -F/ '{print$NF}')"
 	local locateOptions="-i --regex"
-	if [ $locate == "$(type -P mlocate)" ];then
+	if [ $target == mlocate ] || [ $target == plocate ];then
 		locateOptions+=" -e"
 		groups 2>/dev/null | \egrep -w "sudo|adm|admin|root|wheel" -q || locateOptions+=" --database $HOME/.local/lib/mlocate/mlocate.db"
 	elif [ $locate == "$(type -P plocate)" ];then
