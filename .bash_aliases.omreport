@@ -9,12 +9,16 @@ openManagerSBinDir=/opt/dell/srvadmin/sbin
 #update-alternatives --install /usr/sbin/omconfig omconfig $openManagerSBinDir/omconfig 5
 
 omreport=$openManagerBinDir/omreport
+omconfig=$openManagerBinDir/omconfig
 controllerID=$($omreport storage controller -fmt ssv | awk -F';' '/^[0-9];/{printf$1;exit}')
 
 alias omreport=$omreport
+alias omreportTechnicalSupportReport="$omreport system alertlog;$omreport system esmlog;$omreport system version;$omreport storage controller;$omreport storage vdisk;$omreport storage pdisk controller=$controllerID;"
 alias omServiceTag="$omreport chassis info | awk '/Service.Tag/{print\$NF}'"
 alias omiDracIP="$omreport system summary | awk '/Team.Interface.0|Remote.Access.Controller/{found=1} /IP.Address/ && found==1 {print\$NF;exit}'"
 alias omiDracURL='echo https://$(omiDracIP)'
+alias omiDracVersion="$omreport system summary | "$'awk \'/Remote.Access.Device/{$1=$2=$3=$4="";gsub(/^ +/,"");print}\''
+alias omclearForeignRAIDConfig="$omconfig storage controller action=clearforeignconfig controller=$controllerID"
 alias omchassisbios="$omreport chassis bios"
 alias omchassisbiosCSV="omchassisbios -fmt ssv"
 alias omchassisinfo="$omreport chassis info"
