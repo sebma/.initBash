@@ -59,6 +59,17 @@ function pem2keyDER {
 		echo
 	done
 }
+function pem2P12 {
+	local argc=$#
+	if [ $argc != 3 ];then
+		echo "=> Usage: $FUNCNAME pemFile CAfile pemKey">&2
+		return 1
+	fi
+
+	local pemFile=$1 CAfile=$2 pemKey=$3
+	local p12File=${pemFile/.pem/.p12}
+	openssl pkcs12 -in $pemFile -CAfile $CAfile -inkey $pemKey -export -out $p12File
+}
 
 set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
