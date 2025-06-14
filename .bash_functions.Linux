@@ -419,7 +419,7 @@ function processENV_Variables {
 		[ $pid != 0 ] && tr '\0' '\n' < /proc/$pid/environ | \egrep -v "^hidden=" | \grep -P "^[^\s%]+=" | sort -u
 	elif [ $# = 2 ];then
 		local varNAME=$2
-		[ $pid != 0 ] && tr '\0' '\n' < /proc/$pid/environ | \egrep -v "^hidden=" | \grep -P "^[^\s%]+=" | sort -u | egrep -w "$varNAME"
+		[ $pid != 0 ] && tr '\0' '\n' < /proc/$pid/environ | \egrep -v "^hidden=" | \grep -P "^[^\s%]+=" | sort -u | egrep "$varNAME"
 	fi
 }
 function psAncestors {
