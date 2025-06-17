@@ -94,6 +94,7 @@ alias dbus-reboot='\dbus-send --system --print-reply --dest="org.freedesktop.Con
 alias dbus-suspend='\dbus-send --system --print-reply --dest="org.freedesktop.UPower" /org/freedesktop/UPower org.freedesktop.UPower.Suspend || \dbus-send --system --print-reply --dest="org.freedesktop.login1" /org/freedesktop/login1 org.freedesktop.login1.Manager.Suspend boolean:true'
 alias deborphan="\deborphan | sort"
 alias dig='\dig +ttlunits'
+alias digsimple="\dig +ttlunits +search +noquestion +nostats +noedns +nocomments +nocmd"
 alias digshort="dig +search +short"
 alias digreverse="dig +short -x"
 alias dir2iso='\mkisofs -J -R -o'
