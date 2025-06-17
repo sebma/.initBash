@@ -95,7 +95,7 @@ alias dbus-suspend='\dbus-send --system --print-reply --dest="org.freedesktop.UP
 alias deborphan="\deborphan | sort"
 alias dig='\dig +ttlunits'
 alias digsimple="\dig +ttlunits +search +noquestion +nostats +noedns +nocomments +nocmd"
-alias digshort="dig +search +short"
+alias digshort="\dig +ttlunits +search +short"
 alias digreverse="dig +short -x"
 alias dir2iso='\mkisofs -J -R -o'
 alias disconnectB206_BT_From_DAC="ssh b206.local. myScripts/shl/bluetoothDisconnectAllBlueZ5.sh"
