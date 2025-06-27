@@ -80,6 +80,7 @@ alias isWayLand=$'printf "$XDG_SESSION_TYPE => ";loginctl show-session $(loginct
 alias journalSvc="journalctl --unit"
 alias journalctl='\journalctl -e'
 alias journalctlErrors='\journalctl -p err..emerg --no-pager'
+alias journalctlErrorsNWarings='journalctlErrors -p warning'
 alias kwinRestart="\kwin --replace >/dev/null 2>&1 &"
 alias l="\ls"
 alias lastme='last -w $USER'
