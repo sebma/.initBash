@@ -9,6 +9,7 @@ alias addCover2mp4=addThumbnail2mp4_AtomicParsley
 alias ffmpeg="time $ffmpeg"
 alias ffmpegwebcamInfo="ffmpeg -list_formats all -i"
 alias ffplaywebcam="ffplay -fflags nobuffer -flags low_delay -framedrop"
+alias ffprobeJSON="$ffprobe -v error -show_format -show_streams -of json"
 alias keyFrames="$ffprobe -loglevel error -skip_frame nokey -select_streams v:0 -show_entries frame=pkt_pts_time -of csv=print_section=0"
 alias mp32wavstdout="\mpg123 --wav - "
 alias ogg2wavstdout="\oggdec --output=- "
