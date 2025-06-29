@@ -45,12 +45,18 @@ ytdlpnoconfig="yt-dlp --ignore-config"
 alias ytdlpnoconfig="$ytdlpnoconfig"
 alias ytdlVersion="\youtube-dl --version"
 alias ytdlpVersion="\yt-dlp --version"
+
 alias ytdlGetFileName="\youtube-dl --get-filename"
 alias ytdlpGetFileName="\yt-dlp --get-filename"
 alias ytdlGetVideoID="\youtube-dl --get-id"
+alias ytdlpGetVideoID="\yt-dlp --get-id"
 alias ytdlGetFormatID="\youtube-dl --get-filename -o '%(format_id)s' -f"
+alias ytdlpGetFormatID="\yt-dlp --get-filename -o '%(format_id)s' -f"
+alias ytdlGetTitle="\youtube-dl -e"
+alias ytdlpGetTitle="\yt-dlp -e"
 alias ytdlLatestRelease='\git ls-remote --tags --refs $ytdlURL | awk -F/ "{print\$NF}" | sort -rV | head -1'
 alias ytdlpLatestRelease='\git ls-remote --tags --refs $ytdlpURL | awk -F/ "{print\$NF}" | sort -rV | head -1'
+
 alias ytdlOpenIssues="open $ytdlURL/issues"
 alias ytdlpOpenIssues="open $ytdlpURL/issues"
 alias ytdlOpenReleases="open $ytdlURL/releases"
