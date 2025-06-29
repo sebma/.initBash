@@ -38,6 +38,7 @@ alias recordNCCLive=recordNCCLive480p
 alias recordJPLive=recordJPLive360p
 alias youtube-dl="LANG=C.UTF-8 command youtube-dl"
 alias yt-dl="LANG=C.UTF-8 command youtube-dl"
+alias yt-dlp="env LANG=C.UTF-8 yt-dlp"
 ytdlnoconfig="youtube-dl --ignore-config"
 alias ytdlnoconfig="$ytdlnoconfig"
 ytdlpnoconfig="yt-dlp --ignore-config"
