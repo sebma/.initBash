@@ -174,7 +174,7 @@ function addThumbnail2mp4_ffmpeg {
 	local timestampFileRef=$(mktemp) && touch -r "$videoFileName" $timestampFileRef
 	local extension=${videoFileName/*./}
 
-	local ffprobeJSON_Info=$($ffprobe -v error -show_format -show_streams -print_format json "$videoFileName")
+	local ffprobeJSON_Info=$($ffprobe -v error -show_format -show_streams -of json "$videoFileName")
 	local embeddedArtworkCodecName=$(echo $ffprobeJSON_Info | jq -r '[ .streams[] | select(.codec_type=="video") ][-1].codec_name')
 	local major_brand=$(echo $ffprobeJSON_Info | jq -r '.format.tags.major_brand')
 	local disposition_stream_specifier=null
@@ -685,7 +685,7 @@ function audioChannelLayoutOfFile {
 	for file
 	do
 #		audioChannelLayout=$($ffprobe "$file" -select_streams a:0? -show_entries stream=channel_layout -of default=noprint_wrappers=1:nokey=1 -v error)
-		ffprobeJSON_File_Info=$($ffprobe -v error -show_format -show_streams -print_format json "$file")
+		ffprobeJSON_File_Info=$($ffprobe -v error -show_format -show_streams -of json "$file")
 		audioChannelLayout=$(echo $ffprobeJSON_File_Info | jq -r '[ .streams[] | select(.codec_type=="audio") ][-1].channel_layout')
 		printf "=> $file : audioChannelLayout = " >&2
 		echo $audioChannelLayout
@@ -697,7 +697,7 @@ function audioCodecOfFile {
 	for file
 	do
 #		audioCodec=$($ffprobe "$file" -select_streams a:0? -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 -v error)
-		ffprobeJSON_File_Info=$($ffprobe -v error -show_format -show_streams -print_format json "$file")
+		ffprobeJSON_File_Info=$($ffprobe -v error -show_format -show_streams -of json "$file")
 		audioCodec=$(echo $ffprobeJSON_File_Info | jq -r '[ .streams[] | select(.codec_type=="audio") ][-1].codec_name')
 		printf "=> $file : audioCodec = " >&2
 		echo $audioCodec
@@ -731,7 +731,7 @@ function audioShift {
 function avprobe {
 	for arg
 	do
-		echo "$arg" | egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $avprobe $avprobeOptions "$(youtube-dl -gf best -- "$arg")" || command avprobe $avprobeOptions -probesize 400M -analyzeduration 400M "$arg"
+		echo "$arg" | egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $avprobe $avprobeOptions "$(yt-dlp -g -- "$arg")" || command avprobe $avprobeOptions -probesize 400M -analyzeduration 400M "$arg"
 #	done 2>&1 | cut -c 1-$(tput cols)
 	done
 }
@@ -741,7 +741,7 @@ function containerOfFile {
 	for file
 	do
 #		container=$($ffprobe "$file" -show_entries format=format_name -of default=noprint_wrappers=1:nokey=1 -v error)
-		ffprobeJSON_File_Info=$($ffprobe -v error -show_format -show_streams -print_format json "$file")
+		ffprobeJSON_File_Info=$($ffprobe -v error -show_format -show_streams -of json "$file")
 		container=$(echo $ffprobeJSON_File_Info | jq -r .format.format_name | cut -d, -f1)
 		printf "=> $file : container = " >&2
 		echo $container
@@ -754,7 +754,7 @@ function ffplay {
 	local args=("$@")
 	local lastArg="${@: -1}"
 	type -P ffprobe >/dev/null && {
-		echo "$lastArg" | \egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $ffplay -user_agent "$userAgent" $ffplayOptions "$(youtube-dl -gf best -- "${args[@]}")" || $ffplay $ffplayOptions "${args[@]}"
+		echo "$lastArg" | \egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $ffplay -user_agent "$userAgent" $ffplayOptions "$(yt-dlp -g -- "${args[@]}")" || $ffplay $ffplayOptions "${args[@]}"
 		echo
 	}
 }
@@ -762,7 +762,7 @@ function ffprobe {
 	type -P ffprobe >/dev/null && {
 		for arg
 		do
-			echo "$arg" | \egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $ffprobe $ffprobeOptions -user_agent "$userAgent" "$(youtube-dl -gf best -- "$arg")" || $ffprobe $ffprobeOptions "$arg"
+			echo "$arg" | \egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $ffprobe $ffprobeOptions -user_agent "$userAgent" "$(yt-dlp -g -- "$arg")" || $ffprobe $ffprobeOptions "$arg"
 			echo
 		done 2>&1
 	}
@@ -771,14 +771,14 @@ function ffprobe2Flat {
 	local ffprobeOptions="-v error -show_format -show_streams -of flat"
 	for arg
 	do
-		echo "$arg" | \egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $ffprobe $ffprobeOptions "$(youtube-dl -gf best -- "$arg")" || $ffprobe $ffprobeOptions "$arg"
+		echo "$arg" | \egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $ffprobe $ffprobeOptions "$(yt-dlp -g -- "$arg")" || $ffprobe $ffprobeOptions "$arg"
 	done 2>&1 | cut -c 1-$(tput cols)
 }
 function ffprobe2Ini {
 	local ffprobeOptions="-v error -show_format -show_streams -of ini"
 	for arg
 	do
-		echo "$arg" | \egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $ffprobe $ffprobeOptions "$(youtube-dl -gf best -- "$arg")" || $ffprobe $ffprobeOptions "$arg"
+		echo "$arg" | \egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $ffprobe $ffprobeOptions "$(yt-dlp -g -- "$arg")" || $ffprobe $ffprobeOptions "$arg"
 	done 2>&1 | cut -c 1-$(tput cols)
 }
 function ffprobe2JSON {
@@ -786,14 +786,14 @@ function ffprobe2JSON {
 	local ffprobeOptions="-v error -show_format -show_streams -of json"
 	for arg
 	do
-		echo "$arg" | \egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $ffprobe $ffprobeUserAgentOption $ffprobeOptions "$(youtube-dl -gf best -- "$arg")" || $ffprobe $ffprobeOptions "$arg"
+		echo "$arg" | \egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $ffprobe $ffprobeUserAgentOption $ffprobeOptions "$(yt-dlp -g -- "$arg")" || $ffprobe $ffprobeOptions "$arg"
 	done
 }
 function ffprobe2XML {
 	local ffprobeOptions="-v error -show_format -show_streams -of xml"
 	for arg
 	do
-		echo "$arg" | \egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $ffprobe $ffprobeOptions "$(youtube-dl -gf best -- "$arg")" || $ffprobe $ffprobeOptions "$arg"
+		echo "$arg" | \egrep -q "(https?|s?ftps?|ssh|rtmp|rtsp|mms)://" && $ffprobe $ffprobeOptions "$(yt-dlp -g -- "$arg")" || $ffprobe $ffprobeOptions "$arg"
 	done
 }
 function flac2spx {
@@ -1197,7 +1197,7 @@ function subtitleCodecOfFile {
 	for file
 	do
 #		subtitleCodec=$($ffprobe "$file" -select_streams s:0? -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 -v error)
-		ffprobeJSON_File_Info=$($ffprobe -v error -show_format -show_streams -print_format json "$file")
+		ffprobeJSON_File_Info=$($ffprobe -v error -show_format -show_streams -of json "$file")
 		subtitleCodec=$(echo $ffprobeJSON_File_Info | jq -r '[ .streams[] | select(.codec_type=="subtitle") ][-1].codec_name')
 		printf "=> $file : subtitleCodec = " >&2
 		echo $subtitleCodec
@@ -1231,7 +1231,7 @@ function urlinfo {
 	for url
 	do
 		echo "=> url = $url"
-		time $ffprobe -user_agent "$userAgent" $(time youtube-dl -gf best -- "$url")
+		time $ffprobe -user_agent "$userAgent" $(time yt-dlp -g -- "$url")
 	done
 }
 function videoCodecOfFile {
@@ -1240,7 +1240,7 @@ function videoCodecOfFile {
 	for file
 	do
 #		videoCodec=$($ffprobe "$file" -select_streams v:0? -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 -v error)
-		ffprobeJSON_File_Info=$($ffprobe -v error -show_format -show_streams -print_format json "$file")
+		ffprobeJSON_File_Info=$($ffprobe -v error -show_format -show_streams -of json "$file")
 		videoCodec=$(echo $ffprobeJSON_File_Info | jq -r '[ .streams[] | select(.codec_type=="video") ][-1].codec_name')
 		printf "=> $file : videoCodec = " >&2
 		echo $videoCodec
