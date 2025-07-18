@@ -207,6 +207,7 @@ if type -P smartctl >/dev/null 2>&1;then
 fi
 
 if type -P docker >/dev/null 2>&1;then
+	test -r $initDir/.bash_aliases.docker && Source $initDir/.bash_aliases.docker
 	test -r $initDir/.bash_functions.docker && Source $initDir/.bash_functions.docker
 fi
 
