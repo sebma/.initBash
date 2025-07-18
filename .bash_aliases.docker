@@ -3,7 +3,7 @@
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 alias dockerCleanup="$sudo docker system prune"
-alias dockerCleanOldImages="$sudo docker image prune --all --filter until=$((30*24))h"
+alias dockerCleanOldImages="$sudo "'docker image prune --all --filter until=$((30*24))h'
 alias dockerImageSizes=$'$sudo docker images --format "{{.ID}}\t{{.Size}}\t{{.CreatedSince}}\t{{.Repository}}:{{.Tag}}" | sort -k 2 -h'
 
 set +x
