@@ -1328,9 +1328,8 @@ function os {
 	echo $os
 }
 function osSize {
-	#La partition swap n'est pas prise en compte pour le moment
-	LC_NUMERIC=C
-	local df="command df"
+#	La partition swap n'est pas prise en compte pour le moment
+	local df="env LC_NUMERIC=C df"
 	echo $OSTYPE | grep -q android && export osFamily=Android || export osFamily=$(uname -s)
 	if [ $osFamily = Linux ];then
 		time $df -T | awk 'BEGIN{printf "df -T "} !/tmpfs/ && !/efivarfs/ && /\/$|boot$|opt|tmp$|usr|var/{printf $NF" "}' | sh -x | awk '{total+=$4}END{print total/1024^2" GiB"}'
