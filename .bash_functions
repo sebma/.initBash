@@ -1515,9 +1515,10 @@ function perlGrep {
 set +x
 }
 function picMpixels {
+	local perl="env LC_NUMERIC=C perl"
 	for fileName
 	do
-		LC_NUMERIC=C \perl -le "printf \"=> fileName = %s size = %.2f Mpix\n\", \"$fileName\", $(identify -format '%w*%h/10**6' $fileName)"
+		$perl -le "printf \"=> fileName = %s size = %.2f Mpix\n\", \"$fileName\", $(identify -format '%w*%h/10**6' $fileName)"
 	done | \column -t
 }
 function pingMyLAN {
