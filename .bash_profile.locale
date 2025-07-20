@@ -6,14 +6,14 @@ test "$debug" -gt 1 && localectl status
 test "$debug" -gt 2 && locale
 test "$debug" -gt 3 && set -x
 
-test -z "$LANG" && export LANG=$(locale -a 2>/dev/null | egrep -i -m1 '^(fr_FR|en_US|en_UK).utf-?8')
+test -z "$LANG" && export LANG=$(locale -a 2>/dev/null | egrep -i -m1 '^(fr_FR|en_US|en_UK).utf8')
 
-if locale -a | egrep -iq "c.utf-?8";then
-	export LC_{CTYPE,COLLATE,MESSAGES}=C.UTF-8 || export LC_{CTYPE,COLLATE,MESSAGES}=$(locale -a 2>/dev/null | egrep -i -m1 '^(en_US|en_GB|en_UK).utf-?8')
+if locale -a | egrep -iq "c.utf8";then
+	export LC_{CTYPE,COLLATE,MESSAGES}=C.utf8 || export LC_{CTYPE,COLLATE,MESSAGES}=$(locale -a 2>/dev/null | egrep -i -m1 '^(en_US|en_GB|en_UK).utf8')
 fi
 
-export LC_{ADDRESS,IDENTIFICATION,MEASUREMENT,MONETARY,NAME,NUMERIC,PAPER,TELEPHONE,TIME}=$(locale -a 2>/dev/null | egrep -i -m1 '^fr_FR.utf-?8') # Locale parameters for France
-export LC_TIME=$(locale -a 2>/dev/null | egrep -i -m1 '^fr_FR.utf-?8') # Heures et dates francaises
+export LC_{ADDRESS,IDENTIFICATION,MEASUREMENT,MONETARY,NAME,NUMERIC,PAPER,TELEPHONE,TIME}=$(locale -a 2>/dev/null | egrep -i -m1 '^fr_FR.utf8') # Locale parameters for France
+export LC_TIME=$(locale -a 2>/dev/null | egrep -i -m1 '^fr_FR.utf8') # Heures et dates francaises
 export LANGUAGE=en:en_GB:en_US:C:fr # i.e https://unix.stackexchange.com/a/181867/135038
 
 test "$debug" -gt 1 && localectl status
