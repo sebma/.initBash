@@ -74,6 +74,7 @@ alias ipbrief="\ip -brief" # Since iproute2 v4.3
 alias ipinfo='\ip -c -br addr show'
 alias ipmcastinfo='\ip -c -br maddr show'
 alias isEFI=isUEFI
+alias isSecureBoot='mokutil --sb-state | grep SecureBoot'
 alias isUEFI="[ -d /sys/firmware/efi ] && echo 'Session EFI' || echo 'Session non-EFI'"
 alias isVM='egrep -i "vmware|virtal" /sys/class/dmi/id/sys_vendor /sys/class/dmi/id/product_name -q && echo true || echo false'
 alias isWayLand=$'printf "$XDG_SESSION_TYPE => ";loginctl show-session $(loginctl | awk "/$USER/"\'{print $1}\') -p Type | grep =wayland -q && echo true || echo false'
