@@ -132,7 +132,7 @@ function getPlaylistsRestrictedFilenamesFSD {
 		mkdir -pv $playListTitle && cd $playListTitle
 		if echo $playList | \egrep -q "youtube|dailymotion|vevo|tonvid"
 		then
-			listOfUrls=$(hxwls 2>/dev/null "$playList" | awk -F '&' '/\<(watch|video)\>/{print$1}' | sort -u | paste -sd" ")
+			listOfUrls=$(curl -Ls "$playList" | hxwls 2>/dev/null | awk -F '&' '/\<(watch|video)\>/{print$1}' | sort -u | paste -sd" ")
 			test $? != 0 && return
 		else
 			fqdn=$(echo "$playList" | sed "s|https\?://||" | cut -d/ -f1)
@@ -140,7 +140,7 @@ function getPlaylistsRestrictedFilenamesFSD {
 			listOfUrls=$(time getVideoURLsFromVideoIDs $service $(ytdlpGetVideoIDsFromPlayListURL $playList))
 		fi
 
-		getRestrictedFilenamesFSD $listOfUrls
+		getRestrictedFilenamesFSD.sh $listOfUrls
 		cd - >/dev/null
 	done
 	trap - INT
@@ -158,7 +158,7 @@ function getPlaylistsRestrictedFilenamesFORMAT {
 		mkdir -pv $playListTitle && cd $playListTitle
 		if echo $playList | \egrep -q "youtube|dailymotion|vevo|tonvid"
 		then
-			listOfUrls=$(hxwls 2>/dev/null "$playList" | awk -F '&' '/\<(watch|video)\>/{print$1}' | sort -u | paste -sd" ")
+			listOfUrls=$(curl -Ls "$playList" | hxwls 2>/dev/null | awk -F '&' '/\<(watch|video)\>/{print$1}' | sort -u | paste -sd" ")
 			test $? != 0 && return
 		else
 			fqdn=$(echo "$playList" | sed "s|https\?://||" | cut -d/ -f1)
@@ -166,7 +166,7 @@ function getPlaylistsRestrictedFilenamesFORMAT {
 			listOfUrls=$(time getVideoURLsFromVideoIDs $service $(ytdlpGetVideoIDsFromPlayListURL $playList))
 		fi
 
-		getRestrictedFilenamesFORMAT $format $listOfUrls
+		getRestrictedFilenamesFORMAT.sh -f $format $listOfUrls
 		cd - >/dev/null
 	done
 	trap - INT
@@ -182,14 +182,14 @@ function getPlaylistsRestrictedFilenamesHD {
 		mkdir -pv $playListTitle && cd $playListTitle
 		if echo $playList | \egrep -q "youtube|dailymotion|vevo|tonvid"
 		then
-			listOfUrls=$(hxwls 2>/dev/null "$playList" | awk -F '&' '/\<(watch|video)\>/{print$1}' | sort -u | paste -sd" ")
+			listOfUrls=$(curl -Ls "$playList" | hxwls 2>/dev/null | awk -F '&' '/\<(watch|video)\>/{print$1}' | sort -u | paste -sd" ")
 		else
 			fqdn=$(echo "$playList" | sed "s|https\?://||" | cut -d/ -f1)
 			service=$(echo $fqdn | awk -F. '{print$(NF-1)}')
 			listOfUrls=$(time getVideoURLsFromVideoIDs $service $(ytdlpGetVideoIDsFromPlayListURL $playList))
 		fi
 
-		getRestrictedFilenamesHD $listOfUrls
+		getRestrictedFilenamesHD.sh $listOfUrls
 		cd - >/dev/null
 	done
 	trap - INT
@@ -205,7 +205,7 @@ function getPlaylistsRestrictedFilenamesSD {
 		mkdir -pv $playListTitle && cd $playListTitle
 		if echo $playList | \egrep -q "youtube|dailymotion|vevo|tonvid"
 		then
-			listOfUrls=$(hxwls 2>/dev/null "$playList" | awk -F '&' '/\<(watch|video)\>/{print$1}' | sort -u | paste -sd" ")
+			listOfUrls=$(curl -Ls "$playList" | hxwls 2>/dev/null | awk -F '&' '/\<(watch|video)\>/{print$1}' | sort -u | paste -sd" ")
 			test $? != 0 && return
 		else
 			fqdn=$(echo "$playList" | sed "s|https\?://||" | cut -d/ -f1)
@@ -213,7 +213,7 @@ function getPlaylistsRestrictedFilenamesSD {
 			listOfUrls=$(time getVideoURLsFromVideoIDs $service $(ytdlpGetVideoIDsFromPlayListURL $playList))
 		fi
 
-		getRestrictedFilenamesSD $listOfUrls
+		getRestrictedFilenamesSD.sh $listOfUrls
 		cd - >/dev/null
 	done
 	trap - INT
