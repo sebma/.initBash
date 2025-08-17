@@ -137,7 +137,7 @@ function getPlaylistsRestrictedFilenamesFSD {
 		else
 			fqdn=$(echo "$playList" | sed "s|https\?://||" | cut -d/ -f1)
 			service=$(echo $fqdn | awk -F. '{print$(NF-1)}')
-			listOfUrls=$(time getVideoURLsFromVideoIDs $service $(ytdlGetVideoIDsFromPlayListURL $playList))
+			listOfUrls=$(time getVideoURLsFromVideoIDs $service $(ytdlpGetVideoIDsFromPlayListURL $playList))
 		fi
 
 		getRestrictedFilenamesFSD $listOfUrls
@@ -163,7 +163,7 @@ function getPlaylistsRestrictedFilenamesFORMAT {
 		else
 			fqdn=$(echo "$playList" | sed "s|https\?://||" | cut -d/ -f1)
 			service=$(echo $fqdn | awk -F. '{print$(NF-1)}')
-			listOfUrls=$(time getVideoURLsFromVideoIDs $service $(ytdlGetVideoIDsFromPlayListURL $playList))
+			listOfUrls=$(time getVideoURLsFromVideoIDs $service $(ytdlpGetVideoIDsFromPlayListURL $playList))
 		fi
 
 		getRestrictedFilenamesFORMAT $format $listOfUrls
@@ -186,7 +186,7 @@ function getPlaylistsRestrictedFilenamesHD {
 		else
 			fqdn=$(echo "$playList" | sed "s|https\?://||" | cut -d/ -f1)
 			service=$(echo $fqdn | awk -F. '{print$(NF-1)}')
-			listOfUrls=$(time getVideoURLsFromVideoIDs $service $(ytdlGetVideoIDsFromPlayListURL $playList))
+			listOfUrls=$(time getVideoURLsFromVideoIDs $service $(ytdlpGetVideoIDsFromPlayListURL $playList))
 		fi
 
 		getRestrictedFilenamesHD $listOfUrls
@@ -210,7 +210,7 @@ function getPlaylistsRestrictedFilenamesSD {
 		else
 			fqdn=$(echo "$playList" | sed "s|https\?://||" | cut -d/ -f1)
 			service=$(echo $fqdn | awk -F. '{print$(NF-1)}')
-			listOfUrls=$(time getVideoURLsFromVideoIDs $service $(ytdlGetVideoIDsFromPlayListURL $playList))
+			listOfUrls=$(time getVideoURLsFromVideoIDs $service $(ytdlpGetVideoIDsFromPlayListURL $playList))
 		fi
 
 		getRestrictedFilenamesSD $listOfUrls
@@ -604,14 +604,14 @@ function ytdlpGetThumbNail {
 		done
 	done
 }
-function ytdlGetVideoIDsFromPlayListURL {
+function ytdlpGetVideoIDsFromPlayListURL {
 	test $# = 0 && {
 		echo "=> Usage: $FUNCNAME playListURL" >&2
 		return 1
 	}
 
 	local playListURL="$1"
-	test "$playListURL" && $ytdlnoconfig  --ignore-errors --flat-playlist -j "$playListURL" | jq -r .id
+	test "$playListURL" && $ytdlpnoconfig  --ignore-errors --flat-playlist -j "$playListURL" | jq -r .id
 }
 function ytdlGetFirstURL {
 	local youtube_dl="command youtube-dl"
