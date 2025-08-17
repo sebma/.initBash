@@ -127,7 +127,7 @@ function getPlaylistsRestrictedFilenamesFSD {
 	for playList
 	do
 		echo "=> Treating playList : $playList ..." >&2
-		playListTitle=$(\youtube-dl --ignore-config --ignore-errors --flat-playlist -J $playList | jq -r '.title')
+		playListTitle=$(yt-dlp --ignore-config --ignore-errors --flat-playlist -J $playList | jq -r '.title')
 		playListTitle="${playListTitle// /_}"
 		mkdir -pv $playListTitle && cd $playListTitle
 		if echo $playList | \egrep -q "youtube|dailymotion|vevo|tonvid"
@@ -153,7 +153,7 @@ function getPlaylistsRestrictedFilenamesFORMAT {
 	for playList
 	do
 		echo "=> Treating playList : $playList ..." >&2
-		playListTitle=$(\youtube-dl --ignore-config --ignore-errors --flat-playlist -J $playList | jq -r '.title')
+		playListTitle=$(yt-dlp --ignore-config --ignore-errors --flat-playlist -J $playList | jq -r '.title')
 		playListTitle="${playListTitle// /_}"
 		mkdir -pv $playListTitle && cd $playListTitle
 		if echo $playList | \egrep -q "youtube|dailymotion|vevo|tonvid"
@@ -177,7 +177,7 @@ function getPlaylistsRestrictedFilenamesHD {
 	for playList
 	do
 		echo "=> Treating playList : $playList ..." >&2
-		playListTitle=$(\youtube-dl --ignore-config --ignore-errors --flat-playlist -J $playList | jq -r '.title')
+		playListTitle=$(yt-dlp --ignore-config --ignore-errors --flat-playlist -J $playList | jq -r '.title')
 		playListTitle="${playListTitle// /_}"
 		mkdir -pv $playListTitle && cd $playListTitle
 		if echo $playList | \egrep -q "youtube|dailymotion|vevo|tonvid"
@@ -200,7 +200,7 @@ function getPlaylistsRestrictedFilenamesSD {
 	for playList
 	do
 		echo "=> Treating playList : $playList ..." >&2
-		playListTitle=$(\youtube-dl --ignore-config --ignore-errors --flat-playlist -J $playList | jq -r '.title')
+		playListTitle=$(yt-dlp --ignore-config --ignore-errors --flat-playlist -J $playList | jq -r '.title')
 		playListTitle="${playListTitle// /_}"
 		mkdir -pv $playListTitle && cd $playListTitle
 		if echo $playList | \egrep -q "youtube|dailymotion|vevo|tonvid"
