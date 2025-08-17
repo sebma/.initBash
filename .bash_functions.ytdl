@@ -130,9 +130,9 @@ function getPlaylistsRestrictedFilenamesFSD {
 		playListTitle=$(yt-dlp --ignore-config --ignore-errors --flat-playlist -J $playList | jq -r '.title')
 		playListTitle="${playListTitle// /_}"
 		mkdir -pv $playListTitle && cd $playListTitle
-		if echo $playList | \egrep -q "youtube|dailymotion|vevo|tonvid"
+		if echo $playList | \egrep -q "dailymotion|vevo|tonvid"
 		then
-			listOfUrls=$(curl -Ls "$playList" | hxwls 2>/dev/null | awk -F '&' '/\<(watch|video)\>/{print$1}' | sort -u | paste -sd" ")
+			listOfUrls=$(\curl -Ls "$playList" | hxwls 2>/dev/null | awk -F '&' '/\<(watch|video)\>/{print$1}' | sort -u | paste -sd" ")
 			test $? != 0 && return
 		else
 			fqdn=$(echo "$playList" | sed "s|https\?://||" | cut -d/ -f1)
@@ -156,9 +156,9 @@ function getPlaylistsRestrictedFilenamesFORMAT {
 		playListTitle=$(yt-dlp --ignore-config --ignore-errors --flat-playlist -J $playList | jq -r '.title')
 		playListTitle="${playListTitle// /_}"
 		mkdir -pv $playListTitle && cd $playListTitle
-		if echo $playList | \egrep -q "youtube|dailymotion|vevo|tonvid"
+		if echo $playList | \egrep -q "dailymotion|vevo|tonvid"
 		then
-			listOfUrls=$(curl -Ls "$playList" | hxwls 2>/dev/null | awk -F '&' '/\<(watch|video)\>/{print$1}' | sort -u | paste -sd" ")
+			listOfUrls=$(\curl -Ls "$playList" | hxwls 2>/dev/null | awk -F '&' '/\<(watch|video)\>/{print$1}' | sort -u | paste -sd" ")
 			test $? != 0 && return
 		else
 			fqdn=$(echo "$playList" | sed "s|https\?://||" | cut -d/ -f1)
@@ -180,9 +180,9 @@ function getPlaylistsRestrictedFilenamesHD {
 		playListTitle=$(yt-dlp --ignore-config --ignore-errors --flat-playlist -J $playList | jq -r '.title')
 		playListTitle="${playListTitle// /_}"
 		mkdir -pv $playListTitle && cd $playListTitle
-		if echo $playList | \egrep -q "youtube|dailymotion|vevo|tonvid"
+		if echo $playList | \egrep -q "dailymotion|vevo|tonvid"
 		then
-			listOfUrls=$(curl -Ls "$playList" | hxwls 2>/dev/null | awk -F '&' '/\<(watch|video)\>/{print$1}' | sort -u | paste -sd" ")
+			listOfUrls=$(\curl -Ls "$playList" | hxwls 2>/dev/null | awk -F '&' '/\<(watch|video)\>/{print$1}' | sort -u | paste -sd" ")
 		else
 			fqdn=$(echo "$playList" | sed "s|https\?://||" | cut -d/ -f1)
 			service=$(echo $fqdn | awk -F. '{print$(NF-1)}')
@@ -203,9 +203,9 @@ function getPlaylistsRestrictedFilenamesSD {
 		playListTitle=$(yt-dlp --ignore-config --ignore-errors --flat-playlist -J $playList | jq -r '.title')
 		playListTitle="${playListTitle// /_}"
 		mkdir -pv $playListTitle && cd $playListTitle
-		if echo $playList | \egrep -q "youtube|dailymotion|vevo|tonvid"
+		if echo $playList | \egrep -q "dailymotion|vevo|tonvid"
 		then
-			listOfUrls=$(curl -Ls "$playList" | hxwls 2>/dev/null | awk -F '&' '/\<(watch|video)\>/{print$1}' | sort -u | paste -sd" ")
+			listOfUrls=$(\curl -Ls "$playList" | hxwls 2>/dev/null | awk -F '&' '/\<(watch|video)\>/{print$1}' | sort -u | paste -sd" ")
 			test $? != 0 && return
 		else
 			fqdn=$(echo "$playList" | sed "s|https\?://||" | cut -d/ -f1)
