@@ -236,7 +236,7 @@ function listInstalledPackagesFromRepo {
 }
 function lsPPAs {
 	local releaseCodeName=$(lsb_release -sc 2>/dev/null)
-	local sourcesDisabledFileList=$({ cd /etc/apt/sources.list.d/;grep Enabled:.no *-$releaseCodeName.sources -l || echo '^$'; } | paste -sd"|" -;)
+	local sourcesDisabledFileList=$({ cd /etc/apt/sources.list.d/;grep "^\s*Enabled:.no" *-$releaseCodeName.sources -l || echo '^$'; } | paste -sd"|" -;)
 	local sourcesEnabledFileList=$(ls /etc/apt/sources.list.d/*-$releaseCodeName.sources | egrep -v "$sourcesDisabledFileList")
 	awk -F "[ /]" 'BEGINFILE{if(ERRNO)nextfile}
 		/^(deb|URIs:) .*launchpad.*.net/{
