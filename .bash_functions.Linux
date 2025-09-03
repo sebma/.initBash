@@ -571,7 +571,7 @@ function watchProcess {
 	do
 		pidList=$(\pgrep -f "$1")
 		ppidList=$($ps -o ppid= $pidList && echo)
-		test -n "$pidList" && ( $ps -fp $pidList && test -n "$ppidList" && echo "=> Showing the parent process :" && $ps h -fp $ppidList ) | tee -a ~/log/processSPY.log && break
+		test -n "$pidList" && ( $ps -fp $pidList && test -n "$ppidList" && echo "=> Showing the parent process :" && $ps -fp $ppidList | grep -vw UID ) | tee -a ~/log/processSPY.log && break
 		sleep 0.01
 	done
 }
