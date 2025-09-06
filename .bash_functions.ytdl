@@ -243,7 +243,7 @@ function getPlaylistsRestrictedFilenamesMP3_M3U {
 		do
 			IFS=$'\n' read -d '' title filename <<< "$(time yt-dlp --restrict-filenames -f bestaudio -j "$url" | jq -r '.title,.filename')"
 			echo "=> title = $title"
-			extension=${filename##*}
+			extension=${filename/*./}
 			filename=${filename/$extension/mp3}
 			printf "#EXTINF:-1," >> $m3uFileName
 			echo $title >> $m3uFileName
@@ -265,7 +265,7 @@ function getPlaylistsRestrictedFilenamesM4A_M3U {
 		do
 			IFS=$'\n' read -d '' title filename <<< "$(time yt-dlp --restrict-filenames -f bestaudio -j "$url" | jq -r '.title,.filename')"
 			echo "=> title = $title"
-			extension=${filename##*}
+			extension=${filename/*./}
 			filename=${filename/$extension/aac}
 			printf "#EXTINF:-1," >> $m3uFileName
 			echo $title >> $m3uFileName
