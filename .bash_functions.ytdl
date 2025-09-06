@@ -230,6 +230,54 @@ function getPlaylistsRestrictedFilenamesMP3 {
 		yt-dlp --no-write-auto-subs -t mp3 "$playList"
 	done
 }
+function getPlaylistsRestrictedFilenamesMP3_M3U {
+	for playList
+	do
+		playListTitle=$(yt-dlp --ignore-config --ignore-errors --flat-playlist -J $playList | jq -r '.title')
+		echo "=> playListTitle = $playListTitle"
+		playListTitle="$(echo $playListTitle | sed -E "s/ /_/g;s/'/_/g;s/\|/-/g;s/[éè]/e/g")"
+		m3uFileName=$playListTitle.m3u
+		echo "#EXTM3U" > $m3uFileName
+		listOfUrls=$(time ytdlpGetVideoURLsFromPlayListURL "$playList")
+		for url in $listOfUrls
+		do
+			time yt-dlp --restrict-filenames -f bestaudio -j "$url" | jq -r '.title,.filename' | while read -d '' title filename
+			do
+				echo "=> title = $title"
+				extension=${filename##*}
+				filename=${filename/$extension/mp3}
+				printf "#EXTINF:-1," >> $m3uFileName
+				echo $title >> $m3uFileName
+				echo $filename >> $m3uFileName
+				yt-dlp --no-write-auto-subs -t mp3 "$url"
+			done
+		done
+	done
+}
+function getPlaylistsRestrictedFilenamesM4A_M3U {
+	for playList
+	do
+		playListTitle=$(yt-dlp --ignore-config --ignore-errors --flat-playlist -J $playList | jq -r '.title')
+		echo "=> playListTitle = $playListTitle"
+		playListTitle="$(echo $playListTitle | sed -E "s/ /_/g;s/'/_/g;s/\|/-/g;s/[éè]/e/g")"
+		m3uFileName=$playListTitle.m3u
+		echo "#EXTM3U" > $m3uFileName
+		listOfUrls=$(time ytdlpGetVideoURLsFromPlayListURL "$playList")
+		for url in $listOfUrls
+		do
+			time yt-dlp --restrict-filenames -f bestaudio -j "$url" | jq -r '.title,.filename' | while read -d '' title filename
+			do
+				echo "=> title = $title"
+				extension=${filename##*}
+				filename=${filename/$extension/aac}
+				printf "#EXTINF:-1," >> $m3uFileName
+				echo $title >> $m3uFileName
+				echo $filename >> $m3uFileName
+				yt-dlp -t aac "$url"
+			done
+		done
+	done
+}
 function getRestrictedFilenamesBEST {
 	getRestrictedFilenamesFORMAT "(best[ext=mp4]/best[ext=webm]/best[ext=flv])" $@ # because of the "eval" statement in the "youtube_dl" bash variable
 }
@@ -623,7 +671,7 @@ function ytdlpGetVideoIDsFromPlayListURL {
 	}
 
 	local playListURL="$1"
-	test "$playListURL" && $ytdlpnoconfig  --ignore-errors --flat-playlist -j "$playListURL" | jq -r .id
+	test "$playListURL" && $ytdlpnoconfig  --ignore-errors --flat-playlist -J "$playListURL" | jq -r .entries[].id
 }
 function ytdlpGetVideoURLsFromPlayListURL {
 	test $# = 0 && {
@@ -632,7 +680,7 @@ function ytdlpGetVideoURLsFromPlayListURL {
 	}
 
 	local playListURL="$1"
-	test "$playListURL" && $ytdlpnoconfig  --ignore-errors --flat-playlist -j "$playListURL" | jq -r .url
+	test "$playListURL" && $ytdlpnoconfig  --ignore-errors --flat-playlist -J "$playListURL" | jq -r .entries[].url
 }
 function ytdlGetFirstURL {
 	local youtube_dl="command youtube-dl"
