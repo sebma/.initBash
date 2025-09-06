@@ -241,7 +241,7 @@ function getPlaylistsRestrictedFilenamesMP3_M3U {
 		listOfUrls=$(time ytdlpGetVideoURLsFromPlayListURL "$playList")
 		for url in $listOfUrls
 		do
-			time yt-dlp --restrict-filenames -f bestaudio -j "$url" | jq -r '.title,.filename' | while read -d '' title filename
+			time yt-dlp --restrict-filenames -f bestaudio -j "$url" | jq -r '.title,.filename' | while IFS=$'\n' read -d '' title filename
 			do
 				echo "=> title = $title"
 				extension=${filename##*}
@@ -265,7 +265,7 @@ function getPlaylistsRestrictedFilenamesM4A_M3U {
 		listOfUrls=$(time ytdlpGetVideoURLsFromPlayListURL "$playList")
 		for url in $listOfUrls
 		do
-			time yt-dlp --restrict-filenames -f bestaudio -j "$url" | jq -r '.title,.filename' | while read -d '' title filename
+			time yt-dlp --restrict-filenames -f bestaudio -j "$url" | jq -r '.title,.filename' | while IFS=$'\n' read -d '' title filename
 			do
 				echo "=> title = $title"
 				extension=${filename##*}
