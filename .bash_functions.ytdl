@@ -137,7 +137,7 @@ function getPlaylistsRestrictedFilenamesFSD {
 		else
 			fqdn=$(echo "$playList" | sed "s|https\?://||" | cut -d/ -f1)
 			service=$(echo $fqdn | awk -F. '{print$(NF-1)}')
-			listOfUrls=$(time getVideoURLsFromVideoIDs $service $(ytdlpGetVideoIDsFromPlayListURL $playList))
+			listOfUrls=$(time ytdlpGetVideoURLsFromPlayListURL $playList)
 		fi
 
 		getRestrictedFilenamesFSD.sh $listOfUrls
@@ -163,7 +163,7 @@ function getPlaylistsRestrictedFilenamesFORMAT {
 		else
 			fqdn=$(echo "$playList" | sed "s|https\?://||" | cut -d/ -f1)
 			service=$(echo $fqdn | awk -F. '{print$(NF-1)}')
-			listOfUrls=$(time getVideoURLsFromVideoIDs $service $(ytdlpGetVideoIDsFromPlayListURL $playList))
+			listOfUrls=$(time ytdlpGetVideoURLsFromPlayListURL $playList)
 		fi
 
 		getRestrictedFilenamesFORMAT.sh -f $format $listOfUrls
@@ -186,7 +186,7 @@ function getPlaylistsRestrictedFilenamesHD {
 		else
 			fqdn=$(echo "$playList" | sed "s|https\?://||" | cut -d/ -f1)
 			service=$(echo $fqdn | awk -F. '{print$(NF-1)}')
-			listOfUrls=$(time getVideoURLsFromVideoIDs $service $(ytdlpGetVideoIDsFromPlayListURL $playList))
+			listOfUrls=$(time ytdlpGetVideoURLsFromPlayListURL $playList)
 		fi
 
 		getRestrictedFilenamesHD.sh $listOfUrls
@@ -210,13 +210,25 @@ function getPlaylistsRestrictedFilenamesSD {
 		else
 			fqdn=$(echo "$playList" | sed "s|https\?://||" | cut -d/ -f1)
 			service=$(echo $fqdn | awk -F. '{print$(NF-1)}')
-			listOfUrls=$(time getVideoURLsFromVideoIDs $service $(ytdlpGetVideoIDsFromPlayListURL $playList))
+			listOfUrls=$(time ytdlpGetVideoURLsFromPlayListURL $playList)
 		fi
 
 		getRestrictedFilenamesSD.sh $listOfUrls
 		cd - >/dev/null
 	done
 	trap - INT
+}
+function getPlaylistsRestrictedFilenamesM4A {
+	for playList
+	do
+		yt-dlp -t aac "$playList"
+	done
+}
+function getPlaylistsRestrictedFilenamesMP3 {
+	for playList
+	do
+		yt-dlp --no-write-auto-subs -t mp3 "$playList"
+	done
 }
 function getRestrictedFilenamesBEST {
 	getRestrictedFilenamesFORMAT "(best[ext=mp4]/best[ext=webm]/best[ext=flv])" $@ # because of the "eval" statement in the "youtube_dl" bash variable
@@ -612,6 +624,15 @@ function ytdlpGetVideoIDsFromPlayListURL {
 
 	local playListURL="$1"
 	test "$playListURL" && $ytdlpnoconfig  --ignore-errors --flat-playlist -j "$playListURL" | jq -r .id
+}
+function ytdlpGetVideoURLsFromPlayListURL {
+	test $# = 0 && {
+		echo "=> Usage: $FUNCNAME playListURL" >&2
+		return 1
+	}
+
+	local playListURL="$1"
+	test "$playListURL" && $ytdlpnoconfig  --ignore-errors --flat-playlist -j "$playListURL" | jq -r .url
 }
 function ytdlGetFirstURL {
 	local youtube_dl="command youtube-dl"
