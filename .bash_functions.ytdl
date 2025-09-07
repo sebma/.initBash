@@ -236,20 +236,24 @@ function getPlaylistsRestrictedFilenamesMP3_M3U {
 		playListTitle=$(yt-dlp --ignore-config --ignore-errors --flat-playlist -J $playList | jq -r '.title')
 		echo "=> playListTitle = $playListTitle"
 		playListTitle="$(echo $playListTitle | sed -E "s/ /_/g;s/'/_/g;s/\|/-/g;s/[éè]/e/g")"
-		m3uFileName=$playListTitle.m3u
-		echo "#EXTM3U" > $m3uFileName
-		listOfUrls=$(time ytdlpGetVideoURLsFromPlayListURL "$playList")
-		for url in $listOfUrls
-		do
-			IFS=$'\n' read -d '' title filename <<< "$(time yt-dlp --restrict-filenames -f bestaudio -j "$url" | jq -r '.title,.filename')"
-			echo "=> title = $title"
-			extension=${filename/*./}
-			filename=${filename/$extension/mp3}
-			printf "#EXTINF:-1," >> $m3uFileName
-			echo $title >> $m3uFileName
-			echo $filename >> $m3uFileName
-			yt-dlp --no-write-auto-subs -t mp3 "$url"
-		done
+		mkdir -vp "$playListTitle"
+		if cd "$playListTitle";then
+			m3uFileName=$playListTitle.m3u
+			echo "#EXTM3U" > $m3uFileName
+			listOfUrls=$(time ytdlpGetVideoURLsFromPlayListURL "$playList")
+			for url in $listOfUrls
+			do
+				IFS=$'\n' read -d '' title filename <<< "$(time yt-dlp --restrict-filenames -f bestaudio -j "$url" | jq -r '.title,.filename')"
+				echo "=> title = $title"
+				extension=${filename/*./}
+				filename=${filename/$extension/mp3}
+				printf "#EXTINF:-1," >> $m3uFileName
+				echo $title >> $m3uFileName
+				echo $filename >> $m3uFileName
+				yt-dlp --no-write-auto-subs -t mp3 "$url"
+			done
+			cd -
+		fi
 	done
 }
 function getPlaylistsRestrictedFilenamesM4A_M3U {
@@ -258,20 +262,24 @@ function getPlaylistsRestrictedFilenamesM4A_M3U {
 		playListTitle=$(yt-dlp --ignore-config --ignore-errors --flat-playlist -J $playList | jq -r '.title')
 		echo "=> playListTitle = $playListTitle"
 		playListTitle="$(echo $playListTitle | sed -E "s/ /_/g;s/'/_/g;s/\|/-/g;s/[éè]/e/g")"
-		m3uFileName=$playListTitle.m3u
-		echo "#EXTM3U" > $m3uFileName
-		listOfUrls=$(time ytdlpGetVideoURLsFromPlayListURL "$playList")
-		for url in $listOfUrls
-		do
-			IFS=$'\n' read -d '' title filename <<< "$(time yt-dlp --restrict-filenames -f bestaudio -j "$url" | jq -r '.title,.filename')"
-			echo "=> title = $title"
-			extension=${filename/*./}
-			filename=${filename/$extension/aac}
-			printf "#EXTINF:-1," >> $m3uFileName
-			echo $title >> $m3uFileName
-			echo $filename >> $m3uFileName
-			yt-dlp -t aac "$url"
-		done
+		mkdir -vp "$playListTitle"
+		if cd "$playListTitle";then
+			m3uFileName=$playListTitle.m3u
+			echo "#EXTM3U" > $m3uFileName
+			listOfUrls=$(time ytdlpGetVideoURLsFromPlayListURL "$playList")
+			for url in $listOfUrls
+			do
+				IFS=$'\n' read -d '' title filename <<< "$(time yt-dlp --restrict-filenames -f bestaudio -j "$url" | jq -r '.title,.filename')"
+				echo "=> title = $title"
+				extension=${filename/*./}
+				filename=${filename/$extension/aac}
+				printf "#EXTINF:-1," >> $m3uFileName
+				echo $title >> $m3uFileName
+				echo $filename >> $m3uFileName
+				yt-dlp -t aac "$url"
+			done
+			cd -
+		fi
 	done
 }
 function getRestrictedFilenamesBEST {
