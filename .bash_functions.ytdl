@@ -247,8 +247,7 @@ function getPlaylistsRestrictedFilenamesMP3_M3U {
 				echo "=> title = $title"
 				extension=${filename/*./}
 				filename=${filename/$extension/mp3}
-				printf "#EXTINF:$duration," >> $m3uFileName
-				echo $title >> $m3uFileName
+				echo "#EXTINF:$duration,$title" >> $m3uFileName
 				echo $filename >> $m3uFileName
 				yt-dlp --no-write-auto-subs -t mp3 "$url"
 			done
@@ -273,8 +272,7 @@ function getPlaylistsRestrictedFilenamesM4A_M3U {
 				echo "=> title = $title"
 				extension=${filename/*./}
 				filename=${filename/$extension/aac}
-				printf "#EXTINF:$duration," >> $m3uFileName
-				echo $title >> $m3uFileName
+				echo "#EXTINF:$duration,$title" >> $m3uFileName
 				echo $filename >> $m3uFileName
 				yt-dlp -t aac "$url"
 			done
