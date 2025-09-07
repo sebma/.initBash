@@ -700,7 +700,7 @@ function fsUsage {
 function functionDefinition {
 	[ $osFamily = Darwin ] && local sed="command sed -E"
 	[ $osFamily = Linux ]  && local sed="command sed -r"
-	type "$@" | \grep -v 'is a function$' | $sed 's/(;| )$//;s/    /\t/g'
+	type "$@" | \grep -v 'is a function$' | $sed 's/([^;]);$/\1/;s/    /\t/g'
 }
 function gdebiALL {
 	for package
