@@ -8,8 +8,8 @@ test "$debug" -gt 3 && set -x
 
 test -z "$LANG" && export LANG=$(locale -a 2>/dev/null | egrep -i -m1 '^(fr_FR|en_US|en_UK).utf8')
 
-if locale -a | egrep -iq "c.utf-?8";then
-	export LC_{CTYPE,COLLATE,MESSAGES}=C.utf8 || export LC_{CTYPE,COLLATE,MESSAGES,NUMERIC}=$(locale -a 2>/dev/null | egrep -i -m1 '^(en_US|en_GB|en_UK).utf-?8')
+if locale -a | egrep -iw "C.utf-?8|C" -q;then
+	export LC_{CTYPE,COLLATE,MESSAGES}=C.utf8 2>&1 | grep warning -q && export LC_{CTYPE,COLLATE,MESSAGES}=C 2>&1 | grep warning -q || export LC_{CTYPE,COLLATE,MESSAGES,NUMERIC}=$(locale -a 2>/dev/null | egrep -i -m1 '^(en_US|en_GB|en_UK).utf-?8')
 fi
 
 export LC_{ADDRESS,IDENTIFICATION,MEASUREMENT,MONETARY,NAME,PAPER,TELEPHONE,TIME}=$(locale -a 2>/dev/null | egrep -i -m1 '^fr_FR.utf-?8') # Locale parameters for France
