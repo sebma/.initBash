@@ -14,7 +14,7 @@ fi
 
 export LC_{ADDRESS,IDENTIFICATION,MEASUREMENT,MONETARY,NAME,PAPER,TELEPHONE,TIME}=$(locale -a 2>/dev/null | egrep -i -m1 '^fr_FR.utf-?8') # Locale parameters for France
 export LC_TIME=$(locale -a 2>/dev/null | egrep -i -m1 '^fr_FR.utf-?8') # Heures et dates francaises
-export LANGUAGE=en:C:fr # i.e https://unix.stackexchange.com/a/181867/135038
+export LANGUAGE=en:C # i.e https://unix.stackexchange.com/a/181867/135038
 
 test "$debug" -gt 1 && localectl status
 test "$debug" -gt 2 && locale
