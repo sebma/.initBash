@@ -200,6 +200,9 @@ function isoLabel {
 		blkid -o value -s LABEL "$isoFile"
 	done
 }
+function journalctlStats {
+	journalctl "$@" -o cat | sort | uniq -c | sort -nr
+}
 function lanIP {
 	set -o pipefail
 	local ip="command ip"
