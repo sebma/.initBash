@@ -534,13 +534,13 @@ function dfc {
 	firstArg=$1
 	if echo "$firstArg" | \egrep -q "^\-|^$"
 	then
-		command dfc -TWfc always "$@"
+		command dfc -dTWfc always "$@"
 	else
 		shift
 		test $# != 0 && argsRE="|$(echo "$@" | tr -s / | sed 's/ /$|/g' | sed "s,/$,," | sed 's/$/$/')"
 		firstArg=$(echo "$firstArg" | tr -s /)
 		test "$firstArg" != / && firstArg="$(echo "$firstArg" | sed "s,/$,,")"
-		command dfc -TWfc always | sed "s/ *$//" | \egrep "FILESYSTEM|${firstArg}\>${argsRE}"
+		command dfc -dTWfc always | sed "s/ *$//" | \egrep "FILESYSTEM|${firstArg}\>${argsRE}"
 	fi
 }
 function dirName {
