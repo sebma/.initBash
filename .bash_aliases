@@ -337,7 +337,6 @@ alias screenDiagonal=$'xrandr | awk \'/ connected/{print sqrt( ($(NF-2)/10)^2 + 
 alias screenInfo='xdpyinfo | egrep "dimensions:|resolution:|depths.*:|depth.*root"'
 alias screenResolution=$'xrandr | awk \'/\*/{print$1}\''
 alias screenSize=$'xrandr | awk \'/ connected/{print$(NF-2)" x "$NF}\''
-alias sdiff='\sdiff -w $COLUMNS'
 alias sink-inputs='\pactl list sink-inputs short'
 alias sinks='\pactl list sinks short'
 alias sortip="\sort -nt. -k1,1 -k2,2 -k3,3 -k4,4"
