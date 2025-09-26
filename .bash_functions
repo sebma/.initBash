@@ -532,8 +532,7 @@ function ddPV {
 }
 function dfc {
 	firstArg=$1
-	if echo "$firstArg" | \egrep -q "^\-|^$"
-	then
+	if printf -- "$firstArg" | egrep "^\-|^$" -q;then
 		command dfc -dTWfc always "$@"
 	else
 		shift
