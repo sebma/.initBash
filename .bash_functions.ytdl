@@ -837,7 +837,7 @@ function ytdlpUpdate {
 
 	if echo $yt_dlp | grep /opt/pipx/venvs/ -q;then
 		$sudo pipx upgrade --global yt-dlp
-		exit 1
+		return
 	fi
 
 	if [ -n "$yt_dlp" ];then
