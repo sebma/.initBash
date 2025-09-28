@@ -30,10 +30,14 @@ alias mpvFASTER='mpv --profile=for_slow_hardware'
 alias mpvOK.ru='mpv --profile=ok.ru'
 alias mpvFreeBoxTV='mpv --profile=freebox-rtsp'
 
-videoExtensions=avi,mp2,mp3,mp4,mkv,mpg,mov
-alias mpvfirst='mpv $(\ls -1 -t '*.{$videoExtensions}{,.part}' 2>/dev/null | tail -1)'
-alias mpvlast='mpv  $(\ls -1 -t '*.{$videoExtensions}{,.part}' 2>/dev/null | head -1)'
-alias lslastvideo='echo  $(\ls -1 -t '*.{$videoExtensions}{,.part}' 2>/dev/null | head -1)'
+#videoExtensions=avi,mp2,mp3,mp4,mkv,mpg,mov
+#alias mpvfirst='mpv $(\ls -1 -t '*.{$videoExtensions}{,.part}' 2>/dev/null | tail -1)'
+#alias mpvlast='mpv  $(\ls -1 -t '*.{$videoExtensions}{,.part}' 2>/dev/null | head -1)'
+#alias lslastvideo='echo  $(\ls -1 -t '*.{$videoExtensions}{,.part}' 2>/dev/null | head -1)'
+videoExtensions=avi,mp2,mp3,mp4,mkv,mpg,mov,part
+alias mpvfirst='mpv $(\ls -1 -t '*.{$videoExtensions}' 2>/dev/null | tail -1)'
+alias mpvlast='mpv  $(\ls -1 -t '*.{$videoExtensions}' 2>/dev/null | head -1)'
+alias lslastvideo='echo  $(\ls -1 -t '*.{$videoExtensions}' 2>/dev/null | head -1)'
 
 alias mpvPlaylistFileBEST='mpvPlaylistFile --profile=best'
 alias mpvPlaylistFileFHD='mpvPlaylistFile --profile=fhd'
