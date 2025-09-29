@@ -270,9 +270,15 @@ function lsprinters {
 function lsraid {
 set -x
 	\lspci -nnd ::104 "$@"
-	\lsscsi -ss -d -x -i
-	\lsscsi -c # W.I.P.
-	\lsscsi -C -t || \lsscsi -t # W.I.P.
+	if type -P lsscsi >/dev/null;then
+		\lsscsi -ss -d -x -i
+		\lsscsi -c # W.I.P.
+		\lsscsi -t # W.I.P.
+		\lsscsi -C -t
+	else
+		lsblk -mpS
+	fi
+
 	type -P inxi >/dev/null && \inxi -R -xxx
 set +x
 }
