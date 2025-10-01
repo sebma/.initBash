@@ -834,12 +834,6 @@ function ytdlpUpdate {
 
 	local package=yt-dlp
 	local yt_dlp="$(readlink -f $(type -P yt-dlp))"
-
-	if echo $yt_dlp | grep /opt/pipx/venvs/ -q;then
-		$sudo pipx upgrade --global yt-dlp
-		return
-	fi
-
 	if [ -n "$yt_dlp" ];then
 		local ytdlpCurrentRelease=$($package --version)
 		echo "=> The current version of $package is <$ytdlpCurrentRelease>."
@@ -860,6 +854,11 @@ function ytdlpUpdate {
 		fi
 
 		if [ "$ytdlpLatestRelease" != $ytdlpCurrentRelease ];then
+			if echo $yt_dlp | grep /opt/pipx/venvs/ -q;then
+				$sudo pipx upgrade --global yt-dlp
+				return
+			fi
+
 			local ytdlPythonVersion=$($yt_dlp --ignore-config -v 2>&1 | awk -F "[ .]" '/debug. Python/{printf$3"."$4}')
 			$sudo pip$ytdlPythonVersion install -U $package
 			ytdlpTestURLs="https://youtu.be/vWYp2iGMDcM https://www.dailymotion.com/video/x5850if https://ok.ru/video/2091889462009"
