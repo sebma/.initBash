@@ -356,7 +356,7 @@ function open {
 		else
 			ls "$arg" >/dev/null || continue
 			fileExtension="${arg/*./}"
-			if [ $fileExtension = desktop ];then
+			if [ "$fileExtension" = desktop ];then
 				openDesktopApp=$(grep -oP "Exec=\K.*" "$arg" | sed 's/"//g;s/ %[a-zA-Z]//')
 				$openDesktopApp &
 			else
