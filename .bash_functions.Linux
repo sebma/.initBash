@@ -267,7 +267,7 @@ function lsprinters {
 		\lsusb -d $device "$@"
 	done
 }
-function lsraid {
+function raidinfo {
 set -x
 	\lspci -nnd ::104 "$@"
 	if type -P lsscsi >/dev/null;then
