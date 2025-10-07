@@ -37,7 +37,7 @@ type -P lspci >/dev/null && {
 	alias lsvideo="\lspci -nnd ::300"
 	alias lsaudioCards="\lspci -nnd ::403"
 	alias lsraid='\lspci -nnd ::104'
-	alias lssata='\lspci -nnd::0106'
+	alias lssata='\lspci -nnd ::0106'
 	alias lssas='\lspci -nnd::0107'
 	alias northBridge="\lspci -nns 0:0.0"
 	alias southBridge="\lspci -nnd ::601"
