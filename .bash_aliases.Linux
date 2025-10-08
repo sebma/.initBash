@@ -44,6 +44,7 @@ type -P lspci >/dev/null && {
 	alias lsgpu=lsvideo
 	alias lsvga=lsvideo
 	alias lswifi='\lspci -nnd ::0280'
+	alias raiddrivers="\lspci -d::0104 -k | awk '/Kernel driver in use/{print\$NF}'"
 }
 
 alias audioCardsMinimumInfo='pactl list sinks | egrep -e "^Sink |Ports?:|available"'
