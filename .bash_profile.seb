@@ -99,6 +99,7 @@ PERL_MB_OPT="--install_base \"$HOME/perl5\""; export PERL_MB_OPT;
 PERL_MM_OPT="INSTALL_BASE=$HOME/perl5"; export PERL_MM_OPT;
 export myPerl5DefaultOptions="-ale"
 export PIP_FORMAT=columns
+export RIPGREP_CONFIG_PATH=$HOME/.config/.ripgreprc
 test -z "$XDG_RUNTIME_DIR" && export XDG_RUNTIME_DIR="/run/user/$UID" && export DBUS_SESSION_BUS_ADDRESS="unix:path=${XDG_RUNTIME_DIR}/bus" # For "systemctl --user" # i.e https://askubuntu.com/q/1461457/426176
 
 if [ $osID_LIKE == debian ];then
