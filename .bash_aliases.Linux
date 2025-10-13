@@ -57,8 +57,8 @@ alias cdLabel="\blkid -o value -s LABEL /dev/cdrom"
 #type -P ccze >/dev/null 2>&1 && alias ccze="\ccze -A" && alias dmesg="\ccze -A < /var/log/dmesg"
 alias connect2eduroam="connect2SSID eduroam"
 alias cp='\cp --preserve=timestamps -v'
-#alias dmesg="\grc less /var/log/dmesg"
 alias diskSizes='\lsblk -pS -o NAME,SIZE'
+#alias dmesg="\grc less /var/log/dmesg"
 alias dmesg="\dmesg -L -Tx"
 alias dmesgErrors="\dmesg -L -Tx -l err,crit,alert,emerg"
 alias dmesgErrorsNWarings="dmesgErrors -l warn"
