@@ -58,7 +58,7 @@ alias cdLabel="\blkid -o value -s LABEL /dev/cdrom"
 alias connect2eduroam="connect2SSID eduroam"
 alias cp='\cp --preserve=timestamps -v'
 #alias dmesg="\grc less /var/log/dmesg"
-alias diskSizes='\lsblk -do NAME,SIZE'
+alias diskSizes='\lsblk -pS -o NAME,SIZE'
 alias dmesg="\dmesg -L -Tx"
 alias dmesgErrors="\dmesg -L -Tx -l err,crit,alert,emerg"
 alias dmesgErrorsNWarings="dmesgErrors -l warn"
