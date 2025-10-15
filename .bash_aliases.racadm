@@ -12,6 +12,7 @@ alias racadmIP="$racadm get iDRAC.IPv4.Address | grep Address | cut -d= -f2"
 alias racadmURL='echo https://$(racadmIP)'
 alias racadmPDInfo="$racadm raid get pdisks -o"
 alias racadmSysInfo="$racadm getsysinfo"
+alias racadmServiceTag="$racadm getsvctag"
 alias racadmSVCTag="$racadm getsvctag"
 alias racadmVDInfo="$racadm raid get vdisks -o"
 alias racadmVersion="$racadm get iDRAC.Info.Version | grep Version | cut -d= -f2"
