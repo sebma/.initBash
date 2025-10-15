@@ -2,6 +2,8 @@
 ! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
+alias esxVersion='vmware -v'
+alias vcenterVersion='vpxd -v'
 alias vxrailVersion="rpm -q vmware-marvin"
 alias vxrailVersion2='egrep "PRODUCT_VERSION|BUILD_NUMBER" /etc/vxm-build.properties'
 
