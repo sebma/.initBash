@@ -1555,7 +1555,7 @@ function pingMyLANSimple {
     for i in $(seq $(($nbHost-1)))
     do
         ping $lanPrefix.$i -c1 -W1 &
-    done | grep --color=auto from | sort -t . -k 4n
+    done | grep from | sort -t . -k 4n
 }
 function pip {
 	local caller=${FUNCNAME[1]}
