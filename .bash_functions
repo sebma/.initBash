@@ -1949,10 +1949,13 @@ string2qrcode_with_zint () {
     fi
 }
 function sumAwk {
-	awk "{sum+=\$1}END{print sum}"
+	awk '{sum+=$1}END{print sum}'
+}
+function sumPerl {
+	perl -lane 'END { print $sum } $sum += $F[0];'
 }
 function sumSizesFirstColumnAwk {
-	awk "{print \$1}" | LC_ALL=C numfmt --from=iec | paste -sd+ | bc | numfmt --to=iec-i --suffix=B
+	awk '{print $1}' | LC_ALL=C numfmt --from=iec | paste -sd+ | bc | numfmt --to=iec-i --suffix=B
 }
 function tar2dir {
 	local dir=.
