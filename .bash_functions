@@ -1952,7 +1952,7 @@ function sumAwk {
 	awk '{sum+=$1}END{print sum}'
 }
 function sumPerl {
-	perl -lane 'END { print $sum } $sum += $F[0];'
+	perl -lane '$sum+=$F[0];END{print $sum}'
 }
 function sumSizesFirstColumnAwk {
 	awk '{print $1}' | LC_ALL=C numfmt --from=iec | paste -sd+ | bc | numfmt --to=iec-i --suffix=B
