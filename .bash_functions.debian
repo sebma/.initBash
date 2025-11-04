@@ -94,6 +94,9 @@ function aptitude {
 		*) $aptitude "${args[@]}";;
 	esac
 }
+function chdist {
+    command chdist "$@" 2>&1 | grep -v deprecated
+}
 function debExtract {
 	for pkg
 	do
