@@ -95,7 +95,7 @@ function aptitude {
 	esac
 }
 function chdist {
-    command chdist "$@" 2>&1 | grep -v deprecated
+    command chdist "$@" 2>&1 | \grep -v deprecated
 }
 function debExtract {
 	for pkg
