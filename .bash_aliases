@@ -118,7 +118,7 @@ alias sheet2pdf="libreofficeTo pdf"
 alias sheet2xls="libreofficeTo xls"
 alias sheet2xlsx="libreofficeTo xlsx"
 alias dos2unix="\sed -i 's/\r//'"
-alias doublons='\fdupes -rnASd'
+alias doublons='\fdupes -rnAS -G 1048576 -d'
 alias downloadCertificate=getCertificate
 alias driveinfo='\cdrecord -prcap'
 alias du="LANG=C \du -h"
