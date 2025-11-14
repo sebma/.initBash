@@ -2,9 +2,10 @@
 ! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-alias dockerCleanup="$sudo docker system prune"
-alias dockerCleanOldImages="$sudo "'docker image prune --all --filter until=$((30*24))h'
-alias dockerImageSizes=$'$sudo docker images --format "{{.ID}}\t{{.Size}}\t{{.CreatedSince}}\t{{.Repository}}:{{.Tag}}" | sort -k 2 -h'
+alias dockerCleanup="$docker system prune"
+alias dockerCleanOldImages="$docker "'image prune --all --filter until=$((30*24))h'
+alias dockerImageSizes=$'$docker images --format "{{.ID}}\t{{.Size}}\t{{.CreatedSince}}\t{{.Repository}}:{{.Tag}}" | sort -k 2 -h'
+alias dockerImagesBySize=$'$docker images | awk \'NR<2{print $0;next}{print $0 | "sort -k7 -hr"}\' | head'
 
 set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
