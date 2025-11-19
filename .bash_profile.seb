@@ -6,6 +6,7 @@ declare -gxr isSudoer=$(groups 2>/dev/null | \egrep -wq "sudo|adm|admin|root|whe
 [ $isSudoer = true ] && declare -gx sudo=$(type -P sudo) || declare -gxr sudo=""
 test -z "$initDir" && export initDir=$HOME/.initBash
 ! declare 2>&1 | grep -wq ^colors= && [ ${BASH_VERSINFO[0]} -ge 4 ] && source $initDir/.colors
+export OSTYPE
 
 initDir=$(basename $initDir) #Pour creer des liens symboliques relatifs a $HOME
 cd $HOME
