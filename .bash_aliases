@@ -185,6 +185,7 @@ alias install="\install -pv"
 alias integer="$local -i"
 alias inxi="LC_ALL=C \inxi -z -c2"
 alias inxiSummary="inxi -SMBmCGANEdPjsIJ -xx"
+alias ip='\ip -c'
 alias ip@=lanip
 alias ipNeighbours="ip neighbour | column -t"
 alias is32or64bits='\getconf LONG_BIT'
