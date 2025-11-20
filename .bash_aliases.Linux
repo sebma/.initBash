@@ -47,6 +47,8 @@ type -P lspci >/dev/null && {
 	alias raiddrivers="\lspci -d::0104 -k | awk '/Kernel driver in use/{print\$NF}'"
 }
 
+alias arp="\ip -4 neigh"
+alias arpShow="\ip -4 neigh show"
 alias audioCardsMinimumInfo='pactl list sinks | egrep -e "^Sink |Ports?:|available"'
 alias audioInfo="pactl info"
 alias batteryINFO='upower -i $(upower -e 2>/dev/null | grep BAT) 2>/dev/null;acpi -i 2>/dev/null && echo;LC_ALL=C \inxi -z -Bxxx 2>/dev/null'
@@ -71,6 +73,9 @@ alias firefoxDefrag='pgrep firefox || time find ~/.mozilla/firefox/ -name "*sqli
 alias fsType="\lsblk -n -o FSTYPE"
 alias gpuRAM='\dmesg | grep VRAM'
 alias hardwareUNCLAIMED='sudo \lshw | sed -n "/UNCLAIMED/,/configuration:/ p"'
+alias ip='\ip -c'
+alias ip@=ipinfo
+alias ipNeighbours="ip neighbour | column -t"
 alias ipAddress=$'\ip -4 -o a | awk -F " *|/" \'!/lo\s/{print$4;exit}\''
 alias ipbrief="\ip -brief" # Since iproute2 v4.3
 alias ipinfo='\ip -c -br addr show'
