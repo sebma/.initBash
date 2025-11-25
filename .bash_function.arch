@@ -5,10 +5,16 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 function yayInstall {
 	if ! which yay >/dev/null 2>&1;then
 		sudo pacman -S --needed git base-devel --noconfirm
+		mkdir -p ~/git/aur
 		git clone https://aur.archlinux.org/yay.git
 		cd yay
 		makepkg -si
 	fi
+}
+function yayUpdate {
+	cd ~/git/aur/yay
+	git pull
+	makepkg -si
 }
 
 set +x
