@@ -6,7 +6,7 @@ function yayInstall {
 	if ! which yay >/dev/null 2>&1;then
 		sudo pacman -S --needed git base-devel --noconfirm
 		mkdir -p ~/git/aur
-		git clone https://aur.archlinux.org/yay.git
+		git clone https://aur.archlinux.org/yay-bin.git
 		cd yay
 		makepkg -si
 	fi
