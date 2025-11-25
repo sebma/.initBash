@@ -7,12 +7,12 @@ function yayInstall {
 		sudo pacman -S --needed git base-devel --noconfirm
 		mkdir -p ~/git/aur
 		git clone https://aur.archlinux.org/yay-bin.git
-		cd yay
+		cd yay-bin
 		makepkg -si
 	fi
 }
 function yayUpdate {
-	cd ~/git/aur/yay
+	cd ~/git/aur/yay-bin
 	git pull
 	makepkg -si
 }
