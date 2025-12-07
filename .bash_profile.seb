@@ -115,7 +115,7 @@ if ! groups 2>/dev/null | egrep -wq "sudo|adm|admin|root|wheel";then
 	export HOMEBREW_PREFIX=$HOME/usr/local
 fi
 
-export domain=$(awk -F"[ .]" '/domain/{print$(NF-1);exit}' /etc/resolv.conf /private/etc/resolv.conf 2>/dev/null)
+export domain=$(awk -F"[ .]" '/^[^#].*domain/{print$(NF-1);exit}' /etc/resolv.conf /private/etc/resolv.conf 2>/dev/null)
 test -z $domain && export domain=local # Si le domaine est inconnu
 case $domain in
 jussieu|enst)
