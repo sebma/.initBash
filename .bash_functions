@@ -6,7 +6,6 @@ Source $initDir/.bash_functions.build
 Source $initDir/.bash_functions.AV
 
 test "$debug" -gt 0 && Echo "\n=> \${BASH_SOURCE[*]} = ${BASH_SOURCE[*]}\n"
-find="$(type -P find)"
 
 function EchoSpecialCharacters {
 	local rc=$?
