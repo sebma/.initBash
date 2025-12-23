@@ -75,8 +75,12 @@ else
 fi
 
 #DEFINITION DES VARIABLES
-[ ${BASH_VERSINFO[0]} -ge 4 ] && export which="type -P"
-[ ${BASH_VERSINFO[0]} -ge 4 ] && export find="$(type -P find)"
+if [ ${BASH_VERSINFO[0]} -ge 4 ];then
+	export which="type -P"
+	[ $osFamily = Linux ] && export find="$(type -P find)"
+	[ $osFamily = Darwin ] && export find="$(type -P gfind)"
+fi
+
 export bashProfileLoaded=true
 [ $osFamily = Linux ] && export osID=$(source /etc/os-release && echo $ID) osID_LIKE=$(source /etc/os-release && echo $ID_LIKE)
 [ $osFamily = Darwin ] && export osID=Darwin && export osID_LIKE=FreeBSD
