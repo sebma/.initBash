@@ -82,7 +82,6 @@ alias xlock="\/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resou
 alias ytdlInstall="brew install youtube-dl"
 alias ytdlUpdate="brew upgrade youtube-dl"
 alias ytdlpInstall="brew install yt-dlp"
-#alias ytdlpUpdate="brew upgrade yt-dlp"
 
 if groups 2>/dev/null | \egrep -wq "sudo|admin"
 then
