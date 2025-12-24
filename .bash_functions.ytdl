@@ -854,10 +854,15 @@ function ytdlpUpdate {
 		fi
 
 		if [ "$ytdlpLatestRelease" != $ytdlpCurrentRelease ];then
-			if echo $yt_dlp | grep /opt/pipx/venvs/ -q;then
-				$sudo pipx upgrade --global yt-dlp
-				return
-			fi
+			case $yt_dlp in
+				/opt/pipx/*)
+					$sudo pipx upgrade --global yt-dlp
+					exit
+					;;
+				/usr/local/Cellar/*)
+					brew upgrade yt-dlp
+					;;
+			esac
 
 			local ytdlPythonVersion=$($yt_dlp --ignore-config -v 2>&1 | awk -F "[ .]" '/debug. Python/{printf$3"."$4}')
 			$sudo pip$ytdlPythonVersion install -U $package
