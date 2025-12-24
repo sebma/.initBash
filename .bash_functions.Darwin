@@ -46,8 +46,8 @@ function lanIP {
 }
 function locate {
 	local locate="$(type -P glocate)"
-	groups 2>/dev/null | \egrep -wq "sudo|admin" && locateOptions="-e" || locateOptions="--database $HOME/.local/lib/mlocate/mlocate.db -e"
-	echo "$@" | \grep -q "\-[a-z]*r" && time $locate $locateOptions "$@" || time $locate $locateOptions -ir "${@}"
+	groups 2>/dev/null | egrep -wq "sudo|admin" && locateOptions="--database /usr/local/var/locate/locatedb -e" || locateOptions="--database $HOME/.local/lib/mlocate/mlocate.db -e"
+	echo "$@" | grep -q "\-[a-z]*r" && time $locate $locateOptions "$@" || time $locate $locateOptions -ir "${@}"
 }
 function mac@ {
 	ethName=$1
