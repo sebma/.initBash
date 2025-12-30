@@ -267,7 +267,7 @@ if [ $osFamily = Linux ];then
 		export GOBIN=~/go/bin
 	fi
 	sed="command sed -r"
-	calendar -w -l 0
+	tty -s && calendar -w -l 0
 elif [ $osFamily = Darwin ];then
 	export GOBIN=/usr/local/bin
 	sed="command sed -E"
