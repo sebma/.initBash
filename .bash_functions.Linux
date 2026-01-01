@@ -248,7 +248,7 @@ function lsbluetooth {
 	done
 }
 function lseth {
-	\lspci -nnd ::200 "$@"
+	\lspci -nnd ::0200 "$@"
 	\lsusb | awk 'BEGIN{IGNORECASE=1}/Ethernet/{print$6}' | while read device # see https://stackoverflow.com/q/69860894/5649639
 	do
 		\lsusb -d $device "$@"
@@ -261,16 +261,16 @@ function lsgroup {
 	done
 }
 function lsprinters {
-#	\lspci -nnd ::280 "$@"
+#	\lspci -nnd ::0280 "$@"
 	\lsusb -v 2>/dev/null | awk 'BEGIN{IGNORECASE=1}/^Bus/{id=$6}/Printer/{print id}' | uniq | while read device # see https://stackoverflow.com/q/69860894/5649639
 	do
 		\lsusb -d $device "$@"
 	done
 }
 function raidinfo {
-	if \lspci -nnd ::104 | grep . -q;then
+	if \lspci -nnd ::0104 | grep . -q;then
 set -x
-		\lspci -nnd ::104 "$@"
+		\lspci -nnd ::0104 "$@"
 		if type -P lsscsi >/dev/null;then
 			\lsscsi -ss -d -x -i
 			\lsscsi -c # W.I.P.
@@ -297,7 +297,7 @@ function lswebcams {
 	v4l2-ctl --list-devices
 }
 function lswifiNICs {
-	\lspci -nnd ::280 "$@"
+	\lspci -nnd ::0280 "$@"
 	\lsusb -v 2>/dev/null | awk 'BEGIN{IGNORECASE=1}/^Bus/{id=$6}/WLAN|802.11|wireless [abgn]|AC1200/{print id}' | uniq | while read device # see https://stackoverflow.com/q/69860894/5649639
 	do
 		\lsusb -d $device "$@"
