@@ -34,17 +34,20 @@ type -P lspci >/dev/null && {
 	alias lspci="\lspci -nn"
 	alias lspciSimple="\lspci -nnvmk"
 	alias lspcimore="\lspci -m"
-	alias lsvideo="\lspci -nnd ::300"
-	alias lsaudioCards="\lspci -nnd ::403"
-	alias lsraid='\lspci -nnd ::104'
+	alias lsvideo="\lspci -nnd ::03xx"
+	alias lsaudioCards="\lspci -nnd ::04xx"
+	alias lsraid='\lspci -nnd ::0104'
 	alias lssata='\lspci -nnd ::0106'
 	alias lssas='\lspci -nnd::0107'
+	alias lsstorage='\lspci -nnd::01xx'
+	alias lsnvme='\lspci -nnd::0108'
 	alias northBridge="\lspci -nns 0:0.0"
-	alias southBridge="\lspci -nnd ::601"
+	alias pciBridge="\lspci -nnd ::0604"
+	alias southBridge="\lspci -nnd ::0601"
 	alias lsgpu=lsvideo
 	alias lsvga=lsvideo
 	alias lswifi='\lspci -nnd ::0280'
-	alias raiddrivers="\lspci -d::0104 -k | awk '/Kernel driver in use/{print\$NF}'"
+	alias raiddrivers="\lspci -d ::0104 -k | awk '/Kernel driver in use/{print\$NF}'"
 }
 
 alias arp="\ip -4 neigh"
