@@ -216,6 +216,10 @@ if type -P adb >/dev/null 2>&1 && \pgrep -u $USER -f "adb -. " >/dev/null;then
 	test -r $initDir/.bash_functions.adb && Source $initDir/.bash_functions.adb
 fi
 
+if type -P flatpak >/dev/null 2>&1;then
+	test -r $initDir/.bash_aliases.flatpak && Source $initDir/.bash_aliases.flatpak
+fi
+
 test -r $initDir/.bashrc.$osFamily && Source $initDir/.bashrc.$osFamily
 #test -r $initDir/.bashrc.$osFamily.$HOSTNAME && Source $initDir/.bashrc.$osFamily.$HOSTNAME
 test -r $initDir/.bashrc.$osID_LIKE && Source $initDir/.bashrc.$osID_LIKE # Si c'est un Linux de type Debian ou Redhat
