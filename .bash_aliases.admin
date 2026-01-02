@@ -6,7 +6,6 @@ ls /dev/md* >/dev/null 2>&1 && alias mdraidInfo='sudo mdadm /dev/md?;sudo mdadm 
 alias enableAllCPUs='echo 1 | sudo tee /sys/devices/system/cpu/cpu{?,??}/online'
 alias rescanExistingDisks='time echo 1 | sudo tee /sys/class/block/sd?/device/rescan >/dev/null'
 alias scanNewDisks='time echo "- - -" | sudo tee /sys/class/scsi_host/host*/scan >/dev/null'
-alias snapCleanDisabledPackages='\snap list --all | while read snapname ver rev trk pub notes; do if [[ $notes =~ disabled ]]; then $sudo snap remove $snapname --revision=$rev; fi; done'
 
 set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
