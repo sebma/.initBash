@@ -83,18 +83,6 @@ addmanpaths $manPathsList
 [ -n "$BASH_VERSION" ] && test -r $initDir/.bash_functions && Source $initDir/.bash_functions
 test -r $initDir/.bash_functions.seb && Source $initDir/.bash_functions.seb
 
-type -P lpr >/dev/null 2>&1 &&    test -f $initDir/.bash_aliases.lpr && Source $initDir/.bash_aliases.lpr
-type -P mpv >/dev/null 2>&1 &&    test -r $initDir/.bash_aliases.mpv && Source $initDir/.bash_aliases.mpv
-type -P ffmpeg >/dev/null 2>&1 && test -r $initDir/.bash_aliases.AV  && Source $initDir/.bash_aliases.AV
-
-type -P mpv >/dev/null 2>&1 && test -r $initDir/.bash_functions.mpv && Source $initDir/.bash_functions.mpv
-type -P units >/dev/null 2>&1 && test -r $initDir/.bash_functions.units && Source $initDir/.bash_functions.units
-
-if type -P youtube-dl >/dev/null 2>&1 || type -P yt-dlp >/dev/null 2>&1;then
-	test -r $initDir/.bash_aliases.ytdl && Source $initDir/.bash_aliases.ytdl
-	test -r $initDir/.bash_functions.ytdl && Source $initDir/.bash_functions.ytdl
-fi
-
 test -r ~/.config/.bcrc && export BC_ENV_ARGS="-l $HOME/.config/.bcrc"
 
 #Export de toutes les fonctions sauf celles dont le nom commence par "_"
@@ -187,54 +175,19 @@ fi
 
 # pidof cupsd >/dev/null && Echo "=> The cups admin console is available at http://localhost:631/admin\n"
 
-getprop 2>/dev/null | grep ro.build.version.release -q && test -r $initDir/.bash_aliases.getprop && Source $initDir/.bash_aliases.getprop
-
-type -P conda >/dev/null 2>&1 && test -r $initDir/.bashrc.conda && Source $initDir/.bashrc.conda
-
-if type -P openssl >/dev/null 2>&1;then
-	test -r $initDir/.bashrc.openssl && Source $initDir/.bashrc.openssl
-	test -r $initDir/.bash_aliases.openssl && Source $initDir/.bash_aliases.openssl
-	test -r $initDir/.bash_functions.openssl && Source $initDir/.bash_functions.openssl
-fi
-
-if type -P brew >/dev/null 2>&1;then
-	test -r $initDir/.bashrc.brew && Source $initDir/.bashrc.brew
-	test -r $initDir/.bash_aliases.brew && Source $initDir/.bash_aliases.brew
-	test -r $initDir/.bash_functions.brew && Source $initDir/.bash_functions.brew
-fi
-
-if type -P smartctl >/dev/null 2>&1;then
-	test -r $initDir/.bash_functions.smartctl && Source $initDir/.bash_functions.smartctl
-fi
-
-if type -P docker >/dev/null 2>&1;then
-	test -r $initDir/.bash_aliases.docker && Source $initDir/.bash_aliases.docker
-	test -r $initDir/.bash_functions.docker && Source $initDir/.bash_functions.docker
-fi
-
-if type -P adb >/dev/null 2>&1 && \pgrep -u $USER -f "adb -. " >/dev/null;then
-	test -r $initDir/.bash_aliases.adb && Source $initDir/.bash_aliases.adb
-	test -r $initDir/.bash_functions.adb && Source $initDir/.bash_functions.adb
-fi
-
-if type -P flatpak >/dev/null 2>&1;then
-	test -r $initDir/.bash_aliases.flatpak && Source $initDir/.bash_aliases.flatpak
-fi
-
-if type -P snap >/dev/null 2>&1;then
-	test -r $initDir/.bash_aliases.snap && Source $initDir/.bash_aliases.snap
-fi
+for tool in lpr mpv ffmpeg units yt-dlp conda openssl brew smartctl docker adb flatpak snap git racadm omreport esxcli;do
+	if type -P $tool >/dev/null 2>&1;then
+		test -r $initDir/.bashrc.$tool && Source $initDir/.bashrc.$tool
+		test -r $initDir/.bash_aliases.$tool && Source $initDir/.bash_aliases.$tool
+		test -r $initDir/.bash_functions.$tool && Source $initDir/.bash_functions.$tool
+	fi
+done
 
 test -r $initDir/.bashrc.$osFamily && Source $initDir/.bashrc.$osFamily
 #test -r $initDir/.bashrc.$osFamily.$HOSTNAME && Source $initDir/.bashrc.$osFamily.$HOSTNAME
 test -r $initDir/.bashrc.$osID_LIKE && Source $initDir/.bashrc.$osID_LIKE # Si c'est un Linux de type Debian ou Redhat
 
 #my git configuration
-if type -P git >/dev/null 2>&1; then
-#	test -r $initDir/.bashrc.git && Source $initDir/.bashrc.git
-	test -r $initDir/.bash_aliases.git && Source $initDir/.bash_aliases.git
-	test -r $initDir/.bash_functions.git && Source $initDir/.bash_functions.git
-fi
 
 test -r $initDir/.bashrc.gpu && Source $initDir/.bashrc.gpu
 
@@ -258,6 +211,7 @@ case $OSTYPE in
 		type -P toybox >/dev/null 2>&1 && test -r $initDir/.bash_aliases.toybox && Source $initDir/.bash_aliases.toybox
 		;;
 	linux-android)
+		getprop 2>/dev/null | grep ro.build.version.release -q && test -r $initDir/.bash_aliases.getprop && Source $initDir/.bash_aliases.getprop
 		if type -P termux-info >/dev/null;then
 			test -r $initDir/.bash_aliases.Linux && Source $initDir/.bash_aliases.Linux
 			test -r $initDir/.bash_functions.Linux && Source $initDir/.bash_functions.Linux
