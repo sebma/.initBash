@@ -100,6 +100,7 @@ alias ll="ls -blF --time-style=+'%Y-%m-%d %T'"
 alias llk="ll --block-size=K"
 alias llm="ll --block-size=M"
 alias ls="ls --color -F"
+alias lsautostart='dex -ad -e $XDG_SESSION_DESKTOP'
 alias lsinterfaces="\ls /sys/class/net"
 alias lsprocessors="lscpu -J | jq -r '.lscpu | map( select(.field | IN(\"CPU(s):\",\"Model name:\") ).data ) | join(\" x \")'"
 alias lstpm='test -s /proc/tpminfo && cat /proc/tpminfo;lsmod | grep tpm;\ls /dev/tpm? /dev/tpmrm? 2>/dev/null && \ls -ld /sys/kernel/security/tpm?/ /sys/class/tpm/tpm?/device/caps /sys/class/tpm/tpm?/tpm_version_major /sys/class/tpm/tpm?/device/firmware_node/description;\ls /dev/tpm? /dev/tpmrm? 2>/dev/null && sudo dmidecode -t 43'
