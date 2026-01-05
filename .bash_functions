@@ -808,7 +808,9 @@ function getURLTitle {
 			\curl -qLs "$URL" | hxnormalize -x | hxselect -s '\n' 'head title' -c
 		done
 	else
-		\curl -qLs "$URL" | grep -oP '<title>\K[^<]*'
+		if ! \curl -qLs "$URL" | \grep -oP '<title>\K[^<]*';then
+			\curl -qLs "$URL" | perl -le '$/=undef; $s=<>; $s =~ m{<title>(.*)</title>}si; print $1 if $1'
+		fi
 	fi
 }
 function getVideosFromRSSPodCastPlayList {
