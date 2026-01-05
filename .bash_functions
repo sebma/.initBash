@@ -808,8 +808,10 @@ function getURLTitle {
 			\curl -qLs "$URL" | hxnormalize -x | hxselect -s '\n' 'head title' -c
 		done
 	else
-		if ! \curl -qLs "$URL" | \grep -oP '<title>\K[^<]*';then
-			\curl -qLs "$URL" | perl -le '$/=undef; $s=<>; $s =~ m{<title>(.*)</title>}si; print $1 if $1'
+		if grep -P '.*' <<< 'Test' >/dev/null;then
+			\curl -qLs "$URL" | \grep -oP '<title>\K[^<]*'
+		else
+			\curl -qLs "$URL" | \perl -le '$/=undef; $s=<>; $s =~ m{<title>(.*)</title>}si; print $1 if $1'
 		fi
 	fi
 }
