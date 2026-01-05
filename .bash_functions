@@ -808,7 +808,7 @@ function getURLTitle {
 			\curl -qLs "$URL" | hxnormalize -x | hxselect -s '\n' 'head title' -c
 		done
 	else
-		if grep -P '.*' <<< 'Test' >/dev/null;then
+		if \grep -P '.*' <<< 'Test' >/dev/null;then
 			for URL
 			do
 				\curl -qLs "$URL" | \grep -oP '<title>\K[^<]*'
