@@ -788,17 +788,6 @@ function getShellFunctionName {
 function getShellFunctions {
 	test $# != 0 && grepParagraph '(^|\s)\w+\(\)|\bfunction\b' '^}' $@
 }
-function getURLTitle {
-	for url
-	do
-		printf "$url # " >&2
-		if type -P xidel >/dev/null;then
-			xidel -s --css 'head title' "$url"
-		elif type -P pup >/dev/null;then
-			\curl -Ls "$url" | pup --charset utf8 'head title text{}'
-		fi
-	done
-}
 function getVideosFromRSSPodCastPlayList {
 	test $# = 1 && {
 		local rssURL="$1"
