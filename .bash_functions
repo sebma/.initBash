@@ -809,9 +809,15 @@ function getURLTitle {
 		done
 	else
 		if grep -P '.*' <<< 'Test' >/dev/null;then
-			\curl -qLs "$URL" | \grep -oP '<title>\K[^<]*'
+			for URL
+			do
+				\curl -qLs "$URL" | \grep -oP '<title>\K[^<]*'
+			done
 		else
-			\curl -qLs "$URL" | \perl -le '$/=undef; $s=<>; $s =~ m{<title>(.*)</title>}si; print $1 if $1'
+			for URL
+			do
+				\curl -qLs "$URL" | \perl -le '$/=undef; $s=<>; $s =~ m{<title>(.*)</title>}si; print $1 if $1'
+			done
 		fi
 	fi
 }
