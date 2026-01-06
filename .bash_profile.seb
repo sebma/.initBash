@@ -30,6 +30,9 @@ fi
 test "$debug" -gt 0 && Echo "\n=> \${BASH_SOURCE[*]} = ${BASH_SOURCE[*]}\n"
 tty -s && Debug "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
+which fd &>/dev/null && export fd_find=fd || { which fdfind >/dev/null 2>&1 && export fd_find=fdfind; }
+which paperconf >/dev/null 2>&1 && export pageSize=$(paperconf)
+
 echo $OSTYPE | grep -q android && export osFamily=Android || export osFamily=$(uname -s)
 
 function SourceProfile { test "$debug" -gt 0 && { time . "$@";echo;true; } || . "$@" ; }
