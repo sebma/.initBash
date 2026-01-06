@@ -11,18 +11,25 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 #type -P vim >/dev/null && alias vim="LANG=$(locale -a 2>/dev/null | egrep -i '(fr_fr|en_us|en_uk).*utf' | sort -r | head -1) \vim" && alias vi=vim
 #alias wget='wget2 || wget1'
 
-which paperconf >/dev/null 2>&1 && export pageSize=$(paperconf)
+egrep --help 2>&1 | \grep -qw "\--color" && alias egrep="egrep --color"
+grep  --help 2>&1 | \grep -qw "\--color" && alias grep="grep --color"
+type -P xclip >/dev/null && alias copy2Clipboard="\xclip -i -selection clipboard" || alias copy2Clipboard="\xsel -bi"
+uname -s | grep -q AIX && alias stat="istat"
+which lsb_release >/dev/null 2>&1 && alias lsb_release="\lsb_release -s"
+
+#alias ftp="\pftp" # Passive FTP # Removed from Ubuntu cf. https://launchpad.net/ubuntu/+source/pftp
 alias .....="cd ../../../.."
 alias ....="cd ../../.."
 alias ...="cd ../.."
 alias ..="cd .."
-alias 2iec='\numfmt --suffix=B --format=%.5f --to=iec-i'
-alias 2si='\numfmt  --suffix=B --format=%.5f --to=si'
 alias 2iec2=$'\\awk \'BEGIN{split("iB kiB MiB GiB TiB PiB EiB", unit)}{size=$1;exponent=int( log(size)/(10*log(2)) );print size/2^(10*exponent)" "unit[exponent+1]}\''
-alias 2si2=$'\\awk  \'BEGIN{split("B kB MB GB TB PB EB", unit)}{size=$1;exponent=int( log(size)/(3*log(10)) );print size/10^(3*exponent)" "unit[exponent+1]}\''
+alias 2iec='\numfmt --suffix=B --format=%.5f --to=iec-i'
 alias 2lower=tolower
+alias 2si2=$'\\awk  \'BEGIN{split("B kB MB GB TB PB EB", unit)}{size=$1;exponent=int( log(size)/(3*log(10)) );print size/10^(3*exponent)" "unit[exponent+1]}\''
+alias 2si='\numfmt  --suffix=B --format=%.5f --to=si'
 alias 2upper=toupper
 alias Cut='\cut -c 1-$COLUMNS'
+alias Pgrepfirst="grepfirst -P"
 alias Pgreplast="greplast -P"
 alias _2spaces="sed 's/[_-]/ /g'"
 alias acp='\advcp -gpuv'
@@ -38,9 +45,9 @@ alias audioRenameFromTags=renameFromTags
 alias bc="\bc -l"
 alias binxi="\binxi -c17 -z"
 alias binxiSummary="binxi -SMBmCGANEdPjsIJ -xx"
-alias bthctl=bluetoothctl
 alias brewUnInstall='\bash -c "$(\curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall.sh)"'
 alias brewUpdate="time \brew update -v"
+alias bthctl=bluetoothctl
 alias burnaudiocd='\burnclone'
 alias burncdrw='\cdrecord -v -dao driveropts=burnfree fs=14M speed=12 gracetime=10 -eject'
 alias burnclone='\cdrecord -v -clone -raw driveropts=burnfree fs=14M speed=16 gracetime=10 -eject -overburn'
@@ -64,7 +71,6 @@ alias closecd='\eject -t $CDR_DEVICE'
 alias columns='\column -c $COLUMNS -t'
 alias conky_restart=restart_conky
 alias countFiles=$'perl -le \'opendir($dh,".");$i=0;while(readdir $dh){$i++};print($i-1);closedir($dh);\''
-type -P xclip >/dev/null && alias copy2Clipboard="\xclip -i -selection clipboard" || alias copy2Clipboard="\xsel -bi"
 alias cp2FAT32="rsync --modify-window=1"
 alias cp2NTFS="rsync -ogpuv"
 alias cp2NTFSPartition="rsync -ogpuv -x -r"
@@ -92,29 +98,19 @@ alias dbus-reboot='\dbus-send --system --print-reply --dest="org.freedesktop.Con
 alias dbus-suspend='\dbus-send --system --print-reply --dest="org.freedesktop.UPower" /org/freedesktop/UPower org.freedesktop.UPower.Suspend || \dbus-send --system --print-reply --dest="org.freedesktop.login1" /org/freedesktop/login1 org.freedesktop.login1.Manager.Suspend boolean:true'
 alias deborphan="\deborphan | sort"
 alias dig='\dig +ttlunits'
-alias digsimple="\dig +ttlunits +search +noquestion +nostats +noedns +nocomments +nocmd"
-alias digshort="\dig +ttlunits +search +short"
 alias digreverse="dig +short -x"
+alias digshort="\dig +ttlunits +search +short"
+alias digsimple="\dig +ttlunits +search +noquestion +nostats +noedns +nocomments +nocmd"
 alias dir2iso='\mkisofs -J -R -o'
 alias disconnectB206_BT_From_DAC="ssh b206.local. myScripts/shl/bluetoothDisconnectAllBlueZ5.sh"
 alias distrib='\strings $(\ps -p 1 -o command= | cut -d" " -f1) | egrep -i "ubuntu|debian|centos|redhat" -o | tr [:upper:] [:lower:] | uniq'
-alias dnsroots='dnsServers .'
 alias dnsServers='\dig +short -t NS'
+alias dnsroots='dnsServers .'
 alias document2doc="libreofficeTo doc"
 alias document2docx="libreofficeTo docx"
 alias document2fodt="libreofficeTo fodt"
 alias document2odt="libreofficeTo odt"
 alias document2pdf="libreofficeTo pdf"
-alias presentation2fodp="libreofficeTo fodp"
-alias presentation2odp="libreofficeTo odp"
-alias presentation2ppt="libreofficeTo ppt"
-alias presentation2pptx="libreofficeTo pptx"
-alias presentation2pdf="libreofficeTo pdf"
-alias sheet2fods="libreofficeTo fods"
-alias sheet2ods="libreofficeTo ods"
-alias sheet2pdf="libreofficeTo pdf"
-alias sheet2xls="libreofficeTo xls"
-alias sheet2xlsx="libreofficeTo xlsx"
 alias dos2unix="\sed -i 's/\r//'"
 alias doublons='\fdupes -rnAS -G 1048576 -d'
 alias downloadCertificate=getCertificate
@@ -127,7 +123,6 @@ alias ejectcd='\eject $CDR_DEVICE'
 alias enman="\man -L en"
 alias erasecd='\cdrecord -v speed=12 blank=fast gracetime=10 -eject'
 alias erasewholecd='\cdrecord -v speed=12 blank=all gracetime=10 -eject'
-which fd &>/dev/null && fd_find=fd || { which fdfind &>/dev/null && fd_find=fdfind; }
 alias findBigFiles="findBiggerThan +100mi | sort -rhk5"
 alias findBiggerThan='$fd_find --xdev -t f -E /dev,/proc,/sys -l "." ./ -S'
 alias findFunctions="grep -P '(^| )\w+\(\)|\bfunction\b'"
@@ -138,7 +133,6 @@ alias fprintMostSupportedDevices="fprintSupportedDevices | awk '{print\$2}' | so
 alias fprintSupportedDevices="\curl -s https://fprint.freedesktop.org/supported-devices.html | html2text.py | tail -n +10 | \grep -v '^$' | \sed -zr 's/([a-f0-9]{4}:[a-f0-9]{4})\n/\1 /g'"
 alias free="\free -m"
 alias frman="\man -Lfr"
-#alias ftp="\pftp" # Passive FTP # Removed from Ubuntu cf. https://launchpad.net/ubuntu/+source/pftp
 alias fuser="\fuser -v"
 alias fuserumount="\fusermount -u"
 alias gateWay="\route -n | awk '/^(0.0.0.0|default)/{print\$2}'"
@@ -146,20 +140,19 @@ alias gateWayFQDN='\dig +short -x $(gateWay)'
 alias gateWayOPEN='open https://$(gateWayFQDN)'
 alias gateWayURL='echo https://$(gateWayFQDN)'
 alias gdmlogout="\gnome-session-quit --force"
-alias geoipjson="( \curl -sLA '' freegeoip.app/json 2>/dev/null || \wget -qU '' -O- freegeoip.app/json ) | jq"
-alias geoipjson2="( \curl -sA '' ipinfo.io/json 2>/dev/null || \wget -qU '' -O- ipinfo.io/json ) | jq"
-alias geoipv4="geoipjson2 .ip -r"
-alias geoipv6="geoipjson .ip -r"
 alias geoipAS="geoipjson2 .org -r"
 alias geoipCity="geoipjson '.city+\" \"+.country_code' -r"
 alias geoipHostname="geoipjson2 .hostname -r"
+alias geoipjson2="( \curl -sA '' ipinfo.io/json 2>/dev/null || \wget -qU '' -O- ipinfo.io/json ) | jq"
+alias geoipjson="( \curl -sLA '' freegeoip.app/json 2>/dev/null || \wget -qU '' -O- freegeoip.app/json ) | jq"
+alias geoipv4="geoipjson2 .ip -r"
+alias geoipv6="geoipjson .ip -r"
 alias getFS_TYPE="\blkid -o value -s TYPE"
-alias getPip="wget -qO- https://bootstrap.pypa.io/get-pip.py | python"
 alias getPartitionUUID="\blkid -o value -s UUID"
+alias getPip="wget -qO- https://bootstrap.pypa.io/get-pip.py | python"
 alias grepInHome="time \grep --exclude-dir=Audios --exclude-dir=Music --exclude-dir=Podcasts --exclude-dir=Videos --exclude-dir=Karambiri --exclude-dir=iso --exclude-dir=Downloads --exclude-dir=Documents --exclude-dir=src --exclude-dir=Pictures --exclude-dir=.thunderbird --exclude-dir=deb --exclude-dir=apks --exclude-dir=.mozilla --exclude-dir=.PlayOnLinux --exclude-dir=PlayOnLinux\'s\ virtual\ drives --exclude-dir=.cache --exclude-dir=Sauvegarde_MB525 --exclude-dir=A_Master_RES --exclude-dir=SailFishSDK --exclude=.*history"
 alias greperrors="egrep -wiC2 'err:|:err|error|erreur|java.*exception'"
 alias grepfirst="grep -m1"
-alias Pgrepfirst="grepfirst -P"
 alias grub-emu="xterm -e grub-emu"
 alias gtop="\watch -n1 gps"
 alias gunzip="\gunzip -Nv"
@@ -200,13 +193,13 @@ alias killall="\killall -v"
 alias kshOldVersion="strings $(type -P ksh) | grep Version | tail -2"
 alias kshVersion='ksh -c "echo \$KSH_VERSION" 2>/dev/null'
 alias l1="\ls -1"
+alias la="ls -a"
 alias lastfiles='$find . -xdev -type f -mmin -2'
 alias lastfilestoday="$find . -type f -ctime -1"
 alias lastloggin='\lastlog -u $USER'
+alias less="$(locate -r vim/.*/less.sh)"
 alias libreofficeTo="\lowriter --headless --convert-to"
 alias lkshVersion='lksh -c "echo \$KSH_VERSION" 2>/dev/null'
-alias la="ls -a"
-alias less="$(locate -r vim/.*/less.sh)"
 alias ll="ls -lF"
 alias lla="ll -a"
 alias llah="ll -ah"
@@ -215,29 +208,28 @@ alias llh="ll -h"
 alias llha="ll -ha"
 alias ln="\ln -v"
 alias loadsshkeys='eval $(keychain --eval --agents ssh)'
-alias loffice='soffice'
 alias lobase="loffice --base"
 alias localc="loffice --calc"
 alias lodraw="loffice --draw"
+alias loffice='soffice'
+alias lofromtemplate="loffice .uno:NewDoc"
 alias loimpress="loffice --impress"
 alias lomath="loffice --math"
 alias loquickstart="loffice --quickstart"
 alias loweb="loffice --web"
 alias lowriter="loffice --writer"
-alias lofromtemplate="loffice .uno:NewDoc"
 alias lpq="\lpq -a +3"
 alias lpr2ppsheet="\lpr -o number-up=2"
 alias ls="ls -F"
-alias lslast="\ls -1 -t 2>/dev/null | head"
-which lsb_release >/dev/null 2>&1 && alias lsb_release="\lsb_release -s"
 alias lsdvd="\lsdvd -avcs"
 alias lshw="\lshw -numeric -sanitize"
 alias lshwBUSINFO='lshw -businfo'
+alias lslast="\ls -1 -t 2>/dev/null | head"
 alias lsqm='dspmq | sed "s/[()]/ /g" | awk "/Running/{print \$2}" | paste -sd" ";echo'
 alias lzgrep="\lzgrep --color"
 alias mail='\mail || mail -f $HOME/mbox'
-alias manSearch=manpageSearch
 alias man2ps="\man -Tps"
+alias manSearch=manpageSearch
 alias manen=enman
 alias manfile="\man -l"
 alias manfr=frman
@@ -273,16 +265,16 @@ alias openwrtSupportedRouters="openwrtTOH | awk '/ Router/{for(i=4;i<=5;i++)prin
 alias openwrtTOH="\curl -sIf -o /dev/null https://openwrt.org/_media/toh_dump_tab_separated.gz && \curl -s https://openwrt.org/_media/toh_dump_tab_separated.gz | \gunzip -c"
 alias osFamily='echo $OSTYPE | grep android || uname -s'
 alias page="\head -50"
-alias paperSizeInDots="\paperconf -s -N"
-alias paperSizeInPixels=paperSizeInDots
 alias paperSizeInCM="paperSizeInDots -c"
-alias paperSizeInMM="paperSizeInDots -m"
+alias paperSizeInDots="\paperconf -s -N"
 alias paperSizeInInches="paperSizeInDots -i"
-alias paperSizesInDots="\paperconf -s -N -a"
-alias paperSizesInPixels=paperSizesInDots
+alias paperSizeInMM="paperSizeInDots -m"
+alias paperSizeInPixels=paperSizeInDots
 alias paperSizesInCM="paperSizesInDots -c"
-alias paperSizesInMM="paperSizesInDots -m"
+alias paperSizesInDots="\paperconf -s -N -a"
 alias paperSizesInInches="paperSizesInDots -i"
+alias paperSizesInMM="paperSizesInDots -m"
+alias paperSizesInPixels=paperSizesInDots
 alias patchCreate="\diff -Nau"
 alias pcmanfm="\pcmanfm --no-desktop"
 alias pdfjamhelp="\pdfjam --help | less"
@@ -300,6 +292,11 @@ alias pps2pdf=odp2pdf
 alias ppsx2pdf=odp2pdf
 alias ppt2pdf=odp2pdf
 alias pptx2pdf=odp2pdf
+alias presentation2fodp="libreofficeTo fodp"
+alias presentation2odp="libreofficeTo odp"
+alias presentation2pdf="libreofficeTo pdf"
+alias presentation2ppt="libreofficeTo ppt"
+alias presentation2pptx="libreofficeTo pptx"
 alias prettyjson='\python -m json.tool'
 alias psf='\ps -O user:14,euid,ppid,pcpu,pmem,start'
 alias psu='psf -u $USER'
@@ -333,6 +330,11 @@ alias screenDiagonal=$'xrandr | awk \'/ connected/{print sqrt( ($(NF-2)/10)^2 + 
 alias screenInfo='xdpyinfo | egrep "dimensions:|resolution:|depths.*:|depth.*root"'
 alias screenResolution=$'xrandr | awk \'/\*/{print$1}\''
 alias screenSize=$'xrandr | awk \'/ connected/{print$(NF-2)" x "$NF}\''
+alias sheet2fods="libreofficeTo fods"
+alias sheet2ods="libreofficeTo ods"
+alias sheet2pdf="libreofficeTo pdf"
+alias sheet2xls="libreofficeTo xls"
+alias sheet2xlsx="libreofficeTo xlsx"
 alias sink-inputs='\pactl list sink-inputs short'
 alias sinks='\pactl list sinks short'
 alias sortip="\sort -nt. -k1,1 -k2,2 -k3,3 -k4,4"
@@ -364,8 +366,6 @@ alias toupperSed="sed 's/.*/\U&/'"
 alias toupperTr='tr [:lower:] [:upper:]'
 alias ulogerrors="egrep -iB4 -A1 'error|erreur|Err: [^0]'"
 alias ulogtodayerrors="egrep -iB4 -A1 'error|erreur|Err: [^0]' $ulog"
-alias url2qrcode=string2qrcode
-alias urlExists='\curl --head --silent --fail'
 alias umask="\umask -S"
 alias uncompress="\uncompress -v"
 alias uncpio="\cpio -idcmv <"
@@ -377,15 +377,17 @@ alias updateBrew="time \brew update -v"
 alias updatePip="pip install -U pip"
 alias updateThumbnails="\exiftran -gpi"
 alias updateYoutube-dl="pip install -U youtube-dl"
+alias url2qrcode=string2qrcode
+alias urlExists='\curl --head --silent --fail'
 alias uuidGet='sudo cat /sys/class/dmi/id/product_serial /sys/class/dmi/id/product_uuid'
 alias venv="\python3 -m venv"
 alias vict2c="vim +'setf xml' $LOGDIR/ct2c.log"
 alias vidInfo=videoInfo
+alias videoTo1.5Mbps="videoToAnyBitrate 1.5M"
+alias videoTo1Mbps="videoToAnyBitrate 1M"
+alias videoTo2Mbps="videoToAnyBitrate 2M"
 alias videoTo500kbps="videoToAnyBitrate 500k"
 alias videoTo750kbps="videoToAnyBitrate 750k"
-alias videoTo1Mbps="videoToAnyBitrate 1M"
-alias videoTo1.5Mbps="videoToAnyBitrate 1.5M"
-alias videoTo2Mbps="videoToAnyBitrate 2M"
 alias view='vim -R'
 alias vihistory='\vim ~/.bash_history'
 alias vim="LANG=C.UTF-8 \vim" && alias vi=vim
@@ -418,9 +420,6 @@ alias xzgrep="\xzgrep --color"
 alias ytGetAudio="\youtube-dl -x -f 249/250/251/171/m4a"
 alias zgrep="\zgrep --color"
 alias zip="\zip -vr"
-egrep --help 2>&1 | \grep -qw "\--color" && alias egrep="egrep --color"
-grep  --help 2>&1 | \grep -qw "\--color" && alias grep="grep --color"
-uname -s | grep -q AIX && alias stat="istat"
 
 set +x
 test "$debug" -gt 0 && \echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
