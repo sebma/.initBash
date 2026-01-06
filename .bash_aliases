@@ -197,7 +197,7 @@ alias la="ls -a"
 alias lastfiles='$find . -xdev -type f -mmin -2'
 alias lastfilestoday="$find . -type f -ctime -1"
 alias lastloggin='\lastlog -u $USER'
-alias less="$(locate -r ^/usr/.*/vim/.*/less.sh)"
+locate -r ^/usr/.*/vim/.*/less.sh | grep /less.sh -q && alias less="$(locate -r ^/usr/.*/vim/.*/less.sh) -R" || alias less="less -ir"
 alias libreofficeTo="\lowriter --headless --convert-to"
 alias lkshVersion='lksh -c "echo \$KSH_VERSION" 2>/dev/null'
 alias ll="ls -lF"
