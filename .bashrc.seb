@@ -74,6 +74,7 @@ addpathsAtTheEnd $HOME/myScripts/shl $HOME/myScripts/py $HOME/myScripts/pl
 addpathsAtTheEnd $HOME/Scripts/shl $HOME/Scripts/py $HOME/Scripts/pl
 addpathsAtTheEnd $userPathsList
 addpathsAtTheEnd $HOME/.poetry/bin
+addpathsAtTheEnd $HOME/.cargo/bin
 #echo "=> AFTER: PATH = $PATH"
 
 manPathsList="/opt/ffmpeg/share/man /opt/local/man $HOME/.local/share/man /usr/local/share/man /usr/share/man /usr/local/miniconda3/share/man /usr/local/miniconda2/share/man"
