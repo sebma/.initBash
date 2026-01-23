@@ -1861,6 +1861,7 @@ function screenSeb {
 	mkdir -pv $screenLogDir
 	screen -L -S "$screenSessionName"
 	if [ -s $screenLogFileName ];then
+		echo "=> Cleaning $screenLogFileName up with ansifilter ..."
 		ansifilter $screenLogFileName > $screenLogFileName.cleaned && \mv -f $screenLogFileName.cleaned $screenLogFileName
 		echo "=> The log file is <$screenLogFileName>."
 	fi
