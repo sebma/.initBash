@@ -1852,8 +1852,7 @@ function screenSeb {
 
 	screenLogFileName=$(grep -v "logfile\s*flush" $HOME/.screenrc | grep -w "^logfile" | sed "s/%S/$screenSessionName/;s/%c/%H:%M/;s/logfile //")
 	screenLogFileName=$(date +"$screenLogFileName")
-	if [ ! "$screenLogFileName" ];
-	then
+	if [ ! "$screenLogFileName" ];then
 		echo "=> $FUNCNAME: Error: Empty screenLogFileName." >&2
 		return 1
 	fi
