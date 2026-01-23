@@ -1842,6 +1842,30 @@ function rtt {
 	[ $osFamily = Linux ]  && deadline="-w 5"
 	$ping -c $NBPackets $deadline -i $interval $remote | $awk -F/ '//{print}/min\/avg\/max\/\w+dev/{avg=$5}END{print "=> avg = "avg" ms"}'
 }
+function screenSeb {
+	if [ $# == 0 ];then
+		echo "=> Usage: $FUNCNAME <screenSessionName>" >&2
+		return -1
+	elif [ $# == 1 ];then
+		screenSessionName="$1"
+	fi
+
+	screenLogFileName=$(grep -v "logfile\s*flush" $HOME/.screenrc | grep -w "^logfile" | sed "s/%S/$screenSessionName/;s/%c/%H:%M/;s/logfile //")
+	screenLogFileName=$(date +"$screenLogFileName")
+	if [ ! "$screenLogFileName" ];
+	then
+		echo "=> $FUNCNAME: Error: Empty screenLogFileName." >&2
+		return 1
+	fi
+
+	screenLogDir=$(dirname $screenLogFileName)
+	mkdir -pv $screenLogDir
+	screen -L -S "$screenSessionName"
+	if [ -s $screenLogFileName ];then
+		ansifilter $screenLogFileName > $screenLogFileName.cleaned && \mv -f $screenLogFileName.cleaned $screenLogFileName
+		echo "=> The log file is <$screenLogFileName>."
+	fi
+}
 function setTimestamps {
 	for file
 	do
