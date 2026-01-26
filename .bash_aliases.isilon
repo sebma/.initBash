@@ -2,7 +2,7 @@
 ! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-alias isiInfo="isi_for_array -s isi_hw_status -i"
+alias isiSysInfo="isi_for_array -s isi_hw_status -i"
 alias isiHistory="grep 'isi[_ ].*' $HISTFILE -o | uniq"
 alias isiFullHistory="grep '^: [0-9]*:[0-9];isi[_ ]' $HISTFILE | cut -d';' -f2- | uniq"
 
