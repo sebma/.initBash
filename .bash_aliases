@@ -263,7 +263,7 @@ alias openedFiles="\strace -e trace=open,close,read,write,connect,accept"
 alias openwrtMostSupportedRouterBrands="openwrtTOH | awk '/ Router/{print\$4}' | sort | uniq -c | sort -rn"
 alias openwrtSupportedRouters="openwrtTOH | awk '/ Router/{for(i=4;i<=5;i++)printf\$i\" \";print\$i}'"
 alias openwrtTOH="\curl -sIf -o /dev/null https://openwrt.org/_media/toh_dump_tab_separated.gz && \curl -s https://openwrt.org/_media/toh_dump_tab_separated.gz | \gunzip -c"
-alias osFamily='echo $OSTYPE | grep android || uname -s | cut -d' ' -f1'
+alias osFamily='echo $OSTYPE | grep android || uname -s | cut -d" " -f1'
 alias page="\head -50"
 alias paperSizeInCM="paperSizeInDots -c"
 alias paperSizeInDots="\paperconf -s -N"
