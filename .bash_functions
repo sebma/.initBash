@@ -550,7 +550,7 @@ function dirName {
 }
 function distribName {
 	local osName=unknown
-	echo $OSTYPE | grep -q android && local osFamily=Android || local osFamily=$(uname -s)
+	echo $OSTYPE | grep -q android && local osFamily=Android || local osFamily=$(uname -s | cut -d' ' -f1)
 
 	if [ $osFamily = Linux ]; then
 		if grep -w ID /etc/os-release -q 2>/dev/null; then
@@ -576,7 +576,7 @@ function distribName {
 }
 function distribType {
 	local distribType=unknown
-	echo $OSTYPE | grep -q android && local osFamily=Android || local osFamily=$(uname -s)
+	echo $OSTYPE | grep -q android && local osFamily=Android || local osFamily=$(uname -s | cut -d' ' -f1)
 
 	if [ $osFamily = Linux ]; then
 		if grep ID_LIKE /etc/os-release -q 2>/dev/null; then
@@ -680,7 +680,7 @@ function findWithHumanReadableSizes {
 	fi
 }
 function findLoops {
-	echo $OSTYPE | \grep android -q && local osFamily=Android || local osFamily=$(uname -s)
+	echo $OSTYPE | \grep android -q && local osFamily=Android || local osFamily=$(uname -s | cut -d' ' -f1)
 	[ $osFamily = Darwin ] && local find=gfind
 	time $find "$@" -xdev -follow -printf ""
 }
@@ -1350,7 +1350,7 @@ function os {
 function osSize {
 #	La partition swap n'est pas prise en compte pour le moment
 	local df="env LC_NUMERIC=C df"
-	echo $OSTYPE | grep -q android && export osFamily=Android || export osFamily=$(uname -s)
+	echo $OSTYPE | grep -q android && export osFamily=Android || export osFamily=$(uname -s | cut -d' ' -f1)
 	if [ $osFamily = Linux ];then
 		time $df -T | awk 'BEGIN{printf "df -T "} !/tmpfs/ && !/efivarfs/ && /\/$|boot$|opt|tmp$|usr|var/{printf $NF" "}' | sh -x | awk '{total+=$4}END{print total/1024^2" GiB"}'
 		echo
