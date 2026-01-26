@@ -328,6 +328,7 @@ alias screenDPI=$'xdpyinfo | awk \'/dots per inch/{$1="";sub("^ ","");print}\''
 alias screenDPI_Calculated=$'xrandr | awk -F "[ x+]" \'/ connected/{gsub("mm|primary ","");print$3*25.4/$(NF-3)" dpi x "$4*25.4/$NF" dpi"}\''
 alias screenDiagonal=$'xrandr | awk \'/ connected/{print sqrt( ($(NF-2)/10)^2 + ($NF/10)^2 )/2.54" inches"}\''
 alias screenInfo='xdpyinfo | egrep "dimensions:|resolution:|depths.*:|depth.*root"'
+alias screenLogCleanup='\ansifilter'
 alias screenResolution=$'xrandr | awk \'/\*/{print$1}\''
 alias screenSize=$'xrandr | awk \'/ connected/{print$(NF-2)" x "$NF}\''
 alias sheet2fods="libreofficeTo fods"
