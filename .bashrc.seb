@@ -22,7 +22,7 @@ set -o histexpand # Re-enable the history expansion disabled previously by my "e
 #test -n "$bashRCLoaded" && return
 bashRCLoaded=1
 
-echo $OSTYPE | grep -q android && export osFamily=Android || export osFamily=$(uname -s)
+echo $OSTYPE | grep -q android && export osFamily=Android || export osFamily=$(uname -s | cut -d' ' -f1)
 [ $osFamily = Linux ] && export osID=$(Source /etc/os-release && echo $ID) osID_LIKE=$(Source /etc/os-release && echo $ID_LIKE)
 archi=$(uname -m)
 today=$(date +%Y-%m-%d)
