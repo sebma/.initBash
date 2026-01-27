@@ -6,6 +6,9 @@ function VMGuestinfo {
 	key=$1
 	vmware-rpctool "info-get guestinfo.$key"
 }
+function ovaInfo {
+	vmware-rpctool "info-get guestinfo.ovfEnv"
+}
 
 set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
