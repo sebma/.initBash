@@ -2,7 +2,7 @@
 ! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-test -x /usr/lib/vmware-vmafd/bin/dir-cli && declare -gr dir_cli=/usr/lib/vmware-vmafd/bin/dir-cli && declare -g PATH=$PATH:/usr/lib/vmware-vmafd/bin
+test -d /usr/lib/vmware-vmafd/bin/ && declare -g PATH=$PATH:/usr/lib/vmware-vmafd/bin
 
 set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
