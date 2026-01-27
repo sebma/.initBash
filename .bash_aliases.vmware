@@ -4,9 +4,9 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 
 alias esxVersion='vmware -v'
 alias vcenterVersion='vpxd -v'
-alias vcenterLdapUserFind='$dir_cli user find-by-name --level 2 --account'
-alias vcenterLdapUserModify='$dir_cli user modify --account'
-alias vcenterLdapUserNeverExpire='$dir_cli user modify --password-never-expires --account'
+alias vcenterLdapUserFind='dir_cli user find-by-name --level 2 --account'
+alias vcenterLdapUserModify='dir_cli user modify --account'
+alias vcenterLdapUserNeverExpire='dir_cli user modify --password-never-expires --account'
 alias vxrailVersion="rpm -q vmware-marvin"
 alias vxrailVersion2='egrep "PRODUCT_VERSION|BUILD_NUMBER" /etc/vxm-build.properties'
 
