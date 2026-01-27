@@ -7,7 +7,7 @@ function VMGuestinfo {
 	vmware-rpctool "info-get guestinfo.$key"
 }
 function ovaInfo {
-	vmware-rpctool "info-get guestinfo.ovfEnv"
+	vmtoolsd --cmd 'info-get guestinfo.ovfEnv'
 }
 
 set +x
