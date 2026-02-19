@@ -97,6 +97,7 @@ alias dbus-logout-kde='\qdbus org.kde.ksmserver /KSMServer org.kde.KSMServerInte
 alias dbus-reboot='\dbus-send --system --print-reply --dest="org.freedesktop.ConsoleKit" /org/freedesktop/ConsoleKit/Manager org.freedesktop.ConsoleKit.Manager.Restart'
 alias dbus-suspend='\dbus-send --system --print-reply --dest="org.freedesktop.UPower" /org/freedesktop/UPower org.freedesktop.UPower.Suspend || \dbus-send --system --print-reply --dest="org.freedesktop.login1" /org/freedesktop/login1 org.freedesktop.login1.Manager.Suspend boolean:true'
 alias deborphan="\deborphan | sort"
+alias dhcpd-check-config='\dhcpd -t -cf /etc/dhcp/dhcpd.conf'
 alias dig='\dig +ttlunits'
 alias digreverse="dig +short -x"
 alias digshort="\dig +ttlunits +search +short"
@@ -160,6 +161,7 @@ alias gzcat="\gunzip -c"
 alias gzgrep="zgrep"
 alias gzip="\gzip -Nv"
 alias h5dump="\h5dump -n 1"
+alias haproxy-check-config='\haproxy -c -V -f /etc/haproxy'
 alias halt="\halt && exit"
 alias headlines='\head -n $((LINES-2))'
 alias hexdump="\hexdump -Cc" || alias hexdump="\od -tx1z"
@@ -256,6 +258,7 @@ alias myCity="time curl ipinfo.io/city"
 alias myCountry="time curl ipinfo.io/country"
 alias myIP="time curl ipinfo.io/ip"
 alias nautilus="\nautilus --no-desktop"
+alias nginx-check-config='\nginx -t'
 alias no='yes n'
 alias nocomment='\egrep -v "^\s*(#|$|;|//)"'
 alias od="\od -ct x1z"
