@@ -134,6 +134,7 @@ alias fprintMostSupportedDevices="fprintSupportedDevices | awk '{print\$2}' | so
 alias fprintSupportedDevices="\curl -s https://fprint.freedesktop.org/supported-devices.html | html2text.py | tail -n +10 | \grep -v '^$' | \sed -zr 's/([a-f0-9]{4}:[a-f0-9]{4})\n/\1 /g'"
 alias free="\free -m"
 alias frman="\man -Lfr"
+alias ftptlstest='\openssl s_client -starttls ftp -connect'
 alias fuser="\fuser -v"
 alias fuserumount="\fusermount -u"
 alias gateWay="\route -n | awk '/^(0.0.0.0|default)/{print\$2}'"
