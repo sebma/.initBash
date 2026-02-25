@@ -50,6 +50,7 @@ type -P lspci >/dev/null && {
 	alias raiddrivers="\lspci -d ::0104 -k | awk '/Kernel driver in use/{print\$NF}'"
 }
 
+alias architecture-support="$(\ls /lib*/ld-linux-x86-64.so*) --help | grep supported"
 alias arp="\ip -4 neigh"
 alias arpShow="\ip -4 neigh show"
 alias audioCardsMinimumInfo='pactl list sinks | egrep -e "^Sink |Ports?:|available"'
