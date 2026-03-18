@@ -833,7 +833,10 @@ function ytdlpUpdate {
 	fi
 
 	local package=yt-dlp
-	local yt_dlp="$(readlink -f $(type -P yt-dlp))"
+	[ $osFamily = Linux ]  && local -x readlink="readlink -e"
+	[ $osFamily = Darwin ] && local -x readlink="readlink -e"
+	local yt_dlp="$($readlink $(type -P yt-dlp))"
+
 	if [ -n "$yt_dlp" ];then
 		local ytdlpCurrentRelease=$($package --version)
 		echo "=> The current version of $package is <$ytdlpCurrentRelease>."
