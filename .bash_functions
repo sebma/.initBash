@@ -875,7 +875,7 @@ set +x
 		return 2
 	}
 
-	echo $1 | grep -q -- "^-[a-z]" && local option=$1 && shift
+	echo $1 | \grep -q -- "^-[a-z]" && local option=$1 && shift
 
 	fileListPattern="${@:3}"
 	local startRegExpPattern
