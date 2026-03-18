@@ -193,6 +193,15 @@ if [ $osFamily = Linux ] || [ $osFamily = Darwin ];then
 	pgrep -u $USER -f "adb -. " >/dev/null && export androidWlanInterface=$(adb shell getprop wifi.interface 2>/dev/null | tr -d '\r')
 fi
 
+case $OSTYPE in
+	linux-gnueabi)
+		type -P busybox >/dev/null 2>&1 && test -r $initDir/.bash_profile.busybox && Source $initDir/.bash_profile.busybox
+		type -P toybox >/dev/null 2>&1 && test -r $initDir/.bash_profile.toybox && Source $initDir/.bash_profile.toybox
+		;;
+	linux-android)
+		;;
+esac
+
 test -r $initDir/.bash_profile.$osFamily && SourceProfile $initDir/.bash_profile.$osFamily
 test "$debug" -gt 0 && echo "=> BACK to $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
 
