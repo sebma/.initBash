@@ -52,6 +52,7 @@ function gitUpdateAllMyLocalRepos {
 		echo
 	done
 	unset dir
+	sync
 }
 
 set +x
