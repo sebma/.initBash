@@ -826,7 +826,7 @@ function getURLTitle() {
 				printf "$URL # "
 				\curl -qLs "$URL" | \perl -le '$/=undef; $s=<>; $s =~ m{<title>(.*)</title>}si; print $1 if $1'| \xargs
 			done
-		elif type -P grep > /dev/null && echo 'Test' | \grep -P '.*' -q 2> /dev/null;then
+		elif type -P grep > /dev/null && echo Test | \grep -P '.*' -q 2> /dev/null;then
 			for URL
 			do
 				printf "$URL # "
