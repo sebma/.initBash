@@ -788,35 +788,55 @@ function getShellFunctionName {
 function getShellFunctions {
 	test $# != 0 && grepParagraph '(^|\s)\w+\(\)|\bfunction\b' '^}' $@
 }
-function getURLTitle {
-	if type -P xidel > /dev/null; then
+function getURLTitle() {
+	if type -P htmlq > /dev/null; then
 		for URL
 		do
 			printf "$URL # "
-			xidel -s --css 'head title' "$URL"
+			\curl -qLs "$URL" | htmlq -t 'title' | \xargs
 		done
 	elif type -P pup > /dev/null; then
 		for URL
 		do
 			printf "$URL # "
-			\curl -qLs "$URL" | pup --charset utf8 'head title text{}'
+			\curl -qLs "$URL" | pup --charset utf8 'head title text{}' | \xargs
 		done
 	elif type -P hxselect > /dev/null; then
 		for URL
 		do
 			printf "$URL # "
-			\curl -qLs "$URL" | hxnormalize -x | hxselect -s '\n' 'head title' -c
+			\curl -qLs "$URL" | hxnormalize -x | hxselect -s '\n' 'head title' -c | \xargs
+		done
+	elif type -P xidel > /dev/null; then
+		for URL
+		do
+			printf "$URL # "
+			xidel -s --css 'head title' "$URL" | \xargs
 		done
 	else
-		if \grep -P '.*' <<< 'Test' >/dev/null;then
+		if type -P gawk > /dev/null; then
 			for URL
 			do
-				\curl -qLs "$URL" | \grep -oP '<title>\K[^<]*'
+				printf "$URL # "
+				\curl -qLs "$URL" | \gawk -v IGNORECASE=1 -v RS='</title' 'RT{gsub(/.*<title[^>]*>/,"");print;exit}' | \xargs
+			done
+		elif type -P perl > /dev/null; then
+			for URL
+			do
+				printf "$URL # "
+				\curl -qLs "$URL" | \perl -le '$/=undef; $s=<>; $s =~ m{<title>(.*)</title>}si; print $1 if $1'| \xargs
+			done
+		elif type -P grep > /dev/null && echo 'Test' | \grep -P '.*' -q 2> /dev/null;then
+			for URL
+			do
+				printf "$URL # "
+				\curl -qLs "$URL" | \grep -oP '<title>\K[^<]*' || \curl -qLs "$URL" | \grep -iPo '(?<=<title>)(.*)(?=</title>)'
 			done
 		else
 			for URL
 			do
-				\curl -qLs "$URL" | \perl -le '$/=undef; $s=<>; $s =~ m{<title>(.*)</title>}si; print $1 if $1'
+				printf "$URL # "
+				\curl -qLs "$URL" |	grep -o "<title>[^<]*" | cut -d'>' -f2-
 			done
 		fi
 	fi
