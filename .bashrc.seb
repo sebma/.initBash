@@ -176,7 +176,7 @@ fi
 
 # pidof cupsd >/dev/null && Echo "=> The cups admin console is available at http://localhost:631/admin\n"
 
-for tool in lspci lpr mpv ffmpeg units yt-dlp conda openssl brew smartctl docker adb flatpak snap git racadm omreport esxcli;do
+for tool in git dra lspci lpr mpv ffmpeg units yt-dlp conda openssl brew smartctl docker adb flatpak snap git racadm omreport esxcli;do
 	if type -P $tool >/dev/null 2>&1;then
 		test -r $initDir/.bashrc.$tool && Source $initDir/.bashrc.$tool
 		test -r $initDir/.bash_aliases.$tool && Source $initDir/.bash_aliases.$tool
