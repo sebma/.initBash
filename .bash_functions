@@ -1210,6 +1210,12 @@ function lslib {
 		lsPackageContents $package
 	done | sort -u | egrep "(\.so)"
 }
+function lsservices {
+	for package
+	do
+		lsPackageContents $package
+	done | sort -u | egrep "(\.service$)"
+}
 function lv_Dev_Creation_Date {
 	sudo -v
 	for lv
