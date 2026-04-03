@@ -78,6 +78,7 @@ else
 fi
 
 #DEFINITION DES VARIABLES
+export UID
 if [ ${BASH_VERSINFO[0]} -ge 4 ];then
 	export which="type -P"
 	[ $osFamily = Linux ] && export find="$(type -P find)"
