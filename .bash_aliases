@@ -228,6 +228,7 @@ alias lsdvd="\lsdvd -avcs"
 alias lshw="\lshw -numeric -sanitize"
 alias lshwBUSINFO='lshw -businfo'
 alias lslast="\ls -1 -t 2>/dev/null | head"
+alias lsof='\lsof -e /run/user/$UID/gvfs -e /run/user/$UID/doc'
 alias lsqm='dspmq | sed "s/[()]/ /g" | awk "/Running/{print \$2}" | paste -sd" ";echo'
 alias lzgrep="\lzgrep --color"
 alias mail='\mail || mail -f $HOME/mbox'
