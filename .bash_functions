@@ -1130,6 +1130,14 @@ function ldapUserFind {
 		ldapsearch -x -LLL uid=$1
 	fi
 }
+function less {
+	local less="$(find /usr/*/vim -type f -name less.sh | grep '/less.sh$' -m1 && echo -R || echo less -ir)"
+	if [ $# == 0 ];then
+		$less -
+	else
+		$less "$@"
+	fi
+}
 function listVideosFromRSSPodCastPlayList {
 	test $# = 1 && {
 		local rssURL="$1"
