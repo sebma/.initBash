@@ -79,6 +79,7 @@ fi
 
 #DEFINITION DES VARIABLES
 export UID
+locate -r ^/usr/.*/vim/.*/less.sh 2>/dev/null | grep /less.sh -q && export less="$(locate -r ^/usr/.*/vim/.*/less.sh) -R" || export less='\less -ir'
 if [ ${BASH_VERSINFO[0]} -ge 4 ];then
 	export which="type -P"
 	[ $osFamily = Linux ] && export find="$(type -P find)"
