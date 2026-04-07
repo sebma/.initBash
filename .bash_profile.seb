@@ -78,10 +78,12 @@ else
 fi
 
 #DEFINITION DES VARIABLES
-export UID GROUPS
+export UID
+
 set -o pipefail
 export less="$(find /usr/share/vim/vim*/macros/ -type f -name less.sh | grep '/less.sh$' -m1 | tr -d '\n' && echo ' -R' || echo less -ir)"
 set +o pipefail
+
 if [ ${BASH_VERSINFO[0]} -ge 4 ];then
 	export which="type -P"
 	[ $osFamily = Linux ] && export find="$(type -P find)"
