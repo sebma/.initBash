@@ -78,7 +78,7 @@ else
 fi
 
 #DEFINITION DES VARIABLES
-export UID
+export UID GROUPS
 set -o pipefail
 export less="$(find /usr/share/vim/vim*/macros/ -type f -name less.sh | grep '/less.sh$' -m1 | tr -d '\n' && echo ' -R' || echo less -ir)"
 set +o pipefail
