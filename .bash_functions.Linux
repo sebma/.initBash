@@ -425,12 +425,14 @@ function processENV_Variables {
 	local processName=$1
 	local -i pid=0
 	pid=$(\pidof -s $processName)
+	test $(id -u) == 0 && sudo="" || sudo=$(type -P sudo)
+	cat="sudo cat"
 
 	if [ $# = 1 ];then
-		[ $pid != 0 ] && tr '\0' '\n' < /proc/$pid/environ | \egrep -v "^hidden=" | \grep -P "^[^\s%]+=" | sort -u
+		[ $pid != 0 ] && $cat /proc/$pid/environ | tr '\0' '\n' | \grep -v "^hidden=" | \grep -P "^[^\s%]+=" | sort -u
 	elif [ $# = 2 ];then
 		local varNAME=$2
-		[ $pid != 0 ] && tr '\0' '\n' < /proc/$pid/environ | \egrep -v "^hidden=" | \grep -P "^[^\s%]+=" | sort -u | egrep "$varNAME"
+		[ $pid != 0 ] && $cat /proc/$pid/environ | tr '\0' '\n' | \grep -v "^hidden=" | \grep -P "^[^\s%]+=" | sort -u | egrep "$varNAME"
 	fi
 }
 function psAncestors {
