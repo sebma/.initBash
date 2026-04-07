@@ -1224,7 +1224,7 @@ function lsof {
     local lsof=$(type -P lsof)
 	#local df=$(type -P df)
     #local lsofExcludeCMD=$($df -aT | awk "/run.user.[0-9]+.(gvfs|doc)/"'{printf "-e %s ",$NF}')
-    local lsofExcludeCMD=$($lsof 2>&1 | awk '/WARNING: can.t stat()/{printf "-e %s ",$NF}')
+    local lsofExcludeCMD=$($lsof -U 2>&1 | awk '/WARNING: can.t stat()/{printf "-e %s ",$NF}')
     $lsof $lsofExcludeCMD "$@"
 }
 function lsservices {
