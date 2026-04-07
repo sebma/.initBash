@@ -1218,6 +1218,12 @@ function lslib {
 		lsPackageContents $package
 	done | sort -u | egrep "(\.so)"
 }
+function lsof {
+    local lsof=$(type -P lsof)
+    #local lsofExcludeCMD=$(df -a -t fuse.gvfsd-fuse | awk "/run.user.[0-9]+.(gvfs|doc)/"'{printf "-e %s ",$NF}')
+    local lsofExcludeCMD=$($lsof 2>&1 | awk '/WARNING: can.t stat()/{printf "-e %s ",$NF}')
+    $lsof $lsofExcludeCMD "$@"
+}
 function lsservices {
 	for package
 	do
