@@ -1131,7 +1131,7 @@ function ldapUserFind {
 	fi
 }
 function less {
-	local less="$(find /usr/*/vim -type f -name less.sh | grep '/less.sh$' -m1 && echo -R || echo less -ir)"
+	local less="$(find /usr/*/vim -type f -name less.sh | $grep '/less.sh$' -m1 && echo -R || echo less -ir)"
 	if [ $# == 0 ];then
 		$less -
 	else
