@@ -79,7 +79,9 @@ fi
 
 #DEFINITION DES VARIABLES
 export UID
-export less="$(find /usr/*/vim -type f -name less.sh | grep '/less.sh$' -m1 && echo -R || echo less -ir)"
+set -o pipefail
+export less="$(find /usr/*/vim -type f -name less.sh | grep '/less.sh$' -m1 | tr -d '\n' && echo ' -R' || echo less -ir)"
+set +o pipefail
 if [ ${BASH_VERSINFO[0]} -ge 4 ];then
 	export which="type -P"
 	[ $osFamily = Linux ] && export find="$(type -P find)"
