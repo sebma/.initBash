@@ -200,7 +200,7 @@ alias la="ls -a"
 alias lastfiles='$find . -xdev -type f -mmin -2'
 alias lastfilestoday="$find . -type f -ctime -1"
 alias lastloggin='\lastlog -u $USER'
-find /usr/*/vim -type f -name less.sh | grep /less.sh -q && alias less="$(find /usr/*/vim -type f -name less.sh | grep '/less.sh$' -m1) -R" || alias less="less -ir"
+find /usr/share/vim/vim*/macros/ -type f -name less.sh | grep /less.sh$ -q && alias less="$(find /usr/share/vim/vim*/macros/ -type f -name less.sh | grep '/less.sh$' -m1) -R" || alias less="\less -ir"
 alias libreofficeTo="\lowriter --headless --convert-to"
 alias lkshVersion='lksh -c "echo \$KSH_VERSION" 2>/dev/null'
 alias ll="ls -lF"
