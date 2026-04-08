@@ -1133,6 +1133,7 @@ function ldapUserFind {
 	fi
 }
 function less {
+	local grep=$(type -P ggrep 2>/dev/null || type -P grep)
 	set -o pipefail
 	local less="$(find /usr/share/vim/vim*/macros/ -type f -name less.sh | $grep '/less.sh$' -m1 | tr -d '\n' && echo ' -R' || echo \\less -ir)"
 	set +o pipefail
