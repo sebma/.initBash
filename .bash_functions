@@ -1139,6 +1139,8 @@ function less {
 	set +o pipefail
 	if [ $# == 0 ];then
 		$less -
+	elif [ $# == 1 ] && ! [ -e $1 ];then
+		$(which less) $1
 	else
 		$less "$@"
 	fi
