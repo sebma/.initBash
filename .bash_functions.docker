@@ -70,15 +70,15 @@ function findDockerImageFromPath {
 		$sudo docker image ls -a | grep ${sha:0:12}
 	done
 }
-function startContainerByName {
+function dockerStartByName {
 	local containerName=$1
 	$sudo docker start "$(sudo docker ps -a --filter name="$containerName" -q | head -1)"
 }
-function stopContainerByName {
+function dockerStopByName {
 	local containerName=$1
 	$sudo docker stop "$(sudo docker ps --filter name="$containerName" -q | head -1)"
 }
-function execContainerByName {
+function dockerExecByName {
 	local containerName=$1
 	$sudo docker exec "$(sudo docker ps --filter name="$containerName" -q | head -1)" bash || $sudo docker exec "$(sudo docker ps --filter name="$containerName" -q | head -1)" sh
 }
