@@ -167,7 +167,7 @@ function downgradeTo {
 		sudo $apt dist-upgrade -V
 	else
 		echo "=> ERROR: The file </etc/apt/preferences.d/99-downgrade> does not exist, generating it ..." >&2
-		$sudo tee /etc/apt/preferences.d/99-downgrade <<-EOF
+		$sudo tee /etc/apt/preferences.d/99-downgrade <<-EOF >/dev/null
 			Package: *
 			Pin: release a=$distribCodename
 			Pin-Priority: 1001
