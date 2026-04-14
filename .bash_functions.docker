@@ -80,7 +80,7 @@ function stopContainerByName {
 }
 function execContainerByName {
 	local containerName=$1
-	$sudo docker exec "$(sudo docker ps --filter name="$containerName" -q | head -1)" bash
+	$sudo docker exec "$(sudo docker ps --filter name="$containerName" -q | head -1)" bash || $sudo docker exec "$(sudo docker ps --filter name="$containerName" -q | head -1)" sh
 }
 
 set +x
