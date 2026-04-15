@@ -101,7 +101,8 @@ alias dhcpd-check-config='\dhcpd -t -cf /etc/dhcp/dhcpd.conf'
 alias dig='\dig +ttlunits'
 alias digreverse="dig +short -x"
 alias digshort="\dig +ttlunits +search +short"
-alias digsimple="\dig +ttlunits +search +noquestion +nostats +noedns +nocomments +nocmd"
+alias digsimple="\dig +ttlunits +search +noquestion +nostats +noedns +nocomments +nocmd +multiline"
+alias digsimple2="\dig +ttlunits +noall +answer +multiline"
 alias dir2iso='\mkisofs -J -R -o'
 alias disconnectB206_BT_From_DAC="ssh b206.local. myScripts/shl/bluetoothDisconnectAllBlueZ5.sh"
 alias distrib='\strings $(\ps -p 1 -o command= | cut -d" " -f1) | egrep -i "ubuntu|debian|centos|redhat" -o | tr [:upper:] [:lower:] | uniq'
