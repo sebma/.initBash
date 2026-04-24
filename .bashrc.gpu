@@ -7,7 +7,7 @@ if [ $osFamily = Linux ] && type -P lspci >/dev/null;then
 	if \lspci -md ::03xx | \grep -i nvidia -q;then
 		alias nvidiaVersion="cat /proc/driver/nvidia/version"
 		export nvcc=/usr/local/cuda*/bin/nvcc
-		alias cudaVersion="$(echo /usr/local/cuda*/bin/nvcc) -V"
+		alias cudaVersion="$(echo /usr/local/cuda*/bin/nvcc | head -1) -V"
 	else
 		:
 	fi
