@@ -56,6 +56,7 @@ alias findDeadLinks='$find . -xtype l -exec ls --color -l {} +'
 alias findDirectoriesWithLotsOfInodes=$'locate "" | sed "s|/[^/]*$|/|g" | sort | uniq -c | sort -n | tee filesperdirectory.txt | tail'
 alias firefoxDefrag='pgrep firefox || time find ~/.mozilla/firefox/ -name "*sqlite" -ls -exec sqlite3 -echo {} vacuum \;'
 alias fsType="\lsblk -n -o FSTYPE"
+alias gallerydlInstall="sudo pipx install --global gallery-dl"
 alias gpuRAM='\dmesg | grep VRAM'
 alias hardwareUNCLAIMED='sudo \lshw | sed -n "/UNCLAIMED/,/configuration:/ p"'
 alias ip='\ip -c'
