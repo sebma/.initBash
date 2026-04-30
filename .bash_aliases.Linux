@@ -30,7 +30,7 @@ test "$wiFiInterface" && {
 	alias restartWifi=wifiRestart
 }
 
-alias architecture-support="$(\ls /lib*/ld-linux-x86-64.so*) --help | grep supported"
+alias glibc-architecture-support="$(\ls /lib*/ld-linux-x86-64.so*) --help | grep supported"
 alias arp="\ip -4 neigh"
 alias arpShow="\ip -4 neigh show"
 alias audioCardsMinimumInfo='pactl list sinks | egrep -e "^Sink |Ports?:|available"'
