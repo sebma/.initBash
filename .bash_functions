@@ -532,15 +532,17 @@ function ddPV {
 	time sudo bash -c "pv $inputFile | dd $@"
 }
 function dfc {
-	firstArg=$1
+	local firstArg=$1
+	local dfc="command dfc"
+	local dfcOptions="-dTWwfc always"
 	if printf -- "$firstArg" | egrep "^\-|^$" -q;then
-		command dfc -dTWfc always "$@"
+		$dfc $dfcOptions "$@"
 	else
 		shift
 		test $# != 0 && argsRE="|$(echo "$@" | tr -s / | sed 's/ /$|/g' | sed "s,/$,," | sed 's/$/$/')"
 		firstArg=$(echo "$firstArg" | tr -s /)
 		test "$firstArg" != / && firstArg="$(echo "$firstArg" | sed "s,/$,,")"
-		command dfc -dTWfc always | sed "s/ *$//" | \egrep "FILESYSTEM|${firstArg}\>${argsRE}"
+		$dfc $dfcOptions | sed "s/ *$//" | \egrep "FILESYSTEM|${firstArg}\>${argsRE}"
 	fi
 }
 function dirName {
