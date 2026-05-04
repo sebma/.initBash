@@ -87,9 +87,10 @@ alias lsautostart='dex -ad -e $XDG_SESSION_DESKTOP'
 alias lsblk='\lsblk -e 7'
 alias lsinterfaces="\ls /sys/class/net"
 alias lsprocessors="lscpu -J | jq -r '.lscpu | map( select(.field | IN(\"CPU(s):\",\"Model name:\") ).data ) | join(\" x \")'"
-alias lstpm='test -s /proc/tpminfo && cat /proc/tpminfo;lsmod | grep tpm;\ls /dev/tpm? /dev/tpmrm? 2>/dev/null && \ls -ld /sys/kernel/security/tpm?/ /sys/class/tpm/tpm?/device/caps /sys/class/tpm/tpm?/tpm_version_major /sys/class/tpm/tpm?/device/firmware_node/description;\ls /dev/tpm? /dev/tpmrm? 2>/dev/null && sudo dmidecode -t 43'
-alias lszombies='\ps aux | grep -v grep | grep defunct'
 alias lxterm="\lxterm -sb -fn 9x15"
+alias lstpm='test -s /proc/tpminfo && cat /proc/tpminfo;lsmod | grep tpm;\ls /dev/tpm? /dev/tpmrm? 2>/dev/null && \ls -ld /sys/kernel/security/tpm?/ /sys/class/tpm/tpm?/device/caps /sys/class/tpm/tpm?/tpm_version_major /sys/class/tpm/tpm?/device/firmware_node/description;\ls /dev/tpm? /dev/tpmrm? 2>/dev/null && sudo dmidecode -t 43'
+alias lsusers=$'awk -F: \'{ if($3>=10^3) print $1":"$3 }\' /etc/passwd'
+alias lszombies='\ps aux | grep -v grep | grep defunct'
 alias macinfo='\ip -c -br link show'
 alias memOccupation='\smem -t -c "user pid swap pss rss uss vss command" -k -p -s rss'
 alias memSnapshot='\smem -t -c "user pid swap pss rss uss vss command" -k -p -s command'
