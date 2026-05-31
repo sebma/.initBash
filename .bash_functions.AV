@@ -1549,6 +1549,10 @@ function videoSplit {
 	outputFile="$outputFilePath/$fileBaseName-CUT.$extension"
 	chmod -x "$fileName"
 
+	if $ffprobe "$fileName" 2>&1 | grep Video:.none -q;then
+		remuxOptions="-map -0:v:1 $remuxOptions"
+	fi
+
 #	[ $extension = mp4 ] && remuxOptions="$remuxOptions $mp4Options"
 	if test $# -ge 3
 	then
