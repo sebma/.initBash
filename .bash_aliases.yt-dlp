@@ -54,6 +54,8 @@ alias ytdlGetFormatID="\youtube-dl --get-filename -o '%(format_id)s' -f"
 alias ytdlpGetFormatID="\yt-dlp --get-filename -o '%(format_id)s' -f"
 alias ytdlGetTitle="\youtube-dl -e"
 alias ytdlpGetTitle="\yt-dlp -e"
+alias ytdlGetWebpageURL="\youtube-dl --no-restrict-filenames --get-filename -o '%(webpage_url)s'"
+alias ytdlpGetWebpageURL="\yt-dlp --no-restrict-filenames --get-filename -o '%(webpage_url)s'"
 alias ytdlLatestRelease='\git ls-remote --tags --refs $ytdlURL | awk -F/ "{print\$NF}" | sort -rV | head -1'
 alias ytdlpLatestRelease='\git ls-remote --tags --refs $ytdlpURL | awk -F/ "{print\$NF}" | sort -rV | head -1'
 
