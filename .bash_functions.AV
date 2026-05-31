@@ -1550,7 +1550,7 @@ function videoSplit {
 	chmod -x "$fileName"
 	local mappingOptions="-map 0"
 
-	if $ffprobe "$fileName" 2>&1 | grep Video:.none -q;then
+	if $ffprobe "$fileName" 2>&1 | \grep Video:.none -q;then
 		mappingOptions+=" -map -0:v:1"
 	fi
 
