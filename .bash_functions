@@ -2030,7 +2030,9 @@ function sshStartLocalForwarding {
 }
 function statsFromFile {
 	local file="$1"
-	sort "$file" | uniq -c | sort -nr
+	if [ $# -ge 1 ];then
+		sort "$@" | uniq -c | sort -nr
+	fi
 }
 function str2qrcode_with_qrencode {
 	local dotSize=8 string=""
