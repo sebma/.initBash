@@ -352,7 +352,7 @@ alias speedtestSimple="time \speedtest --simple"
 alias sshStatusLocalForward="command ssh -O check"
 alias sshStopLocalForward="command ssh -O exit"
 alias startSSHAgent='\pgrep -lfu $USER ssh-agent || eval $(ssh-agent -s)'
-alias stats='sort | uniq -c | sort -nr'
+alias statsFromPipe='sort | uniq -c | sort -nr'
 alias sudo="\sudo "
 alias swapUsage="\free -m | awk '/^Swap/{print 100*\$3/\$2}'"
 alias systemType='strings $(\ps -p 1 -o command= | cut -d" " -f1) | \egrep -o "upstart|sysvinit|systemd|launchd" | head -1'
