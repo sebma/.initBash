@@ -627,8 +627,10 @@ function ytdlGetThumbNail {
 		do
 			if [ -n "$thumbnailID" ];then
 				set -o | \grep xtrace.*on && echo "=> thumbnailBaseName = <$thumbnailBaseName>"
-				thumbnailExtension="${thumbnailURL/*./}"
-				thumbnailExtension="${thumbnailExtension/\?*/}"
+				thumbnailMimeType=$(\curl -s $thumbnailURL | file -bi - | cut -d';' -f1)
+				case $thumbnailMimeType in
+					image/jpeg) thumbnailExtension="jpg"
+				esac
 				thumbnailBaseName+=__${thumbnailID}__${thumbnailExtractor}_com.$thumbnailExtension
 				if \wget -c -nv -O "$thumbnailBaseName" "$thumbnailURL";then
 					\du -h "$thumbnailBaseName"
@@ -655,7 +657,6 @@ function ytdlpGetThumbNail {
 				case $thumbnailMimeType in
 					image/jpeg) thumbnailExtension="jpg"
 				esac
-				echo "=> thumbnailExtension = $thumbnailExtension"
 				thumbnailBaseName+=__${thumbnailID}__${thumbnailExtractor}_com.$thumbnailExtension
 				if \wget -c -nv -O "$thumbnailBaseName" "$thumbnailURL";then
 					\du -h "$thumbnailBaseName"
