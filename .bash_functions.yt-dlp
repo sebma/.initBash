@@ -647,12 +647,15 @@ function ytdlpGetThumbNail {
 	for url
 	do
 		jsonResult="$(yt-dlp -j "$url" | jq -r 'del(.formats , .tags , .automatic_captions , .requested_subtitles , .requested_formats[].fragments)')"
-		echo "$jsonResult" | jq -r $'.id, .extractor, [ .thumbnails[] | select(.preference == -1).url ][-1] , ( .title | gsub("[: \']";"_") | gsub("[#|,()]";"") | gsub("&";"_and_") )' | while read thumbnailID && read thumbnailExtractor && read thumbnailURL && read thumbnailBaseName;
+		echo "$jsonResult" | jq -r $'.id, .extractor, [ .thumbnails[].url ][-1] , ( .title | gsub("[: \']";"_") | gsub("[#|,()]";"") | gsub("&";"_and_") )' | while read thumbnailID && read thumbnailExtractor && read thumbnailURL && read thumbnailBaseName;
 		do
 			if [ -n "$thumbnailID" ];then
 				set -o | \grep xtrace.*on && echo "=> thumbnailBaseName = <$thumbnailBaseName>" && echo "=> thumbnailURL = <$thumbnailURL>"
-				thumbnailExtension="${thumbnailURL/*./}"
-				thumbnailExtension="${thumbnailExtension/\?*/}"
+				thumbnailMimeType=$(\curl -s $thumbnailURL | file -bi - | cut -d';' -f1)
+				case $thumbnailMimeType in
+					image/jpeg) thumbnailExtension="jpg"
+				esac
+				echo "=> thumbnailExtension = $thumbnailExtension"
 				thumbnailBaseName+=__${thumbnailID}__${thumbnailExtractor}_com.$thumbnailExtension
 				if \wget -c -nv -O "$thumbnailBaseName" "$thumbnailURL";then
 					\du -h "$thumbnailBaseName"
