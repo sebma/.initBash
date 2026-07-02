@@ -2028,6 +2028,10 @@ function sshStartLocalForwarding {
 		\pgrep -lf $tunnelDef
 	fi
 }
+function statsFromFile {
+	local file="$1"
+	sort "$file" | uniq -c | sort -nr
+}
 function str2qrcode_with_qrencode {
 	local dotSize=8 string=""
 	if [ $# = 1 ];then
