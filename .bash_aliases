@@ -126,7 +126,7 @@ alias enman="\man -L en"
 alias erasecd='\cdrecord -v speed=12 blank=fast gracetime=10 -eject'
 alias erasewholecd='\cdrecord -v speed=12 blank=all gracetime=10 -eject'
 alias findBigFiles="findBiggerThan +100mi | sort -rhk5"
-alias findBiggerThan='$fd_find -H --xdev -t f -E /dev,/proc,/sys -l "." ./ -S'
+alias findBiggerThan='$fd_find -H -I --xdev -t f -E /dev,/proc,/sys -l "." ./ -S'
 alias findFunctions="grep -P '(^| )\w+\(\)|\bfunction\b'"
 alias findSpecialFiles="$find . -xdev '(' -type b -o -type c -o -type p -o -type s ')' -a -ls"
 alias findbin='$find $(echo $PATH | tr : "\n" | \egrep "/(s?bin|shl|py|rb|pl)") /system/{bin,xbin} 2>/dev/null | egrep'
