@@ -154,7 +154,7 @@ function getPlaylistsRestrictedFilenamesFORMAT {
 	do
 		echo "=> Treating playList : $playList ..." >&2
 		playListTitle=$(yt-dlp --ignore-config --ignore-errors --flat-playlist -J $playList | jq -r '.title')
-		playListTitle="$(echo $playListTitle | sed -E "s/ /_/g;s/'/_/g;s/\|/-/g;s/[éè]/e/g")"
+		playListTitle="$(echo $playListTitle | sed -E "s/ /_/g;s/'/_/g;s/\|/-/g;s/[éè]/e/g" | tr -d "[:]")"
 		mkdir -pv $playListTitle && cd $playListTitle
 		if echo $playList | \egrep -q "dailymotion|vevo|tonvid"
 		then
@@ -166,7 +166,7 @@ function getPlaylistsRestrictedFilenamesFORMAT {
 			listOfUrls=$(time ytdlpGetVideoURLsFromPlayListURL $playList)
 		fi
 
-		getRestrictedFilenamesFORMAT.sh -f $format $listOfUrls
+		getRestrictedFilenamesFORMAT.sh -i -f $format $listOfUrls
 		cd - >/dev/null
 	done
 	trap - INT
@@ -178,7 +178,7 @@ function getPlaylistsRestrictedFilenamesHD {
 	do
 		echo "=> Treating playList : $playList ..." >&2
 		playListTitle=$(yt-dlp --ignore-config --ignore-errors --flat-playlist -J $playList | jq -r '.title')
-		playListTitle="$(echo $playListTitle | sed -E "s/ /_/g;s/'/_/g;s/\|/-/g;s/[éè]/e/g")"
+		playListTitle="$(echo $playListTitle | sed -E "s/ /_/g;s/'/_/g;s/\|/-/g;s/[éè]/e/g" | tr -d "[:]")"
 		mkdir -pv $playListTitle && cd $playListTitle
 		if echo $playList | \egrep -q "dailymotion|vevo|tonvid"
 		then
@@ -189,7 +189,7 @@ function getPlaylistsRestrictedFilenamesHD {
 			listOfUrls=$(time ytdlpGetVideoURLsFromPlayListURL $playList)
 		fi
 
-		getRestrictedFilenamesHD.sh $listOfUrls
+		getRestrictedFilenamesHD.sh -i $listOfUrls
 		cd - >/dev/null
 	done
 	trap - INT
@@ -201,7 +201,7 @@ function getPlaylistsRestrictedFilenamesSD {
 	do
 		echo "=> Treating playList : $playList ..." >&2
 		playListTitle=$(yt-dlp --ignore-config --ignore-errors --flat-playlist -J $playList | jq -r '.title')
-		playListTitle="$(echo $playListTitle | sed -E "s/ /_/g;s/'/_/g;s/\|/-/g;s/[éè]/e/g")"
+		playListTitle="$(echo $playListTitle | sed -E "s/ /_/g;s/'/_/g;s/\|/-/g;s/[éè]/e/g" | tr -d "[:]")"
 		mkdir -pv $playListTitle && cd $playListTitle
 		if echo $playList | \egrep -q "dailymotion|vevo|tonvid"
 		then
@@ -213,7 +213,7 @@ function getPlaylistsRestrictedFilenamesSD {
 			listOfUrls=$(time ytdlpGetVideoURLsFromPlayListURL $playList)
 		fi
 
-		getRestrictedFilenamesSD.sh $listOfUrls
+		getRestrictedFilenamesSD.sh -i $listOfUrls
 		cd - >/dev/null
 	done
 	trap - INT
