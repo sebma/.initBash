@@ -1109,6 +1109,12 @@ function jpgRotate {
 		touch -r "$pic" "$newFile"
 	done
 }
+function jsonReIndent {
+	for file
+	do
+		jq . "$file" | sponge "$file"
+	done
+}
 function jupyterToken {
 	jupyter notebook list
 	local token
