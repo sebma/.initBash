@@ -696,6 +696,12 @@ function ytdlGetFirstURL {
 	set +o pipefail
 	echo "$url"
 }
+function ytdlpGetJsonFile {
+	for url
+	do
+		jsonFILE=$(time yt-dlp --ignore-config --restrict-filenames --no-download --write-info-json "$url" | awk '/json$/{print$NF}')
+	done
+}
 function ytdlGetSize {
 	type jq >/dev/null || { echo -1;return 1; }
 	local ytdlnoconfig="youtube-dl --ignore-config"
