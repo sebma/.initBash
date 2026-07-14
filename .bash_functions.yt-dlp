@@ -699,7 +699,8 @@ function ytdlGetFirstURL {
 function ytdlpGetJsonFile {
 	for url
 	do
-		jsonFILE=$(time yt-dlp --ignore-config --restrict-filenames --no-download --write-info-json "$url" | awk '/json$/{print$NF}')
+		jsonFILE=$(yt-dlp --ignore-config --restrict-filenames --no-download --write-info-json "$url" | awk '/json$/{print$NF}')
+		echo "=> jsonFILE = <$jsonFILE>."
 	done
 }
 function ytdlGetSize {
