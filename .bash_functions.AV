@@ -758,7 +758,7 @@ function ffplay {
 		echo
 	}
 }
-function ffprobe {
+function ffprobeLoopSummary {
 	type -P ffprobe >/dev/null && {
 		for arg
 		do
