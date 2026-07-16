@@ -128,7 +128,7 @@ function getPlaylistsRestrictedFilenamesFSD {
 	do
 		echo "=> Treating playList : $playList ..." >&2
 		playListTitle=$(yt-dlp --ignore-config --ignore-errors --flat-playlist -J $playList | jq -r '.title')
-		playListTitle="$(echo $playListTitle | sed -E "s/ /_/g;s/'/_/g;s/\|/-/g;s/[éè]/e/g")"
+		playListTitle="$(echo $playListTitle | sed -E "s/ /_/g;s/'/_/g;s/\|/-/g;s/[éè]/e/g" | tr -d "[:\-]")"
 		mkdir -pv $playListTitle && cd $playListTitle
 		if echo $playList | \egrep -q "dailymotion|vevo|tonvid"
 		then
@@ -154,7 +154,7 @@ function getPlaylistsRestrictedFilenamesFORMAT {
 	do
 		echo "=> Treating playList : $playList ..." >&2
 		playListTitle=$(yt-dlp --ignore-config --ignore-errors --flat-playlist -J $playList | jq -r '.title')
-		playListTitle="$(echo $playListTitle | sed -E "s/ /_/g;s/'/_/g;s/\|/-/g;s/[éè]/e/g" | tr -d "[:]")"
+		playListTitle="$(echo $playListTitle | sed -E "s/ /_/g;s/'/_/g;s/\|/-/g;s/[éè]/e/g" | tr -d "[:\-]")"
 		mkdir -pv $playListTitle && cd $playListTitle
 		if echo $playList | \egrep -q "dailymotion|vevo|tonvid"
 		then
@@ -178,7 +178,7 @@ function getPlaylistsRestrictedFilenamesHD {
 	do
 		echo "=> Treating playList : $playList ..." >&2
 		playListTitle=$(yt-dlp --ignore-config --ignore-errors --flat-playlist -J $playList | jq -r '.title')
-		playListTitle="$(echo $playListTitle | sed -E "s/ /_/g;s/'/_/g;s/\|/-/g;s/[éè]/e/g" | tr -d "[:]")"
+		playListTitle="$(echo $playListTitle | sed -E "s/ /_/g;s/'/_/g;s/\|/-/g;s/[éè]/e/g" | tr -d "[:\-]")"
 		mkdir -pv $playListTitle && cd $playListTitle
 		if echo $playList | \egrep -q "dailymotion|vevo|tonvid"
 		then
@@ -201,7 +201,7 @@ function getPlaylistsRestrictedFilenamesSD {
 	do
 		echo "=> Treating playList : $playList ..." >&2
 		playListTitle=$(yt-dlp --ignore-config --ignore-errors --flat-playlist -J $playList | jq -r '.title')
-		playListTitle="$(echo $playListTitle | sed -E "s/ /_/g;s/'/_/g;s/\|/-/g;s/[éè]/e/g" | tr -d "[:]")"
+		playListTitle="$(echo $playListTitle | sed -E "s/ /_/g;s/'/_/g;s/\|/-/g;s/[éè]/e/g" | tr -d "[:\-]")"
 		mkdir -pv $playListTitle && cd $playListTitle
 		if echo $playList | \egrep -q "dailymotion|vevo|tonvid"
 		then
@@ -234,8 +234,8 @@ function getPlaylistsRestrictedFilenamesMP3_M3U {
 	for playList
 	do
 		playListTitle=$(yt-dlp --ignore-config --ignore-errors --flat-playlist -J $playList | jq -r '.title')
+		playListTitle="$(echo $playListTitle | sed -E "s/ /_/g;s/'/_/g;s/\|/-/g;s/[éè]/e/g" | tr -d "[:\-]")"
 		echo "=> playListTitle = $playListTitle"
-		playListTitle="$(echo $playListTitle | sed -E "s/ /_/g;s/'/_/g;s/\|/-/g;s/[éè]/e/g")"
 		mkdir -vp "$playListTitle"
 		if cd "$playListTitle";then
 			m3uFileName=$playListTitle.m3u
@@ -259,8 +259,8 @@ function getPlaylistsRestrictedFilenamesM4A_M3U {
 	for playList
 	do
 		playListTitle=$(yt-dlp --ignore-config --ignore-errors --flat-playlist -J $playList | jq -r '.title')
+		playListTitle="$(echo $playListTitle | sed -E "s/ /_/g;s/'/_/g;s/\|/-/g;s/[éè]/e/g" | tr -d "[:\-]")"
 		echo "=> playListTitle = $playListTitle"
-		playListTitle="$(echo $playListTitle | sed -E "s/ /_/g;s/'/_/g;s/\|/-/g;s/[éè]/e/g")"
 		mkdir -vp "$playListTitle"
 		if cd "$playListTitle";then
 			m3uFileName=$playListTitle.m3u
