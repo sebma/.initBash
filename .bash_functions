@@ -2040,6 +2040,13 @@ function statsFromFile {
 		sort "$@" | uniq -c | sort -nr
 	fi
 }
+function statsFromFileAndRegExp {
+	local file="$1"
+	local regExp="$2"
+	if [ $# -ge 2 ];then
+		grep $regExp $file | sort | uniq -c | sort -nr
+	fi
+}
 function str2qrcode_with_qrencode {
 	local dotSize=8 string=""
 	if [ $# = 1 ];then
