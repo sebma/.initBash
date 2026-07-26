@@ -7,7 +7,7 @@ alias findipp="\ippfind _ipp._tcp"
 alias findipps="\ippfind _ipps._tcp"
 alias findprinter="\ippfind _printer._tcp"
 alias printerInfo='lpstat -l -p'
-alias printerList='lpstat -p'
+alias printerList='lpstat -e'
 alias printerOptions='lpoptions -l -p $(lpstat -e | head -1)'
 alias printerStatus='lpstat -s'
 
