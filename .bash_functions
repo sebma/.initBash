@@ -1176,19 +1176,6 @@ function locateFromHome {
 	shift
 	locate "^$HOME/.*$regExp" "$@" | sed "s|$HOME.||"
 }
-function lprColorPageRange {
-	test -n "$colorPrinter" && test $colorPrinter && lprPageRange $@ -P $colorPrinter
-}
-function lprPageRange {
-	test $# -lt 2 && {
-		echo "=> Usage: $FUNCNAME pageRange pdf/psFile" >&2
-		return 1
-	}
-
-	pageRange=$1
-	shift
-	test $pageRange && echo $pageRange | grep -ivq "[A-Z]" && command lpr -o page-ranges=$pageRange $@ && lpq
-}
 function lsPackageContents {
 	package=${1/:/}
 	case "$(packageManager)" in
