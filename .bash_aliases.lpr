@@ -5,6 +5,7 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 #alias lpr="\lpr -P ppti-14-503-imp -o PageSize=A4 -o PageRegion=A4 -o Resolution=default -o InputSlot=Tray2 -o Duplex=DuplexNoTumble -o PreFilter=No"
 #alias lpr="\lpr -o PageSize=A4 -o PageRegion=A4 -o Resolution=default -o InputSlot=Tray2 -o Duplex=DuplexNoTumble -o PreFilter=No"
 alias a2psColor='\a2ps -P $colorPrinter'
+alias setDefaultPrinter='lpoptions -d'
 alias defaultPrinter='lpstat -d'
 alias findipp="\ippfind _ipp._tcp"
 alias findipps="\ippfind _ipps._tcp"
