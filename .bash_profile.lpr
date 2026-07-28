@@ -15,8 +15,6 @@ then
 	then
 #		lpoptions -p $colorPrinter -o media=A4 -o fit-to-page -o Duplex=DuplexNoTumble -o sides=two-sided-long-edge -o page-border=none -o prettyprint -o StapleLocation=UpperLeft
 		lpoptions -p $colorPrinter -o media=A4 -o fit-to-page -o Duplex=DuplexNoTumble -o sides=two-sided-long-edge -o page-border=none -o prettyprint
-		alias lprColor='\lpr -P $colorPrinter'
-		alias a2psColor='\a2ps -P $colorPrinter'
 	fi
 else
 	$time firstPrinter=$(LANG=C lpstat -a 2>/dev/null | grep -vi pdf | awk '/accepting/{print$1;exit}') || firstPrinter=""
