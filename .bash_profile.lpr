@@ -3,6 +3,12 @@
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 [ "$debug" -gt 1 ] && time="eval time" || time=eval
+
+#lpstat -v $myPrinterName || sudo lpadmin -p $myPrinterName -o 'Two-Sided Printing=DuplexNoTumble' -v $myPrinterURI -m $ppdModelLocation -L $myPrinterLocation -E
+#lpstat -v PDF || sudo lpadmin -p PDF -o 'Two-Sided Printing=DuplexNoTumble' -v cups-pdf:/ -m lsb/usr/cups-pdf/CUPS-PDF.ppd -E
+#$sudo lpadmin -p $myPrinterName -o 'Two-Sided Printing=DuplexNoTumble' -E -v $myPrinterURI -P /etc/cups/ppd/$myPrinterName.ppd
+#groups | grep -wq lp || { sudo groupadd lpadmin; sudo usermod -a -G lp,lpadmin $USER; exit; }
+
 $time firstPrinter="$(LANG=C lpstat -p -d 2>/dev/null | awk '/^system default destination:/{print$NF;exit}')" #i.e. https://www.cups.org/doc/options.html#PRINTER
 if test $firstPrinter
 then
