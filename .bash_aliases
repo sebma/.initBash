@@ -409,6 +409,7 @@ alias web2pdf="wkhtmltopdf --page-size $pageSize --minimum-font-size 12 --no-bac
 alias wegrep="wgrep -E"
 alias wget1='\wget'
 alias wgetUserAgent='\wget --no-config -d http://www.linuxfr.org -O /dev/null 2>&1 | grep User-Agent | head -1'
+alias wget2UserAgent='\wget2 --no-config -d http://www.linuxfr.org -O /dev/null 2>&1 | grep User-Agent | head -1'
 alias wget2noconfig="\wget2 --no-config"
 alias wgetnoconfig="\wget --config=/dev/null"
 alias which="\type -P"
