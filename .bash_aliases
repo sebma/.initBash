@@ -408,6 +408,7 @@ alias wavemon="xterm -e wavemon &"
 alias web2pdf="wkhtmltopdf --page-size $pageSize --minimum-font-size 12 --no-background --outline --header-line --footer-line --header-left [webpage] --footer-left '[isodate] [time]' --footer-right [page]/[toPage]"
 alias wegrep="wgrep -E"
 alias wget1='\wget'
+alias wgetUserAgent='\wget --no-config -d http://www.linuxfr.org -O /dev/null 2>&1 | grep User-Agent | head -1'
 alias wget2noconfig="\wget2 --no-config"
 alias wgetnoconfig="\wget --config=/dev/null"
 alias which="\type -P"
