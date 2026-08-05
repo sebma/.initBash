@@ -5,6 +5,7 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 test "$debug" -gt 0 && Echo "\n=> \${BASH_SOURCE[*]} = ${BASH_SOURCE[*]}\n"
 
 function gpartedNoUdisks2Inhibit {
+	# See https://unix.stackexchange.com/a/591638/135038
 	gpartedLaunchLog=gparted_launch_error_$$.log
 	[ $isAdmin = true ] && sudoBackground="sudo -b"
 	$sudoBackground gparted 2>&1 "$@" | tee $gpartedLaunchLog
