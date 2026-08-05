@@ -7,13 +7,6 @@ Source $initDir/.bash_functions.AV
 
 test "$debug" -gt 0 && Echo "\n=> \${BASH_SOURCE[*]} = ${BASH_SOURCE[*]}\n"
 
-function EchoSpecialCharacters {
-	local rc=$?
-	set +o histexpand # Turn off history expansion to be able easily use the exclamation mark in strings i.e https://stackoverflow.com/a/22130745/5649639
-	command echo "$@"
-	set -o histexpand
-	return $rc
-}
 function Cat {
 	local highlightCMD="command highlight -O ansi --force"
 	if [ $# = 0 ] || [ "$1" = - ];then
@@ -42,6 +35,13 @@ function Less {
 			[ $extension != pdf ] && $highlightCMD "$file" | $lessColors || $less "$file"
 		done
 	fi
+}
+function EchoSpecialCharacters {
+	local rc=$?
+	set +o histexpand # Turn off history expansion to be able easily use the exclamation mark in strings i.e https://stackoverflow.com/a/22130745/5649639
+	command echo "$@"
+	set -o histexpand
+	return $rc
 }
 function More {
 	local highlightCMD="command highlight -O ansi --force"
