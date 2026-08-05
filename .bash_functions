@@ -2005,7 +2005,7 @@ function ssh2ppk {
 	fi
 
 	for sshKey;do
-		puttygen $sshKey -o ${sshKey/.ppk}
+		puttygen $sshKey -o $sshKey.ppk
 	done
 }
 function sshStartLocalForwarding {
