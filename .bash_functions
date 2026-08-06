@@ -1998,14 +1998,14 @@ function ssh {
 		time $ssh -o ConnectTimeout=$timeout $@
 	fi
 }
-function ssh2ppk {
+function sshkeys2ppk {
 	if ! which puttygen &>/dev/null;then
 		echo "=> ERROR : You must install <puttygen>." >&2
 		return -1
 	fi
 
 	for sshKey;do
-		puttygen $sshKey -o $sshKey.ppk
+		puttygen -o $sshKey.ppk $sshKey
 	done
 }
 function sshStartLocalForwarding {
