@@ -272,7 +272,7 @@ function raidinfo {
 set -x
 		\lspci -nnd ::0104 "$@"
 		if type -P lsscsi >/dev/null;then
-			\lsscsi -ss -d -x -i
+			\lsscsi -ssd -x -i
 			\lsscsi -c # W.I.P.
 			\lsscsi -t # W.I.P.
 			\lsscsi -C -t
