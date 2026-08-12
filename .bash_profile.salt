@@ -29,8 +29,8 @@ echo "=> Checking the scality-srebuildd status on storage servers :"
 salt -G roles:ROLE_STORE --out=text cmd.run 'systemctl status scality-srebuildd' | egrep "Active: failed " | sort
 echo "=> DONE."
 echo
-dnsServer=$(set -o pipefail;dig 2>/dev/null | awk -F '[()]' '/SERVER/{print$(NF-1)}' || host -v google.fr 2>/dev/null | awk -F '[ #]' '/^Received/{print$5;exit}')
 echo "=> Checking that nodes can join their DNS :"
+dnsServer=$(set -o pipefail;dig 2>/dev/null | awk -F '[()]' '/SERVER/{print$(NF-1)}' || host -v google.fr 2>/dev/null | awk -F '[ #]' '/^Received/{print$5;exit}')
 salt -G roles:ROLE_STORE --out=text cmd.run "host $dnsServer" --out=text 2>&1 | egrep --color=always 'timed out' | sort
 echo "=> DONE."
 echo
