@@ -58,6 +58,7 @@ alias ytdlGetVideoTitle="\youtube-dl -e"
 alias ytdlpGetVideoTitle="\yt-dlp -e"
 alias ytdlGetVideoWebpageURL="\youtube-dl --ignore-config --no-restrict-filenames --get-filename -o '%(webpage_url)s'"
 alias ytdlpGetVideoWebpageURL="\yt-dlp --ignore-config --print webpage_url"
+
 alias ytdlLatestRelease='\git ls-remote --tags --refs $ytdlURL | awk -F/ "{print\$NF}" | sort -rV | head -1'
 alias ytdlpLatestRelease='\git ls-remote --tags --refs $ytdlpURL | awk -F/ "{print\$NF}" | sort -rV | head -1'
 
