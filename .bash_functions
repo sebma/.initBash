@@ -1036,8 +1036,8 @@ function hw-probeAddNodeToInventory {
 	fi
 
 	[ -n "$sudo" ] && sudo="sudo -E"
-	local architecture=$(uname)
-	test $architecture = Darwin && architecture=bsd
+	local osFamily=$(uname -s)
+	test $osFamily = Darwin && osFamily=bsd
 	hwprobe=$(which hw-probe)
 	time $sudo $hwprobe -all -upload -i $inventoryID && echo "=> INFO: Check your email to add confirm adding the new node to your inventory : https://$architecture-hardware.org/index.php?view=computers&inventory=$inventoryID" >&2
 }
