@@ -1282,8 +1282,7 @@ function memUsageOfProcessRegExp {
 	done
 }
 function mkdircd {
-	\mkdir -pv $1
-	cd $1 && pwd -P
+	\mkdir -pv $1 && cd $1 && pwd -P
 }
 function mkdirSeb {
 	local dir
