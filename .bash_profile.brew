@@ -7,6 +7,8 @@ test "$debug" -gt 0 && Echo "\n=> eval \$(brew shellenv) ..."
 
 export HOMEBREW_NO_INSTALL_CLEANUP=1
 export HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1
+which gcc-{0..9}{0..9} | grep -m1 bin/ -q && export  HOMEBREW_CC=$(which gcc-{0..9}{0..9} | awk -F/ '/bin/{printf$NF;exit}')
+which g++-{0..9}{0..9} | grep -m1 bin/ -q && export HOMEBREW_CXX=$(which g++-{0..9}{0..9} | awk -F/ '/bin/{printf$NF;exit}')
 
 brewInitEnv='eval $($brew shellenv 2>/dev/null | grep -vw PATH)'
 brewPrefix=$($brew --prefix)
