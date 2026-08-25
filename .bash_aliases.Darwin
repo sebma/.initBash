@@ -43,7 +43,7 @@ alias macmodel="\system_profiler SPHardwareDataType -json | jq -r '.SPHardwareDa
 alias lastme='last -t console | \grep $USER'
 alias lastmeToday='lastme | \grep "$(LC_TIME=C date +%b\ %_d)"'
 alias lshw='\system_profiler -detailLevel mini | sed "/^Printer Software:/,/^      *Library Extensions/d"'
-alias lsvga="\system_profiler SPDisplaysDataType"
+alias lsgpu="\system_profiler SPDisplaysDataType"
 alias l="\ls -G"
 alias ldd="\otool -L"
 alias ll="ls -blF -T"
