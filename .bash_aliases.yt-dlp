@@ -37,6 +37,7 @@ alias recordNCCLive480p="recordYTLive 94 $NCC_Live"
 alias recordNCCLive=recordNCCLive480p
 alias recordJPLive=recordJPLive360p
 declare -gx youtube_dl="$(type -P youtube-dl)"
+declare -gx yt_dl="$youtube_dl"
 declare -gx yt_dlp="$(type -P yt-dlp)"
 alias youtube-dl="time env LANG=C.UTF-8 $youtube_dl"
 alias yt-dl=youtube-dl
