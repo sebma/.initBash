@@ -222,9 +222,8 @@ case $OSTYPE in
 		;;
 esac
 
-if [ $osFamily = Linux ];then
-	if groups | \egrep -wq "sudo|adm|admin|root|wheel";
-	then
+if [ $osFamily == Linux ];then
+	if groups | \egrep -wq "sudo|adm|admin|root|wheel";then
 		export GOBIN=/usr/local/bin
 		distribType=$(distribType)
 		test $distribType = debian && export sudo=sudo
@@ -232,8 +231,9 @@ if [ $osFamily = Linux ];then
 	else
 		export GOBIN=~/go/bin
 	fi
+
 	sed="command sed -r"
-	tty -s && calendar -w -l 0
+	tty -s && calendar -w -l 0 | head -5
 elif [ $osFamily = Darwin ];then
 	export GOBIN=/usr/local/bin
 	sed="command sed -E"
