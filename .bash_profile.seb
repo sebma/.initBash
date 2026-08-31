@@ -242,7 +242,7 @@ $xtrace
 
 type -P hub >/dev/null 2>&1 && eval "$(hub alias -s)" # See https://github.com/github/hub
 if which fastfetch >/dev/null 2>&1;then
-	time fastfetch
+	fastfetch
 elif which neofetch >/dev/null 2>&1;then
 	time neofetch
 fi
