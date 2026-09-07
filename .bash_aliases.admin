@@ -4,7 +4,7 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 
 ls /dev/md* >/dev/null 2>&1 && alias mdraidInfo='sudo mdadm /dev/md?;sudo mdadm -D /dev/md?;cat /proc/mdstat'
 alias memRescan='ls /sys/bus/memory/rescan >/dev/null 2>&1 && echo 1 | sudo tee /sys/bus/memory/rescan'
-alias enableAllCPUs='echo 1 | sudo tee /sys/devices/system/cpu/cpu{?,??}/online;lscpu | grep line.CPU'
+alias enableAllCPUs='time echo 1 | sudo tee /sys/devices/system/cpu/cpu{?,??}/online 2>/dev/null;lscpu | grep line.CPU'
 alias rescanExistingDisks='time echo 1 | sudo tee /sys/class/block/sd?/device/rescan >/dev/null'
 alias scanNewDisks='time echo "- - -" | sudo tee /sys/class/scsi_host/host*/scan >/dev/null'
 alias draUpdate="$sudo dra download -a devmatteini/dra -i -o /usr/local/bin/"
