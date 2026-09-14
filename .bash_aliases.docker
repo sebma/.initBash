@@ -2,9 +2,6 @@
 ! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-set | grep ^sudo= -q || test $(id -u) != 0 && export sudo=$(type -P sudo)
-set | grep ^docker= -q || export docker="$sudo $(type -P docker)"
-
 alias dockerCleanup="$docker system prune"
 alias dockerCleanOldImages="$docker "'image prune --all --filter until=$((30*24))h'
 alias dockerImageSizes=$'$docker images --format "{{.ID}}\t{{.Size}}\t{{.CreatedSince}}\t{{.Repository}}:{{.Tag}}" | sort -k 2 -h'
