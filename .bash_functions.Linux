@@ -425,7 +425,7 @@ function processENV_Variables {
 	local processName=$1
 	local -i pid=0
 	pid=$(\pidof -s $processName)
-	test $(id -u) == 0 && sudo="" || sudo=$(type -P sudo)
+	test $(id -u) == 0 && local sudo="" || local sudo=$(type -P sudo)
 	cat="sudo cat"
 
 	if [ $# = 1 ];then
