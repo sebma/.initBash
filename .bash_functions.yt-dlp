@@ -782,7 +782,7 @@ function ytdlUpdate {
 	local sudo=""
 	if $isAdmin
 	then
-		sudo="command sudo -H"
+		local sudo="command sudo -H"
 	fi
 
 	local package=youtube-dl
@@ -840,7 +840,7 @@ function ytdlpUpdate {
 	local sudo=""
 	if $isAdmin
 	then
-		sudo="command sudo -H"
+		local sudo="command sudo -H"
 	fi
 
 	local package=yt-dlp
