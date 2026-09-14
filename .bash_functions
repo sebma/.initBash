@@ -1035,7 +1035,7 @@ function hw-probeAddNodeToInventory {
 		return 2
 	fi
 
-	[ -n "$sudo" ] && sudo="sudo -E"
+	[ -n "$sudo" ] && local sudo="sudo -E"
 	local osFamily=$(uname -s)
 	test $osFamily = Darwin && osFamily=bsd
 	hwprobe=$(which hw-probe)
