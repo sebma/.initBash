@@ -2,7 +2,7 @@
 ! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
-set | grep ^sudo= -q || test $(id -u) == 0 && sudo="" || export sudo=$(type -P sudo)
+set | grep ^sudo= -q || test $(id -u) != 0 && export sudo=$(type -P sudo)
 set | grep ^docker= -q || export docker="$sudo $(type -P docker)"
 
 alias dockerCleanup="$docker system prune"
