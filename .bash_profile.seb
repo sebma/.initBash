@@ -203,6 +203,9 @@ if [ $osFamily = Linux ] || [ $osFamily = Darwin ];then
 	#my lpr configuration
 	type -P lpr >/dev/null 2>&1 && test -f $initDir/.bash_profile.lpr && SourceProfile $initDir/.bash_profile.lpr
 
+	#my docker configuration
+	type -P docker >/dev/null 2>&1 && test -f $initDir/.bash_profile.docker && SourceProfile $initDir/.bash_profile.docker
+
 #	! pgrep -u $USER -f "adb -. " >/dev/null && tty -s && echo "=> Starting the <adb> service ..." && time adb start-server
 	pgrep -u $USER -f "adb -. " >/dev/null && export androidWlanInterface=$(adb shell getprop wifi.interface 2>/dev/null | tr -d '\r')
 fi
