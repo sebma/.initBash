@@ -1,9 +1,10 @@
 # vim: ft=bash noet:
 #[ -n "$ZSH_VERSION" ] && emulate -l bash
 [ ${BASH_VERSINFO[0]} = 3 ] && [ -x ~/usr/local/bin/bash ] && exec ~/usr/local/bin/bash -l
-declare -gxr isAdmin=$(groups 2>/dev/null | \egrep -wq "sudo|adm|admin|root|wheel" && echo true || echo false)
+declare -gxr isAdmin=$( groups 2>/dev/null | \egrep -wq "sudo|adm|admin|root|wheel" && echo true || echo false)
 declare -gxr isSudoer=$(groups 2>/dev/null | \egrep -wq "sudo|adm|admin|root|wheel" && echo true || echo false)
-[ $isSudoer = true ] && declare -gx sudo=$(type -P sudo) || declare -gxr sudo=""
+test $(id -u) != 0 && declare -gxr sudo=$(type -P sudo)
+
 test -z "$initDir" && export initDir=$HOME/.initBash
 ! declare 2>&1 | grep -wq ^colors= && [ ${BASH_VERSINFO[0]} -ge 4 ] && source $initDir/.colors
 export OSTYPE
@@ -16,6 +17,12 @@ cd $HOME
 initDir=$HOME/$initDir
 
 #command -v termux-chroot >/dev/null 2>&1 && command -v bash 2>/dev/null | grep termux -q && termux-chroot
+
+[ $osFamily == Linux ] && $isAdmin && export GOBIN=/usr/local/bin || export GOBIN=~/go/bin
+[ $osFamily == Darwin ] && export GOBIN=/usr/local/bin
+
+[ $osFamily == Linux ] && export sed="command sed -r"
+[ $osFamily == Darwin ] && export sed="command sed -E"
 
 if tty -s;then
 	function Debug { test "$debug" -gt 0 && echo "$bold${colors[blue]}$@$normal"; }
