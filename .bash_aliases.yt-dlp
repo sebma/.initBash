@@ -6,6 +6,9 @@ test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SO
 NCC_Channel=https://www.youtube.com/@NewCreationChurch
 NCC_Live=$NCC_Channel/live
 NCC_Videos=$NCC_Channel/videos?sort=dd
+EVEC_Channel=https://www.youtube.com/@Anastasienguessan
+EVEC_Live=$EVEC_Channel/live
+EVEC_Videos=$EVEC_Channel/videos?sort=dd
 JP_Channel=https://www.youtube.com/@JosephPrince
 JP_Live=$JP_Channel/live
 JP_Videos=$JP_Channel/videos?sort=dd
