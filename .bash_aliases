@@ -98,6 +98,7 @@ alias dbus-logout-kde='\qdbus org.kde.ksmserver /KSMServer org.kde.KSMServerInte
 alias dbus-reboot='\dbus-send --system --print-reply --dest="org.freedesktop.ConsoleKit" /org/freedesktop/ConsoleKit/Manager org.freedesktop.ConsoleKit.Manager.Restart'
 alias dbus-suspend='\dbus-send --system --print-reply --dest="org.freedesktop.UPower" /org/freedesktop/UPower org.freedesktop.UPower.Suspend || \dbus-send --system --print-reply --dest="org.freedesktop.login1" /org/freedesktop/login1 org.freedesktop.login1.Manager.Suspend boolean:true'
 alias deborphan="\deborphan | sort"
+alias dfc='\dfc -c always -TWfd'
 alias dhcpd-check-config='\dhcpd -t -cf /etc/dhcp/dhcpd.conf'
 alias dig='\dig +ttlunits'
 alias digreverse="dig +short -x"
