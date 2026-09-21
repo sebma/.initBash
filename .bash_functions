@@ -534,7 +534,7 @@ function ddPV {
 function dfc {
 	local firstArg=$1
 	local dfc="command dfc"
-	local dfcOptions="-dTWwfc always"
+	local dfcOptions="-c always -dTWf"
 	if printf -- "$firstArg" | egrep "^\-|^$" -q;then
 		$dfc $dfcOptions "$@"
 	else
