@@ -531,7 +531,7 @@ function ddPV {
 	echo "=> sudo bash -c \"pv $inputFile | dd $@\" ..."
 	time sudo bash -c "pv $inputFile | dd $@"
 }
-function dfc {
+function dfcSeb {
 	local firstArg=$1
 	local dfc="command dfc"
 	local dfcOptions="-c always -dTWf"
