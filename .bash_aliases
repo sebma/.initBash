@@ -167,7 +167,7 @@ alias gzcat="\gunzip -c"
 alias gzgrep="zgrep"
 alias gzip="\gzip -Nv"
 alias h5dump="\h5dump -n 1"
-alias haproxy-check-config='\haproxy -c -V -f /etc/haproxy'
+alias haproxy-check-config='\haproxy -c -V -f /etc/haproxy/'
 alias halt="\halt && exit"
 alias headlines='\head -n $((LINES-2))'
 alias hexdump="\hexdump -Cc" || alias hexdump="\od -tx1z"
