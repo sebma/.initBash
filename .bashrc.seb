@@ -219,6 +219,7 @@ if [ $osFamily == Linux ];then
 	tty -s && calendar -w -l 0 | head -5
 fi
 
+\mkdir -p ~/.local/share/bash-completion/completions/
 for tool in git dra lspci lpr mpv ffmpeg units yt-dlp conda openssl brew smartctl docker podman kubectl adb flatpak snap git racadm omreport esxcli;do
 	if type -P $tool >/dev/null 2>&1;then
 		test -r $initDir/.bashrc.$tool && Source $initDir/.bashrc.$tool
