@@ -3,7 +3,6 @@
 test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
 
 export docker="$sudo $(type -P docker)"
-\mkdir -p ~/.local/share/bash-completion/completions/
 docker completion $(basename $SHELL) > ~/.local/share/bash-completion/completions/docker
 source ~/.local/share/bash-completion/completions/docker
 
