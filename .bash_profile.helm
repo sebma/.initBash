@@ -1,0 +1,10 @@
+# vim: set ft=sh noet:
+! declare 2>&1 | grep -wq ^colors= && [ $BASH_VERSINFO -ge 4 ] && source $initDir/.colors
+test "$debug" -gt 0 && echo "=> Running $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal ..."
+
+export helm="$(type -P helm)"
+helm completion $(basename $SHELL) > ~/.local/share/bash-completion/completions/helm
+source ~/.local/share/bash-completion/completions/helm
+
+set +x
+test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
