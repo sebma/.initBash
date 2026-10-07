@@ -11,11 +11,11 @@ which gcc-{0..9}{0..9} | grep -m1 bin/ -q && export HOMEBREW_CC=$( which gcc-{0.
 which g++-{0..9}{0..9} | grep -m1 bin/ -q && export HOMEBREW_CXX=$(which g++-{0..9}{0..9} | awk -F/ '/bin/{printf$NF;exit}')
 
 brewInitEnv='eval $($brew shellenv 2>/dev/null | grep -vw PATH)'
-brewPrefix=$($brew --prefix)
+test -z $HOMEBREW_PREFIX && export HOMEBREW_PREFIX="$(brew --prefix)"
 
 $time $brewInitEnv
-[ $BASH_VERSINFO -ge 4 ] && [ -r $brewPrefix/share/bash-completion/bash_completion ] && Source $brewPrefix/share/bash-completion/bash_completion
 brew completions state | grep "not linked" -q || brew completions link
+[ $BASH_VERSINFO -ge 4 ] && [ -r $HOMEBREW_PREFIX/share/bash-completion/bash_completion ] && Source $HOMEBREW_PREFIX/share/bash-completion/bash_completion
 
 set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
