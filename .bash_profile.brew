@@ -15,7 +15,7 @@ test -z $HOMEBREW_PREFIX && export HOMEBREW_PREFIX="$(brew --prefix)"
 
 $time $brewInitEnv
 brew completions state | grep "not linked" -q || brew completions link
-[ $BASH_VERSINFO -ge 4 ] && [ -r $HOMEBREW_PREFIX/share/bash-completion/bash_completion ] && Source $HOMEBREW_PREFIX/share/bash-completion/bash_completion
+[ -r $HOMEBREW_PREFIX/etc/bash_completion.d/brew ] && Source $HOMEBREW_PREFIX/etc/bash_completion.d/brew
 
 set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
