@@ -15,6 +15,7 @@ brewPrefix=$($brew --prefix)
 
 $time $brewInitEnv
 [ $BASH_VERSINFO -ge 4 ] && [ -r $brewPrefix/share/bash-completion/bash_completion ] && Source $brewPrefix/share/bash-completion/bash_completion
+brew completions state | grep "not linked" -q || brew completions link
 
 set +x
 test "$debug" -gt 0 && echo "=> END of $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
