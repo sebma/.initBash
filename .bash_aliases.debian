@@ -14,15 +14,15 @@ alias architecture="dpkg --print-architecture"
 
 [ -n "$SSH_CONNECTION" ] && type -P screen >/dev/null 2>&1 && screen="screen -L"
 
-	alias autoremove="( $apt -h 2>&1 | \grep -wq autoremove && $apt autoremove -s | \grep -wq '^Remv' && $sudo $screen $apt autoremove -V ) || $apt_get autoremove -s | \grep -wq '^Remv' && $sudo $screen $apt_get autoremove -V"
-	alias cleanupOldKernels='linux-version list;\linux-purge -l -k 2 | grep -q linux && set -x && $sudo $screen $apt purge -V $(\linux-purge -l -k 2); set +x'
-	alias do-release-upgrade='$sudo $screen do-release-upgrade'
-	alias upgrade="LANGUAGE=$LANGUAGE $apt_get upgrade -s | \grep '^[1-9][0-9]* upgraded' && $sudo $apt upgrade -V --download-only && sync && $sudo $screen $apt upgrade -V --yes;sync"
-	alias dist-upgrade="sudo $apt dist-upgrade -V --no-remove --download-only && sync && $sudo $screen $apt dist-upgrade -V --no-remove --yes;sync"
-	alias full-upgrade="sudo $apt full-upgrade -V --no-remove --download-only && sync && $sudo $screen $apt full-upgrade -V --no-remove --yes;sync"
-	alias installSecurityUpdates="\apt list --upgradable 2>/dev/null | awk -F/ '/security/{packages=packages\" \"\$1}END{if(packages){commandLine=\"sudo $screen apt install -V -y\"packages;print commandLine >\"/dev/stderr\";print commandLine;}}' | sh"
-	alias reinstallPkg="sudo $screen $apt install --reinstall -V"
-	alias reinstallPkgWithConfigFiles="sudo $screen $apt install --reinstall -V -o Dpkg::Options::=--force-confask,confnew,confmiss"
+alias autoremove="( $apt -h 2>&1 | \grep -wq autoremove && $apt autoremove -s | \grep -wq '^Remv' && $sudo $screen $apt autoremove -V ) || $apt_get autoremove -s | \grep -wq '^Remv' && $sudo $screen $apt_get autoremove -V"
+alias cleanupOldKernels='linux-version list;\linux-purge -l -k 2 | grep -q linux && set -x && $sudo $screen $apt purge -V $(\linux-purge -l -k 2); set +x'
+alias do-release-upgrade='$sudo $screen do-release-upgrade'
+alias upgrade="LANGUAGE=$LANGUAGE $apt_get upgrade -s | \grep '^[1-9][0-9]* upgraded' && $sudo $apt upgrade -V --download-only && sync && $sudo $screen $apt upgrade -V --yes;sync"
+alias dist-upgrade="sudo $apt dist-upgrade -V --no-remove --download-only && sync && $sudo $screen $apt dist-upgrade -V --no-remove --yes;sync"
+alias full-upgrade="sudo $apt full-upgrade -V --no-remove --download-only && sync && $sudo $screen $apt full-upgrade -V --no-remove --yes;sync"
+alias installSecurityUpdates="\apt list --upgradable 2>/dev/null | awk -F/ '/security/{packages=packages\" \"\$1}END{if(packages){commandLine=\"sudo $screen apt install -V -y\"packages;print commandLine >\"/dev/stderr\";print commandLine;}}' | sh"
+alias reinstallPkg="sudo $screen $apt install --reinstall -V"
+alias reinstallPkgWithConfigFiles="sudo $screen $apt install --reinstall -V -o Dpkg::Options::=--force-confask,confnew,confmiss"
 
 alias debExport=dpkg-repack
 alias debInfo="\dpkg -I"
