@@ -164,8 +164,7 @@ tty -s && { # For interactive shell sessions
 }
 cd
 
-if test -r /usr/share/bash-completion/bash_completion 
-then
+if test -r /usr/share/bash-completion/bash_completion;then
 	Debug "=> Running /usr/share/bash-completion/bash_completion ..."
 	set -o | grep -q xtrace.*on && xtrace="set -o xtrace"
 	set +x
