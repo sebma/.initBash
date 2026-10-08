@@ -15,7 +15,9 @@ if [ -n "$BASH_VERSION" ]; then
 	if [ -f "/etc/skel/.bashrc" ]; then
 		if [ "$debug" -gt 0 ];then
 			echo "=> Running $bold${colors[blue]}/etc/skel/.bashrc$normal ..."
+			set +x
 			time source /etc/skel/.bashrc;true
+			[ "$debug" -gt 2 ] && set -x
 			echo "=> END of $bold${colors[blue]}/etc/skel/.bashrc$normal"
 		else
 			source /etc/skel/.bashrc
