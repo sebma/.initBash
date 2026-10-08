@@ -12,9 +12,7 @@ apt_get=$(type -P apt-get)
 #alias installSecurityUpdates="sudo apt install -V $(apt-get -s dist-upgrade | awk "/^Inst.*\/$codeName-security/"'{print$2}')"
 alias architecture="dpkg --print-architecture"
 
-if [ -n "$SSH_CONNECTION" ] && type -P screen >/dev/null 2>&1;then
-	screen="screen -L"
-fi
+[ -n "$SSH_CONNECTION" ] && type -P screen >/dev/null 2>&1 && screen="screen -L"
 
 	alias autoremove="( $apt -h 2>&1 | \grep -wq autoremove && $apt autoremove -s | \grep -wq '^Remv' && $sudo $screen $apt autoremove -V ) || $apt_get autoremove -s | \grep -wq '^Remv' && $sudo $screen $apt_get autoremove -V"
 	alias cleanupOldKernels='linux-version list;\linux-purge -l -k 2 | grep -q linux && set -x && $sudo $screen $apt purge -V $(\linux-purge -l -k 2); set +x'
