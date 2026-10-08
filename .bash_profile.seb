@@ -222,10 +222,10 @@ esac
 test -r $initDir/.bash_profile.$osFamily && SourceProfile $initDir/.bash_profile.$osFamily
 test "$debug" -gt 0 && echo "=> BACK to $bold${colors[blue]}$(basename ${BASH_SOURCE[0]})$normal"
 
-[ $debug = 1 ] && echo "=> system = <$system>."
+[ "$debug" = 1 ] && echo "=> system = <$system>."
 if [ "$osFamily" != Darwin ] && [ "$osFamily" != Linux ] && [ "$osFamily" != Android ];then
 	if [ -z "$system" ];then
-		[ $debug = 1 ] && echo "=> system = <$system>."
+		[ "$debug" = 1 ] && echo "=> system = <$system>."
 		if type -P lsb_release >/dev/null;then 
 			declare -gxr system="$(lsb_release -sd | awk -F '"' '{print$(NF-1)}')"
 		elif type -P getprop >/dev/null;then
@@ -233,7 +233,7 @@ if [ "$osFamily" != Darwin ] && [ "$osFamily" != Linux ] && [ "$osFamily" != And
 		else
 			declare -gxr system=$(echo $HOSTTYPE-$OSTYPE | sed "s/arm[^-]*-/arm-/")
 		fi
-		[ $debug = 1 ] && echo "=> system = <$system>."
+		[ "$debug" = 1 ] && echo "=> system = <$system>."
 	fi
 fi
 
