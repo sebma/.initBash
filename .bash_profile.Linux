@@ -74,7 +74,7 @@ if [ -z "$system" ];then
 		declare -gxr system=$(echo $HOSTTYPE-$OSTYPE | sed "s/arm[^-]*-/arm-/")
 	fi
 fi
-[ $debug = 1 ] && echo "=> system = <$system>."
+[ "$debug" = 1 ] && echo "=> system = <$system>."
 
 setxkbmap -layout fr >/dev/null 2>&1
 
