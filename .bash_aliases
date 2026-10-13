@@ -360,6 +360,7 @@ alias swapUsage="\free -m | awk '/^Swap/{print 100*\$3/\$2}'"
 alias systemType='strings $(\ps -p 1 -o command= | cut -d" " -f1) | \egrep -o "upstart|sysvinit|systemd|launchd" | head -1'
 alias taillines='\tail -n $((LINES-2))'
 alias tcpPorts="\netstat -ntl"
+alias telnet='\nc -vz'
 alias terminfo='echo "=> C est un terminal $(tput cols 2>/dev/null)x$(tput lines 2>/dev/null)."'
 alias thunderbirdUnlock='\ps -C thunderbird >/dev/null || rm ~/.thunderbird/default/lock'
 alias timestamp='\date +"%Y%m%d_%HH%M"'
