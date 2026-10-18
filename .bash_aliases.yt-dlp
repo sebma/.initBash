@@ -15,6 +15,9 @@ JP_Videos=$JP_Channel/videos?sort=dd
 JP_USA_Channel=https://www.youtube.com/c/JosephPrinceMinistriesUSA
 JP_USA_Live=$JP_USA_Channel/live
 JP_USA_Videos=$JP_USA_Channel/videos?sort=dd
+GRC_Channel=https://www.youtube.com/@gracerev.online
+GRC_Live=$GRC_Channel/live 
+GRC_Videos=$GRC_Channel/videos?sort=dd
 # youtube-dl
 ytdlURL=https://github.com/ytdl-org/youtube-dl
 ytdlGitURL=git+https://github.com/ytdl-org/youtube-dl
