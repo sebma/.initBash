@@ -369,7 +369,7 @@ function open {
 }
 function pip2Install {
 	if ! type -P pip2 >/dev/null;then
-		if [ $(distribType) = debian ];then
+		if [ $(distribFamily) = debian ];then
 			for pkg in "";do
 				:
 			done
@@ -379,7 +379,7 @@ function pip2Install {
 }
 function pip3Install {
 	if ! type -P pip3 >/dev/null;then
-		if [ $(distribType) = debian ];then
+		if [ $(distribFamily) = debian ];then
 			for pkg in python3-distutils;do
 				dpkg -l $pkg | \grep ^i -q || { echo "=> You need to install <$pkg>";return 1; }
 			done
