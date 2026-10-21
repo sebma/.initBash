@@ -579,34 +579,34 @@ function distribName {
 
 	echo $osName | awk '{print tolower($0)}'
 }
-function distribType {
-	local distribType=unknown
+function distribFamily {
+	local distribFamily=unknown
 	echo $OSTYPE | grep -q android && local osFamily=Android || local osFamily=$(uname -s | cut -d' ' -f1)
 
 	if [ $osFamily = Linux ]; then
 		if grep ID_LIKE /etc/os-release -q 2>/dev/null; then
-			distribType=$(source /etc/os-release && echo $ID_LIKE)
+			distribFamily=$(source /etc/os-release && echo $ID_LIKE)
 		elif [ ls /etc/*_version >/dev/null 2>&1 ]; then
-			distribType=$(echo /etc/*version | sed 's,/etc/\|_version,,g')
+			distribFamily=$(echo /etc/*version | sed 's,/etc/\|_version,,g')
 		else
 			distribName=$(distribName)
 			case $distribName in
-				sailfishos|rhel|fedora|centos) distribType=redhat ;;
-				ubuntu) distribType=debian;;
-				*) distribType=$distribName ;;
+				sailfishos|rhel|fedora|centos) distribFamily=redhat ;;
+				ubuntu) distribFamily=debian;;
+				*) distribFamily=$distribName ;;
 			esac
 		fi
 	elif [ $osFamily = Darwin ]; then
-		distribType=Darwin
+		distribFamily=Darwin
 	elif [ $osFamily = Android ]; then
-		distribType=Android
+		distribFamily=Android
 	elif [ $osFamily = VMkernel ]; then # ESXi
-		distribType=ESXi
+		distribFamily=ESXi
 	else
-		test -n $OSTYPE && distribType=$OSTYPE || distribType=$osFamily
+		test -n $OSTYPE && distribFamily=$OSTYPE || distribFamily=$osFamily
 	fi
 
-	echo $distribType
+	echo $distribFamily
 }
 function envSorted {
 	command env "$@" | sort
@@ -1053,8 +1053,8 @@ function img2pdfA4R {
 	img2pdf --pagesize A4^T $allArgsButLast -o $lastArg
 }
 function installDate {
-	local distribType=$(distribType)
-	case $distribType in
+	local distribFamily=$(distribFamily)
+	case $distribFamily in
 		debian|ubuntu) \ls -lact --full-time /etc | awk 'END {print $6,substr($7,1,8)}' ;;
 		linux) find /etc -type f -printf '%T+ \n' 2>/dev/null | sort | head -1 ;; # Pas tres fiable
 		mer|redhat) \rpm -q basesystem --qf '%{installtime:date}\n' ;;
@@ -1402,7 +1402,7 @@ function osSize {
 }
 function packageManager {
 	local pkgManager
-	case $(distribType) in
+	case $(distribFamily) in
 		debian) pkgManager="deb";;
 		redhat) pkgManager="rpm";;
 		Darwin) type -P brew >/dev/null 2>&1 && pkgManager="brew";;
@@ -2177,7 +2177,7 @@ function umountISO {
 	udisksctl loop-delete -b $loopBackDevice
 }
 function updateDistrib {
-	local distrib=$(distribType)
+	local distrib=$(distribFamily)
 	case $distrib in
 		debian|ubuntu) sudo apt -V upgrade --download-only "$@" && sync && echo && sudo apt -V upgrade --yes "$@" && echo && sudo apt-get -V autoremove "$@" && sudo \updatedb; sync;;
 		*)	;;
