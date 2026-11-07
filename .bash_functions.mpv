@@ -60,10 +60,7 @@ function mpv2 {
 function mpvFORMAT {
 	local firstArg="$1"
 	shift
-	test -f nohup.out && \rm -v nohup.out
-	touch nohup.out
-	mpvNoHup --ytdl-format="$firstArg" "$@" &
-	tail -f nohup.out | egrep -v "AV: "
+	mpv --ytdl-format="$firstArg" "$@"
 }
 function mpvInit {
 	if [ -c /dev/fb0 ]; then
