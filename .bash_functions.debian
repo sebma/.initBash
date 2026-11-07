@@ -235,7 +235,7 @@ function listInstalledPackagesFromRepo {
 		echo "=> Usage : $FUNCNAME repo" >&2
 		return 1
 	fi
-	lsPackagesFromRepo "$1" | \xargs dpkg-query -W --showformat='${Package} is ${Status}\n' 2>/dev/null | awk '/ installed/{print$1}' | sort -u
+	lsPackagesFromRepo "$1" | \xargs dpkg-query -W --showformat='${Package} is ${Status}\n' 2>/dev/null | awk '/ installed/{print$1}'
 }
 function lsPPAs {
 	local releaseCodeName=$(lsb_release -sc 2>/dev/null)
@@ -263,7 +263,7 @@ function lsPackagesFromRepo {
 		:
 	else aptitude search -F '%p' "?origin(${repo/\//-}\>) ( ?architecture($architecture) | ?architecture(all) )"
 		:
-	fi
+	fi | sort -u
 }
 function move_Extra_Keys_To_Main_APT_KeyRing {
 	apt-key list 2>&1 >/dev/null | awk -F"[\`']" '/resource limit/{print "sudo apt-key add "$2"; sudo \\rm -vf "$2}' | sh -x
